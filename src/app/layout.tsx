@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tableau de Bord - Suivi des Engagements",
-  description: "Dashboard de suivi des engagements budgétaires - 07/05/2026",
-  keywords: ["dashboard", "engagements", "budget", "suivi"],
+  title: "Tableau de Bord - Situation d'exécution des Engagements",
+  description: "Tableau de bord de situation d'exécution des engagements budgétaires",
+  keywords: ["dashboard", "engagements", "budget", "situation", "exécution"],
   authors: [{ name: "Z.ai Team" }],
   icons: {
     icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >

@@ -795,7 +795,7 @@ export default function Dashboard() {
             P\u00e9riode : {new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
-            Entit\u00e9 : {selectedEntite === 'all' ? 'Toutes' : selectedEntite}
+            entit\u00e9 : {selectedEntite === 'all' ? 'Toutes' : selectedEntite}
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
             Projet : {selectedProjet === 'all' ? 'Tous' : selectedProjet}
@@ -1054,7 +1054,7 @@ export default function Dashboard() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-50">
-                  <TableHead className="text-xs font-semibold text-gray-600 w-[300px]">Entit\u00e9 / Projet / Programme</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 w-[300px]">entit\u00e9 / Projet / Programme</TableHead>
                   <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI) M\u202F\u20ac</TableHead>
                   <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements M\u202F\u20ac</TableHead>
                   <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. %</TableHead>
@@ -1159,7 +1159,7 @@ export default function Dashboard() {
 
     return (
       <>
-        <h2 className="text-lg font-bold text-gray-900">Analyse par Entit\u00e9</h2>
+        <h2 className="text-lg font-bold text-gray-900">Analyse par entit\u00e9</h2>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1216,7 +1216,7 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">Entit\u00e9</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">entit\u00e9</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI)</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
@@ -1426,7 +1426,7 @@ export default function Dashboard() {
                   <TableRow className="bg-gray-50">
                     <TableHead className="text-xs font-semibold text-gray-600">Programme</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Entit\u00e9</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">entit\u00e9</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI)</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
@@ -1560,7 +1560,7 @@ export default function Dashboard() {
                   <TableRow className="bg-gray-50">
                     <TableHead className="text-xs font-semibold text-gray-600">N\u00b0 Engagement</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">D\u00e9signation</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Entit\u00e9</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">entit\u00e9</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Consolid\u00e9s</TableHead>
@@ -1693,7 +1693,7 @@ export default function Dashboard() {
                   <TableRow className="bg-gray-50">
                     <TableHead className="text-xs font-semibold text-gray-600">N\u00b0 Engagement</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">D\u00e9signation</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Entit\u00e9</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">entit\u00e9</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Consolid\u00e9s</TableHead>
@@ -1933,7 +1933,7 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">Entit\u00e9</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">entit\u00e9</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
@@ -2201,7 +2201,7 @@ export default function Dashboard() {
                 <Badge variant="secondary" className="text-xs">1.0.0</Badge>
               </div>
               <p className="text-xs text-gray-500">
-                Tableau de bord de suivi d&apos;ex\u00e9cution du budget d&apos;investissement.
+                Tableau de bord de situation d&apos;ex\u00e9cution du budget d&apos;investissement.
                 Application d\u00e9di\u00e9e au suivi et \u00e0 l&apos;analyse des engagements, ordonnancements
                 et paiements relatifs au budget d&apos;investissement.
               </p>
@@ -2324,7 +2324,7 @@ export default function Dashboard() {
             <div className="flex flex-wrap items-center gap-2 mt-3">
               <Select value={selectedEntite} onValueChange={setSelectedEntite}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
-                  <SelectValue placeholder="Entit\u00e9" />
+                  <SelectValue placeholder="entit\u00e9" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Toutes les entit\u00e9s</SelectItem>
