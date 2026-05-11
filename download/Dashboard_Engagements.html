@@ -78,6 +78,13 @@
       border: 1px solid rgba(255,255,255,0.3);
     }
     .btn-export:hover { background: rgba(255,255,255,0.25); }
+    .btn-share {
+      background: #fbbf24;
+      color: #78350f;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+      font-weight: 700;
+    }
+    .btn-share:hover { background: #f59e0b; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.18); }
     .btn-reset {
       background: #f3f4f6;
       color: #6b7280;
@@ -368,6 +375,9 @@
       </button>
       <button class="btn btn-export" onclick="exportCSV()">
         📤 Exporter CSV
+      </button>
+      <button class="btn btn-share" onclick="saveAndShare()">
+        💾 Sauvegarder & Partager
       </button>
     </div>
   </header>
@@ -823,6 +833,52 @@ function exportCSV() {
   a.href = url; a.download = 'engagements_export.csv'; a.click();
   URL.revokeObjectURL(url);
   showNotification(data.length + ' lignes export\u00e9es en CSV.');
+}
+
+// ===== SAVE & SHARE =====
+function saveAndShare() {
+  showNotification('G\u00e9n\u00e9ration du fichier en cours...');
+  setTimeout(function() {
+    try {
+      var htmlContent = document.documentElement.outerHTML;
+      // Replace the embedded data with current allData
+      var dataStr = JSON.stringify(allData);
+      var marker = '// ===== EMBEDDED DATA =====\nvar allData = ';
+      var scriptStart = htmlContent.indexOf(marker);
+      if (scriptStart === -1) {
+        showNotification('Erreur : impossible de trouver les donn\u00e9es embarqu\u00e9es.');
+        return;
+      }
+      var afterMarker = scriptStart + marker.length;
+      // Find the end of the allData assignment (the semicolon after the JSON array)
+      var depth = 0, endPos = -1;
+      for (var i = afterMarker; i < htmlContent.length; i++) {
+        if (htmlContent[i] === '[') depth++;
+        else if (htmlContent[i] === ']') { depth--; if (depth === 0) { endPos = i + 1; break; } }
+      }
+      if (endPos === -1) {
+        showNotification('Erreur : donn\u00e9es introuvables.');
+        return;
+      }
+      var newHtml = htmlContent.substring(0, afterMarker) + dataStr + htmlContent.substring(endPos);
+      // Update the subtitle date to today
+      var today = new Date();
+      var dateStr = ('0' + today.getDate()).slice(-2) + '/' + ('0' + (today.getMonth()+1)).slice(-2) + '/' + today.getFullYear();
+      newHtml = newHtml.replace(/Donn\u00e9es au \d{2}\/\d{2}\/\d{4}/, 'Donn\u00e9es au ' + dateStr);
+      // Update row count in header
+      newHtml = newHtml.replace(/<span class="badge-count" id="rowCount">[^<]*<\/span>/, '<span class="badge-count" id="rowCount">' + allData.length + ' lignes</span>');
+      var blob = new Blob([newHtml], { type: 'text/html;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'Dashboard_Engagements_' + dateStr.replace(/\//g, '-') + '.html';
+      a.click();
+      URL.revokeObjectURL(url);
+      showNotification('Fichier sauvegard\u00e9 avec succ\u00e8s ! Envoyez-le \u00e0 votre directeur.');
+    } catch(e) {
+      showNotification('Erreur lors de la sauvegarde : ' + e.message);
+    }
+  }, 300);
 }
 
 // ===== NOTIFICATION =====
