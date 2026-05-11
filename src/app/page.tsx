@@ -167,6 +167,31 @@ const NAV_ITEMS = [
 
 const PIE_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4']
 
+// Custom bar label component showing amount and % on each bar
+const BarLabel = (props: { x: number; y: number; width: number; height: number; value: number; dataKey: string; payload: Record<string, unknown> }) => {
+  const { x, y, width, height, value, dataKey, payload } = props
+  if (!value || value === 0) return null
+  const formattedValue = value.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+  let pctText = ''
+  if (dataKey === 'Engagements' && payload?.tauxEngagement != null) {
+    pctText = ` (${(payload.tauxEngagement as number).toFixed(1)}%)`
+  } else if (dataKey === 'Ordonnancements' && payload?.tauxOrdonnement != null) {
+    pctText = ` (${(payload.tauxOrdonnement as number).toFixed(1)}%)`
+  }
+  return (
+    <text
+      x={x + width + 4}
+      y={y + height / 2}
+      fill="#374151"
+      fontSize={9}
+      dominantBaseline="middle"
+      textAnchor="start"
+    >
+      {formattedValue} M€{pctText}
+    </text>
+  )
+}
+
 export default function Dashboard() {
   const [data, setData] = useState<DataRow[]>([])
   const [filters, setFilters] = useState<FilterData>({ programmes: [], projets: [], entites: [] })
@@ -366,6 +391,8 @@ export default function Dashboard() {
       Engagements: Math.round(e.engCP / 1e6 * 10) / 10,
       Ordonnancements: Math.round(e.ord / 1e6 * 10) / 10,
       'Budget LFI': Math.round(e.cp / 1e6 * 10) / 10,
+      tauxEngagement: e.tauxEngagement,
+      tauxOrdonnement: e.tauxOrdonnement,
     }))
   }, [analysisByEntity])
 
@@ -376,6 +403,8 @@ export default function Dashboard() {
       Engagements: Math.round(g.engCP / 1e6 * 10) / 10,
       Ordonnancements: Math.round(g.ord / 1e6 * 10) / 10,
       'Budget LFI': Math.round(g.cp / 1e6 * 10) / 10,
+      tauxEngagement: g.tauxEngagement,
+      tauxOrdonnement: g.tauxOrdonnement,
     }))
   }, [analysisByGroup])
 
@@ -386,6 +415,8 @@ export default function Dashboard() {
       Engagements: Math.round(p.engCP / 1e6 * 10) / 10,
       Ordonnancements: Math.round(p.ord / 1e6 * 10) / 10,
       'Budget LFI': Math.round(p.cp / 1e6 * 10) / 10,
+      tauxEngagement: p.tauxEngagement,
+      tauxOrdonnement: p.tauxOrdonnement,
     }))
   }, [topProjects])
 
@@ -965,8 +996,8 @@ export default function Dashboard() {
           </div>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={chartDataByEntity.length * 50 + 30}>
-            <BarChart data={chartDataByEntity} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
+          <ResponsiveContainer width="100%" height={chartDataByEntity.length * 60 + 30}>
+            <BarChart data={chartDataByEntity} layout="vertical" margin={{ top: 5, right: 110, left: 10, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
               <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
               <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={60} />
@@ -974,9 +1005,9 @@ export default function Dashboard() {
                 formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
-              <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={12} />
-              <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={12} />
+              <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
+              <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
+              <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -995,8 +1026,8 @@ export default function Dashboard() {
           </div>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={chartDataByProgramme.length * 50 + 30}>
-            <BarChart data={chartDataByProgramme} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
+          <ResponsiveContainer width="100%" height={chartDataByProgramme.length * 60 + 30}>
+            <BarChart data={chartDataByProgramme} layout="vertical" margin={{ top: 5, right: 110, left: 10, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
               <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
               <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={80} />
@@ -1004,9 +1035,9 @@ export default function Dashboard() {
                 formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
-              <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={12} />
-              <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={12} />
+              <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
+              <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
+              <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -1025,8 +1056,8 @@ export default function Dashboard() {
           </div>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={chartDataByProject.length * 50 + 30}>
-            <BarChart data={chartDataByProject} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
+          <ResponsiveContainer width="100%" height={chartDataByProject.length * 60 + 30}>
+            <BarChart data={chartDataByProject} layout="vertical" margin={{ top: 5, right: 110, left: 10, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
               <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
               <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={120} />
@@ -1034,9 +1065,9 @@ export default function Dashboard() {
                 formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
-              <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={12} />
-              <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={12} />
+              <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
+              <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
+              <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -1191,16 +1222,16 @@ export default function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={chartDataByEntity.length * 50 + 30}>
-              <BarChart data={chartDataByEntity} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
+            <ResponsiveContainer width="100%" height={chartDataByEntity.length * 60 + 30}>
+              <BarChart data={chartDataByEntity} layout="vertical" margin={{ top: 5, right: 110, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
                 <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={60} />
                 <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={12} />
-                <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
-                <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={12} />
+                <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
+                <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
+                <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -1301,16 +1332,16 @@ export default function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={chartDataByProgramme.length * 50 + 30}>
-              <BarChart data={chartDataByProgramme} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
+            <ResponsiveContainer width="100%" height={chartDataByProgramme.length * 60 + 30}>
+              <BarChart data={chartDataByProgramme} layout="vertical" margin={{ top: 5, right: 110, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
                 <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={80} />
                 <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={12} />
-                <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
-                <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={12} />
+                <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
+                <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
+                <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -1984,7 +2015,7 @@ export default function Dashboard() {
                     outerRadius={100}
                     paddingAngle={3}
                     dataKey="value"
-                    label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(1)}%`}
+                    label={({ name, percent, value }: { name: string; percent: number; value: number }) => `${name} ${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M€ (${(percent * 100).toFixed(1)}%)`}
                   >
                     {budgetStructureData.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
