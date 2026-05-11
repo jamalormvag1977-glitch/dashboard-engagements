@@ -136,6 +136,22 @@ function formatNumberFull(value: number | null | undefined): string {
   return value.toLocaleString('fr-FR')
 }
 
+// Format for table cells: always show full number with French thousands separators
+function formatTableCell(value: number | null | undefined): string {
+  if (value === null || value === undefined) return '—'
+  if (value === 0) return '0'
+  return value.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+}
+
+// Compact format for table: shows unit suffix for large numbers
+function formatTableCompact(value: number | null | undefined): string {
+  if (value === null || value === undefined) return '—'
+  if (value === 0) return '0'
+  if (Math.abs(value) >= 1e9) return `${(value / 1e9).toFixed(2)} Md`
+  if (Math.abs(value) >= 1e6) return `${(value / 1e6).toFixed(2)} M`
+  return value.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+}
+
 function formatDate(iso: string | null): string {
   if (!iso) return '-'
   const d = new Date(iso)
@@ -904,39 +920,83 @@ export default function Dashboard() {
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-gray-50/80 hover:bg-gray-50/80">
-                          <TableHead className="text-[11px] font-semibold text-gray-600 w-10">#</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 min-w-[70px]">Projet</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 min-w-[80px]">Groupe</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 min-w-[70px]">Source</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 min-w-[55px]">Entité</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 min-w-[110px]">N° Eng.</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 min-w-[220px]">Désignation</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 text-right min-w-[90px]">Total CP</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 text-right min-w-[90px]">Total CE</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 text-right min-w-[90px]">Eng. CP</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 text-right min-w-[90px]">Paiements</TableHead>
-                          <TableHead className="text-[11px] font-semibold text-gray-600 text-right min-w-[90px]">Prévisions</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-gray-500 w-10">#</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-gray-500 min-w-[70px]">Projet</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-gray-500 min-w-[80px]">Groupe</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-gray-500 min-w-[70px]">Source</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-gray-500 min-w-[55px]">Entité</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-gray-500 min-w-[110px]">N° Eng.</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-gray-500 min-w-[220px]">Désignation</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-right min-w-[110px]" style={{ color: '#2563eb' }}>Total CP</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-right min-w-[110px]" style={{ color: '#7c3aed' }}>Total CE</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-right min-w-[130px]" style={{ color: '#d97706' }}>Eng. CP</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-right min-w-[130px]" style={{ color: '#e11d48' }}>Paiements</TableHead>
+                          <TableHead className="text-[11px] font-semibold text-right min-w-[130px]" style={{ color: '#059669' }}>Prévisions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {paginatedData.map((row, idx) => (
-                          <TableRow key={idx} className="hover:bg-emerald-50/30 transition-colors">
-                            <TableCell className="text-[11px] text-gray-400 font-mono">{(currentPage - 1) * rowsPerPage + idx + 1}</TableCell>
-                            <TableCell>
-                              <Badge variant="outline" className={`text-[10px] ${row.PROJET === 'DIAEA' ? 'border-emerald-300 text-emerald-700 bg-emerald-50' : 'border-amber-300 text-amber-700 bg-amber-50'}`}>{row.PROJET}</Badge>
-                            </TableCell>
-                            <TableCell className="text-[11px] text-gray-700">{row.GROUPE}</TableCell>
-                            <TableCell className="text-[11px] text-gray-700">{row['SOURCE FINANCEMENT']}</TableCell>
-                            <TableCell><Badge variant="secondary" className="text-[10px] bg-gray-100 text-gray-600">{row.ENTITE}</Badge></TableCell>
-                            <TableCell className="text-[11px] text-gray-600 font-mono">{row['N° ENGAGEMENT'] || '-'}</TableCell>
-                            <TableCell className="text-[11px] text-gray-700 max-w-[280px] truncate" title={row['DETAIL DESIGNATION'] || ''}>{row['DETAIL DESIGNATION'] || '-'}</TableCell>
-                            <TableCell className="text-[11px] text-right font-mono text-gray-700">{formatNumber(row['TOTAL CP'])}</TableCell>
-                            <TableCell className="text-[11px] text-right font-mono text-gray-700">{formatNumber(row['TOTAL CE'])}</TableCell>
-                            <TableCell className="text-[11px] text-right font-mono text-gray-700">{formatNumber(row['ENG CP TOTAL'])}</TableCell>
-                            <TableCell className="text-[11px] text-right font-mono text-gray-700">{formatNumber(row['PAIEMENTS TOTAL'])}</TableCell>
-                            <TableCell className="text-[11px] text-right font-mono font-semibold text-emerald-700">{formatNumber(row['TOTAL PREV'])}</TableCell>
-                          </TableRow>
-                        ))}
+                        {paginatedData.map((row, idx) => {
+                          const cp = row['TOTAL CP'] || 0
+                          const engCP = row['ENG CP TOTAL'] || 0
+                          const paiements = row['PAIEMENTS TOTAL'] || 0
+                          const rowTauxEng = cp > 0 ? (engCP / cp) * 100 : 0
+                          const rowTauxPaie = engCP > 0 ? (paiements / engCP) * 100 : 0
+                          return (
+                            <TableRow key={idx} className="hover:bg-emerald-50/30 transition-colors group">
+                              <TableCell className="text-[11px] text-gray-400 font-mono">{(currentPage - 1) * rowsPerPage + idx + 1}</TableCell>
+                              <TableCell>
+                                <Badge variant="outline" className={`text-[10px] ${row.PROJET === 'DIAEA' ? 'border-emerald-300 text-emerald-700 bg-emerald-50' : 'border-amber-300 text-amber-700 bg-amber-50'}`}>{row.PROJET}</Badge>
+                              </TableCell>
+                              <TableCell className="text-[11px] text-gray-700">{row.GROUPE}</TableCell>
+                              <TableCell className="text-[11px] text-gray-700">{row['SOURCE FINANCEMENT']}</TableCell>
+                              <TableCell><Badge variant="secondary" className="text-[10px] bg-gray-100 text-gray-600">{row.ENTITE}</Badge></TableCell>
+                              <TableCell className="text-[11px] text-gray-600 font-mono">{row['N° ENGAGEMENT'] || '—'}</TableCell>
+                              <TableCell className="text-[11px] text-gray-700 max-w-[280px] truncate" title={row['DETAIL DESIGNATION'] || ''}>{row['DETAIL DESIGNATION'] || '—'}</TableCell>
+                              <TableCell className="text-[11px] text-right font-mono tabular-nums font-semibold" style={{ color: '#2563eb' }}>
+                                {formatTableCell(cp)}
+                              </TableCell>
+                              <TableCell className="text-[11px] text-right font-mono tabular-nums font-semibold" style={{ color: '#7c3aed' }}>
+                                {formatTableCell(row['TOTAL CE'])}
+                              </TableCell>
+                              <TableCell className="text-[11px] text-right p-1">
+                                <div className="flex flex-col items-end gap-0.5">
+                                  <span className="font-mono tabular-nums font-semibold" style={{ color: '#d97706' }}>{formatTableCell(engCP)}</span>
+                                  {cp > 0 && (
+                                    <div className="flex items-center gap-1 w-full">
+                                      <div className="flex-1 h-1 rounded-full bg-gray-100 overflow-hidden">
+                                        <div className={`h-full rounded-full ${rowTauxEng >= 80 ? 'bg-emerald-400' : rowTauxEng >= 50 ? 'bg-amber-400' : 'bg-red-400'}`} style={{ width: `${Math.min(rowTauxEng, 100)}%` }} />
+                                      </div>
+                                      <span className={`text-[9px] font-semibold tabular-nums ${getRateColor(rowTauxEng)}`}>{rowTauxEng.toFixed(0)}%</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-[11px] text-right p-1">
+                                <div className="flex flex-col items-end gap-0.5">
+                                  <span className="font-mono tabular-nums font-semibold" style={{ color: '#e11d48' }}>{formatTableCell(paiements)}</span>
+                                  {engCP > 0 && (
+                                    <div className="flex items-center gap-1 w-full">
+                                      <div className="flex-1 h-1 rounded-full bg-gray-100 overflow-hidden">
+                                        <div className={`h-full rounded-full ${rowTauxPaie >= 80 ? 'bg-emerald-400' : rowTauxPaie >= 50 ? 'bg-amber-400' : 'bg-red-400'}`} style={{ width: `${Math.min(rowTauxPaie, 100)}%` }} />
+                                      </div>
+                                      <span className={`text-[9px] font-semibold tabular-nums ${getRateColor(rowTauxPaie)}`}>{rowTauxPaie.toFixed(0)}%</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-[11px] text-right p-1">
+                                <div className="flex flex-col items-end gap-0.5">
+                                  <span className="font-mono tabular-nums font-bold" style={{ color: '#059669' }}>{formatTableCell(row['TOTAL PREV'])}</span>
+                                  {cp > 0 && (row['TOTAL PREV'] || 0) > 0 && (
+                                    <span className="text-[9px] text-gray-400 tabular-nums">
+                                      {((row['TOTAL PREV'] || 0) / cp * 100).toFixed(0)}% du CP
+                                    </span>
+                                  )}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })}
                         {paginatedData.length === 0 && (
                           <TableRow><TableCell colSpan={12} className="text-center py-8 text-gray-400 text-xs">Aucune donnée trouvée</TableCell></TableRow>
                         )}
