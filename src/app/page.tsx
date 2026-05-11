@@ -2275,7 +2275,7 @@ export default function Dashboard() {
                 </Button>
                 <div>
                   <h2 className="text-base sm:text-lg font-bold text-gray-900">
-                    Suivi d&apos;ex\u00e9cution du budget d&apos;investissement
+                    Situation d'ex\u00e9cution du budget d'investissement
                   </h2>
                   <p className="text-xs text-gray-500 hidden sm:block">
                     Vue consolid\u00e9e par entit\u00e9, projet et programme
