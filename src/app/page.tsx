@@ -349,7 +349,7 @@ export default function Dashboard() {
       .sort((a, b) => (b['TOTAL CP'] || 0) - (a['TOTAL CP'] || 0))
       .slice(0, 5)
       .map(r => ({
-        name: r.PROJET,
+        name: r.PROJET || 'Sans nom',
         cp: r['TOTAL CP'] || 0,
         engCP: r['ENG CP TOTAL'] || 0,
         ord: r['ORD TOTAL'] || 0,
@@ -382,7 +382,7 @@ export default function Dashboard() {
   // Chart data for top 5 projects
   const chartDataByProject = useMemo(() => {
     return topProjects.map(p => ({
-      name: p.name.length > 25 ? p.name.substring(0, 25) + '...' : p.name,
+      name: (p.name || '').length > 25 ? (p.name || '').substring(0, 25) + '...' : (p.name || 'Sans nom'),
       Engagements: Math.round(p.engCP / 1e6 * 10) / 10,
       Ordonnancements: Math.round(p.ord / 1e6 * 10) / 10,
       'Budget LFI': Math.round(p.cp / 1e6 * 10) / 10,
@@ -411,7 +411,7 @@ export default function Dashboard() {
       if (engRate - ordRate > 20 && (r['ENG CP TOTAL'] || 0) > 0) {
         result.push({
           type: 'warning',
-          message: `Retard d'ordonnancement - ${r.PROJET}`,
+          message: `Retard d'ordonnancement - ${r.PROJET || 'Sans nom'}`,
           detail: `\u00c9cart de ${formatPercent(engRate - ordRate)} entre engagement et ordonnancement`,
         })
       }
@@ -434,7 +434,7 @@ export default function Dashboard() {
       if ((r['ENG CP TOTAL'] || 0) > 0 && (r['ORD TOTAL'] || 0) === 0) {
         result.push({
           type: 'info',
-          message: `Donn\u00e9es \u00e0 v\u00e9rifier - ${r.PROJET}`,
+          message: `Donn\u00e9es \u00e0 v\u00e9rifier - ${r.PROJET || 'Sans nom'}`,
           detail: 'Engagement sans ordonnancement',
         })
       }
@@ -464,7 +464,7 @@ export default function Dashboard() {
       if (engRate - ordRate > 20 && (r['ENG CP TOTAL'] || 0) > 0) {
         result.push({
           type: 'warning',
-          message: `Retard d'ordonnancement - ${r.PROJET}`,
+          message: `Retard d'ordonnancement - ${r.PROJET || 'Sans nom'}`,
           detail: `\u00c9cart de ${formatPercent(engRate - ordRate)} entre engagement et ordonnancement`,
           date: lastUpdated || undefined,
         })
@@ -487,7 +487,7 @@ export default function Dashboard() {
       if ((r['ENG CP TOTAL'] || 0) > 0 && (r['ORD TOTAL'] || 0) === 0) {
         result.push({
           type: 'info',
-          message: `Donn\u00e9es \u00e0 v\u00e9rifier - ${r.PROJET}`,
+          message: `Donn\u00e9es \u00e0 v\u00e9rifier - ${r.PROJET || 'Sans nom'}`,
           detail: 'Engagement sans ordonnancement',
           date: lastUpdated || undefined,
         })
@@ -572,7 +572,7 @@ export default function Dashboard() {
         const groupOrd = rows.reduce((s, r) => s + (r['ORD TOTAL'] || 0), 0)
 
         const projects = rows.map(r => ({
-          name: r.PROJET,
+          name: r.PROJET || 'Sans nom',
           cp: r['TOTAL CP'] || 0,
           engCP: r['ENG CP TOTAL'] || 0,
           ord: r['ORD TOTAL'] || 0,
@@ -620,9 +620,9 @@ export default function Dashboard() {
     return [...filteredData]
       .sort((a, b) => (b['TOTAL CP'] || 0) - (a['TOTAL CP'] || 0))
       .map(r => ({
-        name: r.PROJET,
-        groupe: r.GROUPE,
-        entite: r.ENTITE,
+        name: r.PROJET || 'Sans nom',
+        groupe: r.GROUPE || 'Non classé',
+        entite: r.ENTITE || 'Non défini',
         cp: r['TOTAL CP'] || 0,
         engCP: r['ENG CP TOTAL'] || 0,
         ord: r['ORD TOTAL'] || 0,
