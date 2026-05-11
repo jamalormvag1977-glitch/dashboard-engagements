@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import {
   Card,
   CardContent,
@@ -50,7 +50,10 @@ import {
   ChevronRight,
   Search,
   BarChart3,
-  PieChartIcon,
+  Upload,
+  RefreshCw,
+  CheckCircle2,
+  Clock,
 } from 'lucide-react'
 
 interface DataRow {
@@ -92,12 +95,6 @@ interface FilterData {
   entites: string[]
 }
 
-interface ApiResponse {
-  data: DataRow[]
-  filters: FilterData
-  totalCount: number
-}
-
 const CHART_COLORS = [
   '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4',
   '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16',
@@ -117,6 +114,12 @@ function formatNumberFull(value: number | null | undefined): string {
   return value.toLocaleString('fr-FR')
 }
 
+function formatDate(iso: string | null): string {
+  if (!iso) return '-'
+  const d = new Date(iso)
+  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+}
+
 export default function Dashboard() {
   const [data, setData] = useState<DataRow[]>([])
   const [filters, setFilters] = useState<FilterData>({ projets: [], groupes: [], entites: [] })
@@ -126,27 +129,85 @@ export default function Dashboard() {
   const [selectedEntite, setSelectedEntite] = useState<string>('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [activeTab, setActiveTab] = useState<'table' | 'charts'>('table')
+  const [uploading, setUploading] = useState(false)
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null)
+  const [refreshStatus, setRefreshStatus] = useState<'idle' | 'checking' | 'updated'>('idle')
+  const rowsPerPage = 15
 
   const handleProjetChange = (value: string) => { setSelectedProjet(value); setCurrentPage(1) }
   const handleGroupeChange = (value: string) => { setSelectedGroupe(value); setCurrentPage(1) }
   const handleEntiteChange = (value: string) => { setSelectedEntite(value); setCurrentPage(1) }
   const handleSearchChange = (value: string) => { setSearchTerm(value); setCurrentPage(1) }
-  const [activeTab, setActiveTab] = useState<'table' | 'charts'>('table')
-  const rowsPerPage = 15
 
-  useEffect(() => {
-    fetch('/data.json')
-      .then(res => res.json())
-      .then((response: ApiResponse) => {
-        setData(response.data)
-        setFilters(response.filters)
-        setLoading(false)
-      })
-      .catch(err => {
-        console.error('Error loading data:', err)
-        setLoading(false)
-      })
+  // Fetch data from API
+  const fetchData = useCallback(async (silent = false) => {
+    try {
+      if (!silent) setLoading(true)
+      setRefreshStatus('checking')
+      const res = await fetch('/api/data')
+      if (!res.ok) throw new Error('Failed to fetch')
+      const response = await res.json()
+      setData(response.data || [])
+      setFilters(response.filters || { projets: [], groupes: [], entites: [] })
+      setLastUpdated(response.lastUpdated || null)
+      setRefreshStatus('updated')
+      setTimeout(() => setRefreshStatus('idle'), 2000)
+    } catch (err) {
+      console.error('Error loading data:', err)
+    } finally {
+      setLoading(false)
+    }
   }, [])
+
+  // Initial load
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  // Auto-refresh every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchData(true)
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [fetchData])
+
+  // Handle Excel file upload
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.error || 'Upload failed')
+      }
+
+      const result = await res.json()
+
+      // Refresh data from server
+      await fetchData(true)
+
+      alert(`Fichier importé avec succès ! ${result.count} lignes chargées. Le dashboard de votre directeur sera mis à jour automatiquement.`)
+    } catch (err) {
+      console.error('Upload error:', err)
+      alert(`Erreur lors de l'import : ${(err as Error).message}`)
+    } finally {
+      setUploading(false)
+      // Reset file input
+      event.target.value = ''
+    }
+  }
 
   const filteredData = useMemo(() => {
     return data.filter(row => {
@@ -174,7 +235,7 @@ export default function Dashboard() {
     return { totalCP, totalCE, totalPaiements, totalPrevisions, totalEngCP, totalEngCE, count: filteredData.length }
   }, [filteredData])
 
-  // Chart data - By Groupe
+  // Chart data
   const chartByGroupe = useMemo(() => {
     const groups: Record<string, { cp: number; ce: number; paiements: number; previsions: number }> = {}
     filteredData.forEach(row => {
@@ -185,10 +246,13 @@ export default function Dashboard() {
       groups[g].paiements += row['PAIEMENTS TOTAL'] || 0
       groups[g].previsions += row['TOTAL PREV'] || 0
     })
-    return Object.entries(groups).map(([name, vals]) => ({ name, ...vals })).sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+    return Object.entries(groups).map(([name, vals]) => ({ name, ...vals })).sort((a, b) => {
+      const numA = parseInt(a.name.replace(/\D/g, '')) || 0
+      const numB = parseInt(b.name.replace(/\D/g, '')) || 0
+      return numA - numB
+    })
   }, [filteredData])
 
-  // Chart data - By Entité
   const chartByEntite = useMemo(() => {
     const entities: Record<string, { cp: number; ce: number; paiements: number; previsions: number }> = {}
     filteredData.forEach(row => {
@@ -202,7 +266,6 @@ export default function Dashboard() {
     return Object.entries(entities).map(([name, vals]) => ({ name, ...vals }))
   }, [filteredData])
 
-  // Monthly previsions data
   const monthlyPrevisions = useMemo(() => {
     const months = [
       { key: 'JANVIER', label: 'Jan' },
@@ -226,7 +289,6 @@ export default function Dashboard() {
     })
   }, [filteredData])
 
-  // Pie chart data - by Source Financement
   const pieDataBySource = useMemo(() => {
     const sources: Record<string, number> = {}
     filteredData.forEach(row => {
@@ -236,7 +298,6 @@ export default function Dashboard() {
     return Object.entries(sources).map(([name, value]) => ({ name, value }))
   }, [filteredData])
 
-  // Pagination
   const totalPages = Math.ceil(filteredData.length / rowsPerPage)
   const paginatedData = filteredData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
 
@@ -280,22 +341,76 @@ export default function Dashboard() {
                 <BarChart3 className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900">Tableau de Bord</h1>
-                <p className="text-xs text-gray-500">Suivi des Engagements - 07/05/2026</p>
+                <h1 className="text-lg font-bold text-gray-900">Tableau de Bord - Engagements</h1>
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <Clock className="w-3 h-3" />
+                  <span>Dernière mise à jour : {formatDate(lastUpdated)}</span>
+                  {refreshStatus === 'checking' && (
+                    <span className="text-amber-600 flex items-center gap-1">
+                      <RefreshCw className="w-3 h-3 animate-spin" /> Vérification...
+                    </span>
+                  )}
+                  {refreshStatus === 'updated' && (
+                    <span className="text-emerald-600 flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" /> À jour
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 border-emerald-200">
                 {filteredData.length} ligne{filteredData.length > 1 ? 's' : ''}
               </Badge>
+              <label htmlFor="excel-upload">
+                <Button
+                  className="bg-emerald-600 hover:bg-emerald-700 gap-1.5 cursor-pointer"
+                  size="sm"
+                  disabled={uploading}
+                  asChild
+                >
+                  <span>
+                    <Upload className="w-4 h-4" />
+                    {uploading ? 'Import en cours...' : '📥 Importer Excel'}
+                  </span>
+                </Button>
+              </label>
+              <input
+                id="excel-upload"
+                type="file"
+                accept=".xlsx,.xls"
+                className="hidden"
+                onChange={handleFileUpload}
+                disabled={uploading}
+              />
               <Button variant="outline" size="sm" onClick={handleExport} className="gap-1.5">
                 <Download className="w-4 h-4" />
-                Export
+                Export CSV
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => fetchData(true)}
+                title="Actualiser maintenant"
+              >
+                <RefreshCw className={`w-4 h-4 ${refreshStatus === 'checking' ? 'animate-spin' : ''}`} />
               </Button>
             </div>
           </div>
         </div>
       </header>
+
+      {/* Auto-refresh info banner */}
+      <div className="bg-emerald-50 border-b border-emerald-100">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-2">
+          <p className="text-xs text-emerald-700 flex items-center gap-2">
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span className="font-medium">Actualisation automatique toutes les 30 secondes</span>
+            <span className="text-emerald-600">— Importez un fichier Excel et le dashboard se met à jour instantanément pour tous les utilisateurs</span>
+          </p>
+        </div>
+      </div>
 
       <main className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Filters */}
@@ -436,7 +551,6 @@ export default function Dashboard() {
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Monthly Previsions Chart */}
           <Card className="border-gray-200 shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-semibold text-gray-700">Prévisions Mensuelles</CardTitle>
@@ -457,7 +571,6 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* By Groupe Chart */}
           <Card className="border-gray-200 shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-semibold text-gray-700">Répartition par Groupe</CardTitle>
@@ -477,7 +590,6 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* By Entité Chart */}
           <Card className="border-gray-200 shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-semibold text-gray-700">Répartition par Entité</CardTitle>
@@ -498,7 +610,6 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* Source Financement Pie */}
           <Card className="border-gray-200 shadow-sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-semibold text-gray-700">Source de Financement</CardTitle>
@@ -544,8 +655,8 @@ export default function Dashboard() {
             onClick={() => setActiveTab('charts')}
             className={activeTab === 'charts' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
           >
-            <PieChartIcon className="w-4 h-4 mr-1.5" />
-            Graphiques
+            <TrendingUp className="w-4 h-4 mr-1.5" />
+            Plus de Graphiques
           </Button>
         </div>
 
@@ -611,7 +722,6 @@ export default function Dashboard() {
                 </Table>
               </ScrollArea>
 
-              {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
                   <p className="text-xs text-gray-500">
@@ -629,15 +739,10 @@ export default function Dashboard() {
                     </Button>
                     {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                       let page: number
-                      if (totalPages <= 5) {
-                        page = i + 1
-                      } else if (currentPage <= 3) {
-                        page = i + 1
-                      } else if (currentPage >= totalPages - 2) {
-                        page = totalPages - 4 + i
-                      } else {
-                        page = currentPage - 2 + i
-                      }
+                      if (totalPages <= 5) page = i + 1
+                      else if (currentPage <= 3) page = i + 1
+                      else if (currentPage >= totalPages - 2) page = totalPages - 4 + i
+                      else page = currentPage - 2 + i
                       return (
                         <Button
                           key={page}
@@ -668,7 +773,6 @@ export default function Dashboard() {
 
         {activeTab === 'charts' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* CP vs CE comparison */}
             <Card className="border-gray-200 shadow-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-semibold text-gray-700">CP vs CE par Entité</CardTitle>
@@ -688,8 +792,6 @@ export default function Dashboard() {
                 </ResponsiveContainer>
               </CardContent>
             </Card>
-
-            {/* Paiements vs Previsions by Groupe */}
             <Card className="border-gray-200 shadow-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-semibold text-gray-700">Paiements vs Prévisions par Groupe</CardTitle>
@@ -716,7 +818,7 @@ export default function Dashboard() {
       <footer className="mt-8 border-t border-gray-200 bg-white">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <p className="text-xs text-gray-400 text-center">
-            Tableau de Bord - Suivi des Engagements Budgetaires | Données au 07/05/2026
+            Tableau de Bord - Suivi des Engagements Budgétaires | Actualisation automatique toutes les 30s
           </p>
         </div>
       </footer>
