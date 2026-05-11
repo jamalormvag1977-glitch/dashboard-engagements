@@ -76,8 +76,8 @@ import {
 } from 'lucide-react'
 
 interface DataRow {
-  PROJET: string
-  GROUPE: string
+  Programme: string
+  Projet: string
   'SOURCE FINANCEMENT': string
   NOMENCLATURE: string | number | null
   'N° ENGAGEMENT': string | null
@@ -109,8 +109,8 @@ interface DataRow {
 }
 
 interface FilterData {
+  programmes: string[]
   projets: string[]
-  groupes: string[]
   entites: string[]
 }
 
@@ -169,10 +169,10 @@ const PIE_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b
 
 export default function Dashboard() {
   const [data, setData] = useState<DataRow[]>([])
-  const [filters, setFilters] = useState<FilterData>({ projets: [], groupes: [], entites: [] })
+  const [filters, setFilters] = useState<FilterData>({ programmes: [], projets: [], entites: [] })
   const [loading, setLoading] = useState(true)
+  const [selectedProgramme, setSelectedProgramme] = useState<string>('all')
   const [selectedProjet, setSelectedProjet] = useState<string>('all')
-  const [selectedGroupe, setSelectedGroupe] = useState<string>('all')
   const [selectedEntite, setSelectedEntite] = useState<string>('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [uploading, setUploading] = useState(false)
@@ -201,7 +201,7 @@ export default function Dashboard() {
       if (!res.ok) throw new Error('Failed to fetch')
       const response = await res.json()
       setData(response.data || [])
-      setFilters(response.filters || { projets: [], groupes: [], entites: [] })
+      setFilters(response.filters || { programmes: [], projets: [], entites: [] })
       setLastUpdated(response.lastUpdated || null)
       setRefreshStatus('updated')
       setTimeout(() => setRefreshStatus('idle'), 2000)
@@ -245,27 +245,27 @@ export default function Dashboard() {
   }
 
   const handleResetFilters = () => {
+    setSelectedProgramme('all')
     setSelectedProjet('all')
-    setSelectedGroupe('all')
     setSelectedEntite('all')
     setSearchTerm('')
   }
 
   const filteredData = useMemo(() => {
     return data.filter(row => {
-      if (selectedProjet !== 'all' && row.PROJET !== selectedProjet) return false
-      if (selectedGroupe !== 'all' && row.GROUPE !== selectedGroupe) return false
+      if (selectedProgramme !== 'all' && row.Programme !== selectedProgramme) return false
+      if (selectedProjet !== 'all' && row.Projet !== selectedProjet) return false
       if (selectedEntite !== 'all' && row.ENTITE !== selectedEntite) return false
       if (searchTerm) {
         const search = searchTerm.toLowerCase()
         const designation = (row['DETAIL DESIGNATION'] || '').toLowerCase()
         const engagement = (row['N° ENGAGEMENT'] || '').toLowerCase()
-        const projet = (row.PROJET || '').toLowerCase()
+        const projet = (row.Programme || '').toLowerCase()
         if (!designation.includes(search) && !engagement.includes(search) && !projet.includes(search)) return false
       }
       return true
     })
-  }, [data, selectedProjet, selectedGroupe, selectedEntite, searchTerm])
+  }, [data, selectedProgramme, selectedProjet, selectedEntite, searchTerm])
 
   // KPI calculations
   const kpis = useMemo(() => {
@@ -318,7 +318,7 @@ export default function Dashboard() {
   const analysisByGroup = useMemo(() => {
     const groups: Record<string, { cp: number; ce: number; engCP: number; paiements: number; previsions: number; count: number; ord: number }> = {}
     filteredData.forEach(row => {
-      const g = row.GROUPE
+      const g = row.Projet
       if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, paiements: 0, previsions: 0, count: 0, ord: 0 }
       groups[g].cp += row['TOTAL CP'] || 0
       groups[g].ce += row['TOTAL CE'] || 0
@@ -349,7 +349,7 @@ export default function Dashboard() {
       .sort((a, b) => (b['TOTAL CP'] || 0) - (a['TOTAL CP'] || 0))
       .slice(0, 5)
       .map(r => ({
-        name: r.PROJET || 'Sans nom',
+        name: r.Programme || 'Sans nom',
         cp: r['TOTAL CP'] || 0,
         engCP: r['ENG CP TOTAL'] || 0,
         ord: r['ORD TOTAL'] || 0,
@@ -411,7 +411,7 @@ export default function Dashboard() {
       if (engRate - ordRate > 20 && (r['ENG CP TOTAL'] || 0) > 0) {
         result.push({
           type: 'warning',
-          message: `Retard d'ordonnancement - ${r.PROJET || 'Sans nom'}`,
+          message: `Retard d'ordonnancement - ${r.Programme || 'Sans nom'}`,
           detail: `\u00c9cart de ${formatPercent(engRate - ordRate)} entre engagement et ordonnancement`,
         })
       }
@@ -434,7 +434,7 @@ export default function Dashboard() {
       if ((r['ENG CP TOTAL'] || 0) > 0 && (r['ORD TOTAL'] || 0) === 0) {
         result.push({
           type: 'info',
-          message: `Donn\u00e9es \u00e0 v\u00e9rifier - ${r.PROJET || 'Sans nom'}`,
+          message: `Donn\u00e9es \u00e0 v\u00e9rifier - ${r.Programme || 'Sans nom'}`,
           detail: 'Engagement sans ordonnancement',
         })
       }
@@ -464,7 +464,7 @@ export default function Dashboard() {
       if (engRate - ordRate > 20 && (r['ENG CP TOTAL'] || 0) > 0) {
         result.push({
           type: 'warning',
-          message: `Retard d'ordonnancement - ${r.PROJET || 'Sans nom'}`,
+          message: `Retard d'ordonnancement - ${r.Programme || 'Sans nom'}`,
           detail: `\u00c9cart de ${formatPercent(engRate - ordRate)} entre engagement et ordonnancement`,
           date: lastUpdated || undefined,
         })
@@ -487,7 +487,7 @@ export default function Dashboard() {
       if ((r['ENG CP TOTAL'] || 0) > 0 && (r['ORD TOTAL'] || 0) === 0) {
         result.push({
           type: 'info',
-          message: `Donn\u00e9es \u00e0 v\u00e9rifier - ${r.PROJET || 'Sans nom'}`,
+          message: `Donn\u00e9es \u00e0 v\u00e9rifier - ${r.Programme || 'Sans nom'}`,
           detail: 'Engagement sans ordonnancement',
           date: lastUpdated || undefined,
         })
@@ -555,7 +555,7 @@ export default function Dashboard() {
     const grouped: Record<string, Record<string, DataRow[]>> = {}
     filteredData.forEach(row => {
       const entity = row.ENTITE
-      const group = row.GROUPE
+      const group = row.Projet
       if (!grouped[entity]) grouped[entity] = {}
       if (!grouped[entity][group]) grouped[entity][group] = []
       grouped[entity][group].push(row)
@@ -572,7 +572,7 @@ export default function Dashboard() {
         const groupOrd = rows.reduce((s, r) => s + (r['ORD TOTAL'] || 0), 0)
 
         const projects = rows.map(r => ({
-          name: r.PROJET || 'Sans nom',
+          name: r.Programme || 'Sans nom',
           cp: r['TOTAL CP'] || 0,
           engCP: r['ENG CP TOTAL'] || 0,
           ord: r['ORD TOTAL'] || 0,
@@ -620,8 +620,8 @@ export default function Dashboard() {
     return [...filteredData]
       .sort((a, b) => (b['TOTAL CP'] || 0) - (a['TOTAL CP'] || 0))
       .map(r => ({
-        name: r.PROJET || 'Sans nom',
-        projet: r.GROUPE || 'Non classé',
+        name: r.Programme || 'Sans nom',
+        projet: r.Projet || 'Non class\u00e9',
         entite: r.ENTITE || 'Non défini',
         cp: r['TOTAL CP'] || 0,
         engCP: r['ENG CP TOTAL'] || 0,
@@ -648,7 +648,7 @@ export default function Dashboard() {
         numEngagement: r['N° ENGAGEMENT'] || '-',
         designation: r['DETAIL DESIGNATION'] || '-',
         entite: r.ENTITE,
-        projet: r.GROUPE,
+        projet: r.Projet,
         engReports: r['ENG REPORT'] || 0,
         engConsolides: r['ENG CONSOLIDES'] || 0,
         engNouveaux: r['ENG NOUVEAUX'] || 0,
@@ -666,7 +666,7 @@ export default function Dashboard() {
         numEngagement: r['N° ENGAGEMENT'] || '-',
         designation: r['DETAIL DESIGNATION'] || '-',
         entite: r.ENTITE,
-        projet: r.GROUPE,
+        projet: r.Projet,
         ordReports: r['ORD REPORTS'] || 0,
         ordConsolides: r['ORD CONSOLIDES'] || 0,
         ordNouveaux: r['ORD NOUVEAUX'] || 0,
@@ -676,7 +676,7 @@ export default function Dashboard() {
   }, [filteredData])
 
   const handleExport = () => {
-    const headers = ['PROJET', 'GROUPE', 'SOURCE FINANCEMENT', 'NOMENCLATURE', 'N\u00b0 ENGAGEMENT', 'ENTITE', 'DETAIL DESIGNATION', 'TOTAL CP', 'TOTAL CE', 'PAIEMENTS TOTAL', 'TOTAL PREV']
+    const headers = ['Programme', 'Projet', 'SOURCE FINANCEMENT', 'NOMENCLATURE', 'N\u00b0 ENGAGEMENT', 'ENTITE', 'DETAIL DESIGNATION', 'TOTAL CP', 'TOTAL CE', 'PAIEMENTS TOTAL', 'TOTAL PREV']
     const csvRows = [headers.join(';')]
     filteredData.forEach(row => {
       const values = headers.map(h => {
@@ -798,10 +798,10 @@ export default function Dashboard() {
             Entit\u00e9 : {selectedEntite === 'all' ? 'Toutes' : selectedEntite}
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
-            Projet : {selectedGroupe === 'all' ? 'Tous' : selectedGroupe}
+            Projet : {selectedProjet === 'all' ? 'Tous' : selectedProjet}
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
-            Programme : {selectedProjet === 'all' ? 'Tous' : selectedProjet}
+            Programme : {selectedProgramme === 'all' ? 'Tous' : selectedProgramme}
           </Badge>
         </div>
       </div>
@@ -2331,22 +2331,22 @@ export default function Dashboard() {
                   {filters.entites.map(e => <SelectItem key={e} value={e}>{e}</SelectItem>)}
                 </SelectContent>
               </Select>
-              <Select value={selectedGroupe} onValueChange={setSelectedGroupe}>
+              <Select value={selectedProjet} onValueChange={setSelectedProjet}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[150px]">
                   <SelectValue placeholder="Projet" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tous les projets</SelectItem>
-                  {filters.groupes.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
+                  {filters.projets.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
                 </SelectContent>
               </Select>
-              <Select value={selectedProjet} onValueChange={setSelectedProjet}>
+              <Select value={selectedProgramme} onValueChange={setSelectedProgramme}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
                   <SelectValue placeholder="Programme" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tous les programmes</SelectItem>
-                  {filters.projets.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                  {filters.programmes.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
               </Select>
               <div className="relative w-[180px]">

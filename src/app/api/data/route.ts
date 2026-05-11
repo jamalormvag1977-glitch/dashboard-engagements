@@ -18,7 +18,7 @@ export async function GET() {
       const data = JSON.parse(raw)
       return NextResponse.json(data)
     }
-    return NextResponse.json({ data: [], filters: { projets: [], groupes: [], entites: [] }, totalCount: 0 })
+    return NextResponse.json({ data: [], filters: { programmes: [], projets: [], entites: [] }, totalCount: 0 })
   } catch (error) {
     console.error('Error reading data:', error)
     return NextResponse.json({ error: 'Failed to read data' }, { status: 500 })

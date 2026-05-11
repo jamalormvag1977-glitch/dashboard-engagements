@@ -49,8 +49,8 @@ export async function POST(request: Request) {
     }
 
     // Extract filter values
-    const projets = [...new Set(rows.map(r => r.PROJET).filter(Boolean) as string[])].sort()
-    const groupes = [...new Set(rows.map(r => r.GROUPE).filter(Boolean) as string[])].sort((a, b) => {
+    const programmes = [...new Set(rows.map(r => r.Programme).filter(Boolean) as string[])].sort()
+    const projets = [...new Set(rows.map(r => r.Projet).filter(Boolean) as string[])].sort((a, b) => {
       const numA = parseInt(a.replace(/\D/g, '')) || 0
       const numB = parseInt(b.replace(/\D/g, '')) || 0
       return numA - numB
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
 
     const payload = {
       data: rows,
-      filters: { projets, groupes, entites },
+      filters: { programmes, projets, entites },
       totalCount: rows.length,
       lastUpdated: new Date().toISOString(),
     }
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       count: rows.length,
-      filters: { projets, groupes, entites },
+      filters: { programmes, projets, entites },
       lastUpdated: payload.lastUpdated,
     })
   } catch (error) {
