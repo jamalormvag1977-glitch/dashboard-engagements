@@ -114,16 +114,16 @@ interface FilterData {
   entites: string[]
 }
 
-// Format number in millions with 1 decimal and M\u202F\u20ac suffix (French format)
+// Format number in millions with 1 decimal and M € suffix (French format)
 function formatMillions(value: number | null | undefined): string {
   if (value === null || value === undefined) return '-'
   const millions = value / 1e6
-  return millions.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' M\u202F\u20ac'
+  return millions.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' M €'
 }
 
 // Format number for table cells with French thousands separators
 function formatTableCell(value: number | null | undefined): string {
-  if (value === null || value === undefined) return '\u2014'
+  if (value === null || value === undefined) return '—'
   if (value === 0) return '0'
   return value.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
 }
@@ -155,14 +155,14 @@ function tauxBgColor(value: number): string {
 // Navigation items for sidebar
 const NAV_ITEMS = [
   { key: 'overview', label: "Vue d'ensemble", icon: Home },
-  { key: 'entity', label: 'Par entit\u00e9', icon: List },
+  { key: 'entity', label: 'Par entité', icon: List },
   { key: 'program', label: 'Par projet', icon: FolderOpen },
   { key: 'project', label: 'Par programme', icon: FolderOpen },
-  { key: 'engagements', label: 'D\u00e9tails engagements', icon: FileText },
-  { key: 'ordonnancements', label: 'D\u00e9tails ordonnancements', icon: FileText },
+  { key: 'engagements', label: 'Détails engagements', icon: FileText },
+  { key: 'ordonnancements', label: 'Détails ordonnancements', icon: FileText },
   { key: 'alerts', label: 'Alertes', icon: Bell, hasBadge: true },
   { key: 'reports', label: 'Rapports', icon: BarChart3 },
-  { key: 'settings', label: 'Param\u00e8tres', icon: Settings },
+  { key: 'settings', label: 'Paramètres', icon: Settings },
 ]
 
 const PIE_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4']
@@ -234,7 +234,7 @@ export default function Dashboard() {
       }
       const result = await res.json()
       await fetchData(true)
-      alert(`Fichier import\u00e9 avec succ\u00e8s ! ${result.count} lignes charg\u00e9es.`)
+      alert(`Fichier importé avec succès ! ${result.count} lignes chargées.`)
     } catch (err) {
       console.error('Upload error:', err)
       alert(`Erreur lors de l'import : ${(err as Error).message}`)
@@ -399,7 +399,7 @@ export default function Dashboard() {
         result.push({
           type: 'danger',
           message: `Faible taux d'engagement - ${e.name}`,
-          detail: `${formatPercent(e.tauxEngagement)} du budget engag\u00e9`,
+          detail: `${formatPercent(e.tauxEngagement)} du budget engagé`,
         })
       }
     })
@@ -412,29 +412,29 @@ export default function Dashboard() {
         result.push({
           type: 'warning',
           message: `Retard d'ordonnancement - ${r.Programme || 'Sans nom'}`,
-          detail: `\u00c9cart de ${formatPercent(engRate - ordRate)} entre engagement et ordonnancement`,
+          detail: `Écart de ${formatPercent(engRate - ordRate)} entre engagement et ordonnancement`,
         })
       }
     })
 
-    // Consommation \u00e9lev\u00e9e (programme > 80% budget used)
+    // Consommation élevée (programme > 80% budget used)
     analysisByGroup.forEach(g => {
       const consumption = g.cp > 0 ? (g.ord / g.cp) * 100 : 0
       if (consumption > 80) {
         result.push({
           type: 'info',
-          message: `Consommation \u00e9lev\u00e9e - ${g.name}`,
-          detail: `${formatPercent(consumption)} du budget consomm\u00e9`,
+          message: `Consommation élevée - ${g.name}`,
+          detail: `${formatPercent(consumption)} du budget consommé`,
         })
       }
     })
 
-    // Donn\u00e9es \u00e0 v\u00e9rifier (projects with engagement but no ordonnancement)
+    // Données à vérifier (projects with engagement but no ordonnancement)
     filteredData.forEach(r => {
       if ((r['ENG CP TOTAL'] || 0) > 0 && (r['ORD TOTAL'] || 0) === 0) {
         result.push({
           type: 'info',
-          message: `Donn\u00e9es \u00e0 v\u00e9rifier - ${r.Programme || 'Sans nom'}`,
+          message: `Données à vérifier - ${r.Programme || 'Sans nom'}`,
           detail: 'Engagement sans ordonnancement',
         })
       }
@@ -452,7 +452,7 @@ export default function Dashboard() {
         result.push({
           type: 'danger',
           message: `Faible taux d'engagement - ${e.name}`,
-          detail: `${formatPercent(e.tauxEngagement)} du budget engag\u00e9`,
+          detail: `${formatPercent(e.tauxEngagement)} du budget engagé`,
           date: lastUpdated || undefined,
         })
       }
@@ -465,7 +465,7 @@ export default function Dashboard() {
         result.push({
           type: 'warning',
           message: `Retard d'ordonnancement - ${r.Programme || 'Sans nom'}`,
-          detail: `\u00c9cart de ${formatPercent(engRate - ordRate)} entre engagement et ordonnancement`,
+          detail: `Écart de ${formatPercent(engRate - ordRate)} entre engagement et ordonnancement`,
           date: lastUpdated || undefined,
         })
       }
@@ -476,8 +476,8 @@ export default function Dashboard() {
       if (consumption > 80) {
         result.push({
           type: 'info',
-          message: `Consommation \u00e9lev\u00e9e - ${g.name}`,
-          detail: `${formatPercent(consumption)} du budget consomm\u00e9`,
+          message: `Consommation élevée - ${g.name}`,
+          detail: `${formatPercent(consumption)} du budget consommé`,
           date: lastUpdated || undefined,
         })
       }
@@ -487,7 +487,7 @@ export default function Dashboard() {
       if ((r['ENG CP TOTAL'] || 0) > 0 && (r['ORD TOTAL'] || 0) === 0) {
         result.push({
           type: 'info',
-          message: `Donn\u00e9es \u00e0 v\u00e9rifier - ${r.Programme || 'Sans nom'}`,
+          message: `Données à vérifier - ${r.Programme || 'Sans nom'}`,
           detail: 'Engagement sans ordonnancement',
           date: lastUpdated || undefined,
         })
@@ -535,7 +535,7 @@ export default function Dashboard() {
   const sourceFinancementData = useMemo(() => {
     const sources: Record<string, { cp: number; engCP: number; ord: number; count: number }> = {}
     filteredData.forEach(row => {
-      const s = row['SOURCE FINANCEMENT'] || 'Non sp\u00e9cifi\u00e9'
+      const s = row['SOURCE FINANCEMENT'] || 'Non spécifié'
       if (!sources[s]) sources[s] = { cp: 0, engCP: 0, ord: 0, count: 0 }
       sources[s].cp += row['TOTAL CP'] || 0
       sources[s].engCP += row['ENG CP TOTAL'] || 0
@@ -611,7 +611,7 @@ export default function Dashboard() {
   // Budget structure pie chart data
   const budgetStructureData = useMemo(() => [
     { name: 'Reports', value: Math.round(kpis.totalReports / 1e6 * 10) / 10 },
-    { name: 'Consolid\u00e9s', value: Math.round(kpis.totalConsolides / 1e6 * 10) / 10 },
+    { name: 'Consolidés', value: Math.round(kpis.totalConsolides / 1e6 * 10) / 10 },
     { name: 'Nouveaux', value: Math.round(kpis.totalNouveaux / 1e6 * 10) / 10 },
   ], [kpis])
 
@@ -621,7 +621,7 @@ export default function Dashboard() {
       .sort((a, b) => (b['TOTAL CP'] || 0) - (a['TOTAL CP'] || 0))
       .map(r => ({
         name: r.Programme || 'Sans nom',
-        projet: r.Projet || 'Non class\u00e9',
+        projet: r.Projet || 'Non classé',
         entite: r.ENTITE || 'Non défini',
         cp: r['TOTAL CP'] || 0,
         engCP: r['ENG CP TOTAL'] || 0,
@@ -676,7 +676,7 @@ export default function Dashboard() {
   }, [filteredData])
 
   const handleExport = () => {
-    const headers = ['Programme', 'Projet', 'SOURCE FINANCEMENT', 'NOMENCLATURE', 'N\u00b0 ENGAGEMENT', 'ENTITE', 'DETAIL DESIGNATION', 'TOTAL CP', 'TOTAL CE', 'PAIEMENTS TOTAL', 'TOTAL PREV']
+    const headers = ['Programme', 'Projet', 'SOURCE FINANCEMENT', 'NOMENCLATURE', 'N° ENGAGEMENT', 'ENTITE', 'DETAIL DESIGNATION', 'TOTAL CP', 'TOTAL CE', 'PAIEMENTS TOTAL', 'TOTAL PREV']
     const csvRows = [headers.join(';')]
     filteredData.forEach(row => {
       const values = headers.map(h => {
@@ -724,7 +724,7 @@ export default function Dashboard() {
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin" />
-          <p className="text-gray-500 text-sm">Chargement des donn\u00e9es...</p>
+          <p className="text-gray-500 text-sm">Chargement des données...</p>
         </div>
       </div>
     )
@@ -792,10 +792,10 @@ export default function Dashboard() {
             Exercice : 2024
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
-            P\u00e9riode : {new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+            Période : {new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
-            entit\u00e9 : {selectedEntite === 'all' ? 'Toutes' : selectedEntite}
+            entité : {selectedEntite === 'all' ? 'Toutes' : selectedEntite}
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
             Projet : {selectedProjet === 'all' ? 'Tous' : selectedProjet}
@@ -882,7 +882,7 @@ export default function Dashboard() {
               ) : (
                 <ArrowDownRight className="w-3 h-3 mr-1" />
               )}
-              {kpis.tauxEngagement >= 50 ? 'Bon' : '\u00c0 am\u00e9liorer'}
+              {kpis.tauxEngagement >= 50 ? 'Bon' : 'À améliorer'}
             </Badge>
           </CardContent>
         </Card>
@@ -930,7 +930,7 @@ export default function Dashboard() {
               ) : (
                 <ArrowDownRight className="w-3 h-3 mr-1" />
               )}
-              {kpis.tauxOrdonnement >= 50 ? 'Bon' : '\u00c0 am\u00e9liorer'}
+              {kpis.tauxOrdonnement >= 50 ? 'Bon' : 'À améliorer'}
             </Badge>
           </CardContent>
         </Card>
@@ -957,10 +957,10 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Ex\u00e9cution par entit\u00e9 (en M\u202F\u20ac)
+              Exécution par entité (en M €)
             </CardTitle>
             <button onClick={() => handleNavChange('entity')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
-              Voir toutes les entit\u00e9s <ChevronRight className="w-3 h-3" />
+              Voir toutes les entités <ChevronRight className="w-3 h-3" />
             </button>
           </div>
         </CardHeader>
@@ -971,7 +971,7 @@ export default function Dashboard() {
               <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
               <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={60} />
               <Tooltip
-                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M\u202F\u20ac`}
+                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
@@ -987,7 +987,7 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Ex\u00e9cution par projet (en M\u202F\u20ac)
+              Exécution par projet (en M €)
             </CardTitle>
             <button onClick={() => handleNavChange('program')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Voir tous les projets <ChevronRight className="w-3 h-3" />
@@ -1001,7 +1001,7 @@ export default function Dashboard() {
               <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
               <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={80} />
               <Tooltip
-                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M\u202F\u20ac`}
+                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
@@ -1017,7 +1017,7 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Ex\u00e9cution par programme (Top 5) (en M\u202F\u20ac)
+              Exécution par programme (Top 5) (en M €)
             </CardTitle>
             <button onClick={() => handleNavChange('project')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Voir tous les programmes <ChevronRight className="w-3 h-3" />
@@ -1031,7 +1031,7 @@ export default function Dashboard() {
               <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
               <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={120} />
               <Tooltip
-                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M\u202F\u20ac`}
+                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
@@ -1046,7 +1046,7 @@ export default function Dashboard() {
       <Card className="border border-gray-100 shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold text-gray-700">
-            D\u00e9tail de l&apos;ex\u00e9cution
+            Détail de l&apos;exécution
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
@@ -1054,13 +1054,13 @@ export default function Dashboard() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-50">
-                  <TableHead className="text-xs font-semibold text-gray-600 w-[300px]">entit\u00e9 / Projet / Programme</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI) M\u202F\u20ac</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements M\u202F\u20ac</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 w-[300px]">entité / Projet / Programme</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI) M €</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements M €</TableHead>
                   <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. %</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn. M\u202F\u20ac</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn. M €</TableHead>
                   <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord. %</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible M\u202F\u20ac</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible M €</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -1159,7 +1159,7 @@ export default function Dashboard() {
 
     return (
       <>
-        <h2 className="text-lg font-bold text-gray-900">Analyse par entit\u00e9</h2>
+        <h2 className="text-lg font-bold text-gray-900">Analyse par entité</h2>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1187,7 +1187,7 @@ export default function Dashboard() {
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Budget / Engagements / Ordonnancements par entit\u00e9 (en M\u202F\u20ac)
+              Budget / Engagements / Ordonnancements par entité (en M €)
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -1196,7 +1196,7 @@ export default function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
                 <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={60} />
-                <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M\u202F\u20ac`} />
+                <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={12} />
                 <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
@@ -1209,14 +1209,14 @@ export default function Dashboard() {
         {/* Entity Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">D\u00e9tail par entit\u00e9</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Détail par entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">entit\u00e9</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI)</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
@@ -1297,7 +1297,7 @@ export default function Dashboard() {
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Budget / Engagements / Ordonnancements par projet (en M\u202F\u20ac)
+              Budget / Engagements / Ordonnancements par projet (en M €)
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -1306,7 +1306,7 @@ export default function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
                 <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={80} />
-                <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M\u202F\u20ac`} />
+                <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={12} />
                 <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
@@ -1319,7 +1319,7 @@ export default function Dashboard() {
         {/* Programme Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">D\u00e9tail par projet</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Détail par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -1426,7 +1426,7 @@ export default function Dashboard() {
                   <TableRow className="bg-gray-50">
                     <TableHead className="text-xs font-semibold text-gray-600">Programme</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">entit\u00e9</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI)</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
@@ -1439,7 +1439,7 @@ export default function Dashboard() {
                   {pProjects.map((p, idx) => (
                     <TableRow key={`${p.name}-${p.projet}-${p.entite}-${idx}`} className="hover:bg-gray-50">
                       <TableCell className="text-xs font-medium text-gray-900 max-w-[200px] truncate">{p.name}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{p.projet || 'Non class\u00e9'}</TableCell>
+                      <TableCell className="text-xs text-gray-600">{p.projet || 'Non classé'}</TableCell>
                       <TableCell className="text-xs text-gray-600">{p.entite}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.cp)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.engCP)}</TableCell>
@@ -1498,7 +1498,7 @@ export default function Dashboard() {
 
     return (
       <>
-        <h2 className="text-lg font-bold text-gray-900">D\u00e9tails des Engagements</h2>
+        <h2 className="text-lg font-bold text-gray-900">Détails des Engagements</h2>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1525,7 +1525,7 @@ export default function Dashboard() {
         {/* Breakdown */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">R\u00e9partition des engagements</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Répartition des engagements</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1535,7 +1535,7 @@ export default function Dashboard() {
                 <p className="text-xs text-blue-500 mt-0.5">{formatPercent(engagementBreakdown.pctReports)} du total</p>
               </div>
               <div className="p-4 rounded-lg bg-emerald-50">
-                <p className="text-xs font-medium text-emerald-600">Eng. Consolid\u00e9s</p>
+                <p className="text-xs font-medium text-emerald-600">Eng. Consolidés</p>
                 <p className="text-lg font-bold text-emerald-900 mt-1">{formatMillions(engagementBreakdown.engConsolides)}</p>
                 <p className="text-xs text-emerald-500 mt-0.5">{formatPercent(engagementBreakdown.pctConsolides)} du total</p>
               </div>
@@ -1551,19 +1551,19 @@ export default function Dashboard() {
         {/* Engagement Lines Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">D\u00e9tail des engagements ({engagementLines.length} lignes)</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Détail des engagements ({engagementLines.length} lignes)</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">N\u00b0 Engagement</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">D\u00e9signation</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">entit\u00e9</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">N° Engagement</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Désignation</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Consolid\u00e9s</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Consolidés</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP Total</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
@@ -1575,7 +1575,7 @@ export default function Dashboard() {
                       <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
                       <TableCell className="text-xs text-gray-700 max-w-[200px] truncate">{r.designation}</TableCell>
                       <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{r.projet || 'Non class\u00e9'}</TableCell>
+                      <TableCell className="text-xs text-gray-600">{r.projet || 'Non classé'}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.engReports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.engConsolides)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.engNouveaux)}</TableCell>
@@ -1631,7 +1631,7 @@ export default function Dashboard() {
 
     return (
       <>
-        <h2 className="text-lg font-bold text-gray-900">D\u00e9tails des Ordonnancements</h2>
+        <h2 className="text-lg font-bold text-gray-900">Détails des Ordonnancements</h2>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1658,7 +1658,7 @@ export default function Dashboard() {
         {/* Breakdown */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">R\u00e9partition des ordonnancements</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Répartition des ordonnancements</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1668,7 +1668,7 @@ export default function Dashboard() {
                 <p className="text-xs text-blue-500 mt-0.5">{formatPercent(ordonnancementBreakdown.pctReports)} du total</p>
               </div>
               <div className="p-4 rounded-lg bg-emerald-50">
-                <p className="text-xs font-medium text-emerald-600">Ord. Consolid\u00e9s</p>
+                <p className="text-xs font-medium text-emerald-600">Ord. Consolidés</p>
                 <p className="text-lg font-bold text-emerald-900 mt-1">{formatMillions(ordonnancementBreakdown.ordConsolides)}</p>
                 <p className="text-xs text-emerald-500 mt-0.5">{formatPercent(ordonnancementBreakdown.pctConsolides)} du total</p>
               </div>
@@ -1684,19 +1684,19 @@ export default function Dashboard() {
         {/* Ordonnancement Lines Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">D\u00e9tail des ordonnancements ({ordonnancementLines.length} lignes)</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Détail des ordonnancements ({ordonnancementLines.length} lignes)</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">N\u00b0 Engagement</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">D\u00e9signation</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">entit\u00e9</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">N° Engagement</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Désignation</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Consolid\u00e9s</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Consolidés</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Total</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
@@ -1708,7 +1708,7 @@ export default function Dashboard() {
                       <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
                       <TableCell className="text-xs text-gray-700 max-w-[200px] truncate">{r.designation}</TableCell>
                       <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{r.projet || 'Non class\u00e9'}</TableCell>
+                      <TableCell className="text-xs text-gray-600">{r.projet || 'Non classé'}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordReports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordConsolides)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordNouveaux)}</TableCell>
@@ -1893,7 +1893,7 @@ export default function Dashboard() {
   const renderReportsView = () => {
     return (
       <>
-        <h2 className="text-lg font-bold text-gray-900">Rapports et Synth\u00e8ses</h2>
+        <h2 className="text-lg font-bold text-gray-900">Rapports et Synthèses</h2>
 
         {/* Key Metrics Summary */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -1926,14 +1926,14 @@ export default function Dashboard() {
         {/* Entity Comparison Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">R\u00e9sum\u00e9 comparatif par entit\u00e9</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Résumé comparatif par entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">entit\u00e9</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
@@ -1969,7 +1969,7 @@ export default function Dashboard() {
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
               <PieChartIcon className="w-4 h-4" />
-              Structure budg\u00e9taire
+              Structure budgétaire
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -1990,7 +1990,7 @@ export default function Dashboard() {
                       <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M\u202F\u20ac`} />
+                  <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="space-y-3">
@@ -1999,7 +1999,7 @@ export default function Dashboard() {
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }} />
                     <div>
                       <p className="text-sm font-medium text-gray-900">{item.name}</p>
-                      <p className="text-xs text-gray-500">{item.value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M\u202F\u20ac</p>
+                      <p className="text-xs text-gray-500">{item.value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €</p>
                     </div>
                   </div>
                 ))}
@@ -2053,7 +2053,7 @@ export default function Dashboard() {
         <div className="flex flex-wrap gap-3">
           <Button variant="outline" className="gap-2" onClick={handleExport}>
             <FileSpreadsheet className="w-4 h-4" />
-            Exporter CSV (donn\u00e9es filtr\u00e9es)
+            Exporter CSV (données filtrées)
           </Button>
         </div>
       </>
@@ -2063,7 +2063,7 @@ export default function Dashboard() {
   const renderSettingsView = () => {
     return (
       <>
-        <h2 className="text-lg font-bold text-gray-900">Param\u00e8tres</h2>
+        <h2 className="text-lg font-bold text-gray-900">Paramètres</h2>
 
         {/* Auto-refresh */}
         <Card className="border border-gray-100 shadow-sm">
@@ -2077,7 +2077,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-900">Actualisation automatique</p>
-                <p className="text-xs text-gray-500">Rafra\u00eechir les donn\u00e9es automatiquement</p>
+                <p className="text-xs text-gray-500">Rafraîchir les données automatiquement</p>
               </div>
               <Switch checked={autoRefresh} onCheckedChange={setAutoRefresh} />
             </div>
@@ -2085,7 +2085,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-900">Intervalle</p>
-                  <p className="text-xs text-gray-500">Fr\u00e9quence de rafra\u00eechissement</p>
+                  <p className="text-xs text-gray-500">Fréquence de rafraîchissement</p>
                 </div>
                 <Select value={String(refreshInterval)} onValueChange={v => setRefreshInterval(Number(v))}>
                   <SelectTrigger className="w-[120px] h-8 text-xs">
@@ -2107,7 +2107,7 @@ export default function Dashboard() {
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
-              Pr\u00e9f\u00e9rences d&apos;affichage
+              Préférences d&apos;affichage
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -2121,15 +2121,15 @@ export default function Dashboard() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="millions">Millions M\u202F\u20ac</SelectItem>
+                  <SelectItem value="millions">Millions M €</SelectItem>
                   <SelectItem value="full">Complet</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">Page par d\u00e9faut</p>
-                <p className="text-xs text-gray-500">Page affich\u00e9e au chargement</p>
+                <p className="text-sm font-medium text-gray-900">Page par défaut</p>
+                <p className="text-xs text-gray-500">Page affichée au chargement</p>
               </div>
               <Select value={defaultPage} onValueChange={setDefaultPage}>
                 <SelectTrigger className="w-[160px] h-8 text-xs">
@@ -2150,14 +2150,14 @@ export default function Dashboard() {
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
               <Database className="w-4 h-4" />
-              Gestion des donn\u00e9es
+              Gestion des données
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-900">Importer un fichier Excel</p>
-                <p className="text-xs text-gray-500">Charger de nouvelles donn\u00e9es depuis un fichier .xlsx ou .xls</p>
+                <p className="text-xs text-gray-500">Charger de nouvelles données depuis un fichier .xlsx ou .xls</p>
               </div>
               <label htmlFor="settings-excel-upload">
                 <Button className="bg-emerald-600 hover:bg-emerald-700 gap-1 cursor-pointer h-8 text-xs" disabled={uploading} asChild>
@@ -2178,7 +2178,7 @@ export default function Dashboard() {
             </div>
             <div className="grid grid-cols-2 gap-4 p-3 bg-gray-50 rounded-lg">
               <div>
-                <p className="text-xs text-gray-500">Derni\u00e8re mise \u00e0 jour</p>
+                <p className="text-xs text-gray-500">Dernière mise à jour</p>
                 <p className="text-sm font-medium text-gray-900">{formatDate(lastUpdated)}</p>
               </div>
               <div>
@@ -2192,7 +2192,7 @@ export default function Dashboard() {
         {/* About */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">\u00c0 propos</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">À propos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -2201,8 +2201,8 @@ export default function Dashboard() {
                 <Badge variant="secondary" className="text-xs">1.0.0</Badge>
               </div>
               <p className="text-xs text-gray-500">
-                Tableau de bord de situation d&apos;ex\u00e9cution du budget d&apos;investissement.
-                Application d\u00e9di\u00e9e au suivi et \u00e0 l&apos;analyse des engagements, ordonnancements
+                Tableau de bord de situation d&apos;exécution du budget d&apos;investissement.
+                Application dédiée au suivi et à l&apos;analyse des engagements, ordonnancements
                 et paiements relatifs au budget d&apos;investissement.
               </p>
             </div>
@@ -2275,10 +2275,10 @@ export default function Dashboard() {
                 </Button>
                 <div>
                   <h2 className="text-base sm:text-lg font-bold text-gray-900">
-                    Situation d'ex\u00e9cution du budget d'investissement
+                    Situation d'exécution du budget d'investissement
                   </h2>
                   <p className="text-xs text-gray-500 hidden sm:block">
-                    Vue consolid\u00e9e par entit\u00e9, projet et programme
+                    Vue consolidée par entité, projet et programme
                   </p>
                 </div>
               </div>
@@ -2324,10 +2324,10 @@ export default function Dashboard() {
             <div className="flex flex-wrap items-center gap-2 mt-3">
               <Select value={selectedEntite} onValueChange={setSelectedEntite}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
-                  <SelectValue placeholder="entit\u00e9" />
+                  <SelectValue placeholder="entité" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Toutes les entit\u00e9s</SelectItem>
+                  <SelectItem value="all">Toutes les entités</SelectItem>
                   {filters.entites.map(e => <SelectItem key={e} value={e}>{e}</SelectItem>)}
                 </SelectContent>
               </Select>
@@ -2360,7 +2360,7 @@ export default function Dashboard() {
               </div>
               <Button variant="ghost" size="sm" onClick={handleResetFilters} className="gap-1 h-8 text-xs text-gray-600">
                 <RotateCcw className="w-3.5 h-3.5" />
-                R\u00e9initialiser
+                Réinitialiser
               </Button>
               <Badge variant="secondary" className="bg-gray-100 text-gray-600 text-xs">
                 {filteredData.length} lignes
