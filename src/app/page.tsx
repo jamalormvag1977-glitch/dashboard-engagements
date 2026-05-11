@@ -484,7 +484,7 @@ export default function Dashboard() {
         </Card>
 
         {/* KPI Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <Card className="border-gray-200 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
@@ -527,6 +527,12 @@ export default function Dashboard() {
                 <span className="text-xs font-medium text-gray-500">Eng. CP</span>
               </div>
               <p className="text-2xl font-bold text-gray-900">{formatNumber(kpis.totalEngCP)}</p>
+              <div className="mt-1.5 flex items-center gap-1.5">
+                <div className={`text-xs font-semibold px-1.5 py-0.5 rounded ${kpis.tauxEngagement >= 80 ? 'bg-emerald-50 text-emerald-700' : kpis.tauxEngagement >= 50 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'}`}>
+                  {kpis.tauxEngagement.toFixed(1)}%
+                </div>
+                <span className="text-[10px] text-gray-400">taux engagement</span>
+              </div>
             </CardContent>
           </Card>
           <Card className="border-gray-200 shadow-sm">
@@ -538,6 +544,12 @@ export default function Dashboard() {
                 <span className="text-xs font-medium text-gray-500">Paiements</span>
               </div>
               <p className="text-2xl font-bold text-gray-900">{formatNumber(kpis.totalPaiements)}</p>
+              <div className="mt-1.5 flex items-center gap-1.5">
+                <div className={`text-xs font-semibold px-1.5 py-0.5 rounded ${kpis.tauxPaiement >= 80 ? 'bg-emerald-50 text-emerald-700' : kpis.tauxPaiement >= 50 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'}`}>
+                  {kpis.tauxPaiement.toFixed(1)}%
+                </div>
+                <span className="text-[10px] text-gray-400">taux paiement</span>
+              </div>
             </CardContent>
           </Card>
           <Card className="border-gray-200 shadow-sm">
@@ -549,30 +561,6 @@ export default function Dashboard() {
                 <span className="text-xs font-medium text-gray-500">Prévisions</span>
               </div>
               <p className="text-2xl font-bold text-gray-900">{formatNumber(kpis.totalPrevisions)}</p>
-            </CardContent>
-          </Card>
-          <Card className="border-gray-200 shadow-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-                  <TrendingUp className="w-4 h-4 text-indigo-600" />
-                </div>
-                <span className="text-xs font-medium text-gray-500">Taux Engagement</span>
-              </div>
-              <p className="text-2xl font-bold text-gray-900">{kpis.tauxEngagement.toFixed(1)}%</p>
-              <p className="text-[10px] text-gray-400 mt-1">Eng. CP / Total CP</p>
-            </CardContent>
-          </Card>
-          <Card className="border-gray-200 shadow-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-pink-50 flex items-center justify-center">
-                  <TrendingUp className="w-4 h-4 text-pink-600" />
-                </div>
-                <span className="text-xs font-medium text-gray-500">Taux Paiement</span>
-              </div>
-              <p className="text-2xl font-bold text-gray-900">{kpis.tauxPaiement.toFixed(1)}%</p>
-              <p className="text-[10px] text-gray-400 mt-1">Paiements / Eng. CP</p>
             </CardContent>
           </Card>
         </div>
