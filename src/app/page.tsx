@@ -232,7 +232,11 @@ export default function Dashboard() {
     const totalPrevisions = filteredData.reduce((sum, r) => sum + (r['TOTAL PREV'] || 0), 0)
     const totalEngCP = filteredData.reduce((sum, r) => sum + (r['ENG CP TOTAL'] || 0), 0)
     const totalEngCE = filteredData.reduce((sum, r) => sum + (r['ENG CE ULT'] || 0), 0)
-    return { totalCP, totalCE, totalPaiements, totalPrevisions, totalEngCP, totalEngCE, count: filteredData.length }
+    // Taux d'engagement = Engagements CP / Total CP
+    const tauxEngagement = totalCP > 0 ? (totalEngCP / totalCP) * 100 : 0
+    // Taux de paiement = Paiements / Engagements CP
+    const tauxPaiement = totalEngCP > 0 ? (totalPaiements / totalEngCP) * 100 : 0
+    return { totalCP, totalCE, totalPaiements, totalPrevisions, totalEngCP, totalEngCE, count: filteredData.length, tauxEngagement, tauxPaiement }
   }, [filteredData])
 
   // Chart data
@@ -480,7 +484,7 @@ export default function Dashboard() {
         </Card>
 
         {/* KPI Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
           <Card className="border-gray-200 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
@@ -545,6 +549,30 @@ export default function Dashboard() {
                 <span className="text-xs font-medium text-gray-500">Prévisions</span>
               </div>
               <p className="text-2xl font-bold text-gray-900">{formatNumber(kpis.totalPrevisions)}</p>
+            </CardContent>
+          </Card>
+          <Card className="border-gray-200 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4 text-indigo-600" />
+                </div>
+                <span className="text-xs font-medium text-gray-500">Taux Engagement</span>
+              </div>
+              <p className="text-2xl font-bold text-gray-900">{kpis.tauxEngagement.toFixed(1)}%</p>
+              <p className="text-[10px] text-gray-400 mt-1">Eng. CP / Total CP</p>
+            </CardContent>
+          </Card>
+          <Card className="border-gray-200 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-lg bg-pink-50 flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4 text-pink-600" />
+                </div>
+                <span className="text-xs font-medium text-gray-500">Taux Paiement</span>
+              </div>
+              <p className="text-2xl font-bold text-gray-900">{kpis.tauxPaiement.toFixed(1)}%</p>
+              <p className="text-[10px] text-gray-400 mt-1">Paiements / Eng. CP</p>
             </CardContent>
           </Card>
         </div>
