@@ -156,8 +156,8 @@ function tauxBgColor(value: number): string {
 const NAV_ITEMS = [
   { key: 'overview', label: "Vue d'ensemble", icon: Home },
   { key: 'entity', label: 'Par entit\u00e9', icon: List },
-  { key: 'program', label: 'Par programme', icon: FolderOpen },
-  { key: 'project', label: 'Par projet', icon: FolderOpen },
+  { key: 'program', label: 'Par projet', icon: FolderOpen },
+  { key: 'project', label: 'Par programme', icon: FolderOpen },
   { key: 'engagements', label: 'D\u00e9tails engagements', icon: FileText },
   { key: 'ordonnancements', label: 'D\u00e9tails ordonnancements', icon: FileText },
   { key: 'alerts', label: 'Alertes', icon: Bell, hasBadge: true },
@@ -621,7 +621,7 @@ export default function Dashboard() {
       .sort((a, b) => (b['TOTAL CP'] || 0) - (a['TOTAL CP'] || 0))
       .map(r => ({
         name: r.PROJET || 'Sans nom',
-        groupe: r.GROUPE || 'Non classé',
+        projet: r.GROUPE || 'Non classé',
         entite: r.ENTITE || 'Non défini',
         cp: r['TOTAL CP'] || 0,
         engCP: r['ENG CP TOTAL'] || 0,
@@ -648,7 +648,7 @@ export default function Dashboard() {
         numEngagement: r['N° ENGAGEMENT'] || '-',
         designation: r['DETAIL DESIGNATION'] || '-',
         entite: r.ENTITE,
-        groupe: r.GROUPE,
+        projet: r.GROUPE,
         engReports: r['ENG REPORT'] || 0,
         engConsolides: r['ENG CONSOLIDES'] || 0,
         engNouveaux: r['ENG NOUVEAUX'] || 0,
@@ -666,7 +666,7 @@ export default function Dashboard() {
         numEngagement: r['N° ENGAGEMENT'] || '-',
         designation: r['DETAIL DESIGNATION'] || '-',
         entite: r.ENTITE,
-        groupe: r.GROUPE,
+        projet: r.GROUPE,
         ordReports: r['ORD REPORTS'] || 0,
         ordConsolides: r['ORD CONSOLIDES'] || 0,
         ordNouveaux: r['ORD NOUVEAUX'] || 0,
@@ -798,7 +798,10 @@ export default function Dashboard() {
             Entit\u00e9 : {selectedEntite === 'all' ? 'Toutes' : selectedEntite}
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
-            Programme : {selectedGroupe === 'all' ? 'Tous' : selectedGroupe}
+            Projet : {selectedGroupe === 'all' ? 'Tous' : selectedGroupe}
+          </Badge>
+          <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
+            Programme : {selectedProjet === 'all' ? 'Tous' : selectedProjet}
           </Badge>
         </div>
       </div>
@@ -979,15 +982,15 @@ export default function Dashboard() {
         </CardContent>
       </Card>
 
-      {/* Charts - Execution by Programme */}
+      {/* Charts - Execution by Projet */}
       <Card className="border border-gray-100 shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Ex\u00e9cution par programme (en M\u202F\u20ac)
+              Ex\u00e9cution par projet (en M\u202F\u20ac)
             </CardTitle>
             <button onClick={() => handleNavChange('program')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
-              Voir tous les programmes <ChevronRight className="w-3 h-3" />
+              Voir tous les projets <ChevronRight className="w-3 h-3" />
             </button>
           </div>
         </CardHeader>
@@ -1014,10 +1017,10 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Ex\u00e9cution par projet (Top 5) (en M\u202F\u20ac)
+              Ex\u00e9cution par programme (Top 5) (en M\u202F\u20ac)
             </CardTitle>
             <button onClick={() => handleNavChange('project')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
-              Voir tous les projets <ChevronRight className="w-3 h-3" />
+              Voir tous les programmes <ChevronRight className="w-3 h-3" />
             </button>
           </div>
         </CardHeader>
@@ -1051,7 +1054,7 @@ export default function Dashboard() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-50">
-                  <TableHead className="text-xs font-semibold text-gray-600 w-[300px]">Entit\u00e9 / Programme / Projet</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 w-[300px]">Entit\u00e9 / Projet / Programme</TableHead>
                   <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI) M\u202F\u20ac</TableHead>
                   <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements M\u202F\u20ac</TableHead>
                   <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. %</TableHead>
@@ -1266,13 +1269,13 @@ export default function Dashboard() {
 
     return (
       <>
-        <h2 className="text-lg font-bold text-gray-900">Analyse par Programme</h2>
+        <h2 className="text-lg font-bold text-gray-900">Analyse par Projet</h2>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card className="border border-gray-100 shadow-sm">
             <CardContent className="p-4">
-              <span className="text-xs font-medium text-gray-500">Total Budget</span>
+              <span className="text-xs font-medium text-gray-500">Total projets</span>
               <p className="text-xl font-bold text-gray-900 mt-1">{formatMillions(progTotalBudget)}</p>
             </CardContent>
           </Card>
@@ -1294,7 +1297,7 @@ export default function Dashboard() {
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Budget / Engagements / Ordonnancements par programme (en M\u202F\u20ac)
+              Budget / Engagements / Ordonnancements par projet (en M\u202F\u20ac)
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -1316,14 +1319,14 @@ export default function Dashboard() {
         {/* Programme Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">D\u00e9tail par programme</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">D\u00e9tail par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">Programme</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI)</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
@@ -1379,13 +1382,13 @@ export default function Dashboard() {
 
     return (
       <>
-        <h2 className="text-lg font-bold text-gray-900">Analyse par Projet</h2>
+        <h2 className="text-lg font-bold text-gray-900">Analyse par Programme</h2>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card className="border border-gray-100 shadow-sm">
             <CardContent className="p-4">
-              <span className="text-xs font-medium text-gray-500">Total projets</span>
+              <span className="text-xs font-medium text-gray-500">Total programmes</span>
               <p className="text-xl font-bold text-gray-900 mt-1">{totalProjects}</p>
             </CardContent>
           </Card>
@@ -1407,7 +1410,7 @@ export default function Dashboard() {
         <div className="relative w-full sm:w-[300px]">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
-            placeholder="Filtrer les projets par nom..."
+            placeholder="Filtrer les programmes par nom..."
             value={projectSearch}
             onChange={e => { setProjectSearch(e.target.value); setProjectPage(1) }}
             className="pl-8 bg-white h-9 text-sm"
@@ -1421,8 +1424,8 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
+                    <TableHead className="text-xs font-semibold text-gray-600">Programme</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Groupe</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Entit\u00e9</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI)</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
@@ -1434,9 +1437,9 @@ export default function Dashboard() {
                 </TableHeader>
                 <TableBody>
                   {pProjects.map((p, idx) => (
-                    <TableRow key={`${p.name}-${p.groupe}-${p.entite}-${idx}`} className="hover:bg-gray-50">
+                    <TableRow key={`${p.name}-${p.projet}-${p.entite}-${idx}`} className="hover:bg-gray-50">
                       <TableCell className="text-xs font-medium text-gray-900 max-w-[200px] truncate">{p.name}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{p.groupe}</TableCell>
+                      <TableCell className="text-xs text-gray-600">{p.projet || 'Non class\u00e9'}</TableCell>
                       <TableCell className="text-xs text-gray-600">{p.entite}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.cp)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.engCP)}</TableCell>
@@ -1558,7 +1561,7 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-gray-600">N\u00b0 Engagement</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">D\u00e9signation</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Entit\u00e9</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Groupe</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Consolid\u00e9s</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Nouveaux</TableHead>
@@ -1572,7 +1575,7 @@ export default function Dashboard() {
                       <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
                       <TableCell className="text-xs text-gray-700 max-w-[200px] truncate">{r.designation}</TableCell>
                       <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{r.groupe}</TableCell>
+                      <TableCell className="text-xs text-gray-600">{r.projet || 'Non class\u00e9'}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.engReports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.engConsolides)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.engNouveaux)}</TableCell>
@@ -1691,7 +1694,7 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-gray-600">N\u00b0 Engagement</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">D\u00e9signation</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Entit\u00e9</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Groupe</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Consolid\u00e9s</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Nouveaux</TableHead>
@@ -1705,7 +1708,7 @@ export default function Dashboard() {
                       <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
                       <TableCell className="text-xs text-gray-700 max-w-[200px] truncate">{r.designation}</TableCell>
                       <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{r.groupe}</TableCell>
+                      <TableCell className="text-xs text-gray-600">{r.projet || 'Non class\u00e9'}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordReports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordConsolides)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordNouveaux)}</TableCell>
@@ -2275,7 +2278,7 @@ export default function Dashboard() {
                     Suivi d&apos;ex\u00e9cution du budget d&apos;investissement
                   </h2>
                   <p className="text-xs text-gray-500 hidden sm:block">
-                    Vue consolid\u00e9e par entit\u00e9, programme et projet
+                    Vue consolid\u00e9e par entit\u00e9, projet et programme
                   </p>
                 </div>
               </div>
@@ -2330,19 +2333,19 @@ export default function Dashboard() {
               </Select>
               <Select value={selectedGroupe} onValueChange={setSelectedGroupe}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[150px]">
-                  <SelectValue placeholder="Programme" />
+                  <SelectValue placeholder="Projet" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tous les programmes</SelectItem>
+                  <SelectItem value="all">Tous les projets</SelectItem>
                   {filters.groupes.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
                 </SelectContent>
               </Select>
               <Select value={selectedProjet} onValueChange={setSelectedProjet}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
-                  <SelectValue placeholder="Projet" />
+                  <SelectValue placeholder="Programme" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tous les projets</SelectItem>
+                  <SelectItem value="all">Tous les programmes</SelectItem>
                   {filters.projets.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
               </Select>
