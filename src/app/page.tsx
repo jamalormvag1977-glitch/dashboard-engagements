@@ -114,11 +114,11 @@ interface FilterData {
   entites: string[]
 }
 
-// Format number in millions with 1 decimal and M € suffix (French format)
+// Format number in millions with 1 decimal and M DH suffix (French format)
 function formatMillions(value: number | null | undefined): string {
   if (value === null || value === undefined) return '-'
   const millions = value / 1e6
-  return millions.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' M €'
+  return millions.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' M DH'
 }
 
 // Format number for table cells with French thousands separators
@@ -187,7 +187,7 @@ const BarLabel = (props: { x: number; y: number; width: number; height: number; 
       dominantBaseline="middle"
       textAnchor="start"
     >
-      {formattedValue} M€{pctText}
+      {formattedValue} M DH{pctText}
     </text>
   )
 }
@@ -988,7 +988,7 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Exécution par entité (en M €)
+              Exécution par entité (en M DH)
             </CardTitle>
             <button onClick={() => handleNavChange('entity')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Voir toutes les entités <ChevronRight className="w-3 h-3" />
@@ -1002,7 +1002,7 @@ export default function Dashboard() {
               <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
               <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={60} />
               <Tooltip
-                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`}
+                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
@@ -1018,7 +1018,7 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Exécution par projet (en M €)
+              Exécution par projet (en M DH)
             </CardTitle>
             <button onClick={() => handleNavChange('program')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Voir tous les projets <ChevronRight className="w-3 h-3" />
@@ -1032,7 +1032,7 @@ export default function Dashboard() {
               <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
               <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={80} />
               <Tooltip
-                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`}
+                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
@@ -1048,7 +1048,7 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Exécution par programme (Top 5) (en M €)
+              Exécution par programme (Top 5) (en M DH)
             </CardTitle>
             <button onClick={() => handleNavChange('project')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Voir tous les programmes <ChevronRight className="w-3 h-3" />
@@ -1062,7 +1062,7 @@ export default function Dashboard() {
               <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
               <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={120} />
               <Tooltip
-                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`}
+                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
@@ -1086,12 +1086,12 @@ export default function Dashboard() {
               <TableHeader>
                 <TableRow className="bg-gray-50">
                   <TableHead className="text-xs font-semibold text-gray-600 w-[300px]">entité / Projet / Programme</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI) M €</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements M €</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI) M DH</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements M DH</TableHead>
                   <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. %</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn. M €</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn. M DH</TableHead>
                   <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord. %</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible M €</TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible M DH</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -1218,7 +1218,7 @@ export default function Dashboard() {
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Budget / Engagements / Ordonnancements par entité (en M €)
+              Budget / Engagements / Ordonnancements par entité (en M DH)
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -1227,7 +1227,7 @@ export default function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
                 <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={60} />
-                <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`} />
+                <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
                 <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
@@ -1328,7 +1328,7 @@ export default function Dashboard() {
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Budget / Engagements / Ordonnancements par projet (en M €)
+              Budget / Engagements / Ordonnancements par projet (en M DH)
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -1337,7 +1337,7 @@ export default function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
                 <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={80} />
-                <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`} />
+                <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
                 <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
@@ -2015,13 +2015,13 @@ export default function Dashboard() {
                     outerRadius={100}
                     paddingAngle={3}
                     dataKey="value"
-                    label={({ name, percent, value }: { name: string; percent: number; value: number }) => `${name} ${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M€ (${(percent * 100).toFixed(1)}%)`}
+                    label={({ name, percent, value }: { name: string; percent: number; value: number }) => `${name} ${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH (${(percent * 100).toFixed(1)}%)`}
                   >
                     {budgetStructureData.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €`} />
+                  <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="space-y-3">
@@ -2030,7 +2030,7 @@ export default function Dashboard() {
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }} />
                     <div>
                       <p className="text-sm font-medium text-gray-900">{item.name}</p>
-                      <p className="text-xs text-gray-500">{item.value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M €</p>
+                      <p className="text-xs text-gray-500">{item.value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH</p>
                     </div>
                   </div>
                 ))}
@@ -2152,7 +2152,7 @@ export default function Dashboard() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="millions">Millions M €</SelectItem>
+                  <SelectItem value="millions">Millions M DH</SelectItem>
                   <SelectItem value="full">Complet</SelectItem>
                 </SelectContent>
               </Select>
