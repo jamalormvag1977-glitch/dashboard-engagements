@@ -826,13 +826,13 @@ export default function Dashboard() {
             Période : {new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
-            entité : {selectedEntite === 'all' ? 'Toutes' : selectedEntite}
+            Programme : {selectedProgramme === 'all' ? 'Tous' : selectedProgramme}
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
             Projet : {selectedProjet === 'all' ? 'Tous' : selectedProjet}
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
-            Programme : {selectedProgramme === 'all' ? 'Tous' : selectedProgramme}
+            entité : {selectedEntite === 'all' ? 'Toutes' : selectedEntite}
           </Badge>
         </div>
       </div>
@@ -2353,13 +2353,13 @@ export default function Dashboard() {
 
             {/* Filter Bar */}
             <div className="flex flex-wrap items-center gap-2 mt-3">
-              <Select value={selectedEntite} onValueChange={setSelectedEntite}>
+              <Select value={selectedProgramme} onValueChange={setSelectedProgramme}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
-                  <SelectValue placeholder="entité" />
+                  <SelectValue placeholder="Programme" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Toutes les entités</SelectItem>
-                  {filters.entites.map(e => <SelectItem key={e} value={e}>{e}</SelectItem>)}
+                  <SelectItem value="all">Tous les programmes</SelectItem>
+                  {filters.programmes.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
               </Select>
               <Select value={selectedProjet} onValueChange={setSelectedProjet}>
@@ -2371,13 +2371,13 @@ export default function Dashboard() {
                   {filters.projets.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
                 </SelectContent>
               </Select>
-              <Select value={selectedProgramme} onValueChange={setSelectedProgramme}>
+              <Select value={selectedEntite} onValueChange={setSelectedEntite}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
-                  <SelectValue placeholder="Programme" />
+                  <SelectValue placeholder="entité" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tous les programmes</SelectItem>
-                  {filters.programmes.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                  <SelectItem value="all">Toutes les entités</SelectItem>
+                  {filters.entites.map(e => <SelectItem key={e} value={e}>{e}</SelectItem>)}
                 </SelectContent>
               </Select>
               <div className="relative w-[180px]">
