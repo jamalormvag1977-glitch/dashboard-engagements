@@ -2090,6 +2090,126 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* ═══════════ SECTION 3 : INDICATEURS PAR PROJET ═══════════ */}
+        {(() => {
+          const projectColors = [
+            { bg: 'from-teal-500 to-emerald-600', light: 'bg-teal-50', bar: 'from-teal-400 to-teal-600' },
+            { bg: 'from-blue-500 to-indigo-600', light: 'bg-blue-50', bar: 'from-blue-400 to-blue-600' },
+            { bg: 'from-violet-500 to-purple-600', light: 'bg-violet-50', bar: 'from-violet-400 to-violet-600' },
+            { bg: 'from-amber-500 to-orange-600', light: 'bg-amber-50', bar: 'from-amber-400 to-amber-600' },
+            { bg: 'from-rose-500 to-pink-600', light: 'bg-rose-50', bar: 'from-rose-400 to-rose-600' },
+            { bg: 'from-cyan-500 to-sky-600', light: 'bg-cyan-50', bar: 'from-cyan-400 to-cyan-600' },
+            { bg: 'from-fuchsia-500 to-pink-600', light: 'bg-fuchsia-50', bar: 'from-fuchsia-400 to-fuchsia-600' },
+            { bg: 'from-lime-500 to-green-600', light: 'bg-lime-50', bar: 'from-lime-400 to-lime-600' },
+          ]
+          const getColor = (idx: number) => projectColors[idx % projectColors.length]
+          const renderMiniBar = (value: number, max: number, colorClass: string) => {
+            const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0
+            return (
+              <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className={`h-full rounded-full bg-gradient-to-r ${colorClass}`} style={{ width: `${pct}%` }} />
+              </div>
+            )
+          }
+          return (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-5 rounded-full bg-gradient-to-b from-teal-500 to-emerald-600" />
+                <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par projet</h3>
+                <span className="text-[11px] text-gray-400 font-medium">({analysisByGroup.length} projets)</span>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {analysisByGroup.map((proj, idx) => {
+                  const color = getColor(idx)
+                  const pctBudget = progTotalBudget > 0 ? (proj.cp / progTotalBudget) * 100 : 0
+                  return (
+                    <div key={proj.name} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                      {/* Project header */}
+                      <div className={`bg-gradient-to-r ${color.bg} px-4 py-3 flex items-center justify-between`}>
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                            <FolderOpen className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-white leading-tight">{proj.name}</h4>
+                            <p className="text-[10px] text-white/70 font-medium">{proj.count} lignes</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-lg font-black text-white">{formatMillions(proj.cp)}</p>
+                          <p className="text-[10px] text-white/70 font-medium">MDh Budget</p>
+                        </div>
+                      </div>
+                      {/* Key indicators body */}
+                      <div className="p-4 space-y-3">
+                        {/* Row 1: Engagement & Ordonnancement rates */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className={`${color.light} rounded-lg p-2.5`}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Eng. CP</span>
+                              <span className={`text-xs font-bold ${tauxColor(proj.tauxEngagement)}`}>{formatPercent(proj.tauxEngagement)}</span>
+                            </div>
+                            {renderMiniBar(proj.tauxEngagement, 100, color.bar)}
+                          </div>
+                          <div className={`${color.light} rounded-lg p-2.5`}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Ordonn.</span>
+                              <span className={`text-xs font-bold ${tauxColor(proj.tauxOrdonnement)}`}>{formatPercent(proj.tauxOrdonnement)}</span>
+                            </div>
+                            {renderMiniBar(proj.tauxOrdonnement, 100, color.bar)}
+                          </div>
+                        </div>
+                        {/* Row 2: CE engagement & Paiement rates */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className={`${color.light} rounded-lg p-2.5`}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Eng. CE</span>
+                              <span className={`text-xs font-bold ${tauxColor(proj.tauxEngagementCE)}`}>{proj.ce > 0 ? formatPercent(proj.tauxEngagementCE) : '0,0%'}</span>
+                            </div>
+                            {renderMiniBar(proj.tauxEngagementCE, 100, color.bar)}
+                          </div>
+                          <div className={`${color.light} rounded-lg p-2.5`}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Paiement</span>
+                              <span className={`text-xs font-bold ${tauxColor(proj.tauxPaiement)}`}>{formatPercent(proj.tauxPaiement)}</span>
+                            </div>
+                            {renderMiniBar(proj.tauxPaiement, 100, color.bar)}
+                          </div>
+                        </div>
+                        {/* Row 3: Key financial figures */}
+                        <div className="grid grid-cols-3 gap-2 pt-1 border-t border-gray-100">
+                          <div className="text-center">
+                            <p className="text-[10px] text-gray-400 font-medium">Eng. CP</p>
+                            <p className="text-xs font-bold text-gray-800">{formatMillions(proj.engCP)}</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-[10px] text-gray-400 font-medium">Ordonn.</p>
+                            <p className="text-xs font-bold text-gray-800">{formatMillions(proj.ord)}</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-[10px] text-gray-400 font-medium">Disponible</p>
+                            <p className={`text-xs font-bold ${proj.disponible >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>{formatMillions(proj.disponible)}</p>
+                          </div>
+                        </div>
+                        {/* Row 4: Part du budget */}
+                        <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
+                          <span className="text-[10px] text-gray-400 font-medium">Part du budget</span>
+                          <div className="flex-1">
+                            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${Math.min(pctBudget, 100)}%` }} />
+                            </div>
+                          </div>
+                          <span className="text-[10px] font-bold text-gray-600">{pctBudget.toFixed(1)}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })()}
+
         {/* Programme Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
@@ -2118,23 +2238,23 @@ export default function Dashboard() {
                   {analysisByGroup.map(g => (
                     <TableRow key={g.name} className="hover:bg-gray-50">
                       <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.cp)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.engCP)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engCP)}</TableCell>
                       <TableCell className="text-xs text-right">
                         <span className={tauxColor(g.tauxEngagement)}>{formatPercent(g.tauxEngagement)}</span>
                       </TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.ce)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.engCE)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ce)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engCE)}</TableCell>
                       <TableCell className="text-xs text-right">
                         <span className={tauxColor(g.tauxEngagementCE)}>{g.ce > 0 ? formatPercent(g.tauxEngagementCE) : '0,0%'}</span>
                       </TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.ord)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ord)}</TableCell>
                       <TableCell className="text-xs text-right">
                         <span className={tauxColor(g.tauxOrdonnement)}>{formatPercent(g.tauxOrdonnement)}</span>
                       </TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.paiements)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.previsions)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.disponible)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.paiements)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.previsions)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.disponible)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
