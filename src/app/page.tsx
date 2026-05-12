@@ -2981,10 +2981,13 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-blue-50/60">
                     <TableHead className="text-xs font-semibold text-blue-700">Programme</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">CP Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">CP Consolidés</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">CP Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">CP Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">% Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">CP Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">% Consolidé</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">CP Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">% Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right">Eng. CP</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right">Ord. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right">Ord. Consolidés</TableHead>
@@ -3019,10 +3022,13 @@ export default function Dashboard() {
                         {progOrd.map(p => (
                           <TableRow key={p.name} className="hover:bg-gray-50">
                             <TableCell className="text-xs font-medium text-gray-900">{p.name}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpReports)}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpConsolides)}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpNouveaux)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpReports)}</TableCell>
+                            <TableCell className="text-xs text-right">{formatPercent(p.cp > 0 ? (p.cpReports / p.cp) * 100 : 0)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpConsolides)}</TableCell>
+                            <TableCell className="text-xs text-right">{formatPercent(p.cp > 0 ? (p.cpConsolides / p.cp) * 100 : 0)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpNouveaux)}</TableCell>
+                            <TableCell className="text-xs text-right">{formatPercent(p.cp > 0 ? (p.cpNouveaux / p.cp) * 100 : 0)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engCP)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ordReports)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ordConsolides)}</TableCell>
@@ -3038,10 +3044,13 @@ export default function Dashboard() {
                         ))}
                         <TableRow className="bg-blue-50/40 font-bold">
                           <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">{formatPercent(totCP > 0 ? (totCpReports / totCP) * 100 : 0)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">{formatPercent(totCP > 0 ? (totCpConsolides / totCP) * 100 : 0)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">{formatPercent(totCP > 0 ? (totCpNouveaux / totCP) * 100 : 0)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdConsolides)}</TableCell>
@@ -3074,10 +3083,13 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-teal-50/60">
                     <TableHead className="text-xs font-semibold text-teal-700">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">CP Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">CP Consolidés</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">CP Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-teal-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">CP Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">% Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">CP Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">% Consolidé</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">CP Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">% Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-teal-700 text-right">Eng. CP</TableHead>
                     <TableHead className="text-xs font-semibold text-teal-700 text-right">Ord. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-teal-700 text-right">Ord. Consolidés</TableHead>
@@ -3112,10 +3124,13 @@ export default function Dashboard() {
                         {projOrd.map(g => (
                           <TableRow key={g.name} className="hover:bg-gray-50">
                             <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpReports)}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpConsolides)}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpNouveaux)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpReports)}</TableCell>
+                            <TableCell className="text-xs text-right">{formatPercent(g.cp > 0 ? (g.cpReports / g.cp) * 100 : 0)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpConsolides)}</TableCell>
+                            <TableCell className="text-xs text-right">{formatPercent(g.cp > 0 ? (g.cpConsolides / g.cp) * 100 : 0)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpNouveaux)}</TableCell>
+                            <TableCell className="text-xs text-right">{formatPercent(g.cp > 0 ? (g.cpNouveaux / g.cp) * 100 : 0)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engCP)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ordReports)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ordConsolides)}</TableCell>
@@ -3131,10 +3146,13 @@ export default function Dashboard() {
                         ))}
                         <TableRow className="bg-teal-50/40 font-bold">
                           <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">{formatPercent(totCP > 0 ? (totCpReports / totCP) * 100 : 0)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">{formatPercent(totCP > 0 ? (totCpConsolides / totCP) * 100 : 0)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">{formatPercent(totCP > 0 ? (totCpNouveaux / totCP) * 100 : 0)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdConsolides)}</TableCell>
@@ -3167,10 +3185,13 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-indigo-50/60">
                     <TableHead className="text-xs font-semibold text-indigo-700">Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">CP Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">CP Consolidés</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">CP Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">CP Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">CP Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% Consolidé</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">CP Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CP</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right">Ord. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right">Ord. Consolidés</TableHead>
@@ -3205,10 +3226,13 @@ export default function Dashboard() {
                         {entOrd.map(e => (
                           <TableRow key={e.name} className="hover:bg-gray-50">
                             <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpReports)}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpConsolides)}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpNouveaux)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpReports)}</TableCell>
+                            <TableCell className="text-xs text-right">{formatPercent(e.cp > 0 ? (e.cpReports / e.cp) * 100 : 0)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpConsolides)}</TableCell>
+                            <TableCell className="text-xs text-right">{formatPercent(e.cp > 0 ? (e.cpConsolides / e.cp) * 100 : 0)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpNouveaux)}</TableCell>
+                            <TableCell className="text-xs text-right">{formatPercent(e.cp > 0 ? (e.cpNouveaux / e.cp) * 100 : 0)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engCP)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ordReports)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ordConsolides)}</TableCell>
@@ -3224,10 +3248,13 @@ export default function Dashboard() {
                         ))}
                         <TableRow className="bg-indigo-50/40 font-bold">
                           <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">{formatPercent(totCP > 0 ? (totCpReports / totCP) * 100 : 0)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">{formatPercent(totCP > 0 ? (totCpConsolides / totCP) * 100 : 0)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">{formatPercent(totCP > 0 ? (totCpNouveaux / totCP) * 100 : 0)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdConsolides)}</TableCell>
