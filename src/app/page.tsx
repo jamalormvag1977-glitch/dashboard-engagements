@@ -159,8 +159,6 @@ const NAV_ITEMS = [
   { key: 'engagements', label: 'Détails engagements', icon: FileText },
   { key: 'ordonnancements', label: 'Détails ordonnancements', icon: FileText },
   { key: 'assainissement', label: 'Assainissement des reports', icon: RotateCcw },
-  { key: 'reports', label: 'Rapports', icon: BarChart3 },
-  { key: 'settings', label: 'Paramètres', icon: Settings },
 ]
 
 const PIE_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4']
