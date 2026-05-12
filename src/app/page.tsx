@@ -153,12 +153,12 @@ function tauxBgColor(value: number): string {
 // Navigation items for sidebar
 const NAV_ITEMS = [
   { key: 'overview', label: "Vue d'ensemble", icon: Home },
-  { key: 'entity', label: 'Par entité', icon: List },
-  { key: 'program', label: 'Par projet', icon: FolderOpen },
   { key: 'project', label: 'Par programme', icon: FolderOpen },
-  { key: 'engagements', label: 'Détails engagements', icon: FileText },
-  { key: 'ordonnancements', label: 'Détails ordonnancements', icon: FileText },
-  { key: 'previsions', label: 'Prévisions ordonnancement', icon: TrendingUp },
+  { key: 'program', label: 'Par projet', icon: FolderOpen },
+  { key: 'entity', label: 'Par entité', icon: List },
+  { key: 'engagements', label: 'Engagement', icon: FileText },
+  { key: 'ordonnancements', label: 'Ordonnancement', icon: FileText },
+  { key: 'previsions', label: 'Prévisions', icon: TrendingUp },
   { key: 'assainissement', label: 'Assainissement des reports', icon: RotateCcw },
 ]
 
