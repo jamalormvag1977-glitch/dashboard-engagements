@@ -1146,6 +1146,59 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ═══════════ SECTION 4.5 : PRÉVISIONS ORDONNANCEMENT CUMULÉES ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-teal-500 to-violet-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Prévisions d&apos;ordonnancement cumulées</h3>
+          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          {[
+            { label: 'Fin Juin', value: kpis.cumulPrevJuin, color: 'teal', icon: TrendingUp },
+            { label: 'Fin Septembre', value: kpis.cumulPrevSeptembre, color: 'cyan', icon: TrendingUp },
+            { label: 'Fin Octobre', value: kpis.cumulPrevOctobre, color: 'sky', icon: TrendingUp },
+            { label: 'Fin Novembre', value: kpis.cumulPrevNovembre, color: 'indigo', icon: TrendingUp },
+            { label: 'Fin Décembre', value: kpis.cumulPrevDecembre, color: 'violet', icon: TrendingUp },
+          ].map(({ label, value, color, icon: Icon }) => {
+            const taux = kpis.totalCP > 0 ? (value / kpis.totalCP) * 100 : 0
+            const colorMap: Record<string, { gradient: string; iconBg: string; iconText: string; badgeBg: string; badgeText: string; badgeBorder: string; barTop: string }> = {
+              teal: { gradient: 'from-teal-400 to-teal-600', iconBg: 'bg-teal-50', iconText: 'text-teal-600', badgeBg: 'bg-teal-50', badgeText: 'text-teal-700', badgeBorder: 'border-teal-200', barTop: 'bg-gradient-to-r from-teal-400 to-teal-600' },
+              cyan: { gradient: 'from-cyan-400 to-cyan-600', iconBg: 'bg-cyan-50', iconText: 'text-cyan-600', badgeBg: 'bg-cyan-50', badgeText: 'text-cyan-700', badgeBorder: 'border-cyan-200', barTop: 'bg-gradient-to-r from-cyan-400 to-cyan-600' },
+              sky: { gradient: 'from-sky-400 to-sky-600', iconBg: 'bg-sky-50', iconText: 'text-sky-600', badgeBg: 'bg-sky-50', badgeText: 'text-sky-700', badgeBorder: 'border-sky-200', barTop: 'bg-gradient-to-r from-sky-400 to-sky-600' },
+              indigo: { gradient: 'from-indigo-400 to-indigo-600', iconBg: 'bg-indigo-50', iconText: 'text-indigo-600', badgeBg: 'bg-indigo-50', badgeText: 'text-indigo-700', badgeBorder: 'border-indigo-200', barTop: 'bg-gradient-to-r from-indigo-400 to-indigo-600' },
+              violet: { gradient: 'from-violet-400 to-violet-600', iconBg: 'bg-violet-50', iconText: 'text-violet-600', badgeBg: 'bg-violet-50', badgeText: 'text-violet-700', badgeBorder: 'border-violet-200', barTop: 'bg-gradient-to-r from-violet-400 to-violet-600' },
+            }
+            const c = colorMap[color]
+            return (
+              <div key={label} className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+                <div className={`h-1.5 bg-gradient-to-r ${c.gradient}`} />
+                <div className="p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className={`kpi-icon-wrap w-8 h-8 rounded-full ${c.iconBg} flex items-center justify-center`}>
+                      <Icon className={`w-4 h-4 ${c.iconText}`} />
+                    </div>
+                    <Badge className={`${c.badgeBg} ${c.badgeText} ${c.badgeBorder} text-[9px] font-semibold rounded-full px-2`}>{label}</Badge>
+                  </div>
+                  <p className="text-lg font-black text-gray-900 tracking-tight">{formatMillions(value)}</p>
+                  <div className="mt-2">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className={`text-[10px] font-bold ${tauxColor(taux)}`}>
+                        {taux >= 80 ? '✓' : taux >= 50 ? '⚠' : '✗'} {formatPercent(taux)}
+                      </span>
+                      <span className="text-[9px] text-gray-400">/ CP</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div className={`kpi-progress-bar h-full rounded-full ${taux >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : taux >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(taux, 100)}%` }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
       {/* ═══════════ TABLEAU : ANALYSE PAR PROGRAMME ═══════════ */}
       <Card className="border border-gray-100 shadow-sm">
         <CardHeader className="pb-3">
