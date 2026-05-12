@@ -112,11 +112,11 @@ interface FilterData {
   entites: string[]
 }
 
-// Format number in millions with 1 decimal and M DH suffix (French format)
+// Format number in millions with 1 decimal (French format)
 function formatMillions(value: number | null | undefined): string {
   if (value === null || value === undefined) return '-'
   const millions = value / 1e6
-  return millions.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' M DH'
+  return millions.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 }
 
 // Format number for table cells with French thousands separators
@@ -183,7 +183,7 @@ const BarLabel = (props: { x: number; y: number; width: number; height: number; 
       dominantBaseline="middle"
       textAnchor="start"
     >
-      {formattedValue} M DH{pctText}
+      {formattedValue}{pctText}
     </text>
   )
 }
@@ -3192,13 +3192,13 @@ export default function Dashboard() {
                     outerRadius={100}
                     paddingAngle={3}
                     dataKey="value"
-                    label={({ name, percent, value }: { name: string; percent: number; value: number }) => `${name} ${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH (${(percent * 100).toFixed(1)}%)`}
+                    label={({ name, percent, value }: { name: string; percent: number; value: number }) => `${name} ${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} (${(percent * 100).toFixed(1)}%)`}
                   >
                     {budgetStructureData.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`} />
+                  <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })}`} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="space-y-3">
@@ -3207,7 +3207,7 @@ export default function Dashboard() {
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }} />
                     <div>
                       <p className="text-sm font-medium text-gray-900">{item.name}</p>
-                      <p className="text-xs text-gray-500">{item.value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH</p>
+                      <p className="text-xs text-gray-500">{item.value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })}</p>
                     </div>
                   </div>
                 ))}
@@ -3329,7 +3329,7 @@ export default function Dashboard() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="millions">Millions M DH</SelectItem>
+                  <SelectItem value="millions">Millions</SelectItem>
                   <SelectItem value="full">Complet</SelectItem>
                 </SelectContent>
               </Select>
