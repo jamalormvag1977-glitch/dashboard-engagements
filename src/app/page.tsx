@@ -1085,66 +1085,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ═══════════ SECTION 4 : PRÉVISIONS & DISPONIBLE ═══════════ */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-amber-500 to-orange-600" />
-          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Prévisions & Disponible</h3>
-          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Prévisions */}
-          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-orange-500" />
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
-                  <FileSpreadsheet className="w-5 h-5 text-amber-600" />
-                </div>
-                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Prévis.</Badge>
-              </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalPrevisions)}</p>
-              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
-                Réalisation : <span className={tauxColor(kpis.totalPrevisions > 0 ? (kpis.totalOrd / kpis.totalPrevisions) * 100 : 0)}>{kpis.totalPrevisions > 0 ? formatPercent((kpis.totalOrd / kpis.totalPrevisions) * 100) : '0,0%'}</span>
-              </p>
-            </div>
-          </div>
-
-          {/* Écart Prévisions/Réalisé */}
-          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-            <div className="h-1.5 bg-gradient-to-r from-orange-400 to-red-400" />
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center transition-transform">
-                  <Info className="w-5 h-5 text-orange-600" />
-                </div>
-                <Badge className="bg-orange-50 text-orange-700 border-orange-200 text-[10px] font-semibold rounded-full px-2.5">Écart</Badge>
-              </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalPrevisions - kpis.totalOrd)}</p>
-              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
-                {kpis.totalPrevisions > kpis.totalOrd ? 'Prévisions supérieures' : 'Réalisé supérieur'}
-              </p>
-            </div>
-          </div>
-
-          {/* Disponible */}
-          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-            <div className="h-1.5 bg-gradient-to-r from-violet-400 to-purple-500" />
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
-                  <Landmark className="w-5 h-5 text-violet-600" />
-                </div>
-                <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">Reste</Badge>
-              </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.disponible)}</p>
-              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
-                {kpis.totalCP > 0 ? formatPercent((kpis.disponible / kpis.totalCP) * 100) : '0,0%'} du budget CP
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* ═══════════ SECTION 4.5 : PRÉVISIONS ORDONNANCEMENT CUMULÉES ═══════════ */}
       <div className="space-y-3">
