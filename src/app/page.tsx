@@ -2950,6 +2950,213 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Ordonnancement par Programme */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Ordonnancement par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-blue-50/60">
+                    <TableHead className="text-xs font-semibold text-blue-700">Programme</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Ordonn.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Paiements</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prévisions</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Disponible</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const progOrd = analysisByProgramme.map(p => ({
+                      ...p,
+                      disponible: p.cp - p.engCP,
+                    })).sort((a, b) => b.ord - a.ord)
+                    const totCP = progOrd.reduce((s, p) => s + p.cp, 0)
+                    const totEngCP = progOrd.reduce((s, p) => s + p.engCP, 0)
+                    const totOrd = progOrd.reduce((s, p) => s + p.ord, 0)
+                    const totPaiements = progOrd.reduce((s, p) => s + p.paiements, 0)
+                    const totPrevisions = progOrd.reduce((s, p) => s + p.previsions, 0)
+                    const totDisponible = progOrd.reduce((s, p) => s + p.disponible, 0)
+                    return (
+                      <>
+                        {progOrd.map(p => (
+                          <TableRow key={p.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{p.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ord)}</TableCell>
+                            <TableCell className="text-xs text-right">
+                              <span className={tauxColor(p.tauxOrdonnement)}>{formatPercent(p.tauxOrdonnement)}</span>
+                            </TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.paiements)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.previsions)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.disponible)}</TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-blue-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">
+                            <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
+                          </TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiements)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPrevisions)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totDisponible)}</TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Ordonnancement par Projet */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Ordonnancement par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-teal-50/60">
+                    <TableHead className="text-xs font-semibold text-teal-700">Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Ordonn.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Paiements</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prévisions</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Disponible</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const projOrd = analysisByGroup.map(g => ({
+                      ...g,
+                      disponible: g.cp - g.engCP,
+                    })).sort((a, b) => b.ord - a.ord)
+                    const totCP = projOrd.reduce((s, g) => s + g.cp, 0)
+                    const totEngCP = projOrd.reduce((s, g) => s + g.engCP, 0)
+                    const totOrd = projOrd.reduce((s, g) => s + g.ord, 0)
+                    const totPaiements = projOrd.reduce((s, g) => s + g.paiements, 0)
+                    const totPrevisions = projOrd.reduce((s, g) => s + g.previsions, 0)
+                    const totDisponible = projOrd.reduce((s, g) => s + g.disponible, 0)
+                    return (
+                      <>
+                        {projOrd.map(g => (
+                          <TableRow key={g.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ord)}</TableCell>
+                            <TableCell className="text-xs text-right">
+                              <span className={tauxColor(g.tauxOrdonnement)}>{formatPercent(g.tauxOrdonnement)}</span>
+                            </TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.paiements)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.previsions)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.disponible)}</TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-teal-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">
+                            <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
+                          </TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiements)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPrevisions)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totDisponible)}</TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Ordonnancement par Entité */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Ordonnancement par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-indigo-50/60">
+                    <TableHead className="text-xs font-semibold text-indigo-700">Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Ordonn.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Paiements</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prévisions</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Disponible</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const entOrd = analysisByEntity.map(e => ({
+                      ...e,
+                      disponible: e.cp - e.engCP,
+                    })).sort((a, b) => b.ord - a.ord)
+                    const totCP = entOrd.reduce((s, e) => s + e.cp, 0)
+                    const totEngCP = entOrd.reduce((s, e) => s + e.engCP, 0)
+                    const totOrd = entOrd.reduce((s, e) => s + e.ord, 0)
+                    const totPaiements = entOrd.reduce((s, e) => s + e.paiements, 0)
+                    const totPrevisions = entOrd.reduce((s, e) => s + e.previsions, 0)
+                    const totDisponible = entOrd.reduce((s, e) => s + e.disponible, 0)
+                    return (
+                      <>
+                        {entOrd.map(e => (
+                          <TableRow key={e.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ord)}</TableCell>
+                            <TableCell className="text-xs text-right">
+                              <span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span>
+                            </TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.paiements)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.previsions)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.disponible)}</TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-indigo-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">
+                            <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
+                          </TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiements)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPrevisions)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totDisponible)}</TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Prévisions Ordonnancement Cumulés par Projet */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
