@@ -337,10 +337,10 @@ export default function Dashboard() {
   // Analysis by Entity
   const analysisByEntity = useMemo(() => {
     const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
-    const entities: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; prevByMonth: Record<string, number> }> = {}
+    const entities: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; prevByMonth: Record<string, number>; cpReports: number; cpConsolides: number; cpNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number }> = {}
     filteredData.forEach(row => {
       const e = row.ENTITE
-      if (!entities[e]) entities[e] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, prevByMonth: {} }
+      if (!entities[e]) entities[e] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, prevByMonth: {}, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0 }
       entities[e].cp += row['TOTAL CP'] || 0
       entities[e].ce += row['TOTAL CE'] || 0
       entities[e].engCP += row['ENG CP TOTAL'] || 0
@@ -349,6 +349,12 @@ export default function Dashboard() {
       entities[e].previsions += row['TOTAL PREV'] || 0
       entities[e].count += 1
       entities[e].ord += row['ORD TOTAL'] || 0
+      entities[e].cpReports += row.REPORTS || 0
+      entities[e].cpConsolides += row.CONSOLIDES || 0
+      entities[e].cpNouveaux += row.NOUVEAUX || 0
+      entities[e].ordReports += row['ORD REPORTS'] || 0
+      entities[e].ordConsolides += row['ORD CONSOLIDES'] || 0
+      entities[e].ordNouveaux += row['ORD NOUVEAUX'] || 0
     })
     // Calculate cumulative previsions by entity
     Object.keys(entities).forEach(e => {
@@ -366,6 +372,8 @@ export default function Dashboard() {
       name,
       cp: v.cp, ce: v.ce, engCP: v.engCP, engCE: v.engCE,
       paiements: v.paiements, previsions: v.previsions, count: v.count, ord: v.ord,
+      cpReports: v.cpReports, cpConsolides: v.cpConsolides, cpNouveaux: v.cpNouveaux,
+      ordReports: v.ordReports, ordConsolides: v.ordConsolides, ordNouveaux: v.ordNouveaux,
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
       tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
       tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
@@ -381,10 +389,10 @@ export default function Dashboard() {
 
   // Analysis by Group (Programme)
   const analysisByGroup = useMemo(() => {
-    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number }> = {}
+    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number }> = {}
     filteredData.forEach(row => {
       const g = row.Projet
-      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0 }
+      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0 }
       groups[g].cp += row['TOTAL CP'] || 0
       groups[g].ce += row['TOTAL CE'] || 0
       groups[g].engCP += row['ENG CP TOTAL'] || 0
@@ -393,6 +401,12 @@ export default function Dashboard() {
       groups[g].previsions += row['TOTAL PREV'] || 0
       groups[g].count += 1
       groups[g].ord += row['ORD TOTAL'] || 0
+      groups[g].cpReports += row.REPORTS || 0
+      groups[g].cpConsolides += row.CONSOLIDES || 0
+      groups[g].cpNouveaux += row.NOUVEAUX || 0
+      groups[g].ordReports += row['ORD REPORTS'] || 0
+      groups[g].ordConsolides += row['ORD CONSOLIDES'] || 0
+      groups[g].ordNouveaux += row['ORD NOUVEAUX'] || 0
     })
     return Object.entries(groups).map(([name, v]) => ({
       name,
@@ -411,10 +425,10 @@ export default function Dashboard() {
 
   // Analysis by Programme (row.Programme field - actual project names)
   const analysisByProgramme = useMemo(() => {
-    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number }> = {}
+    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number }> = {}
     filteredData.forEach(row => {
       const g = row.Programme
-      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0 }
+      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0 }
       groups[g].cp += row['TOTAL CP'] || 0
       groups[g].ce += row['TOTAL CE'] || 0
       groups[g].engCP += row['ENG CP TOTAL'] || 0
@@ -423,6 +437,12 @@ export default function Dashboard() {
       groups[g].previsions += row['TOTAL PREV'] || 0
       groups[g].count += 1
       groups[g].ord += row['ORD TOTAL'] || 0
+      groups[g].cpReports += row.REPORTS || 0
+      groups[g].cpConsolides += row.CONSOLIDES || 0
+      groups[g].cpNouveaux += row.NOUVEAUX || 0
+      groups[g].ordReports += row['ORD REPORTS'] || 0
+      groups[g].ordConsolides += row['ORD CONSOLIDES'] || 0
+      groups[g].ordNouveaux += row['ORD NOUVEAUX'] || 0
     })
     return Object.entries(groups).map(([name, v]) => ({
       name,
@@ -2961,8 +2981,14 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-blue-50/60">
                     <TableHead className="text-xs font-semibold text-blue-700">Programme</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">CP Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">CP Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">CP Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right">Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Ord. Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Ord. Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right">Ordonn.</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux ord.</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right">Paiements</TableHead>
@@ -2982,13 +3008,25 @@ export default function Dashboard() {
                     const totPaiements = progOrd.reduce((s, p) => s + p.paiements, 0)
                     const totPrevisions = progOrd.reduce((s, p) => s + p.previsions, 0)
                     const totDisponible = progOrd.reduce((s, p) => s + p.disponible, 0)
+                    const totCpReports = progOrd.reduce((s, p) => s + p.cpReports, 0)
+                    const totCpConsolides = progOrd.reduce((s, p) => s + p.cpConsolides, 0)
+                    const totCpNouveaux = progOrd.reduce((s, p) => s + p.cpNouveaux, 0)
+                    const totOrdReports = progOrd.reduce((s, p) => s + p.ordReports, 0)
+                    const totOrdConsolides = progOrd.reduce((s, p) => s + p.ordConsolides, 0)
+                    const totOrdNouveaux = progOrd.reduce((s, p) => s + p.ordNouveaux, 0)
                     return (
                       <>
                         {progOrd.map(p => (
                           <TableRow key={p.name} className="hover:bg-gray-50">
                             <TableCell className="text-xs font-medium text-gray-900">{p.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpReports)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpConsolides)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpNouveaux)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ordReports)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ordConsolides)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ordNouveaux)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ord)}</TableCell>
                             <TableCell className="text-xs text-right">
                               <span className={tauxColor(p.tauxOrdonnement)}>{formatPercent(p.tauxOrdonnement)}</span>
@@ -3000,8 +3038,14 @@ export default function Dashboard() {
                         ))}
                         <TableRow className="bg-blue-50/40 font-bold">
                           <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
                           <TableCell className="text-xs font-bold text-right">
                             <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
@@ -3030,8 +3074,14 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-teal-50/60">
                     <TableHead className="text-xs font-semibold text-teal-700">Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">CP Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">CP Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">CP Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-teal-700 text-right">Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-teal-700 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Ord. Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Ord. Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-teal-700 text-right">Ordonn.</TableHead>
                     <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux ord.</TableHead>
                     <TableHead className="text-xs font-semibold text-teal-700 text-right">Paiements</TableHead>
@@ -3051,13 +3101,25 @@ export default function Dashboard() {
                     const totPaiements = projOrd.reduce((s, g) => s + g.paiements, 0)
                     const totPrevisions = projOrd.reduce((s, g) => s + g.previsions, 0)
                     const totDisponible = projOrd.reduce((s, g) => s + g.disponible, 0)
+                    const totCpReports = projOrd.reduce((s, g) => s + g.cpReports, 0)
+                    const totCpConsolides = projOrd.reduce((s, g) => s + g.cpConsolides, 0)
+                    const totCpNouveaux = projOrd.reduce((s, g) => s + g.cpNouveaux, 0)
+                    const totOrdReports = projOrd.reduce((s, g) => s + g.ordReports, 0)
+                    const totOrdConsolides = projOrd.reduce((s, g) => s + g.ordConsolides, 0)
+                    const totOrdNouveaux = projOrd.reduce((s, g) => s + g.ordNouveaux, 0)
                     return (
                       <>
                         {projOrd.map(g => (
                           <TableRow key={g.name} className="hover:bg-gray-50">
                             <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpReports)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpConsolides)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpNouveaux)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ordReports)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ordConsolides)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ordNouveaux)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ord)}</TableCell>
                             <TableCell className="text-xs text-right">
                               <span className={tauxColor(g.tauxOrdonnement)}>{formatPercent(g.tauxOrdonnement)}</span>
@@ -3069,8 +3131,14 @@ export default function Dashboard() {
                         ))}
                         <TableRow className="bg-teal-50/40 font-bold">
                           <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
                           <TableCell className="text-xs font-bold text-right">
                             <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
@@ -3099,8 +3167,14 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-indigo-50/60">
                     <TableHead className="text-xs font-semibold text-indigo-700">Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">CP Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">CP Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">CP Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Ord. Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Ord. Nouveaux</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right">Ordonn.</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux ord.</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right">Paiements</TableHead>
@@ -3120,13 +3194,25 @@ export default function Dashboard() {
                     const totPaiements = entOrd.reduce((s, e) => s + e.paiements, 0)
                     const totPrevisions = entOrd.reduce((s, e) => s + e.previsions, 0)
                     const totDisponible = entOrd.reduce((s, e) => s + e.disponible, 0)
+                    const totCpReports = entOrd.reduce((s, e) => s + e.cpReports, 0)
+                    const totCpConsolides = entOrd.reduce((s, e) => s + e.cpConsolides, 0)
+                    const totCpNouveaux = entOrd.reduce((s, e) => s + e.cpNouveaux, 0)
+                    const totOrdReports = entOrd.reduce((s, e) => s + e.ordReports, 0)
+                    const totOrdConsolides = entOrd.reduce((s, e) => s + e.ordConsolides, 0)
+                    const totOrdNouveaux = entOrd.reduce((s, e) => s + e.ordNouveaux, 0)
                     return (
                       <>
                         {entOrd.map(e => (
                           <TableRow key={e.name} className="hover:bg-gray-50">
                             <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpReports)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpConsolides)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpNouveaux)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ordReports)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ordConsolides)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ordNouveaux)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ord)}</TableCell>
                             <TableCell className="text-xs text-right">
                               <span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span>
@@ -3138,8 +3224,14 @@ export default function Dashboard() {
                         ))}
                         <TableRow className="bg-indigo-50/40 font-bold">
                           <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
                           <TableCell className="text-xs font-bold text-right">
                             <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
