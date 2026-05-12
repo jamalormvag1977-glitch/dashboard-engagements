@@ -1373,17 +1373,15 @@ export default function Dashboard() {
                 <TableRow className="bg-teal-50/60">
                   <TableHead className="text-xs font-bold text-teal-800 min-w-[100px]">Entité</TableHead>
                   <TableHead className="text-xs font-bold text-emerald-700 text-right bg-emerald-50/30">Crédits Total CP</TableHead>
-                  <TableHead className="text-xs font-bold text-violet-700 text-center bg-violet-50/30" colSpan={2}>Prév. Cumul. Déc.</TableHead>
                   <TableHead className="text-xs font-bold text-teal-700 text-center bg-teal-50/30" colSpan={2}>Fin Juin</TableHead>
                   <TableHead className="text-xs font-bold text-cyan-700 text-center bg-cyan-50/30" colSpan={2}>Fin Septembre</TableHead>
                   <TableHead className="text-xs font-bold text-sky-700 text-center bg-sky-50/30" colSpan={2}>Fin Octobre</TableHead>
                   <TableHead className="text-xs font-bold text-indigo-700 text-center bg-indigo-50/30" colSpan={2}>Fin Novembre</TableHead>
+                  <TableHead className="text-xs font-bold text-violet-700 text-center bg-violet-50/30" colSpan={2}>Prév. Cumul. Déc.</TableHead>
                 </TableRow>
                 <TableRow className="bg-teal-50/30">
                   <TableHead className="text-[10px] text-gray-500" />
                   <TableHead className="text-[10px] font-semibold text-emerald-600 text-right bg-emerald-50/20">CP</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-violet-600 text-right bg-violet-50/20">Prév.</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-violet-600 text-right bg-violet-50/20">Taux</TableHead>
                   <TableHead className="text-[10px] font-semibold text-teal-600 text-right">Prév.</TableHead>
                   <TableHead className="text-[10px] font-semibold text-teal-600 text-right">Taux</TableHead>
                   <TableHead className="text-[10px] font-semibold text-cyan-600 text-right">Prév.</TableHead>
@@ -1392,6 +1390,8 @@ export default function Dashboard() {
                   <TableHead className="text-[10px] font-semibold text-sky-600 text-right">Taux</TableHead>
                   <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Prév.</TableHead>
                   <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Taux</TableHead>
+                  <TableHead className="text-[10px] font-semibold text-violet-600 text-right bg-violet-50/20">Prév.</TableHead>
+                  <TableHead className="text-[10px] font-semibold text-violet-600 text-right bg-violet-50/20">Taux</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -1405,18 +1405,6 @@ export default function Dashboard() {
                     <TableRow key={e.name} className="hover:bg-teal-50/30 transition-colors">
                       <TableCell className="text-xs font-semibold text-gray-900">{e.name}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right font-medium bg-emerald-50/10">{formatMillions(e.cp)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right font-medium bg-violet-50/10">{formatMillions(e.cumulPrevDecembre)}</TableCell>
-                      <TableCell className="text-xs text-right bg-violet-50/10">
-                        <div className="flex items-center justify-end gap-1">
-                          <div className="w-12 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className={`kpi-progress-bar h-full rounded-full ${tauxDec >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxDec >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxDec, 100)}%` }} />
-                          </div>
-                          <span className={`text-[10px] font-bold ${tauxColor(tauxDec)}`}>
-                            {tauxDec >= 80 ? '✓' : tauxDec >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
-                          </span>
-                          <span className={`text-[10px] font-semibold ${tauxColor(tauxDec)}`}>{e.cp > 0 ? formatPercent(tauxDec) : '—'}</span>
-                        </div>
-                      </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right bg-teal-50/20">{formatMillions(e.cumulPrevJuin)}</TableCell>
                       <TableCell className="text-xs text-right bg-teal-50/20">
                         <div className="flex items-center justify-end gap-1">
@@ -1465,6 +1453,18 @@ export default function Dashboard() {
                           <span className={`text-[10px] font-semibold ${tauxColor(tauxNov)}`}>{e.cp > 0 ? formatPercent(tauxNov) : '—'}</span>
                         </div>
                       </TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right font-medium bg-violet-50/10">{formatMillions(e.cumulPrevDecembre)}</TableCell>
+                      <TableCell className="text-xs text-right bg-violet-50/10">
+                        <div className="flex items-center justify-end gap-1">
+                          <div className="w-12 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className={`kpi-progress-bar h-full rounded-full ${tauxDec >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxDec >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxDec, 100)}%` }} />
+                          </div>
+                          <span className={`text-[10px] font-bold ${tauxColor(tauxDec)}`}>
+                            {tauxDec >= 80 ? '✓' : tauxDec >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
+                          </span>
+                          <span className={`text-[10px] font-semibold ${tauxColor(tauxDec)}`}>{e.cp > 0 ? formatPercent(tauxDec) : '—'}</span>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   )
                 })}
@@ -1472,15 +1472,6 @@ export default function Dashboard() {
                 <TableRow className="bg-gradient-to-r from-teal-50/60 to-cyan-50/60 font-bold">
                   <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right bg-emerald-50/20">{formatMillions(kpis.totalCP)}</TableCell>
-                  <TableCell className="text-xs font-bold text-gray-900 text-right bg-violet-50/20">{formatMillions(kpis.cumulPrevDecembre)}</TableCell>
-                  <TableCell className="text-xs text-right bg-violet-50/20">
-                    <div className="flex items-center justify-end gap-1">
-                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevDecembre / kpis.totalCP) * 100 : 0)}`}>
-                        {(() => { const t = kpis.totalCP > 0 ? (kpis.cumulPrevDecembre / kpis.totalCP) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
-                      </span>
-                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevDecembre / kpis.totalCP) * 100 : 0)}`}>{kpis.totalCP > 0 ? formatPercent((kpis.cumulPrevDecembre / kpis.totalCP) * 100) : '—'}</span>
-                    </div>
-                  </TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right bg-teal-50/30">{formatMillions(kpis.cumulPrevJuin)}</TableCell>
                   <TableCell className="text-xs text-right bg-teal-50/30">
                     <div className="flex items-center justify-end gap-1">
@@ -1515,6 +1506,15 @@ export default function Dashboard() {
                         {(() => { const t = kpis.totalCP > 0 ? (kpis.cumulPrevNovembre / kpis.totalCP) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
                       </span>
                       <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevNovembre / kpis.totalCP) * 100 : 0)}`}>{kpis.totalCP > 0 ? formatPercent((kpis.cumulPrevNovembre / kpis.totalCP) * 100) : '—'}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right bg-violet-50/20">{formatMillions(kpis.cumulPrevDecembre)}</TableCell>
+                  <TableCell className="text-xs text-right bg-violet-50/20">
+                    <div className="flex items-center justify-end gap-1">
+                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevDecembre / kpis.totalCP) * 100 : 0)}`}>
+                        {(() => { const t = kpis.totalCP > 0 ? (kpis.cumulPrevDecembre / kpis.totalCP) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
+                      </span>
+                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevDecembre / kpis.totalCP) * 100 : 0)}`}>{kpis.totalCP > 0 ? formatPercent((kpis.cumulPrevDecembre / kpis.totalCP) * 100) : '—'}</span>
                     </div>
                   </TableCell>
                 </TableRow>
