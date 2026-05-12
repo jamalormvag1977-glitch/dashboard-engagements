@@ -1157,7 +1157,7 @@ export default function Dashboard() {
               <TableHeader>
                 <TableRow className="bg-indigo-50/60">
                   <TableHead className="text-xs font-semibold text-indigo-700">Programme</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Budget CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CP</TableHead>
                   <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CP</TableHead>
                   <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux eng. CP</TableHead>
                   <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CE</TableHead>
@@ -1225,7 +1225,7 @@ export default function Dashboard() {
               <TableHeader>
                 <TableRow className="bg-emerald-50/60">
                   <TableHead className="text-xs font-semibold text-emerald-700">Projet</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Budget CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total CP</TableHead>
                   <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. CP</TableHead>
                   <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux eng. CP</TableHead>
                   <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total CE</TableHead>
@@ -1293,7 +1293,7 @@ export default function Dashboard() {
               <TableHeader>
                 <TableRow className="bg-slate-50/60">
                   <TableHead className="text-xs font-semibold text-slate-700">Entité</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Budget CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Total CP</TableHead>
                   <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. CP</TableHead>
                   <TableHead className="text-xs font-semibold text-slate-700 text-right">Taux eng. CP</TableHead>
                   <TableHead className="text-xs font-semibold text-slate-700 text-right">Total CE</TableHead>
@@ -1535,7 +1535,7 @@ export default function Dashboard() {
             <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Total Budget CP */}
+            {/* Total Total CP */}
             <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
               <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
               <div className="p-4">
@@ -1546,7 +1546,7 @@ export default function Dashboard() {
                   <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Budget</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(entityTotalBudget)}</p>
-                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Budget CP total</p>
+                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Total CP total</p>
               </div>
             </div>
 
@@ -1686,7 +1686,7 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-gray-50">
                     <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
@@ -1897,7 +1897,7 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-gray-50">
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
@@ -1975,7 +1975,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Budget Total */}
+            {/* Total CP */}
             <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
               <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
               <div className="p-4">
@@ -1986,7 +1986,7 @@ export default function Dashboard() {
                   <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Budget</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalBudget)}</p>
-                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Budget CP total</p>
+                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Total CP total</p>
               </div>
             </div>
 
@@ -2139,7 +2139,7 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-gray-600">Programme</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
@@ -3071,7 +3071,7 @@ export default function Dashboard() {
             <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Budget total */}
+            {/* Total CP */}
             <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
               <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
               <div className="p-4">
@@ -3082,7 +3082,7 @@ export default function Dashboard() {
                   <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Budget</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCP)}</p>
-                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Budget total CP</p>
+                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Total CP</p>
               </div>
             </div>
 
