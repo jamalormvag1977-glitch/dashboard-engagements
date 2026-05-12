@@ -158,6 +158,7 @@ const NAV_ITEMS = [
   { key: 'project', label: 'Par programme', icon: FolderOpen },
   { key: 'engagements', label: 'Détails engagements', icon: FileText },
   { key: 'ordonnancements', label: 'Détails ordonnancements', icon: FileText },
+  { key: 'previsions', label: 'Prévisions ordonnancement', icon: TrendingUp },
   { key: 'assainissement', label: 'Assainissement des reports', icon: RotateCcw },
 ]
 
@@ -389,10 +390,11 @@ export default function Dashboard() {
 
   // Analysis by Group (Programme)
   const analysisByGroup = useMemo(() => {
-    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number }> = {}
+    const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
+    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number; prevByMonth: Record<string, number> }> = {}
     filteredData.forEach(row => {
       const g = row.Projet
-      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0 }
+      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0, prevByMonth: {} }
       groups[g].cp += row['TOTAL CP'] || 0
       groups[g].ce += row['TOTAL CE'] || 0
       groups[g].engCP += row['ENG CP TOTAL'] || 0
@@ -408,6 +410,18 @@ export default function Dashboard() {
       groups[g].ordConsolides += row['ORD CONSOLIDES'] || 0
       groups[g].ordNouveaux += row['ORD NOUVEAUX'] || 0
     })
+    // Calculate cumulative previsions by group
+    Object.keys(groups).forEach(g => {
+      const groupRows = filteredData.filter(r => r.Projet === g)
+      let cumul = 0
+      for (const m of prevMonths) {
+        const rep = groupRows.reduce((s, r) => s + (r[`Previsions REPORTS ${m}`] || 0), 0)
+        const con = groupRows.reduce((s, r) => s + (r[`Previsions CONSOLIDES ${m}`] || 0), 0)
+        const nouv = groupRows.reduce((s, r) => s + (r[`Previsions NOUVEAUX ${m}`] || 0), 0)
+        cumul += rep + con + nouv
+        groups[g].prevByMonth[m] = cumul
+      }
+    })
     return Object.entries(groups).map(([name, v]) => ({
       name,
       ...v,
@@ -416,6 +430,11 @@ export default function Dashboard() {
       tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
       tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
       disponible: v.cp - v.engCP,
+      cumulPrevJuin: v.prevByMonth['JUIN'] || 0,
+      cumulPrevSeptembre: v.prevByMonth['SEPTEMBRE'] || 0,
+      cumulPrevOctobre: v.prevByMonth['OCTOBRE'] || 0,
+      cumulPrevNovembre: v.prevByMonth['NOVEMBRE'] || 0,
+      cumulPrevDecembre: v.prevByMonth['DECEMBRE'] || 0,
     })).sort((a, b) => {
       const numA = parseInt(a.name.replace(/\D/g, '')) || 0
       const numB = parseInt(b.name.replace(/\D/g, '')) || 0
@@ -425,10 +444,11 @@ export default function Dashboard() {
 
   // Analysis by Programme (row.Programme field - actual project names)
   const analysisByProgramme = useMemo(() => {
-    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number }> = {}
+    const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
+    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number; prevByMonth: Record<string, number> }> = {}
     filteredData.forEach(row => {
       const g = row.Programme
-      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0 }
+      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0, prevByMonth: {} }
       groups[g].cp += row['TOTAL CP'] || 0
       groups[g].ce += row['TOTAL CE'] || 0
       groups[g].engCP += row['ENG CP TOTAL'] || 0
@@ -444,6 +464,18 @@ export default function Dashboard() {
       groups[g].ordConsolides += row['ORD CONSOLIDES'] || 0
       groups[g].ordNouveaux += row['ORD NOUVEAUX'] || 0
     })
+    // Calculate cumulative previsions by programme
+    Object.keys(groups).forEach(g => {
+      const groupRows = filteredData.filter(r => r.Programme === g)
+      let cumul = 0
+      for (const m of prevMonths) {
+        const rep = groupRows.reduce((s, r) => s + (r[`Previsions REPORTS ${m}`] || 0), 0)
+        const con = groupRows.reduce((s, r) => s + (r[`Previsions CONSOLIDES ${m}`] || 0), 0)
+        const nouv = groupRows.reduce((s, r) => s + (r[`Previsions NOUVEAUX ${m}`] || 0), 0)
+        cumul += rep + con + nouv
+        groups[g].prevByMonth[m] = cumul
+      }
+    })
     return Object.entries(groups).map(([name, v]) => ({
       name,
       ...v,
@@ -452,6 +484,11 @@ export default function Dashboard() {
       tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
       tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
       disponible: v.cp - v.engCP,
+      cumulPrevJuin: v.prevByMonth['JUIN'] || 0,
+      cumulPrevSeptembre: v.prevByMonth['SEPTEMBRE'] || 0,
+      cumulPrevOctobre: v.prevByMonth['OCTOBRE'] || 0,
+      cumulPrevNovembre: v.prevByMonth['NOVEMBRE'] || 0,
+      cumulPrevDecembre: v.prevByMonth['DECEMBRE'] || 0,
     })).sort((a, b) => b.cp - a.cp)
   }, [filteredData])
 
@@ -3776,6 +3813,324 @@ export default function Dashboard() {
     )
   }
 
+  const renderPrevisionsView = () => {
+    return (
+      <>
+        {/* ═══════════ SECTION 1 : PRÉVISIONS PAR PROGRAMME ═══════════ */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
+            <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Prévisions d'ordonnancement cumulées</h3>
+          </div>
+        </div>
+
+        {/* Prévisions par Programme */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Prévisions cumulées par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-blue-50/60">
+                    <TableHead className="text-xs font-semibold text-blue-700">Programme</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prév. Fin Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prév. Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prév. Fin Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prév. Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux Déc.</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const data = analysisByProgramme.sort((a, b) => b.cumulPrevDecembre - a.cumulPrevDecembre)
+                    const totCP = data.reduce((s, p) => s + p.cp, 0)
+                    const totJuin = data.reduce((s, p) => s + p.cumulPrevJuin, 0)
+                    const totSept = data.reduce((s, p) => s + p.cumulPrevSeptembre, 0)
+                    const totOct = data.reduce((s, p) => s + p.cumulPrevOctobre, 0)
+                    const totNov = data.reduce((s, p) => s + p.cumulPrevNovembre, 0)
+                    const totDec = data.reduce((s, p) => s + p.cumulPrevDecembre, 0)
+                    return (
+                      <>
+                        {data.map(p => (
+                          <TableRow key={p.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{p.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cumulPrevJuin)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.cumulPrevJuin / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.cumulPrevJuin / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cumulPrevSeptembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.cumulPrevSeptembre / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.cumulPrevSeptembre / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cumulPrevOctobre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.cumulPrevOctobre / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.cumulPrevOctobre / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cumulPrevNovembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.cumulPrevNovembre / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.cumulPrevNovembre / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cumulPrevDecembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.cumulPrevDecembre / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.cumulPrevDecembre / p.cp) * 100 : 0)}</span></TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-blue-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totJuin)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totJuin / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totJuin / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totSept)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totSept / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totSept / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOct)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totOct / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOct / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totNov / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totDec)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totDec / totCP) * 100 : 0)}</span></TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Prévisions par Projet */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Prévisions cumulées par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-teal-50/60">
+                    <TableHead className="text-xs font-semibold text-teal-700">Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prév. Fin Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prév. Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prév. Fin Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prév. Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux Déc.</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const data = analysisByGroup.sort((a, b) => b.cumulPrevDecembre - a.cumulPrevDecembre)
+                    const totCP = data.reduce((s, g) => s + g.cp, 0)
+                    const totJuin = data.reduce((s, g) => s + g.cumulPrevJuin, 0)
+                    const totSept = data.reduce((s, g) => s + g.cumulPrevSeptembre, 0)
+                    const totOct = data.reduce((s, g) => s + g.cumulPrevOctobre, 0)
+                    const totNov = data.reduce((s, g) => s + g.cumulPrevNovembre, 0)
+                    const totDec = data.reduce((s, g) => s + g.cumulPrevDecembre, 0)
+                    return (
+                      <>
+                        {data.map(g => (
+                          <TableRow key={g.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cumulPrevJuin)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.cumulPrevJuin / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.cumulPrevJuin / g.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cumulPrevSeptembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.cumulPrevSeptembre / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.cumulPrevSeptembre / g.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cumulPrevOctobre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.cumulPrevOctobre / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.cumulPrevOctobre / g.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cumulPrevNovembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.cumulPrevNovembre / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.cumulPrevNovembre / g.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cumulPrevDecembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.cumulPrevDecembre / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.cumulPrevDecembre / g.cp) * 100 : 0)}</span></TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-teal-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totJuin)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totJuin / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totJuin / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totSept)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totSept / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totSept / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOct)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totOct / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOct / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totNov / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totDec)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totDec / totCP) * 100 : 0)}</span></TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Prévisions par Entité */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Prévisions cumulées par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-indigo-50/60">
+                    <TableHead className="text-xs font-semibold text-indigo-700">Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prév. Fin Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prév. Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prév. Fin Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prév. Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux Déc.</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const data = [...analysisByEntity].sort((a, b) => b.cumulPrevDecembre - a.cumulPrevDecembre)
+                    const totCP = data.reduce((s, e) => s + e.cp, 0)
+                    const totJuin = data.reduce((s, e) => s + e.cumulPrevJuin, 0)
+                    const totSept = data.reduce((s, e) => s + e.cumulPrevSeptembre, 0)
+                    const totOct = data.reduce((s, e) => s + e.cumulPrevOctobre, 0)
+                    const totNov = data.reduce((s, e) => s + e.cumulPrevNovembre, 0)
+                    const totDec = data.reduce((s, e) => s + e.cumulPrevDecembre, 0)
+                    return (
+                      <>
+                        {data.map(e => (
+                          <TableRow key={e.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cumulPrevJuin)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevJuin / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevJuin / e.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cumulPrevSeptembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevSeptembre / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevSeptembre / e.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cumulPrevOctobre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevOctobre / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevOctobre / e.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cumulPrevNovembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevNovembre / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevNovembre / e.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cumulPrevDecembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevDecembre / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevDecembre / e.cp) * 100 : 0)}</span></TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-indigo-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totJuin)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totJuin / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totJuin / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totSept)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totSept / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totSept / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOct)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totOct / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOct / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totNov / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totDec)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totDec / totCP) * 100 : 0)}</span></TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Détail par Entité avec prévisions mensuelles */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Détail prévisions cumulées par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-violet-50/60">
+                    <TableHead className="text-xs font-semibold text-violet-700">Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Ordonn.</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Prév. Fin Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Taux Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Prév. Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Taux Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Prév. Fin Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Taux Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Prév. Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Taux Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-violet-700 text-right">Taux Déc.</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const data = [...analysisByEntity].sort((a, b) => b.cumulPrevDecembre - a.cumulPrevDecembre)
+                    const totCP = data.reduce((s, e) => s + e.cp, 0)
+                    const totEngCP = data.reduce((s, e) => s + e.engCP, 0)
+                    const totOrd = data.reduce((s, e) => s + e.ord, 0)
+                    const totJuin = data.reduce((s, e) => s + e.cumulPrevJuin, 0)
+                    const totSept = data.reduce((s, e) => s + e.cumulPrevSeptembre, 0)
+                    const totOct = data.reduce((s, e) => s + e.cumulPrevOctobre, 0)
+                    const totNov = data.reduce((s, e) => s + e.cumulPrevNovembre, 0)
+                    const totDec = data.reduce((s, e) => s + e.cumulPrevDecembre, 0)
+                    return (
+                      <>
+                        {data.map(e => (
+                          <TableRow key={e.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ord)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cumulPrevJuin)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevJuin / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevJuin / e.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cumulPrevSeptembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevSeptembre / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevSeptembre / e.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cumulPrevOctobre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevOctobre / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevOctobre / e.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cumulPrevNovembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevNovembre / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevNovembre / e.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cumulPrevDecembre)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevDecembre / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevDecembre / e.cp) * 100 : 0)}</span></TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-violet-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totJuin)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totJuin / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totJuin / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totSept)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totSept / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totSept / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOct)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totOct / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOct / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totNov / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totDec)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totDec / totCP) * 100 : 0)}</span></TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      </>
+    )
+  }
+
   const renderAssainissementView = () => {
     // Calculate reports-focused metrics
     const totalReports = filteredData.reduce((s, r) => s + (r.REPORTS || 0), 0)
@@ -4092,6 +4447,7 @@ export default function Dashboard() {
       case 'project': return renderProjectView()
       case 'engagements': return renderEngagementsView()
       case 'ordonnancements': return renderOrdonnancementsView()
+      case 'previsions': return renderPrevisionsView()
       case 'assainissement': return renderAssainissementView()
       case 'reports': return renderReportsView()
       case 'settings': return renderSettingsView()
