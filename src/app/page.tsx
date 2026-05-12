@@ -128,7 +128,7 @@ function formatTableCell(value: number | null | undefined): string {
 
 // Format percentage with French comma decimal
 function formatPercent(value: number): string {
-  return value.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%'
+  return value.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + '%'
 }
 
 function formatDate(iso: string | null): string {
@@ -1144,7 +1144,7 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Analyse par programme (M DH)
+              Analyse par programme
             </CardTitle>
             <button onClick={() => handleNavChange('project')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
@@ -1212,7 +1212,7 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Analyse par projet (M DH)
+              Analyse par projet
             </CardTitle>
             <button onClick={() => handleNavChange('program')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
@@ -1280,7 +1280,7 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Analyse par entité (M DH)
+              Analyse par entité
             </CardTitle>
             <button onClick={() => handleNavChange('entity')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
@@ -2387,7 +2387,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Programme ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Programme (M DH)</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Programme</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -2494,7 +2494,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Projet ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Projet (M DH)</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -2601,7 +2601,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Entité ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Entité (M DH)</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -2925,7 +2925,7 @@ export default function Dashboard() {
         {/* Prévisions Ordonnancement Cumulés par Projet */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Prévisions ordonnancement cumulées par projet (M DH)</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Prévisions ordonnancement cumulées par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3626,7 +3626,7 @@ export default function Dashboard() {
         {/* Table by Entity */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Assainissement par entité (M DH)</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Assainissement par entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3678,7 +3678,7 @@ export default function Dashboard() {
         {/* Table by Projet */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Assainissement par projet (M DH)</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Assainissement par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
