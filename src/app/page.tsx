@@ -847,7 +847,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-2">
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Crédits</h3>
-          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+          
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Crédits Reportés */}
@@ -921,7 +921,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-2">
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-emerald-500 to-teal-600" />
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Engagements</h3>
-          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+          
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Engagement CP */}
@@ -1017,7 +1017,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-2">
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-cyan-600" />
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancements & Paiements</h3>
-          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+          
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Ord. sur Reports */}
@@ -1091,7 +1091,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-2">
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-teal-500 to-violet-600" />
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Prévisions d&apos;ordonnancement cumulées</h3>
-          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+          
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {[
@@ -1356,7 +1356,7 @@ export default function Dashboard() {
                 <p className="text-[11px] text-gray-400 mt-0.5">Taux = Prévisions d&apos;ordonnancement cumulées / Crédits Total CP</p>
               </div>
             </div>
-            <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+            
           </div>
         </CardHeader>
         <CardContent className="p-0">
@@ -1532,7 +1532,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-2">
             <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
             <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Crédits</h3>
-            <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+            
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Total Total CP */}
@@ -1743,7 +1743,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-2">
             <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
             <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Crédits</h3>
-            <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+            
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Total Budget */}
@@ -1957,7 +1957,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-2">
             <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
             <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Crédits</h3>
-            <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+            
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Nb Programmes */}
@@ -2227,7 +2227,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-2">
             <div className="w-1 h-5 rounded-full bg-gradient-to-b from-emerald-500 to-teal-600" />
             <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Engagements</h3>
-            <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+            
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Engagement CP */}
@@ -2793,7 +2793,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-2">
             <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-cyan-600" />
             <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancements</h3>
-            <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+            
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Total Ordonnancements avec taux */}
@@ -3068,7 +3068,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-2">
             <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
             <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Synthèse générale</h3>
-            <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+            
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Total CP */}
@@ -3479,7 +3479,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-2">
             <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
             <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Reports</h3>
-            <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+            
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Crédits reportés */}
