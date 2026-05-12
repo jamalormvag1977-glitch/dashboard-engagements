@@ -41,3 +41,33 @@ Stage Summary:
 - Key features: Dark navy sidebar navigation with 9 menu items, filters in sidebar, 6 KPI cards (Budget LFI, Engagements, Taux engagement, Ordonnancements, Taux ordonnancement, Disponible), 3 horizontal bar charts (par Entité, par Programme, par Projet Top 5), expandable detail table, alert section
 - All existing features preserved: Excel upload, auto-refresh 30s, CSV export, search, filters
 - Build verified: passes
+
+---
+Task ID: 2 (Phase 2)
+Agent: Code Agent
+Task: Critical bug fixes and feature additions to dashboard
+
+Work Log:
+- Added `analysisByProgramme` useMemo after `analysisByGroup` (line 368-390) — fixes crash on line 1520 where `analysisByProgramme` was referenced but not defined
+- Removed `alerts` useMemo block (was lines 421-473) — unused computation removed
+- Removed `AlertTriangle` import — no longer used after alerts removal
+- Updated NAV_ITEMS to include "Assainissement des reports" with RotateCcw icon (line 161)
+- Added Prévisions KPI Cards row to Overview view (3 cards: Prévisions ordonnancement, Taux réalisation prévisions, Écart prévisions/réalisé) after Disponible card
+- Added "Prévisions ordonnancement cumulées par projet" table card to Ordonnancement view (before Ordonnancement Lines Table)
+- Added `renderAssainissementView()` function (lines 2402-2612) with:
+  - KPI cards: Crédits reportés, Engagements sur reports, Ordonnancements sur reports, Reste à engager
+  - Table by Entity with 9 columns (Reports analysis per entity)
+  - Table by Projet with 9 columns (Reports analysis per project)
+  - Total rows in both tables
+- Added `case 'assainissement': return renderAssainissementView()` to renderActiveView switch
+- Build passes successfully (Next.js 16.1.3 Turbopack)
+- ESLint clean for src/app/page.tsx
+- Standalone build copied and server verified returning 200
+
+Stage Summary:
+- Critical crash bug fixed (analysisByProgramme undefined reference)
+- New "Assainissement des reports" navigation item and view added
+- Prévisions cards added to Overview
+- Prévisions cumulées table added to Ordonnancement view
+- Unused alerts computation and import removed
+- All changes compile and build successfully

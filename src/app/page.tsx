@@ -61,7 +61,6 @@ import {
   ChevronLeft,
   Menu,
   X,
-  AlertTriangle,
   Info,
   Landmark,
   Scale,
@@ -159,6 +158,7 @@ const NAV_ITEMS = [
   { key: 'project', label: 'Par programme', icon: FolderOpen },
   { key: 'engagements', label: 'Détails engagements', icon: FileText },
   { key: 'ordonnancements', label: 'Détails ordonnancements', icon: FileText },
+  { key: 'assainissement', label: 'Assainissement des reports', icon: RotateCcw },
   { key: 'reports', label: 'Rapports', icon: BarChart3 },
   { key: 'settings', label: 'Paramètres', icon: Settings },
 ]
@@ -365,6 +365,30 @@ export default function Dashboard() {
     })
   }, [filteredData])
 
+  // Analysis by Programme (row.Programme field - actual project names)
+  const analysisByProgramme = useMemo(() => {
+    const groups: Record<string, { cp: number; ce: number; engCP: number; paiements: number; previsions: number; count: number; ord: number }> = {}
+    filteredData.forEach(row => {
+      const g = row.Programme
+      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, paiements: 0, previsions: 0, count: 0, ord: 0 }
+      groups[g].cp += row['TOTAL CP'] || 0
+      groups[g].ce += row['TOTAL CE'] || 0
+      groups[g].engCP += row['ENG CP TOTAL'] || 0
+      groups[g].paiements += row['PAIEMENTS TOTAL'] || 0
+      groups[g].previsions += row['TOTAL PREV'] || 0
+      groups[g].count += 1
+      groups[g].ord += row['ORD TOTAL'] || 0
+    })
+    return Object.entries(groups).map(([name, v]) => ({
+      name,
+      ...v,
+      tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
+      tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
+      tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
+      disponible: v.cp - v.engCP,
+    })).sort((a, b) => b.cp - a.cp)
+  }, [filteredData])
+
   // Top 5 Projects by TOTAL CP
   const topProjects = useMemo(() => {
     return [...filteredData]
@@ -417,61 +441,6 @@ export default function Dashboard() {
       tauxOrdonnement: p.tauxOrdonnement,
     }))
   }, [topProjects])
-
-  // Alerts computation (limited for overview)
-  const alerts = useMemo(() => {
-    const result: { type: 'danger' | 'warning' | 'info'; message: string; detail: string }[] = []
-
-    // Faible taux d'engagement (entities with rate < 40%)
-    analysisByEntity.forEach(e => {
-      if (e.tauxEngagement < 40 && e.cp > 0) {
-        result.push({
-          type: 'danger',
-          message: `Faible taux d'engagement - ${e.name}`,
-          detail: `${formatPercent(e.tauxEngagement)} du budget engagé`,
-        })
-      }
-    })
-
-    // Retard d'ordonnancement (projects with gap > 20%)
-    filteredData.forEach(r => {
-      const engRate = (r['TOTAL CP'] || 0) > 0 ? ((r['ENG CP TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0
-      const ordRate = (r['ENG CP TOTAL'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['ENG CP TOTAL'] || 0)) * 100 : 0
-      if (engRate - ordRate > 20 && (r['ENG CP TOTAL'] || 0) > 0) {
-        result.push({
-          type: 'warning',
-          message: `Retard d'ordonnancement - ${r.Programme || 'Sans nom'}`,
-          detail: `Écart de ${formatPercent(engRate - ordRate)} entre engagement et ordonnancement`,
-        })
-      }
-    })
-
-    // Consommation élevée (programme > 80% budget used)
-    analysisByGroup.forEach(g => {
-      const consumption = g.cp > 0 ? (g.ord / g.cp) * 100 : 0
-      if (consumption > 80) {
-        result.push({
-          type: 'info',
-          message: `Consommation élevée - ${g.name}`,
-          detail: `${formatPercent(consumption)} du budget consommé`,
-        })
-      }
-    })
-
-    // Données à vérifier (projects with engagement but no ordonnancement)
-    filteredData.forEach(r => {
-      if ((r['ENG CP TOTAL'] || 0) > 0 && (r['ORD TOTAL'] || 0) === 0) {
-        result.push({
-          type: 'info',
-          message: `Données à vérifier - ${r.Programme || 'Sans nom'}`,
-          detail: 'Engagement sans ordonnancement',
-        })
-      }
-    })
-
-    return result.slice(0, 8)
-  }, [analysisByEntity, analysisByGroup, filteredData])
-
 
 
   // Engagement breakdown
@@ -917,6 +886,54 @@ export default function Dashboard() {
             <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.disponible)}</p>
             <p className="text-xs text-gray-400 mt-1">
               {kpis.totalCP > 0 ? formatPercent((kpis.disponible / kpis.totalCP) * 100) : '0,0%'} du budget
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* KPI Cards - Row 3: Prévisions */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Card className="border border-gray-100 shadow-sm">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center">
+                <FileSpreadsheet className="w-5 h-5 text-teal-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-500">Prévisions ordonnancement</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalPrevisions)}</p>
+            <p className="text-xs text-gray-400 mt-1">
+              {kpis.totalCP > 0 ? formatPercent((kpis.totalPrevisions / kpis.totalCP) * 100) : '0,0%'} du budget
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="border border-gray-100 shadow-sm">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg bg-cyan-50 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-cyan-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-500">Taux réalisation prévisions</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">
+              {kpis.totalPrevisions > 0 ? formatPercent((kpis.totalOrd / kpis.totalPrevisions) * 100) : '0,0%'}
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              Ordonnancements / Prévisions
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="border border-gray-100 shadow-sm">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
+                <Wallet className="w-5 h-5 text-amber-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-500">Écart prévisions/réalisé</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalPrevisions - kpis.totalOrd)}</p>
+            <p className="text-xs text-gray-400 mt-1">
+              {kpis.totalPrevisions > kpis.totalOrd ? 'Prévisions supérieures' : 'Réalisé supérieur'}
             </p>
           </CardContent>
         </Card>
@@ -1922,6 +1939,71 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
+        {/* Prévisions Ordonnancement Cumulés par Projet */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Prévisions ordonnancement cumulées par projet (M DH)</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-teal-50/60">
+                    <TableHead className="text-xs font-semibold text-teal-700">Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Eng. CP Total</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Ord. Total</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prévisions Tot.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux réal.</TableHead>
+                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Écart</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const prevByProjet = analysisByGroup.map(g => {
+                      const rows = filteredData.filter(r => r.Projet === g.name)
+                      const previsions = rows.reduce((s, r) => s + (r['TOTAL PREV'] || 0), 0)
+                      return { ...g, previsions }
+                    }).filter(g => g.previsions > 0 || g.ord > 0).sort((a, b) => b.previsions - a.previsions)
+                    const totalPrev = prevByProjet.reduce((s, g) => s + g.previsions, 0)
+                    const totalEngCP = prevByProjet.reduce((s, g) => s + g.engCP, 0)
+                    const totalOrd2 = prevByProjet.reduce((s, g) => s + g.ord, 0)
+                    return (
+                      <>
+                        {prevByProjet.map(g => (
+                          <TableRow key={g.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ord)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.previsions)}</TableCell>
+                            <TableCell className="text-xs text-right">
+                              <span className={tauxColor(g.previsions > 0 ? (g.ord / g.previsions) * 100 : 0)}>
+                                {formatPercent(g.previsions > 0 ? (g.ord / g.previsions) * 100 : 0)}
+                              </span>
+                            </TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.previsions - g.ord)}</TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-teal-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalOrd2)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalPrev)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">
+                            <span className={tauxColor(totalPrev > 0 ? (totalOrd2 / totalPrev) * 100 : 0)}>
+                              {formatPercent(totalPrev > 0 ? (totalOrd2 / totalPrev) * 100 : 0)}
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalPrev - totalOrd2)}</TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Ordonnancement Lines Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
@@ -2317,6 +2399,218 @@ export default function Dashboard() {
     )
   }
 
+  const renderAssainissementView = () => {
+    // Calculate reports-focused metrics
+    const totalReports = filteredData.reduce((s, r) => s + (r.REPORTS || 0), 0)
+    const totalEngReports = filteredData.reduce((s, r) => s + (r['ENG REPORT'] || 0), 0)
+    const totalOrdReports = filteredData.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
+    const tauxEngReports = totalReports > 0 ? (totalEngReports / totalReports) * 100 : 0
+    const tauxOrdReports = totalEngReports > 0 ? (totalOrdReports / totalEngReports) * 100 : 0
+    const resteEngagerReports = totalReports - totalEngReports
+    const resteOrdonnerReports = totalEngReports - totalOrdReports
+
+    // Group by entity for reports analysis
+    const reportsByEntity = analysisByEntity.map(e => {
+      const rows = filteredData.filter(r => r.ENTITE === e.name)
+      const reports = rows.reduce((s, r) => s + (r.REPORTS || 0), 0)
+      const engReports = rows.reduce((s, r) => s + (r['ENG REPORT'] || 0), 0)
+      const ordReports = rows.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
+      const paiementsReports = rows.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0)
+      return {
+        name: e.name,
+        reports,
+        engReports,
+        ordReports,
+        paiementsReports,
+        tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
+        tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
+        resteEngager: reports - engReports,
+        resteOrdonner: engReports - ordReports,
+      }
+    }).filter(e => e.reports > 0).sort((a, b) => b.reports - a.reports)
+
+    // Group by projet for reports analysis
+    const reportsByProjet = analysisByGroup.map(g => {
+      const rows = filteredData.filter(r => r.Projet === g.name)
+      const reports = rows.reduce((s, r) => s + (r.REPORTS || 0), 0)
+      const engReports = rows.reduce((s, r) => s + (r['ENG REPORT'] || 0), 0)
+      const ordReports = rows.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
+      const paiementsReports = rows.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0)
+      return {
+        name: g.name,
+        reports,
+        engReports,
+        ordReports,
+        paiementsReports,
+        tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
+        tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
+        resteEngager: reports - engReports,
+        resteOrdonner: engReports - ordReports,
+      }
+    }).filter(g => g.reports > 0).sort((a, b) => b.reports - a.reports)
+
+    return (
+      <>
+        <h2 className="text-lg font-bold text-gray-900">Assainissement des Reports</h2>
+
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+                  <RotateCcw className="w-4 h-4 text-blue-600" />
+                </div>
+                <span className="text-xs font-medium text-gray-500">Crédits reportés</span>
+              </div>
+              <p className="text-xl font-bold text-gray-900">{formatMillions(totalReports)}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4 text-emerald-600" />
+                </div>
+                <span className="text-xs font-medium text-gray-500">Engagements sur reports</span>
+              </div>
+              <p className="text-xl font-bold text-gray-900">{formatMillions(totalEngReports)}</p>
+              <p className="text-xs text-gray-400 mt-0.5">Taux : <span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-9 h-9 rounded-lg bg-violet-50 flex items-center justify-center">
+                  <Wallet className="w-4 h-4 text-violet-600" />
+                </div>
+                <span className="text-xs font-medium text-gray-500">Ordonnancements sur reports</span>
+              </div>
+              <p className="text-xl font-bold text-gray-900">{formatMillions(totalOrdReports)}</p>
+              <p className="text-xs text-gray-400 mt-0.5">Taux : <span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center">
+                  <Landmark className="w-4 h-4 text-red-600" />
+                </div>
+                <span className="text-xs font-medium text-gray-500">Reste à engager (reports)</span>
+              </div>
+              <p className="text-xl font-bold text-gray-900">{formatMillions(resteEngagerReports)}</p>
+              <p className="text-xs text-gray-400 mt-0.5">Reste à ordonner : {formatMillions(resteOrdonnerReports)}</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Table by Entity */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Assainissement par entité (M DH)</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-blue-50/60">
+                    <TableHead className="text-xs font-semibold text-blue-700">Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Crédits Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux eng.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Paiements Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Reste à engager</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Reste à ordonner</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {reportsByEntity.map(e => (
+                    <TableRow key={e.name} className="hover:bg-gray-50">
+                      <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.reports)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engReports)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxEngReports)}>{formatPercent(e.tauxEngReports)}</span></TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ordReports)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxOrdReports)}>{formatPercent(e.tauxOrdReports)}</span></TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.paiementsReports)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.resteEngager)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.resteOrdonner)}</TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow className="bg-blue-50/40 font-bold">
+                    <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalReports)}</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngReports)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalOrdReports)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0))}</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteEngagerReports)}</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteOrdonnerReports)}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Table by Projet */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Assainissement par projet (M DH)</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-emerald-50/60">
+                    <TableHead className="text-xs font-semibold text-emerald-700">Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Crédits Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux eng.</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Paiements Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Reste à engager</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Reste à ordonner</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {reportsByProjet.map(g => (
+                    <TableRow key={g.name} className="hover:bg-gray-50">
+                      <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.reports)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engReports)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxEngReports)}>{formatPercent(g.tauxEngReports)}</span></TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ordReports)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxOrdReports)}>{formatPercent(g.tauxOrdReports)}</span></TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.paiementsReports)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.resteEngager)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.resteOrdonner)}</TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow className="bg-emerald-50/40 font-bold">
+                    <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalReports)}</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngReports)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalOrdReports)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0))}</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteEngagerReports)}</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteOrdonnerReports)}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      </>
+    )
+  }
+
   // Active view renderer
   const renderActiveView = () => {
     switch (activeNav) {
@@ -2325,6 +2619,7 @@ export default function Dashboard() {
       case 'project': return renderProjectView()
       case 'engagements': return renderEngagementsView()
       case 'ordonnancements': return renderOrdonnancementsView()
+      case 'assainissement': return renderAssainissementView()
       case 'reports': return renderReportsView()
       case 'settings': return renderSettingsView()
       default: return renderOverview()
