@@ -46,7 +46,6 @@ import {
   List,
   FolderOpen,
   FileText,
-  Bell,
   BarChart3,
   Settings,
   Download,
@@ -160,7 +159,6 @@ const NAV_ITEMS = [
   { key: 'project', label: 'Par programme', icon: FolderOpen },
   { key: 'engagements', label: 'Détails engagements', icon: FileText },
   { key: 'ordonnancements', label: 'Détails ordonnancements', icon: FileText },
-  { key: 'alerts', label: 'Alertes', icon: Bell, hasBadge: true },
   { key: 'reports', label: 'Rapports', icon: BarChart3 },
   { key: 'settings', label: 'Paramètres', icon: Settings },
 ]
@@ -474,59 +472,7 @@ export default function Dashboard() {
     return result.slice(0, 8)
   }, [analysisByEntity, analysisByGroup, filteredData])
 
-  // All alerts (no limit) for the alerts view
-  const allAlerts = useMemo(() => {
-    const result: { type: 'danger' | 'warning' | 'info'; message: string; detail: string; date?: string }[] = []
 
-    analysisByEntity.forEach(e => {
-      if (e.tauxEngagement < 40 && e.cp > 0) {
-        result.push({
-          type: 'danger',
-          message: `Faible taux d'engagement - ${e.name}`,
-          detail: `${formatPercent(e.tauxEngagement)} du budget engagé`,
-          date: lastUpdated || undefined,
-        })
-      }
-    })
-
-    filteredData.forEach(r => {
-      const engRate = (r['TOTAL CP'] || 0) > 0 ? ((r['ENG CP TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0
-      const ordRate = (r['ENG CP TOTAL'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['ENG CP TOTAL'] || 0)) * 100 : 0
-      if (engRate - ordRate > 20 && (r['ENG CP TOTAL'] || 0) > 0) {
-        result.push({
-          type: 'warning',
-          message: `Retard d'ordonnancement - ${r.Programme || 'Sans nom'}`,
-          detail: `Écart de ${formatPercent(engRate - ordRate)} entre engagement et ordonnancement`,
-          date: lastUpdated || undefined,
-        })
-      }
-    })
-
-    analysisByGroup.forEach(g => {
-      const consumption = g.cp > 0 ? (g.ord / g.cp) * 100 : 0
-      if (consumption > 80) {
-        result.push({
-          type: 'info',
-          message: `Consommation élevée - ${g.name}`,
-          detail: `${formatPercent(consumption)} du budget consommé`,
-          date: lastUpdated || undefined,
-        })
-      }
-    })
-
-    filteredData.forEach(r => {
-      if ((r['ENG CP TOTAL'] || 0) > 0 && (r['ORD TOTAL'] || 0) === 0) {
-        result.push({
-          type: 'info',
-          message: `Données à vérifier - ${r.Programme || 'Sans nom'}`,
-          detail: 'Engagement sans ordonnancement',
-          date: lastUpdated || undefined,
-        })
-      }
-    })
-
-    return result
-  }, [analysisByEntity, analysisByGroup, filteredData, lastUpdated])
 
   // Engagement breakdown
   const engagementBreakdown = useMemo(() => {
@@ -761,8 +707,6 @@ export default function Dashboard() {
     )
   }
 
-  const alertCount = allAlerts.length
-
   // Pagination helper
   const paginate = (items: unknown[], page: number, perPage: number) => {
     const start = (page - 1) * perPage
@@ -804,11 +748,6 @@ export default function Dashboard() {
               >
                 <Icon className="w-4 h-4 flex-shrink-0" />
                 <span className="flex-1 text-left">{item.label}</span>
-                {item.hasBadge && alertCount > 0 && (
-                  <Badge className="bg-red-500 text-white text-[10px] h-5 min-w-[20px] flex items-center justify-center px-1.5">
-                    {alertCount}
-                  </Badge>
-                )}
               </button>
             )
           })}
@@ -820,7 +759,7 @@ export default function Dashboard() {
         <p className="text-[11px] font-semibold text-white/50 uppercase tracking-wider">Filtres actifs</p>
         <div className="flex flex-wrap gap-1.5">
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
-            Exercice : 2024
+            Exercice : 2026
           </Badge>
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
             Période : {new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
@@ -1129,57 +1068,7 @@ export default function Dashboard() {
         </CardContent>
       </Card>
 
-      {/* Alerts Section */}
-      <Card className="border border-gray-100 shadow-sm">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-500" />
-              Alertes et points de vigilance
-            </CardTitle>
-            <button onClick={() => handleNavChange('alerts')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
-              Voir toutes <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {alerts.length === 0 ? (
-            <div className="text-center py-6 text-gray-400 text-sm">
-              Aucune alerte en cours
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {alerts.map((alert, idx) => (
-                <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    alert.type === 'danger' ? 'bg-red-100' :
-                    alert.type === 'warning' ? 'bg-amber-100' :
-                    'bg-blue-100'
-                  }`}>
-                    {alert.type === 'danger' ? (
-                      <AlertTriangle className="w-4 h-4 text-red-600" />
-                    ) : alert.type === 'warning' ? (
-                      <AlertTriangle className="w-4 h-4 text-amber-600" />
-                    ) : (
-                      <Info className="w-4 h-4 text-blue-600" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-medium ${
-                      alert.type === 'danger' ? 'text-red-800' :
-                      alert.type === 'warning' ? 'text-amber-800' :
-                      'text-blue-800'
-                    }`}>
-                      {alert.message}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-0.5">{alert.detail}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+
     </>
   )
 
@@ -1579,6 +1468,327 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
+        {/* ═══════════ Engagement par Programme ═══════════ */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Programme (M DH)</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-indigo-50/60">
+                    <TableHead className="text-xs font-semibold text-indigo-700">Programme</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Crédits Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Crédits Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Crédits Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% Consolidé</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CP Total</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Reste à engager CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Reste à engager CE</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const progEng = analysisByProgramme.map(p => {
+                      const rows = filteredData.filter(r => (r.Programme || 'Sans nom') === p.name)
+                      const engReports = rows.reduce((s, r) => s + (r['ENG REPORT'] || 0), 0)
+                      const engConsolides = rows.reduce((s, r) => s + (r['ENG CONSOLIDES'] || 0), 0)
+                      const engNouveaux = rows.reduce((s, r) => s + (r['ENG NOUVEAUX'] || 0), 0)
+                      const cpReports = rows.reduce((s, r) => s + (r.REPORTS || 0), 0)
+                      const cpConsolides = rows.reduce((s, r) => s + (r.CONSOLIDES || 0), 0)
+                      const cpNouveaux = rows.reduce((s, r) => s + (r.NOUVEAUX || 0), 0)
+                      const ce = rows.reduce((s, r) => s + (r['TOTAL CE'] || 0), 0)
+                      const engCE = rows.reduce((s, r) => s + (r['ENG CE ULT'] || 0), 0)
+                      return { ...p, engReports, engConsolides, engNouveaux, cpReports, cpConsolides, cpNouveaux, ce, engCE }
+                    })
+                    const totCP = progEng.reduce((s, p) => s + p.cp, 0)
+                    const totCpReports = progEng.reduce((s, p) => s + p.cpReports, 0)
+                    const totCpConsolides = progEng.reduce((s, p) => s + p.cpConsolides, 0)
+                    const totCpNouveaux = progEng.reduce((s, p) => s + p.cpNouveaux, 0)
+                    const totEngReports = progEng.reduce((s, p) => s + p.engReports, 0)
+                    const totEngConsolides = progEng.reduce((s, p) => s + p.engConsolides, 0)
+                    const totEngNouveaux = progEng.reduce((s, p) => s + p.engNouveaux, 0)
+                    const totEngCP = progEng.reduce((s, p) => s + p.engCP, 0)
+                    const totCE = progEng.reduce((s, p) => s + p.ce, 0)
+                    const totEngCE = progEng.reduce((s, p) => s + p.engCE, 0)
+                    return (
+                      <>
+                        {progEng.map(p => (
+                          <TableRow key={p.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{p.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpReports)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpConsolides)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cpNouveaux)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engReports)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cpReports > 0 ? (p.engReports / p.cpReports) * 100 : 0)}>{formatPercent(p.cpReports > 0 ? (p.engReports / p.cpReports) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engConsolides)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cpConsolides > 0 ? (p.engConsolides / p.cpConsolides) * 100 : 0)}>{formatPercent(p.cpConsolides > 0 ? (p.engConsolides / p.cpConsolides) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engNouveaux)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cpNouveaux > 0 ? (p.engNouveaux / p.cpNouveaux) * 100 : 0)}>{formatPercent(p.cpNouveaux > 0 ? (p.engNouveaux / p.cpNouveaux) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs font-semibold text-emerald-700 text-right">{formatMillions(p.engCP)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxEngagement)}>{formatPercent(p.tauxEngagement)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp - p.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ce)}</TableCell>
+                            <TableCell className="text-xs font-semibold text-teal-700 text-right">{formatMillions(p.engCE)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.ce > 0 ? (p.engCE / p.ce) * 100 : 0)}>{formatPercent(p.ce > 0 ? (p.engCE / p.ce) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ce - p.engCE)}</TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-indigo-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCpReports > 0 ? (totEngReports / totCpReports) * 100 : 0)}>{formatPercent(totCpReports > 0 ? (totEngReports / totCpReports) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCpConsolides > 0 ? (totEngConsolides / totCpConsolides) * 100 : 0)}>{formatPercent(totCpConsolides > 0 ? (totEngConsolides / totCpConsolides) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCpNouveaux > 0 ? (totEngNouveaux / totCpNouveaux) * 100 : 0)}>{formatPercent(totCpNouveaux > 0 ? (totEngNouveaux / totCpNouveaux) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totEngCP / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totEngCP / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP - totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCE)}</TableCell>
+                          <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totEngCE)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCE > 0 ? (totEngCE / totCE) * 100 : 0)}>{formatPercent(totCE > 0 ? (totEngCE / totCE) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCE - totEngCE)}</TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* ═══════════ Engagement par Projet ═══════════ */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Projet (M DH)</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-emerald-50/60">
+                    <TableHead className="text-xs font-semibold text-emerald-700">Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Crédits Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Crédits Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Crédits Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">% Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">% Consolidé</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">% Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. CP Total</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Reste à engager CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">% CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Reste à engager CE</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const projEng = analysisByGroup.map(g => {
+                      const rows = filteredData.filter(r => r.Projet === g.name)
+                      const engReports = rows.reduce((s, r) => s + (r['ENG REPORT'] || 0), 0)
+                      const engConsolides = rows.reduce((s, r) => s + (r['ENG CONSOLIDES'] || 0), 0)
+                      const engNouveaux = rows.reduce((s, r) => s + (r['ENG NOUVEAUX'] || 0), 0)
+                      const cpReports = rows.reduce((s, r) => s + (r.REPORTS || 0), 0)
+                      const cpConsolides = rows.reduce((s, r) => s + (r.CONSOLIDES || 0), 0)
+                      const cpNouveaux = rows.reduce((s, r) => s + (r.NOUVEAUX || 0), 0)
+                      const ce = rows.reduce((s, r) => s + (r['TOTAL CE'] || 0), 0)
+                      const engCE = rows.reduce((s, r) => s + (r['ENG CE ULT'] || 0), 0)
+                      return { ...g, engReports, engConsolides, engNouveaux, cpReports, cpConsolides, cpNouveaux, ce, engCE }
+                    })
+                    const totCP = projEng.reduce((s, g) => s + g.cp, 0)
+                    const totCpReports = projEng.reduce((s, g) => s + g.cpReports, 0)
+                    const totCpConsolides = projEng.reduce((s, g) => s + g.cpConsolides, 0)
+                    const totCpNouveaux = projEng.reduce((s, g) => s + g.cpNouveaux, 0)
+                    const totEngReports = projEng.reduce((s, g) => s + g.engReports, 0)
+                    const totEngConsolides = projEng.reduce((s, g) => s + g.engConsolides, 0)
+                    const totEngNouveaux = projEng.reduce((s, g) => s + g.engNouveaux, 0)
+                    const totEngCP = projEng.reduce((s, g) => s + g.engCP, 0)
+                    const totCE = projEng.reduce((s, g) => s + g.ce, 0)
+                    const totEngCE = projEng.reduce((s, g) => s + g.engCE, 0)
+                    return (
+                      <>
+                        {projEng.map(g => (
+                          <TableRow key={g.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpReports)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpConsolides)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cpNouveaux)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engReports)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(g.cpReports > 0 ? (g.engReports / g.cpReports) * 100 : 0)}>{formatPercent(g.cpReports > 0 ? (g.engReports / g.cpReports) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engConsolides)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(g.cpConsolides > 0 ? (g.engConsolides / g.cpConsolides) * 100 : 0)}>{formatPercent(g.cpConsolides > 0 ? (g.engConsolides / g.cpConsolides) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engNouveaux)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(g.cpNouveaux > 0 ? (g.engNouveaux / g.cpNouveaux) * 100 : 0)}>{formatPercent(g.cpNouveaux > 0 ? (g.engNouveaux / g.cpNouveaux) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs font-semibold text-emerald-700 text-right">{formatMillions(g.engCP)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxEngagement)}>{formatPercent(g.tauxEngagement)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp - g.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ce)}</TableCell>
+                            <TableCell className="text-xs font-semibold text-teal-700 text-right">{formatMillions(g.engCE)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(g.ce > 0 ? (g.engCE / g.ce) * 100 : 0)}>{formatPercent(g.ce > 0 ? (g.engCE / g.ce) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ce - g.engCE)}</TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-emerald-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCpReports > 0 ? (totEngReports / totCpReports) * 100 : 0)}>{formatPercent(totCpReports > 0 ? (totEngReports / totCpReports) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCpConsolides > 0 ? (totEngConsolides / totCpConsolides) * 100 : 0)}>{formatPercent(totCpConsolides > 0 ? (totEngConsolides / totCpConsolides) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCpNouveaux > 0 ? (totEngNouveaux / totCpNouveaux) * 100 : 0)}>{formatPercent(totCpNouveaux > 0 ? (totEngNouveaux / totCpNouveaux) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totEngCP / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totEngCP / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP - totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCE)}</TableCell>
+                          <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totEngCE)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCE > 0 ? (totEngCE / totCE) * 100 : 0)}>{formatPercent(totCE > 0 ? (totEngCE / totCE) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCE - totEngCE)}</TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* ═══════════ Engagement par Entité ═══════════ */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Entité (M DH)</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-slate-50/60">
+                    <TableHead className="text-xs font-semibold text-slate-700">Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Crédits Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Crédits Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Crédits Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">% Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. Consolidés</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">% Consolidé</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">% Nouveaux</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. CP Total</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Reste à engager CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">% CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Reste à engager CE</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const entEng = analysisByEntity.map(e => {
+                      const rows = filteredData.filter(r => r.ENTITE === e.name)
+                      const engReports = rows.reduce((s, r) => s + (r['ENG REPORT'] || 0), 0)
+                      const engConsolides = rows.reduce((s, r) => s + (r['ENG CONSOLIDES'] || 0), 0)
+                      const engNouveaux = rows.reduce((s, r) => s + (r['ENG NOUVEAUX'] || 0), 0)
+                      const cpReports = rows.reduce((s, r) => s + (r.REPORTS || 0), 0)
+                      const cpConsolides = rows.reduce((s, r) => s + (r.CONSOLIDES || 0), 0)
+                      const cpNouveaux = rows.reduce((s, r) => s + (r.NOUVEAUX || 0), 0)
+                      const ce = rows.reduce((s, r) => s + (r['TOTAL CE'] || 0), 0)
+                      const engCE = rows.reduce((s, r) => s + (r['ENG CE ULT'] || 0), 0)
+                      return { ...e, engReports, engConsolides, engNouveaux, cpReports, cpConsolides, cpNouveaux, ce, engCE }
+                    })
+                    const totCP = entEng.reduce((s, e) => s + e.cp, 0)
+                    const totCpReports = entEng.reduce((s, e) => s + e.cpReports, 0)
+                    const totCpConsolides = entEng.reduce((s, e) => s + e.cpConsolides, 0)
+                    const totCpNouveaux = entEng.reduce((s, e) => s + e.cpNouveaux, 0)
+                    const totEngReports = entEng.reduce((s, e) => s + e.engReports, 0)
+                    const totEngConsolides = entEng.reduce((s, e) => s + e.engConsolides, 0)
+                    const totEngNouveaux = entEng.reduce((s, e) => s + e.engNouveaux, 0)
+                    const totEngCP = entEng.reduce((s, e) => s + e.engCP, 0)
+                    const totCE = entEng.reduce((s, e) => s + e.ce, 0)
+                    const totEngCE = entEng.reduce((s, e) => s + e.engCE, 0)
+                    return (
+                      <>
+                        {entEng.map(e => (
+                          <TableRow key={e.name} className="hover:bg-gray-50">
+                            <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpReports)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpConsolides)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cpNouveaux)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engReports)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cpReports > 0 ? (e.engReports / e.cpReports) * 100 : 0)}>{formatPercent(e.cpReports > 0 ? (e.engReports / e.cpReports) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engConsolides)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cpConsolides > 0 ? (e.engConsolides / e.cpConsolides) * 100 : 0)}>{formatPercent(e.cpConsolides > 0 ? (e.engConsolides / e.cpConsolides) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engNouveaux)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.cpNouveaux > 0 ? (e.engNouveaux / e.cpNouveaux) * 100 : 0)}>{formatPercent(e.cpNouveaux > 0 ? (e.engNouveaux / e.cpNouveaux) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs font-semibold text-emerald-700 text-right">{formatMillions(e.engCP)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxEngagement)}>{formatPercent(e.tauxEngagement)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp - e.engCP)}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ce)}</TableCell>
+                            <TableCell className="text-xs font-semibold text-teal-700 text-right">{formatMillions(e.engCE)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(e.ce > 0 ? (e.engCE / e.ce) * 100 : 0)}>{formatPercent(e.ce > 0 ? (e.engCE / e.ce) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ce - e.engCE)}</TableCell>
+                          </TableRow>
+                        ))}
+                        <TableRow className="bg-slate-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCpReports > 0 ? (totEngReports / totCpReports) * 100 : 0)}>{formatPercent(totCpReports > 0 ? (totEngReports / totCpReports) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCpConsolides > 0 ? (totEngConsolides / totCpConsolides) * 100 : 0)}>{formatPercent(totCpConsolides > 0 ? (totEngConsolides / totCpConsolides) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCpNouveaux > 0 ? (totEngNouveaux / totCpNouveaux) * 100 : 0)}>{formatPercent(totCpNouveaux > 0 ? (totEngNouveaux / totCpNouveaux) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totEngCP / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totEngCP / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP - totEngCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCE)}</TableCell>
+                          <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totEngCE)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCE > 0 ? (totEngCE / totCE) * 100 : 0)}>{formatPercent(totCE > 0 ? (totEngCE / totCE) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCE - totEngCE)}</TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Engagement Lines Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
@@ -1780,142 +1990,6 @@ export default function Dashboard() {
               </Button>
             </div>
           </div>
-        )}
-      </>
-    )
-  }
-
-  const renderAlertsView = () => {
-    const critiques = allAlerts.filter(a => a.type === 'danger')
-    const avertissements = allAlerts.filter(a => a.type === 'warning')
-    const infos = allAlerts.filter(a => a.type === 'info')
-
-    return (
-      <>
-        <h2 className="text-lg font-bold text-gray-900">Alertes et Points de Vigilance</h2>
-
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card className="border border-gray-100 shadow-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
-                  <AlertTriangle className="w-4 h-4 text-red-600" />
-                </div>
-                <span className="text-xs font-medium text-gray-500">Critiques</span>
-              </div>
-              <p className="text-xl font-bold text-red-600 mt-2">{critiques.length}</p>
-            </CardContent>
-          </Card>
-          <Card className="border border-gray-100 shadow-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                  <AlertTriangle className="w-4 h-4 text-amber-600" />
-                </div>
-                <span className="text-xs font-medium text-gray-500">Avertissements</span>
-              </div>
-              <p className="text-xl font-bold text-amber-600 mt-2">{avertissements.length}</p>
-            </CardContent>
-          </Card>
-          <Card className="border border-gray-100 shadow-sm">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                  <Info className="w-4 h-4 text-blue-600" />
-                </div>
-                <span className="text-xs font-medium text-gray-500">Informations</span>
-              </div>
-              <p className="text-xl font-bold text-blue-600 mt-2">{infos.length}</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Critiques Section */}
-        {critiques.length > 0 && (
-          <Card className="border-l-4 border-l-red-500 border border-gray-100 shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold text-red-800 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4" />
-                Critiques ({critiques.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {critiques.map((alert, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-red-50">
-                    <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-red-800">{alert.message}</p>
-                      <p className="text-xs text-red-600 mt-0.5">{alert.detail}</p>
-                      {alert.date && <p className="text-xs text-gray-400 mt-1">{formatDate(alert.date)}</p>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Avertissements Section */}
-        {avertissements.length > 0 && (
-          <Card className="border-l-4 border-l-amber-500 border border-gray-100 shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold text-amber-800 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4" />
-                Avertissements ({avertissements.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 max-h-96 overflow-y-auto">
-                {avertissements.map((alert, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-amber-50">
-                    <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-amber-800">{alert.message}</p>
-                      <p className="text-xs text-amber-600 mt-0.5">{alert.detail}</p>
-                      {alert.date && <p className="text-xs text-gray-400 mt-1">{formatDate(alert.date)}</p>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Informations Section */}
-        {infos.length > 0 && (
-          <Card className="border-l-4 border-l-blue-500 border border-gray-100 shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold text-blue-800 flex items-center gap-2">
-                <Info className="w-4 h-4" />
-                Informations ({infos.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 max-h-96 overflow-y-auto">
-                {infos.map((alert, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-blue-50">
-                    <Info className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-blue-800">{alert.message}</p>
-                      <p className="text-xs text-blue-600 mt-0.5">{alert.detail}</p>
-                      {alert.date && <p className="text-xs text-gray-400 mt-1">{formatDate(alert.date)}</p>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {allAlerts.length === 0 && (
-          <Card className="border border-gray-100 shadow-sm">
-            <CardContent className="py-12 text-center">
-              <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-3" />
-              <p className="text-gray-500">Aucune alerte en cours</p>
-            </CardContent>
-          </Card>
         )}
       </>
     )
@@ -2251,7 +2325,6 @@ export default function Dashboard() {
       case 'project': return renderProjectView()
       case 'engagements': return renderEngagementsView()
       case 'ordonnancements': return renderOrdonnancementsView()
-      case 'alerts': return renderAlertsView()
       case 'reports': return renderReportsView()
       case 'settings': return renderSettingsView()
       default: return renderOverview()
