@@ -1522,6 +1522,15 @@ export default function Dashboard() {
     const entityTotalBudget = analysisByEntity.reduce((s, e) => s + e.cp, 0)
     const entityAvgEng = analysisByEntity.length > 0 ? analysisByEntity.reduce((s, e) => s + e.tauxEngagement, 0) / analysisByEntity.length : 0
     const entityAvgOrd = analysisByEntity.length > 0 ? analysisByEntity.reduce((s, e) => s + e.tauxOrdonnement, 0) / analysisByEntity.length : 0
+    // Totals for Détail par entité table
+    const totCP = analysisByEntity.reduce((s, e) => s + e.cp, 0)
+    const totEngCP = analysisByEntity.reduce((s, e) => s + e.engCP, 0)
+    const totCE = analysisByEntity.reduce((s, e) => s + e.ce, 0)
+    const totEngCE = analysisByEntity.reduce((s, e) => s + e.engCE, 0)
+    const totOrd = analysisByEntity.reduce((s, e) => s + e.ord, 0)
+    const totPaiements = analysisByEntity.reduce((s, e) => s + e.paiements, 0)
+    const totPrevisions = analysisByEntity.reduce((s, e) => s + e.previsions, 0)
+    const totDisponible = analysisByEntity.reduce((s, e) => s + e.disponible, 0)
 
     return (
       <>
@@ -1676,7 +1685,7 @@ export default function Dashboard() {
         {/* Entity Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Détail par entité</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Détail par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -1701,25 +1710,46 @@ export default function Dashboard() {
                   {analysisByEntity.map(e => (
                     <TableRow key={e.name} className="hover:bg-gray-50">
                       <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.cp)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.engCP)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engCP)}</TableCell>
                       <TableCell className="text-xs text-right">
                         <span className={tauxColor(e.tauxEngagement)}>{formatPercent(e.tauxEngagement)}</span>
                       </TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.ce)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.engCE)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ce)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engCE)}</TableCell>
                       <TableCell className="text-xs text-right">
                         <span className={tauxColor(e.tauxEngagementCE)}>{e.ce > 0 ? formatPercent(e.tauxEngagementCE) : '0,0%'}</span>
                       </TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.ord)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ord)}</TableCell>
                       <TableCell className="text-xs text-right">
                         <span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span>
                       </TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.paiements)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.previsions)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.disponible)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.paiements)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.previsions)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.disponible)}</TableCell>
                     </TableRow>
                   ))}
+                  {/* Total Row */}
+                  <TableRow className="bg-gray-100 border-t-2 border-gray-300">
+                    <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right">
+                      <span className={tauxColor(totCP > 0 ? (totEngCP / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totEngCP / totCP) * 100 : 0)}</span>
+                    </TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCE)}</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCE)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right">
+                      <span className={tauxColor(totCE > 0 ? (totEngCE / totCE) * 100 : 0)}>{totCE > 0 ? formatPercent((totEngCE / totCE) * 100) : '0%'}</span>
+                    </TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right">
+                      <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
+                    </TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiements)}</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPrevisions)}</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totDisponible)}</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </div>
