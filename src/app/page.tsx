@@ -310,11 +310,28 @@ export default function Dashboard() {
     const tauxPaiement = totalEngCP > 0 ? (totalPaiements / totalEngCP) * 100 : 0
     const tauxOrdonnement = totalEngCP > 0 ? (totalOrd / totalEngCP) * 100 : 0
     const disponible = totalCP - totalEngCP
+
+    // Cumulative forecasts by month
+    const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
+    const cumulPrev: Record<string, number> = {}
+    let cumul = 0
+    for (const m of prevMonths) {
+      const rep = filteredData.reduce((s, r) => s + (r[`Previsions REPORTS ${m}`] || 0), 0)
+      const con = filteredData.reduce((s, r) => s + (r[`Previsions CONSOLIDES ${m}`] || 0), 0)
+      const nouv = filteredData.reduce((s, r) => s + (r[`Previsions NOUVEAUX ${m}`] || 0), 0)
+      cumul += rep + con + nouv
+      cumulPrev[m] = cumul
+    }
+
     return {
       totalCP, totalCE, totalPaiements, totalPrevisions, totalEngCP, totalEngCE,
       totalReports, totalConsolides, totalNouveaux, totalOrd, totalOrdReports, totalOrdNouveaux,
       totalEngReports, totalEngNouveaux, count: filteredData.length,
       tauxEngagement, tauxPaiement, tauxOrdonnement, disponible,
+      cumulPrevJuin: cumulPrev['JUIN'],
+      cumulPrevSeptembre: cumulPrev['SEPTEMBRE'],
+      cumulPrevOctobre: cumulPrev['OCTOBRE'],
+      cumulPrevNovembre: cumulPrev['NOVEMBRE'],
     }
   }, [filteredData])
 
@@ -1104,6 +1121,124 @@ export default function Dashboard() {
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
                 {kpis.totalCP > 0 ? formatPercent((kpis.disponible / kpis.totalCP) * 100) : '0,0%'} du budget CP
               </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════ SECTION 5 : PRÉVISIONS CUMULÉES ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-teal-500 to-cyan-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Prévisions cumulées</h3>
+          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Fin Juin */}
+          <div className="kpi-card-premium rounded-xl border border-teal-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-teal-400 to-cyan-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="kpi-icon-wrap w-9 h-9 rounded-full bg-teal-100 flex items-center justify-center transition-transform">
+                    <FileSpreadsheet className="w-4 h-4 text-teal-700" />
+                  </div>
+                  <span className="text-xs font-semibold text-gray-600">Fin Juin</span>
+                </div>
+                <span className={`inline-flex items-center gap-1 text-xs font-bold ${tauxColor(kpis.cumulPrevJuin > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevJuin) * 100 : 0)}`}>
+                  {(() => { const t = kpis.cumulPrevJuin > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevJuin) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : kpis.cumulPrevJuin > 0 ? '✗' : '' })()}
+                </span>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.cumulPrevJuin)}</p>
+              <div className="mt-2">
+                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`kpi-progress-bar h-full rounded-full ${(() => { const t = kpis.cumulPrevJuin > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevJuin) * 100 : 0; return t >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : t >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500' })()}`} style={{ width: `${Math.min(kpis.cumulPrevJuin > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevJuin) * 100 : 0, 100)}%` }} />
+                </div>
+                <p className="text-[10px] text-gray-400 mt-1">
+                  Taux réal. : <span className={tauxColor(kpis.cumulPrevJuin > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevJuin) * 100 : 0)}>{kpis.cumulPrevJuin > 0 ? formatPercent(kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevJuin) * 100 : 0) : '—'}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Fin Septembre */}
+          <div className="kpi-card-premium rounded-xl border border-cyan-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #ecfeff 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-cyan-400 to-sky-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="kpi-icon-wrap w-9 h-9 rounded-full bg-cyan-100 flex items-center justify-center transition-transform">
+                    <FileSpreadsheet className="w-4 h-4 text-cyan-700" />
+                  </div>
+                  <span className="text-xs font-semibold text-gray-600">Fin Septembre</span>
+                </div>
+                <span className={`inline-flex items-center gap-1 text-xs font-bold ${tauxColor(kpis.cumulPrevSeptembre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevSeptembre) * 100 : 0)}`}>
+                  {(() => { const t = kpis.cumulPrevSeptembre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevSeptembre) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : kpis.cumulPrevSeptembre > 0 ? '✗' : '' })()}
+                </span>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.cumulPrevSeptembre)}</p>
+              <div className="mt-2">
+                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`kpi-progress-bar h-full rounded-full ${(() => { const t = kpis.cumulPrevSeptembre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevSeptembre) * 100 : 0; return t >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : t >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500' })()}`} style={{ width: `${Math.min(kpis.cumulPrevSeptembre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevSeptembre) * 100 : 0, 100)}%` }} />
+                </div>
+                <p className="text-[10px] text-gray-400 mt-1">
+                  Taux réal. : <span className={tauxColor(kpis.cumulPrevSeptembre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevSeptembre) * 100 : 0)}>{kpis.cumulPrevSeptembre > 0 ? formatPercent(kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevSeptembre) * 100 : 0) : '—'}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Fin Octobre */}
+          <div className="kpi-card-premium rounded-xl border border-sky-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-sky-400 to-blue-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="kpi-icon-wrap w-9 h-9 rounded-full bg-sky-100 flex items-center justify-center transition-transform">
+                    <FileSpreadsheet className="w-4 h-4 text-sky-700" />
+                  </div>
+                  <span className="text-xs font-semibold text-gray-600">Fin Octobre</span>
+                </div>
+                <span className={`inline-flex items-center gap-1 text-xs font-bold ${tauxColor(kpis.cumulPrevOctobre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevOctobre) * 100 : 0)}`}>
+                  {(() => { const t = kpis.cumulPrevOctobre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevOctobre) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : kpis.cumulPrevOctobre > 0 ? '✗' : '' })()}
+                </span>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.cumulPrevOctobre)}</p>
+              <div className="mt-2">
+                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`kpi-progress-bar h-full rounded-full ${(() => { const t = kpis.cumulPrevOctobre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevOctobre) * 100 : 0; return t >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : t >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500' })()}`} style={{ width: `${Math.min(kpis.cumulPrevOctobre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevOctobre) * 100 : 0, 100)}%` }} />
+                </div>
+                <p className="text-[10px] text-gray-400 mt-1">
+                  Taux réal. : <span className={tauxColor(kpis.cumulPrevOctobre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevOctobre) * 100 : 0)}>{kpis.cumulPrevOctobre > 0 ? formatPercent(kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevOctobre) * 100 : 0) : '—'}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Fin Novembre */}
+          <div className="kpi-card-premium rounded-xl border border-indigo-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #eef2ff 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-indigo-400 to-violet-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="kpi-icon-wrap w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center transition-transform">
+                    <FileSpreadsheet className="w-4 h-4 text-indigo-700" />
+                  </div>
+                  <span className="text-xs font-semibold text-gray-600">Fin Novembre</span>
+                </div>
+                <span className={`inline-flex items-center gap-1 text-xs font-bold ${tauxColor(kpis.cumulPrevNovembre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevNovembre) * 100 : 0)}`}>
+                  {(() => { const t = kpis.cumulPrevNovembre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevNovembre) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : kpis.cumulPrevNovembre > 0 ? '✗' : '' })()}
+                </span>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.cumulPrevNovembre)}</p>
+              <div className="mt-2">
+                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`kpi-progress-bar h-full rounded-full ${(() => { const t = kpis.cumulPrevNovembre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevNovembre) * 100 : 0; return t >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : t >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500' })()}`} style={{ width: `${Math.min(kpis.cumulPrevNovembre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevNovembre) * 100 : 0, 100)}%` }} />
+                </div>
+                <p className="text-[10px] text-gray-400 mt-1">
+                  Taux réal. : <span className={tauxColor(kpis.cumulPrevNovembre > 0 && kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevNovembre) * 100 : 0)}>{kpis.cumulPrevNovembre > 0 ? formatPercent(kpis.totalOrd > 0 ? (kpis.totalOrd / kpis.cumulPrevNovembre) * 100 : 0) : '—'}</span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
