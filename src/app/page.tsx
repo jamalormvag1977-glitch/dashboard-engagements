@@ -1109,154 +1109,276 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Charts - Execution by Entity */}
+      {/* ═══════════ TABLEAU : ANALYSE PAR PROGRAMME ═══════════ */}
       <Card className="border border-gray-100 shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-semibold text-gray-700">
-              Exécution par entité (en M DH)
-            </CardTitle>
-            <button onClick={() => handleNavChange('entity')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
-              Voir toutes les entités <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={chartDataByEntity.length * 60 + 30}>
-            <BarChart data={chartDataByEntity} layout="vertical" margin={{ top: 5, right: 110, left: 10, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
-              <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={60} />
-              <Tooltip
-                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`}
-              />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-              <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-              <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
-      {/* Charts - Execution by Projet */}
-      <Card className="border border-gray-100 shadow-sm">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-semibold text-gray-700">
-              Exécution par projet (en M DH)
-            </CardTitle>
-            <button onClick={() => handleNavChange('program')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
-              Voir tous les projets <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={chartDataByProgramme.length * 60 + 30}>
-            <BarChart data={chartDataByProgramme} layout="vertical" margin={{ top: 5, right: 110, left: 10, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
-              <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={80} />
-              <Tooltip
-                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`}
-              />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-              <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-              <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
-      {/* Charts - Top 5 Projects */}
-      <Card className="border border-gray-100 shadow-sm">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-semibold text-gray-700">
-              Exécution par programme (Top 5) (en M DH)
+              Analyse par programme (M DH)
             </CardTitle>
             <button onClick={() => handleNavChange('project')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
-              Voir tous les programmes <ChevronRight className="w-3 h-3" />
+              Détails <ChevronRight className="w-3 h-3" />
             </button>
           </div>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={chartDataByProject.length * 60 + 30}>
-            <BarChart data={chartDataByProject} layout="vertical" margin={{ top: 5, right: 110, left: 10, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
-              <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={120} />
-              <Tooltip
-                formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`}
-              />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-              <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-              <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
-      {/* Detail Table */}
-      <Card className="border border-gray-100 shadow-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">
-            Détail de l&apos;exécution
-          </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                  <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600 w-[300px]">entité / Projet / Programme</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Paiements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Prévisions</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible</TableHead>
-                  </TableRow>
-                </TableHeader>
+                <TableRow className="bg-indigo-50/60">
+                  <TableHead className="text-xs font-semibold text-indigo-700">Programme</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Budget CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux eng. CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CE</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CE</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux eng. CE</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Ordonn.</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux ord.</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Paiements</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prévisions</TableHead>
+                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Disponible</TableHead>
+                </TableRow>
+              </TableHeader>
               <TableBody>
-                {detailTableData.map(entity => (
-                  <EntityRow
-                    key={entity.name}
-                    entity={entity}
-                    expanded={expandedEntities.has(entity.name)}
-                    expandedGroups={expandedGroups}
-                    onToggleEntity={() => toggleEntity(entity.name)}
-                    onToggleGroup={toggleGroup}
-                  />
+                {analysisByProgramme.map(p => (
+                  <TableRow key={p.name} className="hover:bg-gray-50">
+                    <TableCell className="text-xs font-medium text-gray-900 max-w-[200px] truncate">{p.name}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engCP)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxEngagement)}>{formatPercent(p.tauxEngagement)}</span></TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ce)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engCE)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxEngagementCE)}>{p.ce > 0 ? formatPercent(p.tauxEngagementCE) : '0,0%'}</span></TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ord)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxOrdonnement)}>{formatPercent(p.tauxOrdonnement)}</span></TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.paiements)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.previsions)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.disponible)}</TableCell>
+                  </TableRow>
                 ))}
-                {/* Total Row */}
-                <TableRow className="bg-gray-100 font-bold">
-                  <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                <TableRow className="bg-indigo-50/40 font-bold">
+                  <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCP)}</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalEngCP)}</TableCell>
-                  <TableCell className="text-xs font-bold text-right">
-                    <span className={tauxColor(kpis.tauxEngagement)}>{formatPercent(kpis.tauxEngagement)}</span>
-                  </TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxEngagement)}>{formatPercent(kpis.tauxEngagement)}</span></TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCE)}</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalEngCE)}</TableCell>
-                  <TableCell className="text-xs font-bold text-right">
-                    <span className={tauxColor(kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0)}>{kpis.totalCE > 0 ? formatPercent((kpis.totalEngCE / kpis.totalCE) * 100) : '0,0%'}</span>
-                  </TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0)}>{kpis.totalCE > 0 ? formatPercent((kpis.totalEngCE / kpis.totalCE) * 100) : '0,0%'}</span></TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalOrd)}</TableCell>
-                  <TableCell className="text-xs font-bold text-right">
-                    <span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span>
-                  </TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span></TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPaiements)}</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPrevisions)}</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.disponible)}</TableCell>
                 </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* ═══════════ TABLEAU : ANALYSE PAR PROJET ═══════════ */}
+      <Card className="border border-gray-100 shadow-sm">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-sm font-semibold text-gray-700">
+              Analyse par projet (M DH)
+            </CardTitle>
+            <button onClick={() => handleNavChange('program')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
+              Détails <ChevronRight className="w-3 h-3" />
+            </button>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-emerald-50/60">
+                  <TableHead className="text-xs font-semibold text-emerald-700">Projet</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Budget CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux eng. CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total CE</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. CE</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux eng. CE</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Ordonn.</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux ord.</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Paiements</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Prévisions</TableHead>
+                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Disponible</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {analysisByGroup.map(g => (
+                  <TableRow key={g.name} className="hover:bg-gray-50">
+                    <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engCP)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxEngagement)}>{formatPercent(g.tauxEngagement)}</span></TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ce)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engCE)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxEngagementCE)}>{g.ce > 0 ? formatPercent(g.tauxEngagementCE) : '0,0%'}</span></TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ord)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxOrdonnement)}>{formatPercent(g.tauxOrdonnement)}</span></TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.paiements)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.previsions)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.disponible)}</TableCell>
+                  </TableRow>
+                ))}
+                <TableRow className="bg-emerald-50/40 font-bold">
+                  <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCP)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalEngCP)}</TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxEngagement)}>{formatPercent(kpis.tauxEngagement)}</span></TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCE)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalEngCE)}</TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0)}>{kpis.totalCE > 0 ? formatPercent((kpis.totalEngCE / kpis.totalCE) * 100) : '0,0%'}</span></TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalOrd)}</TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span></TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPaiements)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPrevisions)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.disponible)}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* ═══════════ TABLEAU : ANALYSE PAR ENTITÉ ═══════════ */}
+      <Card className="border border-gray-100 shadow-sm">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-sm font-semibold text-gray-700">
+              Analyse par entité (M DH)
+            </CardTitle>
+            <button onClick={() => handleNavChange('entity')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
+              Détails <ChevronRight className="w-3 h-3" />
+            </button>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50/60">
+                  <TableHead className="text-xs font-semibold text-slate-700">Entité</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Budget CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Taux eng. CP</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Total CE</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. CE</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Taux eng. CE</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Ordonn.</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Taux ord.</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Paiements</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Prévisions</TableHead>
+                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Disponible</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {analysisByEntity.map(e => (
+                  <TableRow key={e.name} className="hover:bg-gray-50">
+                    <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engCP)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxEngagement)}>{formatPercent(e.tauxEngagement)}</span></TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ce)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engCE)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxEngagementCE)}>{e.ce > 0 ? formatPercent(e.tauxEngagementCE) : '0,0%'}</span></TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ord)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span></TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.paiements)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.previsions)}</TableCell>
+                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.disponible)}</TableCell>
+                  </TableRow>
+                ))}
+                <TableRow className="bg-slate-50/40 font-bold">
+                  <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCP)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalEngCP)}</TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxEngagement)}>{formatPercent(kpis.tauxEngagement)}</span></TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCE)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalEngCE)}</TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0)}>{kpis.totalCE > 0 ? formatPercent((kpis.totalEngCE / kpis.totalCE) * 100) : '0,0%'}</span></TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalOrd)}</TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span></TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPaiements)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPrevisions)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.disponible)}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* ═══════════ TABLEAU : PRÉVISIONS ORDONNANCEMENT CUMULÉS ═══════════ */}
+      <Card className="border border-gray-100 shadow-sm">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-sm font-semibold text-gray-700">
+              Prévisions ordonnancement cumulées par projet (M DH)
+            </CardTitle>
+            <button onClick={() => handleNavChange('ordonnancements')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
+              Détails <ChevronRight className="w-3 h-3" />
+            </button>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-teal-50/60">
+                  <TableHead className="text-xs font-semibold text-teal-700">Projet</TableHead>
+                  <TableHead className="text-xs font-semibold text-teal-700 text-right">Eng. CP Total</TableHead>
+                  <TableHead className="text-xs font-semibold text-teal-700 text-right">Ord. Total</TableHead>
+                  <TableHead className="text-xs font-semibold text-teal-700 text-right">Prévisions Tot.</TableHead>
+                  <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux réal.</TableHead>
+                  <TableHead className="text-xs font-semibold text-teal-700 text-right">Écart</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(() => {
+                  const prevByProjet = analysisByGroup.map(g => {
+                    const rows = filteredData.filter(r => r.Projet === g.name)
+                    const previsions = rows.reduce((s, r) => s + (r['TOTAL PREV'] || 0), 0)
+                    return { ...g, previsions }
+                  }).filter(g => g.previsions > 0 || g.ord > 0).sort((a, b) => b.previsions - a.previsions)
+                  const totalPrev = prevByProjet.reduce((s, g) => s + g.previsions, 0)
+                  const totalEngCP = prevByProjet.reduce((s, g) => s + g.engCP, 0)
+                  const totalOrd2 = prevByProjet.reduce((s, g) => s + g.ord, 0)
+                  return (
+                    <>
+                      {prevByProjet.map(g => (
+                        <TableRow key={g.name} className="hover:bg-gray-50">
+                          <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
+                          <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engCP)}</TableCell>
+                          <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ord)}</TableCell>
+                          <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.previsions)}</TableCell>
+                          <TableCell className="text-xs text-right">
+                            <span className={tauxColor(g.previsions > 0 ? (g.ord / g.previsions) * 100 : 0)}>
+                              {formatPercent(g.previsions > 0 ? (g.ord / g.previsions) * 100 : 0)}
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.previsions - g.ord)}</TableCell>
+                        </TableRow>
+                      ))}
+                      <TableRow className="bg-teal-50/40 font-bold">
+                        <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngCP)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalOrd2)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalPrev)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right">
+                          <span className={tauxColor(totalPrev > 0 ? (totalOrd2 / totalPrev) * 100 : 0)}>
+                            {formatPercent(totalPrev > 0 ? (totalOrd2 / totalPrev) * 100 : 0)}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalPrev - totalOrd2)}</TableCell>
+                      </TableRow>
+                    </>
+                  )
+                })()}
               </TableBody>
             </Table>
           </div>
