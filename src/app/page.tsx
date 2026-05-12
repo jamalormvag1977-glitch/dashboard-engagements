@@ -1544,29 +1544,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Chart */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">
-              Budget / Engagements / Ordonnancements par entité (en M DH)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={chartDataByEntity.length * 60 + 30}>
-              <BarChart data={chartDataByEntity} layout="vertical" margin={{ top: 5, right: 110, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
-                <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
-                <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={60} />
-                <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`} />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-                <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-                <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
         {/* Entity Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
@@ -1777,29 +1754,6 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
-        {/* Chart */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">
-              Budget / Engagements / Ordonnancements par projet (en M DH)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={chartDataByProgramme.length * 60 + 30}>
-              <BarChart data={chartDataByProgramme} layout="vertical" margin={{ top: 5, right: 110, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" horizontal={false} />
-                <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
-                <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#374151' }} width={80} />
-                <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH`} />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="Budget LFI" fill="#94a3b8" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-                <Bar dataKey="Engagements" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-                <Bar dataKey="Ordonnancements" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} label={BarLabel} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
 
         {/* Programme Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
@@ -2298,32 +2252,6 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
-        {/* Breakdown */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Répartition des engagements</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-4 rounded-lg bg-blue-50">
-                <p className="text-xs font-medium text-blue-600">Eng. Reports</p>
-                <p className="text-lg font-bold text-blue-900 mt-1">{formatMillions(engagementBreakdown.engReports)}</p>
-                <p className="text-xs text-blue-500 mt-0.5">{formatPercent(engagementBreakdown.pctReports)} du total</p>
-              </div>
-              <div className="p-4 rounded-lg bg-emerald-50">
-                <p className="text-xs font-medium text-emerald-600">Eng. Consolidés</p>
-                <p className="text-lg font-bold text-emerald-900 mt-1">{formatMillions(engagementBreakdown.engConsolides)}</p>
-                <p className="text-xs text-emerald-500 mt-0.5">{formatPercent(engagementBreakdown.pctConsolides)} du total</p>
-              </div>
-              <div className="p-4 rounded-lg bg-amber-50">
-                <p className="text-xs font-medium text-amber-600">Eng. Nouveaux</p>
-                <p className="text-lg font-bold text-amber-900 mt-1">{formatMillions(engagementBreakdown.engNouveaux)}</p>
-                <p className="text-xs text-amber-500 mt-0.5">{formatPercent(engagementBreakdown.pctNouveaux)} du total</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* ═══════════ Engagement par Programme ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
@@ -2862,32 +2790,6 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
-        {/* Breakdown */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Répartition des ordonnancements</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-4 rounded-lg bg-blue-50">
-                <p className="text-xs font-medium text-blue-600">Ord. Reports</p>
-                <p className="text-lg font-bold text-blue-900 mt-1">{formatMillions(ordonnancementBreakdown.ordReports)}</p>
-                <p className="text-xs text-blue-500 mt-0.5">{formatPercent(ordonnancementBreakdown.pctReports)} du total</p>
-              </div>
-              <div className="p-4 rounded-lg bg-emerald-50">
-                <p className="text-xs font-medium text-emerald-600">Ord. Consolidés</p>
-                <p className="text-lg font-bold text-emerald-900 mt-1">{formatMillions(ordonnancementBreakdown.ordConsolides)}</p>
-                <p className="text-xs text-emerald-500 mt-0.5">{formatPercent(ordonnancementBreakdown.pctConsolides)} du total</p>
-              </div>
-              <div className="p-4 rounded-lg bg-amber-50">
-                <p className="text-xs font-medium text-amber-600">Ord. Nouveaux</p>
-                <p className="text-lg font-bold text-amber-900 mt-1">{formatMillions(ordonnancementBreakdown.ordNouveaux)}</p>
-                <p className="text-xs text-amber-500 mt-0.5">{formatPercent(ordonnancementBreakdown.pctNouveaux)} du total</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Prévisions Ordonnancement Cumulés par Projet */}
         <Card className="border border-gray-100 shadow-sm">
