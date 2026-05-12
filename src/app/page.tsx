@@ -858,7 +858,7 @@ export default function Dashboard() {
                 </div>
                 <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
               </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalReports)}</p>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalReports)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
                 {kpis.totalCP > 0 ? formatPercent((kpis.totalReports / kpis.totalCP) * 100) : '0,0%'} du budget total
               </p>
@@ -875,7 +875,7 @@ export default function Dashboard() {
                 </div>
                 <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
               </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalNouveaux)}</p>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalNouveaux)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
                 {kpis.totalCP > 0 ? formatPercent((kpis.totalNouveaux / kpis.totalCP) * 100) : '0,0%'} du budget total
               </p>
@@ -892,7 +892,7 @@ export default function Dashboard() {
                 </div>
                 <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">CP</Badge>
               </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCP)}</p>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCP)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits de paiement (LFI)</p>
             </div>
           </div>
@@ -907,7 +907,7 @@ export default function Dashboard() {
                 </div>
                 <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-[10px] font-semibold rounded-full px-2.5">CE</Badge>
               </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCE)}</p>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCE)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits d&apos;engagement</p>
             </div>
           </div>
@@ -934,7 +934,7 @@ export default function Dashboard() {
                     </div>
                     <span className="text-sm font-semibold text-gray-600">Engagement CP</span>
                   </div>
-                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngCP)}</p>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngCP)} M DH</p>
                 </div>
                 <div className="text-right">
                   <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(kpis.tauxEngagement)}`}>
@@ -971,7 +971,7 @@ export default function Dashboard() {
                     </div>
                     <span className="text-sm font-semibold text-gray-600">Engagement CE</span>
                   </div>
-                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngCE)}</p>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngCE)} M DH</p>
                 </div>
                 <div className="text-right">
                   {(() => {
@@ -1028,7 +1028,7 @@ export default function Dashboard() {
                 </div>
                 <Badge className="bg-sky-50 text-sky-700 border-sky-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
               </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdReports)}</p>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdReports)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
                 Taux : <span className={tauxColor(kpis.totalEngReports > 0 ? (kpis.totalOrdReports / kpis.totalEngReports) * 100 : 0)}>{formatPercent(kpis.totalEngReports > 0 ? (kpis.totalOrdReports / kpis.totalEngReports) * 100 : 0)}</span> / eng.
               </p>
@@ -1045,7 +1045,7 @@ export default function Dashboard() {
                 </div>
                 <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
               </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdNouveaux)}</p>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdNouveaux)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
                 Taux : <span className={tauxColor(kpis.totalEngNouveaux > 0 ? (kpis.totalOrdNouveaux / kpis.totalEngNouveaux) * 100 : 0)}>{formatPercent(kpis.totalEngNouveaux > 0 ? (kpis.totalOrdNouveaux / kpis.totalEngNouveaux) * 100 : 0)}</span> / eng.
               </p>
@@ -1068,7 +1068,7 @@ export default function Dashboard() {
                   {formatPercent(kpis.tauxOrdonnement)}
                 </span>
               </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrd)}</p>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrd)} M DH</p>
               <div className="mt-2">
                 <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                   <div className={`kpi-progress-bar h-full rounded-full ${kpis.tauxOrdonnement >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : kpis.tauxOrdonnement >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(kpis.tauxOrdonnement, 100)}%` }} />
@@ -1118,7 +1118,7 @@ export default function Dashboard() {
                     </div>
                     <Badge className={`${c.badgeBg} ${c.badgeText} ${c.badgeBorder} text-[9px] font-semibold rounded-full px-2`}>{label}</Badge>
                   </div>
-                  <p className="text-lg font-black text-gray-900 tracking-tight">{formatMillions(value)}</p>
+                  <p className="text-lg font-black text-gray-900 tracking-tight">{formatMillions(value)} M DH</p>
                   <div className="mt-2">
                     <div className="flex items-center justify-between mb-1">
                       <span className={`text-[10px] font-bold ${tauxColor(taux)}`}>
