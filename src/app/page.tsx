@@ -302,13 +302,18 @@ export default function Dashboard() {
     const totalConsolides = filteredData.reduce((sum, r) => sum + (r['CONSOLIDES'] || 0), 0)
     const totalNouveaux = filteredData.reduce((sum, r) => sum + (r['NOUVEAUX'] || 0), 0)
     const totalOrd = filteredData.reduce((sum, r) => sum + (r['ORD TOTAL'] || 0), 0)
+    const totalOrdReports = filteredData.reduce((sum, r) => sum + (r['ORD REPORTS'] || 0), 0)
+    const totalOrdNouveaux = filteredData.reduce((sum, r) => sum + (r['ORD NOUVEAUX'] || 0), 0)
+    const totalEngReports = filteredData.reduce((sum, r) => sum + (r['ENG REPORT'] || 0), 0)
+    const totalEngNouveaux = filteredData.reduce((sum, r) => sum + (r['ENG NOUVEAUX'] || 0), 0)
     const tauxEngagement = totalCP > 0 ? (totalEngCP / totalCP) * 100 : 0
     const tauxPaiement = totalEngCP > 0 ? (totalPaiements / totalEngCP) * 100 : 0
     const tauxOrdonnement = totalEngCP > 0 ? (totalOrd / totalEngCP) * 100 : 0
     const disponible = totalCP - totalEngCP
     return {
       totalCP, totalCE, totalPaiements, totalPrevisions, totalEngCP, totalEngCE,
-      totalReports, totalConsolides, totalNouveaux, totalOrd, count: filteredData.length,
+      totalReports, totalConsolides, totalNouveaux, totalOrd, totalOrdReports, totalOrdNouveaux,
+      totalEngReports, totalEngNouveaux, count: filteredData.length,
       tauxEngagement, tauxPaiement, tauxOrdonnement, disponible,
     }
   }, [filteredData])
@@ -800,243 +805,308 @@ export default function Dashboard() {
 
   const renderOverview = () => (
     <>
-      {/* KPI Cards - Row 1 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Budget d'investissement (LFI) */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                <Scale className="w-5 h-5 text-blue-600" />
+      {/* ═══════════ SECTION 1 : CRÉDITS ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Crédits</h3>
+          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Crédits Reportés */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
+                  <RotateCcw className="w-5 h-5 text-blue-600" />
+                </div>
+                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
               </div>
-              <span className="text-sm font-medium text-gray-500">Budget d&apos;investissement (LFI)</span>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalReports)}</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {kpis.totalCP > 0 ? formatPercent((kpis.totalReports / kpis.totalCP) * 100) : '0,0%'} du budget total
+              </p>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalCP)}</p>
-            <p className="text-xs text-gray-400 mt-1">100% du budget</p>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Engagements */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-emerald-600" />
+          {/* Crédits Nouveaux */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
+                  <TrendingUp className="w-5 h-5 text-emerald-600" />
+                </div>
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
               </div>
-              <span className="text-sm font-medium text-gray-500">Engagements</span>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalNouveaux)}</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {kpis.totalCP > 0 ? formatPercent((kpis.totalNouveaux / kpis.totalCP) * 100) : '0,0%'} du budget total
+              </p>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalEngCP)}</p>
-            <p className="text-xs text-gray-400 mt-1">
-              {formatPercent(kpis.tauxEngagement)} du budget
-            </p>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Taux d'engagement */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${kpis.tauxEngagement >= 50 ? 'bg-emerald-50' : 'bg-blue-50'}`}>
-                {kpis.tauxEngagement >= 50 ? (
-                  <ArrowUpRight className="w-5 h-5 text-emerald-600" />
-                ) : (
-                  <ArrowDownRight className="w-5 h-5 text-blue-600" />
-                )}
+          {/* Total CP */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-violet-400 to-violet-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
+                  <Scale className="w-5 h-5 text-violet-600" />
+                </div>
+                <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">CP</Badge>
               </div>
-              <span className="text-sm font-medium text-gray-500">Taux d&apos;engagement</span>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCP)}</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits de paiement (LFI)</p>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{formatPercent(kpis.tauxEngagement)}</p>
-            <Badge className={`mt-1 text-xs ${
-              kpis.tauxEngagement >= 50
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                : 'bg-blue-50 text-blue-700 border-blue-200'
-            }`}>
-              {kpis.tauxEngagement >= 50 ? (
-                <ArrowUpRight className="w-3 h-3 mr-1" />
-              ) : (
-                <ArrowDownRight className="w-3 h-3 mr-1" />
-              )}
-              {kpis.tauxEngagement >= 50 ? 'Bon' : 'À améliorer'}
-            </Badge>
-          </CardContent>
-        </Card>
+          </div>
+
+          {/* Total CE */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-indigo-400 to-indigo-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center transition-transform">
+                  <Landmark className="w-5 h-5 text-indigo-600" />
+                </div>
+                <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-[10px] font-semibold rounded-full px-2.5">CE</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCE)}</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits d&apos;engagement</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* KPI Cards - Row 2 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Ordonnancements */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                <Wallet className="w-5 h-5 text-blue-600" />
+      {/* ═══════════ SECTION 2 : ENGAGEMENTS ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-emerald-500 to-teal-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Engagements</h3>
+          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Engagement CP */}
+          <div className="kpi-card-premium rounded-xl border border-emerald-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-teal-500" />
+            <div className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-emerald-100 flex items-center justify-center transition-transform">
+                      <TrendingUp className="w-5 h-5 text-emerald-700" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-600">Engagement CP</span>
+                  </div>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngCP)}</p>
+                </div>
+                <div className="text-right">
+                  <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(kpis.tauxEngagement)}`}>
+                    {kpis.tauxEngagement >= 80 ? '✓' : kpis.tauxEngagement >= 50 ? '⚠' : '✗'}
+                    {formatPercent(kpis.tauxEngagement)}
+                  </span>
+                  <p className="text-[11px] text-gray-400 mt-0.5">
+                    {kpis.tauxEngagement >= 80 ? 'Bon' : kpis.tauxEngagement >= 50 ? 'Moyen' : 'Faible'}
+                  </p>
+                </div>
               </div>
-              <span className="text-sm font-medium text-gray-500">Ordonnancements</span>
+              <div className="mt-3">
+                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`kpi-progress-bar h-full rounded-full ${kpis.tauxEngagement >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : kpis.tauxEngagement >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(kpis.tauxEngagement, 100)}%` }} />
+                </div>
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-[10px] text-gray-400">0%</span>
+                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(kpis.disponible)}</span>
+                  <span className="text-[10px] text-gray-400">100%</span>
+                </div>
+              </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalOrd)}</p>
-            <p className="text-xs text-gray-400 mt-1">
-              {kpis.totalCP > 0 ? formatPercent((kpis.totalOrd / kpis.totalCP) * 100) : '0,0%'} du budget
-            </p>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Taux d'ordonnancement */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${kpis.tauxOrdonnement >= 50 ? 'bg-emerald-50' : 'bg-blue-50'}`}>
-                {kpis.tauxOrdonnement >= 50 ? (
-                  <ArrowUpRight className="w-5 h-5 text-emerald-600" />
-                ) : (
-                  <ArrowDownRight className="w-5 h-5 text-blue-600" />
-                )}
+          {/* Engagement CE */}
+          <div className="kpi-card-premium rounded-xl border border-teal-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-teal-400 to-cyan-500" />
+            <div className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-teal-100 flex items-center justify-center transition-transform">
+                      <Landmark className="w-5 h-5 text-teal-700" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-600">Engagement CE</span>
+                  </div>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngCE)}</p>
+                </div>
+                <div className="text-right">
+                  {(() => {
+                    const tauxCE = kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0
+                    return (
+                      <>
+                        <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(tauxCE)}`}>
+                          {tauxCE >= 80 ? '✓' : tauxCE >= 50 ? '⚠' : '✗'}
+                          {formatPercent(tauxCE)}
+                        </span>
+                        <p className="text-[11px] text-gray-400 mt-0.5">
+                          {tauxCE >= 80 ? 'Bon' : tauxCE >= 50 ? 'Moyen' : 'Faible'}
+                        </p>
+                      </>
+                    )
+                  })()}
+                </div>
               </div>
-              <span className="text-sm font-medium text-gray-500">Taux d&apos;ordonnancement</span>
-            </div>
-            <p className="text-2xl font-bold text-gray-900">{formatPercent(kpis.tauxOrdonnement)}</p>
-            <Badge className={`mt-1 text-xs ${
-              kpis.tauxOrdonnement >= 50
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                : 'bg-blue-50 text-blue-700 border-blue-200'
-            }`}>
-              {kpis.tauxOrdonnement >= 50 ? (
-                <ArrowUpRight className="w-3 h-3 mr-1" />
-              ) : (
-                <ArrowDownRight className="w-3 h-3 mr-1" />
-              )}
-              {kpis.tauxOrdonnement >= 50 ? 'Bon' : 'À améliorer'}
-            </Badge>
-          </CardContent>
-        </Card>
-
-        {/* Disponible */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center">
-                <Landmark className="w-5 h-5 text-violet-600" />
+              <div className="mt-3">
+                {(() => {
+                  const tauxCE = kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0
+                  return (
+                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className={`kpi-progress-bar h-full rounded-full ${tauxCE >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxCE >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxCE, 100)}%` }} />
+                    </div>
+                  )
+                })()}
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-[10px] text-gray-400">0%</span>
+                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(kpis.totalCE - kpis.totalEngCE)}</span>
+                  <span className="text-[10px] text-gray-400">100%</span>
+                </div>
               </div>
-              <span className="text-sm font-medium text-gray-500">Disponible</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.disponible)}</p>
-            <p className="text-xs text-gray-400 mt-1">
-              {kpis.totalCP > 0 ? formatPercent((kpis.disponible / kpis.totalCP) * 100) : '0,0%'} du budget
-            </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
-      {/* KPI Cards - Row 2b: CE & Paiements */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total CE */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
-                <Scale className="w-5 h-5 text-indigo-600" />
+      {/* ═══════════ SECTION 3 : ORDONNANCEMENTS & PAIEMENTS ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-cyan-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancements & Paiements</h3>
+          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Ord. sur Reports */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-sky-400 to-blue-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center transition-transform">
+                  <RotateCcw className="w-5 h-5 text-sky-600" />
+                </div>
+                <Badge className="bg-sky-50 text-sky-700 border-sky-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
               </div>
-              <span className="text-sm font-medium text-gray-500">Total CE</span>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdReports)}</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                Taux : <span className={tauxColor(kpis.totalEngReports > 0 ? (kpis.totalOrdReports / kpis.totalEngReports) * 100 : 0)}>{formatPercent(kpis.totalEngReports > 0 ? (kpis.totalOrdReports / kpis.totalEngReports) * 100 : 0)}</span> / eng.
+              </p>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalCE)}</p>
-            <p className="text-xs text-gray-400 mt-1">Crédits d&apos;engagement</p>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Engagements CE */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-teal-600" />
+          {/* Ord. sur Nouveaux */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-cyan-400 to-teal-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
+                  <TrendingUp className="w-5 h-5 text-cyan-600" />
+                </div>
+                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
               </div>
-              <span className="text-sm font-medium text-gray-500">Engagements CE</span>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdNouveaux)}</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                Taux : <span className={tauxColor(kpis.totalEngNouveaux > 0 ? (kpis.totalOrdNouveaux / kpis.totalEngNouveaux) * 100 : 0)}>{formatPercent(kpis.totalEngNouveaux > 0 ? (kpis.totalOrdNouveaux / kpis.totalEngNouveaux) * 100 : 0)}</span> / eng.
+              </p>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalEngCE)}</p>
-            <p className="text-xs text-gray-400 mt-1">
-              Taux CE : <span className={tauxColor(kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0)}>{kpis.totalCE > 0 ? formatPercent((kpis.totalEngCE / kpis.totalCE) * 100) : '0,0%'}</span>
-            </p>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Paiements */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-cyan-50 flex items-center justify-center">
-                <Wallet className="w-5 h-5 text-cyan-600" />
+          {/* Total Ordonnancements */}
+          <div className="kpi-card-premium rounded-xl border border-blue-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #eff6ff 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center transition-transform">
+                    <Wallet className="w-5 h-5 text-blue-700" />
+                  </div>
+                  <span className="text-sm font-semibold text-gray-600">Total Ord.</span>
+                </div>
+                <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(kpis.tauxOrdonnement)}`}>
+                  {kpis.tauxOrdonnement >= 80 ? '✓' : kpis.tauxOrdonnement >= 50 ? '⚠' : '✗'}
+                  {formatPercent(kpis.tauxOrdonnement)}
+                </span>
               </div>
-              <span className="text-sm font-medium text-gray-500">Paiements</span>
-            </div>
-            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalPaiements)}</p>
-            <p className="text-xs text-gray-400 mt-1">
-              Taux paiement : {formatPercent(kpis.tauxPaiement)}
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Reste à payer */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center">
-                <Landmark className="w-5 h-5 text-rose-600" />
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrd)}</p>
+              <div className="mt-2">
+                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`kpi-progress-bar h-full rounded-full ${kpis.tauxOrdonnement >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : kpis.tauxOrdonnement >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(kpis.tauxOrdonnement, 100)}%` }} />
+                </div>
+                <div className="flex justify-between mt-1">
+                  <span className="text-[10px] text-gray-400">{kpis.tauxOrdonnement >= 80 ? 'Bon' : kpis.tauxOrdonnement >= 50 ? 'Moyen' : 'Faible'}</span>
+                  <span className="text-[10px] text-gray-400">Paiements : {formatMillions(kpis.totalPaiements)}</span>
+                </div>
               </div>
-              <span className="text-sm font-medium text-gray-500">Reste à payer</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalEngCP - kpis.totalPaiements)}</p>
-            <p className="text-xs text-gray-400 mt-1">
-              Sur engagements CP
-            </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
-      {/* KPI Cards - Row 3: Prévisions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center">
-                <FileSpreadsheet className="w-5 h-5 text-teal-600" />
+      {/* ═══════════ SECTION 4 : PRÉVISIONS & DISPONIBLE ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-amber-500 to-orange-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Prévisions & Disponible</h3>
+          <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Prévisions */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-orange-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
+                  <FileSpreadsheet className="w-5 h-5 text-amber-600" />
+                </div>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Prévis.</Badge>
               </div>
-              <span className="text-sm font-medium text-gray-500">Prévisions ordonnancement</span>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalPrevisions)}</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                Réalisation : <span className={tauxColor(kpis.totalPrevisions > 0 ? (kpis.totalOrd / kpis.totalPrevisions) * 100 : 0)}>{kpis.totalPrevisions > 0 ? formatPercent((kpis.totalOrd / kpis.totalPrevisions) * 100) : '0,0%'}</span>
+              </p>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalPrevisions)}</p>
-            <p className="text-xs text-gray-400 mt-1">
-              {kpis.totalCP > 0 ? formatPercent((kpis.totalPrevisions / kpis.totalCP) * 100) : '0,0%'} du budget
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-cyan-50 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-cyan-600" />
+          </div>
+
+          {/* Écart Prévisions/Réalisé */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-orange-400 to-red-400" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center transition-transform">
+                  <Info className="w-5 h-5 text-orange-600" />
+                </div>
+                <Badge className="bg-orange-50 text-orange-700 border-orange-200 text-[10px] font-semibold rounded-full px-2.5">Écart</Badge>
               </div>
-              <span className="text-sm font-medium text-gray-500">Taux réalisation prévisions</span>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalPrevisions - kpis.totalOrd)}</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {kpis.totalPrevisions > kpis.totalOrd ? 'Prévisions supérieures' : 'Réalisé supérieur'}
+              </p>
             </div>
-            <p className="text-2xl font-bold text-gray-900">
-              {kpis.totalPrevisions > 0 ? formatPercent((kpis.totalOrd / kpis.totalPrevisions) * 100) : '0,0%'}
-            </p>
-            <p className="text-xs text-gray-400 mt-1">
-              Ordonnancements / Prévisions
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
-                <Wallet className="w-5 h-5 text-amber-600" />
+          </div>
+
+          {/* Disponible */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-violet-400 to-purple-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
+                  <Landmark className="w-5 h-5 text-violet-600" />
+                </div>
+                <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">Reste</Badge>
               </div>
-              <span className="text-sm font-medium text-gray-500">Écart prévisions/réalisé</span>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.disponible)}</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {kpis.totalCP > 0 ? formatPercent((kpis.disponible / kpis.totalCP) * 100) : '0,0%'} du budget CP
+              </p>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalPrevisions - kpis.totalOrd)}</p>
-            <p className="text-xs text-gray-400 mt-1">
-              {kpis.totalPrevisions > kpis.totalOrd ? 'Prévisions supérieures' : 'Réalisé supérieur'}
-            </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Charts - Execution by Entity */}
