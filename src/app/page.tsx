@@ -315,13 +315,14 @@ export default function Dashboard() {
 
   // Analysis by Entity
   const analysisByEntity = useMemo(() => {
-    const entities: Record<string, { cp: number; ce: number; engCP: number; paiements: number; previsions: number; count: number; ord: number }> = {}
+    const entities: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number }> = {}
     filteredData.forEach(row => {
       const e = row.ENTITE
-      if (!entities[e]) entities[e] = { cp: 0, ce: 0, engCP: 0, paiements: 0, previsions: 0, count: 0, ord: 0 }
+      if (!entities[e]) entities[e] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0 }
       entities[e].cp += row['TOTAL CP'] || 0
       entities[e].ce += row['TOTAL CE'] || 0
       entities[e].engCP += row['ENG CP TOTAL'] || 0
+      entities[e].engCE += row['ENG CE ULT'] || 0
       entities[e].paiements += row['PAIEMENTS TOTAL'] || 0
       entities[e].previsions += row['TOTAL PREV'] || 0
       entities[e].count += 1
@@ -331,6 +332,7 @@ export default function Dashboard() {
       name,
       ...v,
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
+      tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
       tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
       tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
       disponible: v.cp - v.engCP,
@@ -339,13 +341,14 @@ export default function Dashboard() {
 
   // Analysis by Group (Programme)
   const analysisByGroup = useMemo(() => {
-    const groups: Record<string, { cp: number; ce: number; engCP: number; paiements: number; previsions: number; count: number; ord: number }> = {}
+    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number }> = {}
     filteredData.forEach(row => {
       const g = row.Projet
-      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, paiements: 0, previsions: 0, count: 0, ord: 0 }
+      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0 }
       groups[g].cp += row['TOTAL CP'] || 0
       groups[g].ce += row['TOTAL CE'] || 0
       groups[g].engCP += row['ENG CP TOTAL'] || 0
+      groups[g].engCE += row['ENG CE ULT'] || 0
       groups[g].paiements += row['PAIEMENTS TOTAL'] || 0
       groups[g].previsions += row['TOTAL PREV'] || 0
       groups[g].count += 1
@@ -355,6 +358,7 @@ export default function Dashboard() {
       name,
       ...v,
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
+      tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
       tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
       tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
       disponible: v.cp - v.engCP,
@@ -367,13 +371,14 @@ export default function Dashboard() {
 
   // Analysis by Programme (row.Programme field - actual project names)
   const analysisByProgramme = useMemo(() => {
-    const groups: Record<string, { cp: number; ce: number; engCP: number; paiements: number; previsions: number; count: number; ord: number }> = {}
+    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number }> = {}
     filteredData.forEach(row => {
       const g = row.Programme
-      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, paiements: 0, previsions: 0, count: 0, ord: 0 }
+      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0 }
       groups[g].cp += row['TOTAL CP'] || 0
       groups[g].ce += row['TOTAL CE'] || 0
       groups[g].engCP += row['ENG CP TOTAL'] || 0
+      groups[g].engCE += row['ENG CE ULT'] || 0
       groups[g].paiements += row['PAIEMENTS TOTAL'] || 0
       groups[g].previsions += row['TOTAL PREV'] || 0
       groups[g].count += 1
@@ -383,6 +388,7 @@ export default function Dashboard() {
       name,
       ...v,
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
+      tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
       tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
       tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
       disponible: v.cp - v.engCP,
@@ -508,21 +514,35 @@ export default function Dashboard() {
     })
 
     const entities = Object.entries(grouped).map(([entityName, groups]) => {
-      const entityCP = filteredData.filter(r => r.ENTITE === entityName).reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
-      const entityEngCP = filteredData.filter(r => r.ENTITE === entityName).reduce((s, r) => s + (r['ENG CP TOTAL'] || 0), 0)
-      const entityOrd = filteredData.filter(r => r.ENTITE === entityName).reduce((s, r) => s + (r['ORD TOTAL'] || 0), 0)
+      const entityRows = filteredData.filter(r => r.ENTITE === entityName)
+      const entityCP = entityRows.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
+      const entityEngCP = entityRows.reduce((s, r) => s + (r['ENG CP TOTAL'] || 0), 0)
+      const entityOrd = entityRows.reduce((s, r) => s + (r['ORD TOTAL'] || 0), 0)
+      const entityCE = entityRows.reduce((s, r) => s + (r['TOTAL CE'] || 0), 0)
+      const entityEngCE = entityRows.reduce((s, r) => s + (r['ENG CE ULT'] || 0), 0)
+      const entityPaiements = entityRows.reduce((s, r) => s + (r['PAIEMENTS TOTAL'] || 0), 0)
+      const entityPrevisions = entityRows.reduce((s, r) => s + (r['TOTAL PREV'] || 0), 0)
 
       const groupsData = Object.entries(groups).map(([groupName, rows]) => {
         const groupCP = rows.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
         const groupEngCP = rows.reduce((s, r) => s + (r['ENG CP TOTAL'] || 0), 0)
         const groupOrd = rows.reduce((s, r) => s + (r['ORD TOTAL'] || 0), 0)
+        const groupCE = rows.reduce((s, r) => s + (r['TOTAL CE'] || 0), 0)
+        const groupEngCE = rows.reduce((s, r) => s + (r['ENG CE ULT'] || 0), 0)
+        const groupPaiements = rows.reduce((s, r) => s + (r['PAIEMENTS TOTAL'] || 0), 0)
+        const groupPrevisions = rows.reduce((s, r) => s + (r['TOTAL PREV'] || 0), 0)
 
         const projects = rows.map(r => ({
           name: r.Programme || 'Sans nom',
           cp: r['TOTAL CP'] || 0,
           engCP: r['ENG CP TOTAL'] || 0,
+          ce: r['TOTAL CE'] || 0,
+          engCE: r['ENG CE ULT'] || 0,
           ord: r['ORD TOTAL'] || 0,
+          paiements: r['PAIEMENTS TOTAL'] || 0,
+          previsions: r['TOTAL PREV'] || 0,
           tauxEngagement: (r['TOTAL CP'] || 0) > 0 ? ((r['ENG CP TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
+          tauxEngagementCE: (r['TOTAL CE'] || 0) > 0 ? ((r['ENG CE ULT'] || 0) / (r['TOTAL CE'] || 0)) * 100 : 0,
           tauxOrdonnement: (r['ENG CP TOTAL'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['ENG CP TOTAL'] || 0)) * 100 : 0,
           disponible: (r['TOTAL CP'] || 0) - (r['ENG CP TOTAL'] || 0),
         }))
@@ -531,8 +551,13 @@ export default function Dashboard() {
           name: groupName,
           cp: groupCP,
           engCP: groupEngCP,
+          ce: groupCE,
+          engCE: groupEngCE,
           ord: groupOrd,
+          paiements: groupPaiements,
+          previsions: groupPrevisions,
           tauxEngagement: groupCP > 0 ? (groupEngCP / groupCP) * 100 : 0,
+          tauxEngagementCE: groupCE > 0 ? (groupEngCE / groupCE) * 100 : 0,
           tauxOrdonnement: groupEngCP > 0 ? (groupOrd / groupEngCP) * 100 : 0,
           disponible: groupCP - groupEngCP,
           projects,
@@ -543,8 +568,13 @@ export default function Dashboard() {
         name: entityName,
         cp: entityCP,
         engCP: entityEngCP,
+        ce: entityCE,
+        engCE: entityEngCE,
         ord: entityOrd,
+        paiements: entityPaiements,
+        previsions: entityPrevisions,
         tauxEngagement: entityCP > 0 ? (entityEngCP / entityCP) * 100 : 0,
+        tauxEngagementCE: entityCE > 0 ? (entityEngCE / entityCE) * 100 : 0,
         tauxOrdonnement: entityEngCP > 0 ? (entityOrd / entityEngCP) * 100 : 0,
         disponible: entityCP - entityEngCP,
         groups: groupsData,
@@ -571,8 +601,13 @@ export default function Dashboard() {
         entite: r.ENTITE || 'Non défini',
         cp: r['TOTAL CP'] || 0,
         engCP: r['ENG CP TOTAL'] || 0,
+        ce: r['TOTAL CE'] || 0,
+        engCE: r['ENG CE ULT'] || 0,
         ord: r['ORD TOTAL'] || 0,
+        paiements: r['PAIEMENTS TOTAL'] || 0,
+        previsions: r['TOTAL PREV'] || 0,
         tauxEngagement: (r['TOTAL CP'] || 0) > 0 ? ((r['ENG CP TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
+        tauxEngagementCE: (r['TOTAL CE'] || 0) > 0 ? ((r['ENG CE ULT'] || 0) / (r['TOTAL CE'] || 0)) * 100 : 0,
         tauxOrdonnement: (r['ENG CP TOTAL'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['ENG CP TOTAL'] || 0)) * 100 : 0,
         disponible: (r['TOTAL CP'] || 0) - (r['ENG CP TOTAL'] || 0),
       }))
@@ -891,6 +926,71 @@ export default function Dashboard() {
         </Card>
       </div>
 
+      {/* KPI Cards - Row 2b: CE & Paiements */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total CE */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
+                <Scale className="w-5 h-5 text-indigo-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-500">Total CE</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalCE)}</p>
+            <p className="text-xs text-gray-400 mt-1">Crédits d&apos;engagement</p>
+          </CardContent>
+        </Card>
+
+        {/* Engagements CE */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-teal-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-500">Engagements CE</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalEngCE)}</p>
+            <p className="text-xs text-gray-400 mt-1">
+              Taux CE : <span className={tauxColor(kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0)}>{kpis.totalCE > 0 ? formatPercent((kpis.totalEngCE / kpis.totalCE) * 100) : '0,0%'}</span>
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Paiements */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg bg-cyan-50 flex items-center justify-center">
+                <Wallet className="w-5 h-5 text-cyan-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-500">Paiements</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalPaiements)}</p>
+            <p className="text-xs text-gray-400 mt-1">
+              Taux paiement : {formatPercent(kpis.tauxPaiement)}
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Reste à payer */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center">
+                <Landmark className="w-5 h-5 text-rose-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-500">Reste à payer</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{formatMillions(kpis.totalEngCP - kpis.totalPaiements)}</p>
+            <p className="text-xs text-gray-400 mt-1">
+              Sur engagements CP
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* KPI Cards - Row 3: Prévisions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card className="border border-gray-100 shadow-sm">
@@ -1040,16 +1140,21 @@ export default function Dashboard() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50">
-                  <TableHead className="text-xs font-semibold text-gray-600 w-[300px]">entité / Projet / Programme</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI) M DH</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements M DH</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. %</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn. M DH</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord. %</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible M DH</TableHead>
-                </TableRow>
-              </TableHeader>
+                  <TableRow className="bg-gray-50">
+                    <TableHead className="text-xs font-semibold text-gray-600 w-[300px]">entité / Projet / Programme</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn.</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Paiements</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Prévisions</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible</TableHead>
+                  </TableRow>
+                </TableHeader>
               <TableBody>
                 {detailTableData.map(entity => (
                   <EntityRow
@@ -1067,16 +1172,19 @@ export default function Dashboard() {
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCP)}</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalEngCP)}</TableCell>
                   <TableCell className="text-xs font-bold text-right">
-                    <span className={kpis.tauxEngagement >= 50 ? 'text-emerald-600' : 'text-red-600'}>
-                      {formatPercent(kpis.tauxEngagement)}
-                    </span>
+                    <span className={tauxColor(kpis.tauxEngagement)}>{formatPercent(kpis.tauxEngagement)}</span>
+                  </TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCE)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalEngCE)}</TableCell>
+                  <TableCell className="text-xs font-bold text-right">
+                    <span className={tauxColor(kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0)}>{kpis.totalCE > 0 ? formatPercent((kpis.totalEngCE / kpis.totalCE) * 100) : '0,0%'}</span>
                   </TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalOrd)}</TableCell>
                   <TableCell className="text-xs font-bold text-right">
-                    <span className={kpis.tauxOrdonnement >= 40 ? 'text-blue-600' : 'text-orange-600'}>
-                      {formatPercent(kpis.tauxOrdonnement)}
-                    </span>
+                    <span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span>
                   </TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPaiements)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPrevisions)}</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.disponible)}</TableCell>
                 </TableRow>
               </TableBody>
@@ -1099,7 +1207,7 @@ export default function Dashboard() {
         <h2 className="text-lg font-bold text-gray-900">Analyse par entité</h2>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           <Card className="border border-gray-100 shadow-sm">
             <CardContent className="p-4">
               <span className="text-xs font-medium text-gray-500">Total Budget</span>
@@ -1116,6 +1224,24 @@ export default function Dashboard() {
             <CardContent className="p-4">
               <span className="text-xs font-medium text-gray-500">Taux ordonnancement moyen</span>
               <p className={`text-xl font-bold mt-1 ${tauxColor(entityAvgOrd)}`}>{formatPercent(entityAvgOrd)}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <span className="text-xs font-medium text-gray-500">Total CE</span>
+              <p className="text-xl font-bold text-gray-900 mt-1">{formatMillions(analysisByEntity.reduce((s, e) => s + e.ce, 0))}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <span className="text-xs font-medium text-gray-500">Engagements CE</span>
+              <p className="text-xl font-bold text-gray-900 mt-1">{formatMillions(analysisByEntity.reduce((s, e) => s + e.engCE, 0))}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <span className="text-xs font-medium text-gray-500">Paiements</span>
+              <p className="text-xl font-bold text-cyan-600 mt-1">{formatMillions(analysisByEntity.reduce((s, e) => s + e.paiements, 0))}</p>
             </CardContent>
           </Card>
         </div>
@@ -1154,13 +1280,17 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-gray-50">
                     <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI)</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn.</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Paiements</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Prévisions</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Nb lignes</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -1170,24 +1300,20 @@ export default function Dashboard() {
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.cp)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.engCP)}</TableCell>
                       <TableCell className="text-xs text-right">
-                        <div className="flex flex-col items-end gap-1">
-                          <span className={tauxColor(e.tauxEngagement)}>{formatPercent(e.tauxEngagement)}</span>
-                          <div className="w-16 h-1.5 bg-gray-200 rounded-full">
-                            <div className={`h-full rounded-full ${tauxBgColor(e.tauxEngagement)}`} style={{ width: `${Math.min(e.tauxEngagement, 100)}%` }} />
-                          </div>
-                        </div>
+                        <span className={tauxColor(e.tauxEngagement)}>{formatPercent(e.tauxEngagement)}</span>
+                      </TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.ce)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.engCE)}</TableCell>
+                      <TableCell className="text-xs text-right">
+                        <span className={tauxColor(e.tauxEngagementCE)}>{e.ce > 0 ? formatPercent(e.tauxEngagementCE) : '0,0%'}</span>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.ord)}</TableCell>
                       <TableCell className="text-xs text-right">
-                        <div className="flex flex-col items-end gap-1">
-                          <span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span>
-                          <div className="w-16 h-1.5 bg-gray-200 rounded-full">
-                            <div className={`h-full rounded-full ${tauxBgColor(e.tauxOrdonnement)}`} style={{ width: `${Math.min(e.tauxOrdonnement, 100)}%` }} />
-                          </div>
-                        </div>
+                        <span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span>
                       </TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.paiements)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.previsions)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(e.disponible)}</TableCell>
-                      <TableCell className="text-xs text-gray-500 text-right">{e.count}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -1209,7 +1335,7 @@ export default function Dashboard() {
         <h2 className="text-lg font-bold text-gray-900">Analyse par Projet</h2>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           <Card className="border border-gray-100 shadow-sm">
             <CardContent className="p-4">
               <span className="text-xs font-medium text-gray-500">Total projets</span>
@@ -1226,6 +1352,24 @@ export default function Dashboard() {
             <CardContent className="p-4">
               <span className="text-xs font-medium text-gray-500">Taux ordonnancement moyen</span>
               <p className={`text-xl font-bold mt-1 ${tauxColor(progAvgOrd)}`}>{formatPercent(progAvgOrd)}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <span className="text-xs font-medium text-gray-500">Total CE</span>
+              <p className="text-xl font-bold text-gray-900 mt-1">{formatMillions(analysisByGroup.reduce((s, g) => s + g.ce, 0))}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <span className="text-xs font-medium text-gray-500">Engagements CE</span>
+              <p className="text-xl font-bold text-gray-900 mt-1">{formatMillions(analysisByGroup.reduce((s, g) => s + g.engCE, 0))}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <span className="text-xs font-medium text-gray-500">Paiements</span>
+              <p className="text-xl font-bold text-cyan-600 mt-1">{formatMillions(analysisByGroup.reduce((s, g) => s + g.paiements, 0))}</p>
             </CardContent>
           </Card>
         </div>
@@ -1264,13 +1408,17 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-gray-50">
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI)</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn.</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Paiements</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Prévisions</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Nb lignes</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -1280,24 +1428,20 @@ export default function Dashboard() {
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.cp)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.engCP)}</TableCell>
                       <TableCell className="text-xs text-right">
-                        <div className="flex flex-col items-end gap-1">
-                          <span className={tauxColor(g.tauxEngagement)}>{formatPercent(g.tauxEngagement)}</span>
-                          <div className="w-16 h-1.5 bg-gray-200 rounded-full">
-                            <div className={`h-full rounded-full ${tauxBgColor(g.tauxEngagement)}`} style={{ width: `${Math.min(g.tauxEngagement, 100)}%` }} />
-                          </div>
-                        </div>
+                        <span className={tauxColor(g.tauxEngagement)}>{formatPercent(g.tauxEngagement)}</span>
+                      </TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.ce)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.engCE)}</TableCell>
+                      <TableCell className="text-xs text-right">
+                        <span className={tauxColor(g.tauxEngagementCE)}>{g.ce > 0 ? formatPercent(g.tauxEngagementCE) : '0,0%'}</span>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.ord)}</TableCell>
                       <TableCell className="text-xs text-right">
-                        <div className="flex flex-col items-end gap-1">
-                          <span className={tauxColor(g.tauxOrdonnement)}>{formatPercent(g.tauxOrdonnement)}</span>
-                          <div className="w-16 h-1.5 bg-gray-200 rounded-full">
-                            <div className={`h-full rounded-full ${tauxBgColor(g.tauxOrdonnement)}`} style={{ width: `${Math.min(g.tauxOrdonnement, 100)}%` }} />
-                          </div>
-                        </div>
+                        <span className={tauxColor(g.tauxOrdonnement)}>{formatPercent(g.tauxOrdonnement)}</span>
                       </TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.paiements)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.previsions)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(g.disponible)}</TableCell>
-                      <TableCell className="text-xs text-gray-500 text-right">{g.count}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -1322,7 +1466,7 @@ export default function Dashboard() {
         <h2 className="text-lg font-bold text-gray-900">Analyse par Programme</h2>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           <Card className="border border-gray-100 shadow-sm">
             <CardContent className="p-4">
               <span className="text-xs font-medium text-gray-500">Total programmes</span>
@@ -1339,6 +1483,24 @@ export default function Dashboard() {
             <CardContent className="p-4">
               <span className="text-xs font-medium text-gray-500">Taux engagement moyen</span>
               <p className={`text-xl font-bold mt-1 ${tauxColor(avgEng)}`}>{formatPercent(avgEng)}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <span className="text-xs font-medium text-gray-500">Total CE</span>
+              <p className="text-xl font-bold text-gray-900 mt-1">{formatMillions(filteredProjects.reduce((s, p) => s + p.ce, 0))}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <span className="text-xs font-medium text-gray-500">Engagements CE</span>
+              <p className="text-xl font-bold text-gray-900 mt-1">{formatMillions(filteredProjects.reduce((s, p) => s + p.engCE, 0))}</p>
+            </CardContent>
+          </Card>
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="p-4">
+              <span className="text-xs font-medium text-gray-500">Paiements</span>
+              <p className="text-xl font-bold text-cyan-600 mt-1">{formatMillions(filteredProjects.reduce((s, p) => s + p.paiements, 0))}</p>
             </CardContent>
           </Card>
         </div>
@@ -1364,11 +1526,16 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-gray-600">Programme</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI)</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CE</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn.</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Paiements</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Prévisions</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -1383,10 +1550,17 @@ export default function Dashboard() {
                       <TableCell className="text-xs text-right">
                         <span className={tauxColor(p.tauxEngagement)}>{formatPercent(p.tauxEngagement)}</span>
                       </TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.ce)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.engCE)}</TableCell>
+                      <TableCell className="text-xs text-right">
+                        <span className={tauxColor(p.tauxEngagementCE)}>{p.ce > 0 ? formatPercent(p.tauxEngagementCE) : '0,0%'}</span>
+                      </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.ord)}</TableCell>
                       <TableCell className="text-xs text-right">
                         <span className={tauxColor(p.tauxOrdonnement)}>{formatPercent(p.tauxOrdonnement)}</span>
                       </TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.paiements)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.previsions)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.disponible)}</TableCell>
                     </TableRow>
                   ))}
@@ -2788,24 +2962,39 @@ function EntityRow({
     name: string
     cp: number
     engCP: number
+    ce: number
+    engCE: number
     ord: number
+    paiements: number
+    previsions: number
     tauxEngagement: number
+    tauxEngagementCE: number
     tauxOrdonnement: number
     disponible: number
     groups: {
       name: string
       cp: number
       engCP: number
+      ce: number
+      engCE: number
       ord: number
+      paiements: number
+      previsions: number
       tauxEngagement: number
+      tauxEngagementCE: number
       tauxOrdonnement: number
       disponible: number
       projects: {
         name: string
         cp: number
         engCP: number
+        ce: number
+        engCE: number
         ord: number
+        paiements: number
+        previsions: number
         tauxEngagement: number
+        tauxEngagementCE: number
         tauxOrdonnement: number
         disponible: number
       }[]
@@ -2828,16 +3017,23 @@ function EntityRow({
         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(entity.cp)}</TableCell>
         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(entity.engCP)}</TableCell>
         <TableCell className="text-xs text-right">
-          <span className={entity.tauxEngagement >= 50 ? 'text-emerald-600 font-medium' : 'text-red-600 font-medium'}>
+          <span className={tauxColor(entity.tauxEngagement)}>
             {formatPercent(entity.tauxEngagement)}
           </span>
         </TableCell>
+        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(entity.ce)}</TableCell>
+        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(entity.engCE)}</TableCell>
+        <TableCell className="text-xs text-right">
+          <span className={tauxColor(entity.tauxEngagementCE)}>{entity.ce > 0 ? formatPercent(entity.tauxEngagementCE) : '0,0%'}</span>
+        </TableCell>
         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(entity.ord)}</TableCell>
         <TableCell className="text-xs text-right">
-          <span className={entity.tauxOrdonnement >= 40 ? 'text-blue-600 font-medium' : 'text-orange-600 font-medium'}>
+          <span className={tauxColor(entity.tauxOrdonnement)}>
             {formatPercent(entity.tauxOrdonnement)}
           </span>
         </TableCell>
+        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(entity.paiements)}</TableCell>
+        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(entity.previsions)}</TableCell>
         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(entity.disponible)}</TableCell>
       </TableRow>
 
@@ -2869,16 +3065,26 @@ function GroupRow({
     name: string
     cp: number
     engCP: number
+    ce: number
+    engCE: number
     ord: number
+    paiements: number
+    previsions: number
     tauxEngagement: number
+    tauxEngagementCE: number
     tauxOrdonnement: number
     disponible: number
     projects: {
       name: string
       cp: number
       engCP: number
+      ce: number
+      engCE: number
       ord: number
+      paiements: number
+      previsions: number
       tauxEngagement: number
+      tauxEngagementCE: number
       tauxOrdonnement: number
       disponible: number
     }[]
@@ -2899,16 +3105,23 @@ function GroupRow({
         <TableCell className="text-xs text-gray-600 text-right">{formatMillions(group.cp)}</TableCell>
         <TableCell className="text-xs text-gray-600 text-right">{formatMillions(group.engCP)}</TableCell>
         <TableCell className="text-xs text-right">
-          <span className={group.tauxEngagement >= 50 ? 'text-emerald-600' : 'text-red-600'}>
+          <span className={tauxColor(group.tauxEngagement)}>
             {formatPercent(group.tauxEngagement)}
           </span>
         </TableCell>
+        <TableCell className="text-xs text-gray-600 text-right">{formatMillions(group.ce)}</TableCell>
+        <TableCell className="text-xs text-gray-600 text-right">{formatMillions(group.engCE)}</TableCell>
+        <TableCell className="text-xs text-right">
+          <span className={tauxColor(group.tauxEngagementCE)}>{group.ce > 0 ? formatPercent(group.tauxEngagementCE) : '0,0%'}</span>
+        </TableCell>
         <TableCell className="text-xs text-gray-600 text-right">{formatMillions(group.ord)}</TableCell>
         <TableCell className="text-xs text-right">
-          <span className={group.tauxOrdonnement >= 40 ? 'text-blue-600' : 'text-orange-600'}>
+          <span className={tauxColor(group.tauxOrdonnement)}>
             {formatPercent(group.tauxOrdonnement)}
           </span>
         </TableCell>
+        <TableCell className="text-xs text-gray-600 text-right">{formatMillions(group.paiements)}</TableCell>
+        <TableCell className="text-xs text-gray-600 text-right">{formatMillions(group.previsions)}</TableCell>
         <TableCell className="text-xs text-gray-600 text-right">{formatMillions(group.disponible)}</TableCell>
       </TableRow>
 
@@ -2920,16 +3133,23 @@ function GroupRow({
           <TableCell className="text-xs text-gray-500 text-right">{formatMillions(project.cp)}</TableCell>
           <TableCell className="text-xs text-gray-500 text-right">{formatMillions(project.engCP)}</TableCell>
           <TableCell className="text-xs text-right">
-            <span className={project.tauxEngagement >= 50 ? 'text-emerald-600' : 'text-red-600'}>
+            <span className={tauxColor(project.tauxEngagement)}>
               {formatPercent(project.tauxEngagement)}
             </span>
           </TableCell>
+          <TableCell className="text-xs text-gray-500 text-right">{formatMillions(project.ce)}</TableCell>
+          <TableCell className="text-xs text-gray-500 text-right">{formatMillions(project.engCE)}</TableCell>
+          <TableCell className="text-xs text-right">
+            <span className={tauxColor(project.tauxEngagementCE)}>{project.ce > 0 ? formatPercent(project.tauxEngagementCE) : '0,0%'}</span>
+          </TableCell>
           <TableCell className="text-xs text-gray-500 text-right">{formatMillions(project.ord)}</TableCell>
           <TableCell className="text-xs text-right">
-            <span className={project.tauxOrdonnement >= 40 ? 'text-blue-600' : 'text-orange-600'}>
+            <span className={tauxColor(project.tauxOrdonnement)}>
               {formatPercent(project.tauxOrdonnement)}
             </span>
           </TableCell>
+          <TableCell className="text-xs text-gray-500 text-right">{formatMillions(project.paiements)}</TableCell>
+          <TableCell className="text-xs text-gray-500 text-right">{formatMillions(project.previsions)}</TableCell>
           <TableCell className="text-xs text-gray-500 text-right">{formatMillions(project.disponible)}</TableCell>
         </TableRow>
       ))}

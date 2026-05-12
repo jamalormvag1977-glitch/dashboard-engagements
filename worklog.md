@@ -71,3 +71,31 @@ Stage Summary:
 - Prévisions cumulées table added to Ordonnancement view
 - Unused alerts computation and import removed
 - All changes compile and build successfully
+
+---
+Task ID: 2 (Phase 3)
+Agent: Code Agent
+Task: Add missing CE, Paiements, and Prévisions indicators across ALL views
+
+Work Log:
+- Added `engCE` field and `tauxEngagementCE` computed rate to analysisByEntity, analysisByGroup, and analysisByProgramme useMemo computations
+- Added ce, engCE, paiements, previsions, tauxEngagementCE to detailTableData useMemo at all levels (entity, group, project)
+- Added ce, engCE, paiements, previsions, tauxEngagementCE to allProjectsData useMemo for project view
+- Added new "Row 2b" KPI cards to Overview: Total CE, Engagements CE, Paiements, Reste à payer (4 cards in lg:grid-cols-4)
+- Updated Overview detail table header: now shows Budget CP, Eng. CP, Taux eng. CP, Total CE, Eng. CE, Taux eng. CE, Ordonn., Taux ord., Paiements, Prévisions, Disponible
+- Updated Overview detail table total row with CE, EngCE, Paiements, Prévisions columns
+- Updated EntityRow component types and rendering to include ce, engCE, paiements, previsions, tauxEngagementCE fields
+- Updated GroupRow component types and rendering to include ce, engCE, paiements, previsions, tauxEngagementCE fields
+- Updated renderEntityView: expanded summary cards from 3 to 6 (added Total CE, Engagements CE, Paiements), updated detail table with CE, Paiements, Prévisions columns
+- Updated renderProgramView: expanded summary cards from 3 to 6 (added Total CE, Engagements CE, Paiements), updated detail table with CE, Paiements, Prévisions columns
+- Updated renderProjectView: expanded summary cards from 3 to 6 (added Total CE, Engagements CE, Paiements), updated detail table with CE, Paiements, Prévisions columns
+- All taux columns now use tauxColor() for consistent coloring (>=80 green, >=50 amber, <50 red)
+- Next.js build compiles successfully
+- Dev server running and returning 200
+
+Stage Summary:
+- CE (Crédits d'engagement) data now visible in all views: KPI cards, summary cards, and detail tables
+- Paiements data now visible in all views
+- Prévisions data now visible in entity/program/project detail tables
+- Engagements CE and Taux eng. CE columns added to all tables
+- Consistent column layout across all views: Budget CP | Eng. CP | Taux eng. CP | Total CE | Eng. CE | Taux eng. CE | Ordonn. | Taux ord. | Paiements | Prévisions | Disponible
