@@ -332,6 +332,7 @@ export default function Dashboard() {
       cumulPrevSeptembre: cumulPrev['SEPTEMBRE'],
       cumulPrevOctobre: cumulPrev['OCTOBRE'],
       cumulPrevNovembre: cumulPrev['NOVEMBRE'],
+      cumulPrevDecembre: cumulPrev['DECEMBRE'],
     }
   }, [filteredData])
 
@@ -376,6 +377,7 @@ export default function Dashboard() {
       cumulPrevSeptembre: v.prevByMonth['SEPTEMBRE'] || 0,
       cumulPrevOctobre: v.prevByMonth['OCTOBRE'] || 0,
       cumulPrevNovembre: v.prevByMonth['NOVEMBRE'] || 0,
+      cumulPrevDecembre: v.prevByMonth['DECEMBRE'] || 0,
     })).sort((a, b) => b.cp - a.cp)
   }, [filteredData])
 
@@ -1358,7 +1360,7 @@ export default function Dashboard() {
               </div>
               <div>
                 <CardTitle className="text-sm font-bold text-gray-800">Prévisions d&apos;ordonnancement cumulées par entité</CardTitle>
-                <p className="text-[11px] text-gray-400 mt-0.5">Taux de réalisation = Ordonnancements / Prévisions cumulées</p>
+                <p className="text-[11px] text-gray-400 mt-0.5">Taux = Prévisions d&apos;ordonnancement cumulées / Crédits Total CP</p>
               </div>
             </div>
             <span className="text-[11px] text-gray-400 font-medium">(M DH)</span>
@@ -1370,7 +1372,8 @@ export default function Dashboard() {
               <TableHeader>
                 <TableRow className="bg-teal-50/60">
                   <TableHead className="text-xs font-bold text-teal-800 min-w-[100px]">Entité</TableHead>
-                  <TableHead className="text-xs font-bold text-teal-800 text-right">Ordonn.</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right bg-emerald-50/30">Crédits Total CP</TableHead>
+                  <TableHead className="text-xs font-bold text-violet-700 text-right bg-violet-50/30">Prév. Cumul. Déc.</TableHead>
                   <TableHead className="text-xs font-bold text-teal-700 text-center bg-teal-50/30" colSpan={2}>Fin Juin</TableHead>
                   <TableHead className="text-xs font-bold text-cyan-700 text-center bg-cyan-50/30" colSpan={2}>Fin Septembre</TableHead>
                   <TableHead className="text-xs font-bold text-sky-700 text-center bg-sky-50/30" colSpan={2}>Fin Octobre</TableHead>
@@ -1378,7 +1381,8 @@ export default function Dashboard() {
                 </TableRow>
                 <TableRow className="bg-teal-50/30">
                   <TableHead className="text-[10px] text-gray-500" />
-                  <TableHead className="text-[10px] text-gray-500 text-right" />
+                  <TableHead className="text-[10px] font-semibold text-emerald-600 text-right bg-emerald-50/20">CP</TableHead>
+                  <TableHead className="text-[10px] font-semibold text-violet-600 text-right bg-violet-50/20">Prév.</TableHead>
                   <TableHead className="text-[10px] font-semibold text-teal-600 text-right">Prév.</TableHead>
                   <TableHead className="text-[10px] font-semibold text-teal-600 text-right">Taux</TableHead>
                   <TableHead className="text-[10px] font-semibold text-cyan-600 text-right">Prév.</TableHead>
@@ -1391,14 +1395,15 @@ export default function Dashboard() {
               </TableHeader>
               <TableBody>
                 {analysisByEntity.map(e => {
-                  const tauxJuin = e.cumulPrevJuin > 0 ? (e.ord / e.cumulPrevJuin) * 100 : 0
-                  const tauxSept = e.cumulPrevSeptembre > 0 ? (e.ord / e.cumulPrevSeptembre) * 100 : 0
-                  const tauxOct = e.cumulPrevOctobre > 0 ? (e.ord / e.cumulPrevOctobre) * 100 : 0
-                  const tauxNov = e.cumulPrevNovembre > 0 ? (e.ord / e.cumulPrevNovembre) * 100 : 0
+                  const tauxJuin = e.cp > 0 ? (e.cumulPrevJuin / e.cp) * 100 : 0
+                  const tauxSept = e.cp > 0 ? (e.cumulPrevSeptembre / e.cp) * 100 : 0
+                  const tauxOct = e.cp > 0 ? (e.cumulPrevOctobre / e.cp) * 100 : 0
+                  const tauxNov = e.cp > 0 ? (e.cumulPrevNovembre / e.cp) * 100 : 0
                   return (
                     <TableRow key={e.name} className="hover:bg-teal-50/30 transition-colors">
                       <TableCell className="text-xs font-semibold text-gray-900">{e.name}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right font-medium">{formatMillions(e.ord)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right font-medium bg-emerald-50/10">{formatMillions(e.cp)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right font-medium bg-violet-50/10">{formatMillions(e.cumulPrevDecembre)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right bg-teal-50/20">{formatMillions(e.cumulPrevJuin)}</TableCell>
                       <TableCell className="text-xs text-right bg-teal-50/20">
                         <div className="flex items-center justify-end gap-1">
@@ -1406,9 +1411,9 @@ export default function Dashboard() {
                             <div className={`kpi-progress-bar h-full rounded-full ${tauxJuin >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxJuin >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxJuin, 100)}%` }} />
                           </div>
                           <span className={`text-[10px] font-bold ${tauxColor(tauxJuin)}`}>
-                            {tauxJuin >= 80 ? '✓' : tauxJuin >= 50 ? '⚠' : e.cumulPrevJuin > 0 ? '✗' : '—'}
+                            {tauxJuin >= 80 ? '✓' : tauxJuin >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
                           </span>
-                          <span className={`text-[10px] font-semibold ${tauxColor(tauxJuin)}`}>{e.cumulPrevJuin > 0 ? formatPercent(tauxJuin) : '—'}</span>
+                          <span className={`text-[10px] font-semibold ${tauxColor(tauxJuin)}`}>{e.cp > 0 ? formatPercent(tauxJuin) : '—'}</span>
                         </div>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right bg-cyan-50/20">{formatMillions(e.cumulPrevSeptembre)}</TableCell>
@@ -1418,9 +1423,9 @@ export default function Dashboard() {
                             <div className={`kpi-progress-bar h-full rounded-full ${tauxSept >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxSept >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxSept, 100)}%` }} />
                           </div>
                           <span className={`text-[10px] font-bold ${tauxColor(tauxSept)}`}>
-                            {tauxSept >= 80 ? '✓' : tauxSept >= 50 ? '⚠' : e.cumulPrevSeptembre > 0 ? '✗' : '—'}
+                            {tauxSept >= 80 ? '✓' : tauxSept >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
                           </span>
-                          <span className={`text-[10px] font-semibold ${tauxColor(tauxSept)}`}>{e.cumulPrevSeptembre > 0 ? formatPercent(tauxSept) : '—'}</span>
+                          <span className={`text-[10px] font-semibold ${tauxColor(tauxSept)}`}>{e.cp > 0 ? formatPercent(tauxSept) : '—'}</span>
                         </div>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right bg-sky-50/20">{formatMillions(e.cumulPrevOctobre)}</TableCell>
@@ -1430,9 +1435,9 @@ export default function Dashboard() {
                             <div className={`kpi-progress-bar h-full rounded-full ${tauxOct >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxOct >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxOct, 100)}%` }} />
                           </div>
                           <span className={`text-[10px] font-bold ${tauxColor(tauxOct)}`}>
-                            {tauxOct >= 80 ? '✓' : tauxOct >= 50 ? '⚠' : e.cumulPrevOctobre > 0 ? '✗' : '—'}
+                            {tauxOct >= 80 ? '✓' : tauxOct >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
                           </span>
-                          <span className={`text-[10px] font-semibold ${tauxColor(tauxOct)}`}>{e.cumulPrevOctobre > 0 ? formatPercent(tauxOct) : '—'}</span>
+                          <span className={`text-[10px] font-semibold ${tauxColor(tauxOct)}`}>{e.cp > 0 ? formatPercent(tauxOct) : '—'}</span>
                         </div>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right bg-indigo-50/20">{formatMillions(e.cumulPrevNovembre)}</TableCell>
@@ -1442,9 +1447,9 @@ export default function Dashboard() {
                             <div className={`kpi-progress-bar h-full rounded-full ${tauxNov >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxNov >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxNov, 100)}%` }} />
                           </div>
                           <span className={`text-[10px] font-bold ${tauxColor(tauxNov)}`}>
-                            {tauxNov >= 80 ? '✓' : tauxNov >= 50 ? '⚠' : e.cumulPrevNovembre > 0 ? '✗' : '—'}
+                            {tauxNov >= 80 ? '✓' : tauxNov >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
                           </span>
-                          <span className={`text-[10px] font-semibold ${tauxColor(tauxNov)}`}>{e.cumulPrevNovembre > 0 ? formatPercent(tauxNov) : '—'}</span>
+                          <span className={`text-[10px] font-semibold ${tauxColor(tauxNov)}`}>{e.cp > 0 ? formatPercent(tauxNov) : '—'}</span>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -1453,41 +1458,42 @@ export default function Dashboard() {
                 {/* Total row */}
                 <TableRow className="bg-gradient-to-r from-teal-50/60 to-cyan-50/60 font-bold">
                   <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
-                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalOrd)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right bg-emerald-50/20">{formatMillions(kpis.totalCP)}</TableCell>
+                  <TableCell className="text-xs font-bold text-gray-900 text-right bg-violet-50/20">{formatMillions(kpis.cumulPrevDecembre)}</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right bg-teal-50/30">{formatMillions(kpis.cumulPrevJuin)}</TableCell>
                   <TableCell className="text-xs text-right bg-teal-50/30">
                     <div className="flex items-center justify-end gap-1">
-                      <span className={`text-[10px] font-bold ${tauxColor(kpis.cumulPrevJuin > 0 ? (kpis.totalOrd / kpis.cumulPrevJuin) * 100 : 0)}`}>
-                        {(() => { const t = kpis.cumulPrevJuin > 0 ? (kpis.totalOrd / kpis.cumulPrevJuin) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
+                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevJuin / kpis.totalCP) * 100 : 0)}`}>
+                        {(() => { const t = kpis.totalCP > 0 ? (kpis.cumulPrevJuin / kpis.totalCP) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
                       </span>
-                      <span className={`text-[10px] font-bold ${tauxColor(kpis.cumulPrevJuin > 0 ? (kpis.totalOrd / kpis.cumulPrevJuin) * 100 : 0)}`}>{kpis.cumulPrevJuin > 0 ? formatPercent((kpis.totalOrd / kpis.cumulPrevJuin) * 100) : '—'}</span>
+                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevJuin / kpis.totalCP) * 100 : 0)}`}>{kpis.totalCP > 0 ? formatPercent((kpis.cumulPrevJuin / kpis.totalCP) * 100) : '—'}</span>
                     </div>
                   </TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right bg-cyan-50/30">{formatMillions(kpis.cumulPrevSeptembre)}</TableCell>
                   <TableCell className="text-xs text-right bg-cyan-50/30">
                     <div className="flex items-center justify-end gap-1">
-                      <span className={`text-[10px] font-bold ${tauxColor(kpis.cumulPrevSeptembre > 0 ? (kpis.totalOrd / kpis.cumulPrevSeptembre) * 100 : 0)}`}>
-                        {(() => { const t = kpis.cumulPrevSeptembre > 0 ? (kpis.totalOrd / kpis.cumulPrevSeptembre) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
+                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevSeptembre / kpis.totalCP) * 100 : 0)}`}>
+                        {(() => { const t = kpis.totalCP > 0 ? (kpis.cumulPrevSeptembre / kpis.totalCP) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
                       </span>
-                      <span className={`text-[10px] font-bold ${tauxColor(kpis.cumulPrevSeptembre > 0 ? (kpis.totalOrd / kpis.cumulPrevSeptembre) * 100 : 0)}`}>{kpis.cumulPrevSeptembre > 0 ? formatPercent((kpis.totalOrd / kpis.cumulPrevSeptembre) * 100) : '—'}</span>
+                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevSeptembre / kpis.totalCP) * 100 : 0)}`}>{kpis.totalCP > 0 ? formatPercent((kpis.cumulPrevSeptembre / kpis.totalCP) * 100) : '—'}</span>
                     </div>
                   </TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right bg-sky-50/30">{formatMillions(kpis.cumulPrevOctobre)}</TableCell>
                   <TableCell className="text-xs text-right bg-sky-50/30">
                     <div className="flex items-center justify-end gap-1">
-                      <span className={`text-[10px] font-bold ${tauxColor(kpis.cumulPrevOctobre > 0 ? (kpis.totalOrd / kpis.cumulPrevOctobre) * 100 : 0)}`}>
-                        {(() => { const t = kpis.cumulPrevOctobre > 0 ? (kpis.totalOrd / kpis.cumulPrevOctobre) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
+                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevOctobre / kpis.totalCP) * 100 : 0)}`}>
+                        {(() => { const t = kpis.totalCP > 0 ? (kpis.cumulPrevOctobre / kpis.totalCP) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
                       </span>
-                      <span className={`text-[10px] font-bold ${tauxColor(kpis.cumulPrevOctobre > 0 ? (kpis.totalOrd / kpis.cumulPrevOctobre) * 100 : 0)}`}>{kpis.cumulPrevOctobre > 0 ? formatPercent((kpis.totalOrd / kpis.cumulPrevOctobre) * 100) : '—'}</span>
+                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevOctobre / kpis.totalCP) * 100 : 0)}`}>{kpis.totalCP > 0 ? formatPercent((kpis.cumulPrevOctobre / kpis.totalCP) * 100) : '—'}</span>
                     </div>
                   </TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right bg-indigo-50/30">{formatMillions(kpis.cumulPrevNovembre)}</TableCell>
                   <TableCell className="text-xs text-right bg-indigo-50/30">
                     <div className="flex items-center justify-end gap-1">
-                      <span className={`text-[10px] font-bold ${tauxColor(kpis.cumulPrevNovembre > 0 ? (kpis.totalOrd / kpis.cumulPrevNovembre) * 100 : 0)}`}>
-                        {(() => { const t = kpis.cumulPrevNovembre > 0 ? (kpis.totalOrd / kpis.cumulPrevNovembre) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
+                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevNovembre / kpis.totalCP) * 100 : 0)}`}>
+                        {(() => { const t = kpis.totalCP > 0 ? (kpis.cumulPrevNovembre / kpis.totalCP) * 100 : 0; return t >= 80 ? '✓' : t >= 50 ? '⚠' : '✗' })()}
                       </span>
-                      <span className={`text-[10px] font-bold ${tauxColor(kpis.cumulPrevNovembre > 0 ? (kpis.totalOrd / kpis.cumulPrevNovembre) * 100 : 0)}`}>{kpis.cumulPrevNovembre > 0 ? formatPercent((kpis.totalOrd / kpis.cumulPrevNovembre) * 100) : '—'}</span>
+                      <span className={`text-[10px] font-bold ${tauxColor(kpis.totalCP > 0 ? (kpis.cumulPrevNovembre / kpis.totalCP) * 100 : 0)}`}>{kpis.totalCP > 0 ? formatPercent((kpis.cumulPrevNovembre / kpis.totalCP) * 100) : '—'}</span>
                     </div>
                   </TableCell>
                 </TableRow>
