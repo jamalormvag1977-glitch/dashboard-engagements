@@ -446,10 +446,10 @@ export default function Dashboard() {
   // Analysis by Programme (row.Programme field - actual project names)
   const analysisByProgramme = useMemo(() => {
     const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
-    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number; prevByMonth: Record<string, number> }> = {}
+    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; engReports: number; engConsolides: number; engNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number; prevByMonth: Record<string, number> }> = {}
     filteredData.forEach(row => {
       const g = row.Programme
-      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0, prevByMonth: {} }
+      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, engReports: 0, engConsolides: 0, engNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0, prevByMonth: {} }
       groups[g].cp += row['TOTAL CP'] || 0
       groups[g].ce += row['TOTAL CE'] || 0
       groups[g].engCP += row['ENG CP TOTAL'] || 0
@@ -461,6 +461,9 @@ export default function Dashboard() {
       groups[g].cpReports += row.REPORTS || 0
       groups[g].cpConsolides += row.CONSOLIDES || 0
       groups[g].cpNouveaux += row.NOUVEAUX || 0
+      groups[g].engReports += row['ENG REPORT'] || 0
+      groups[g].engConsolides += row['ENG CONSOLIDES'] || 0
+      groups[g].engNouveaux += row['ENG NOUVEAUX'] || 0
       groups[g].ordReports += row['ORD REPORTS'] || 0
       groups[g].ordConsolides += row['ORD CONSOLIDES'] || 0
       groups[g].ordNouveaux += row['ORD NOUVEAUX'] || 0
@@ -2159,7 +2162,248 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ═══════════ SECTION 3 : INDICATEURS PAR PROJET ═══════════ */}
+        {/* ═══════════ SECTION 3 : ANALYSE PAR PROGRAMME ═══════════ */}
+        {(() => {
+          const progColors = [
+            { bg: 'from-indigo-500 to-blue-600', light: 'bg-indigo-50', bar: 'from-indigo-400 to-indigo-600', accent: 'text-indigo-700', accentLight: 'text-indigo-500' },
+            { bg: 'from-rose-500 to-pink-600', light: 'bg-rose-50', bar: 'from-rose-400 to-rose-600', accent: 'text-rose-700', accentLight: 'text-rose-500' },
+          ]
+          const renderMiniBar = (value: number, max: number, colorClass: string) => {
+            const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0
+            return (
+              <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className={`h-full rounded-full bg-gradient-to-r ${colorClass}`} style={{ width: `${pct}%` }} />
+              </div>
+            )
+          }
+          const totalBudget = analysisByProgramme.reduce((s, p) => s + p.cp, 0)
+          return (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-5 rounded-full bg-gradient-to-b from-indigo-500 to-purple-600" />
+                <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Analyse par programme</h3>
+                <span className="text-[11px] text-gray-400 font-medium">({analysisByProgramme.length} programmes)</span>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {analysisByProgramme.map((prog, idx) => {
+                  const color = progColors[idx % progColors.length]
+                  const pctBudget = totalBudget > 0 ? (prog.cp / totalBudget) * 100 : 0
+                  const tauxEngReport = prog.cpReports > 0 ? (prog.engReports / prog.cpReports) * 100 : 0
+                  const tauxEngConsolide = prog.cpConsolides > 0 ? (prog.engConsolides / prog.cpConsolides) * 100 : 0
+                  const tauxEngNouveau = prog.cpNouveaux > 0 ? (prog.engNouveaux / prog.cpNouveaux) * 100 : 0
+                  const tauxOrdReport = prog.cpReports > 0 ? (prog.ordReports / prog.cpReports) * 100 : 0
+                  const tauxOrdConsolide = prog.cpConsolides > 0 ? (prog.ordConsolides / prog.cpConsolides) * 100 : 0
+                  const tauxOrdNouveau = prog.cpNouveaux > 0 ? (prog.ordNouveaux / prog.cpNouveaux) * 100 : 0
+                  return (
+                    <div key={prog.name} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                      {/* Programme header */}
+                      <div className={`bg-gradient-to-r ${color.bg} px-4 py-3 flex items-center justify-between`}>
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                            <Landmark className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-white leading-tight">{prog.name}</h4>
+                            <p className="text-[10px] text-white/70 font-medium">{prog.count} lignes</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-lg font-black text-white">{formatMillions(prog.cp)}</p>
+                          <p className="text-[10px] text-white/70 font-medium">MDh Budget</p>
+                        </div>
+                      </div>
+
+                      {/* Indicators body */}
+                      <div className="p-4 space-y-3">
+                        {/* Row 1: Crédits breakdown */}
+                        <div>
+                          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Crédits</p>
+                          <div className="grid grid-cols-3 gap-2">
+                            <div className={`${color.light} rounded-lg p-2`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Reports</span>
+                                <span className="text-[10px] font-bold text-gray-700">{formatMillions(prog.cpReports)}</span>
+                              </div>
+                              <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${prog.cp > 0 ? Math.min((prog.cpReports / prog.cp) * 100, 100) : 0}%` }} />
+                              </div>
+                              <p className="text-[9px] text-gray-400 mt-0.5">{prog.cp > 0 ? formatPercent((prog.cpReports / prog.cp) * 100) : '0%'}</p>
+                            </div>
+                            <div className={`${color.light} rounded-lg p-2`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Consolidés</span>
+                                <span className="text-[10px] font-bold text-gray-700">{formatMillions(prog.cpConsolides)}</span>
+                              </div>
+                              <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${prog.cp > 0 ? Math.min((prog.cpConsolides / prog.cp) * 100, 100) : 0}%` }} />
+                              </div>
+                              <p className="text-[9px] text-gray-400 mt-0.5">{prog.cp > 0 ? formatPercent((prog.cpConsolides / prog.cp) * 100) : '0%'}</p>
+                            </div>
+                            <div className={`${color.light} rounded-lg p-2`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Nouveaux</span>
+                                <span className="text-[10px] font-bold text-gray-700">{formatMillions(prog.cpNouveaux)}</span>
+                              </div>
+                              <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${prog.cp > 0 ? Math.min((prog.cpNouveaux / prog.cp) * 100, 100) : 0}%` }} />
+                              </div>
+                              <p className="text-[9px] text-gray-400 mt-0.5">{prog.cp > 0 ? formatPercent((prog.cpNouveaux / prog.cp) * 100) : '0%'}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Row 2: Taux d'engagement */}
+                        <div>
+                          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Taux d&apos;engagement</p>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className={`${color.light} rounded-lg p-2.5`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Eng. CP</span>
+                                <span className={`text-xs font-bold ${tauxColor(prog.tauxEngagement)}`}>{formatPercent(prog.tauxEngagement)}</span>
+                              </div>
+                              {renderMiniBar(prog.tauxEngagement, 100, color.bar)}
+                              <p className="text-[9px] text-gray-400 mt-0.5">{formatMillions(prog.engCP)} M DH</p>
+                            </div>
+                            <div className={`${color.light} rounded-lg p-2.5`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Eng. CE</span>
+                                <span className={`text-xs font-bold ${tauxColor(prog.tauxEngagementCE)}`}>{prog.ce > 0 ? formatPercent(prog.tauxEngagementCE) : '0%'}</span>
+                              </div>
+                              {renderMiniBar(prog.tauxEngagementCE, 100, color.bar)}
+                              <p className="text-[9px] text-gray-400 mt-0.5">{formatMillions(prog.engCE)} M DH</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Row 3: Engagement par type */}
+                        <div>
+                          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Engagement par type</p>
+                          <div className="grid grid-cols-3 gap-2">
+                            <div className={`${color.light} rounded-lg p-2`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Sur Report</span>
+                                <span className={`text-[10px] font-bold ${tauxColor(tauxEngReport)}`}>{formatPercent(tauxEngReport)}</span>
+                              </div>
+                              <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${Math.min(tauxEngReport, 100)}%` }} />
+                              </div>
+                              <p className="text-[9px] text-gray-400 mt-0.5">{formatMillions(prog.engReports)} M DH</p>
+                            </div>
+                            <div className={`${color.light} rounded-lg p-2`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Sur Consol.</span>
+                                <span className={`text-[10px] font-bold ${tauxColor(tauxEngConsolide)}`}>{formatPercent(tauxEngConsolide)}</span>
+                              </div>
+                              <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${Math.min(tauxEngConsolide, 100)}%` }} />
+                              </div>
+                              <p className="text-[9px] text-gray-400 mt-0.5">{formatMillions(prog.engConsolides)} M DH</p>
+                            </div>
+                            <div className={`${color.light} rounded-lg p-2`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Sur Nouv.</span>
+                                <span className={`text-[10px] font-bold ${tauxColor(tauxEngNouveau)}`}>{formatPercent(tauxEngNouveau)}</span>
+                              </div>
+                              <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${Math.min(tauxEngNouveau, 100)}%` }} />
+                              </div>
+                              <p className="text-[9px] text-gray-400 mt-0.5">{formatMillions(prog.engNouveaux)} M DH</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Row 4: Ordonnancement */}
+                        <div>
+                          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Ordonnancement</p>
+                          <div className="grid grid-cols-2 gap-3 mb-2">
+                            <div className={`${color.light} rounded-lg p-2.5`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Taux ord. CP</span>
+                                <span className={`text-xs font-bold ${tauxColor(prog.tauxOrdonnement)}`}>{formatPercent(prog.tauxOrdonnement)}</span>
+                              </div>
+                              {renderMiniBar(prog.tauxOrdonnement, 100, color.bar)}
+                              <p className="text-[9px] text-gray-400 mt-0.5">{formatMillions(prog.ord)} M DH</p>
+                            </div>
+                            <div className={`${color.light} rounded-lg p-2.5`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Taux paiement</span>
+                                <span className={`text-xs font-bold ${tauxColor(prog.tauxPaiement)}`}>{formatPercent(prog.tauxPaiement)}</span>
+                              </div>
+                              {renderMiniBar(prog.tauxPaiement, 100, color.bar)}
+                              <p className="text-[9px] text-gray-400 mt-0.5">{formatMillions(prog.paiements)} M DH</p>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-3 gap-2">
+                            <div className={`${color.light} rounded-lg p-2`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Ord/Report</span>
+                                <span className={`text-[10px] font-bold ${tauxColor(tauxOrdReport)}`}>{formatPercent(tauxOrdReport)}</span>
+                              </div>
+                              <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${Math.min(tauxOrdReport, 100)}%` }} />
+                              </div>
+                            </div>
+                            <div className={`${color.light} rounded-lg p-2`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Ord/Consol.</span>
+                                <span className={`text-[10px] font-bold ${tauxColor(tauxOrdConsolide)}`}>{formatPercent(tauxOrdConsolide)}</span>
+                              </div>
+                              <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${Math.min(tauxOrdConsolide, 100)}%` }} />
+                              </div>
+                            </div>
+                            <div className={`${color.light} rounded-lg p-2`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Ord/Nouv.</span>
+                                <span className={`text-[10px] font-bold ${tauxColor(tauxOrdNouveau)}`}>{formatPercent(tauxOrdNouveau)}</span>
+                              </div>
+                              <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${Math.min(tauxOrdNouveau, 100)}%` }} />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Row 5: Résumé financier */}
+                        <div className="grid grid-cols-4 gap-2 pt-2 border-t border-gray-100">
+                          <div className="text-center">
+                            <p className="text-[10px] text-gray-400 font-medium">Total CP</p>
+                            <p className="text-xs font-bold text-gray-800">{formatMillions(prog.cp)}</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-[10px] text-gray-400 font-medium">Total CE</p>
+                            <p className="text-xs font-bold text-gray-800">{formatMillions(prog.ce)}</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-[10px] text-gray-400 font-medium">Prévisions</p>
+                            <p className="text-xs font-bold text-gray-800">{formatMillions(prog.previsions)}</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-[10px] text-gray-400 font-medium">Disponible</p>
+                            <p className={`text-xs font-bold ${prog.disponible >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>{formatMillions(prog.disponible)}</p>
+                          </div>
+                        </div>
+
+                        {/* Row 6: Part du budget */}
+                        <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
+                          <span className="text-[10px] text-gray-400 font-medium">Part du budget</span>
+                          <div className="flex-1">
+                            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${Math.min(pctBudget, 100)}%` }} />
+                            </div>
+                          </div>
+                          <span className="text-[10px] font-bold text-gray-600">{pctBudget.toFixed(1)}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })()}
+
+        {/* ═══════════ SECTION 4 : INDICATEURS PAR PROJET ═══════════ */}
         {(() => {
           const projectColors = [
             { bg: 'from-teal-500 to-emerald-600', light: 'bg-teal-50', bar: 'from-teal-400 to-teal-600' },
