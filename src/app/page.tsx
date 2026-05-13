@@ -2342,9 +2342,7 @@ export default function Dashboard() {
     const totalProjects = filteredProjects.length
     const totalBudget = filteredProjects.reduce((s, p) => s + p.cp, 0)
     const avgEng = totalProjects > 0 ? filteredProjects.reduce((s, p) => s + p.tauxEngagement, 0) / totalProjects : 0
-    const PER_PAGE = 15
-    const pProjects = paginate(filteredProjects, projectPage, PER_PAGE) as typeof filteredProjects
-    const tPages = totalPages(filteredProjects.length, PER_PAGE)
+
 
     return (
       <>
@@ -2755,97 +2753,6 @@ export default function Dashboard() {
           )
         })()}
 
-        {/* Search */}
-        <div className="relative w-full sm:w-[300px]">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input
-            placeholder="Filtrer les programmes par nom..."
-            value={projectSearch}
-            onChange={e => { setProjectSearch(e.target.value); setProjectPage(1) }}
-            className="pl-8 bg-white h-9 text-sm"
-          />
-        </div>
-
-        {/* Projects Table */}
-        <Card className="border border-gray-100 shadow-sm">
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">Programme</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Paiements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Prévisions</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pProjects.map((p, idx) => (
-                    <TableRow key={`${p.name}-${p.projet}-${p.entite}-${idx}`} className="hover:bg-gray-50">
-                      <TableCell className="text-xs font-medium text-gray-900 max-w-[200px] truncate">{p.name}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{p.projet || 'Non classé'}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{p.entite}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.cp)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.engCP)}</TableCell>
-                      <TableCell className="text-xs text-right">
-                        <span className={tauxColor(p.tauxEngagement)}>{formatPercent(p.tauxEngagement)}</span>
-                      </TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.ce)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.engCE)}</TableCell>
-                      <TableCell className="text-xs text-right">
-                        <span className={tauxColor(p.tauxEngagementCE)}>{p.ce > 0 ? formatPercent(p.tauxEngagementCE) : '0,0%'}</span>
-                      </TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.ord)}</TableCell>
-                      <TableCell className="text-xs text-right">
-                        <span className={tauxColor(p.tauxOrdonnement)}>{formatPercent(p.tauxOrdonnement)}</span>
-                      </TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.paiements)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.previsions)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(p.disponible)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Pagination */}
-        {tPages > 1 && (
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-500">
-              {((projectPage - 1) * PER_PAGE) + 1} - {Math.min(projectPage * PER_PAGE, filteredProjects.length)} sur {filteredProjects.length}
-            </p>
-            <div className="flex items-center gap-1">
-              <Button variant="outline" size="sm" className="h-8 w-8 p-0" disabled={projectPage === 1} onClick={() => setProjectPage(p => p - 1)}>
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              {Array.from({ length: tPages }, (_, i) => i + 1)
-                .filter(p => p === 1 || p === tPages || Math.abs(p - projectPage) <= 1)
-                .map((p, i, arr) => (
-                  <span key={p} className="flex items-center">
-                    {i > 0 && arr[i - 1] !== p - 1 && <span className="text-gray-400 text-xs px-1">...</span>}
-                    <Button variant={p === projectPage ? 'default' : 'outline'} size="sm" className={`h-8 w-8 p-0 text-xs ${p === projectPage ? 'bg-emerald-600 hover:bg-emerald-700' : ''}`} onClick={() => setProjectPage(p)}>
-                      {p}
-                    </Button>
-                  </span>
-                ))}
-              <Button variant="outline" size="sm" className="h-8 w-8 p-0" disabled={projectPage === tPages} onClick={() => setProjectPage(p => p + 1)}>
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        )}
       </>
     )
   }
