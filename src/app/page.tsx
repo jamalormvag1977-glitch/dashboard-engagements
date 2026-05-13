@@ -307,7 +307,7 @@ export default function Dashboard() {
     const totalEngNouveaux = filteredData.reduce((sum, r) => sum + (r['ENG NOUVEAUX'] || 0), 0)
     const tauxEngagement = totalCP > 0 ? (totalEngCP / totalCP) * 100 : 0
     const tauxPaiement = totalEngCP > 0 ? (totalPaiements / totalEngCP) * 100 : 0
-    const tauxOrdonnement = totalEngCP > 0 ? (totalOrd / totalEngCP) * 100 : 0
+    const tauxOrdonnement = totalCP > 0 ? (totalOrd / totalCP) * 100 : 0
     const disponible = totalCP - totalEngCP
 
     // Cumulative forecasts by month
@@ -377,7 +377,7 @@ export default function Dashboard() {
       ordReports: v.ordReports, ordConsolides: v.ordConsolides, ordNouveaux: v.ordNouveaux,
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
       tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
-      tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
+      tauxOrdonnement: v.cp > 0 ? (v.ord / v.cp) * 100 : 0,
       tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
       disponible: v.cp - v.engCP,
       cumulPrevJuin: v.prevByMonth['JUIN'] || 0,
@@ -427,7 +427,7 @@ export default function Dashboard() {
       ...v,
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
       tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
-      tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
+      tauxOrdonnement: v.cp > 0 ? (v.ord / v.cp) * 100 : 0,
       tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
       disponible: v.cp - v.engCP,
       cumulPrevJuin: v.prevByMonth['JUIN'] || 0,
@@ -481,7 +481,7 @@ export default function Dashboard() {
       ...v,
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
       tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
-      tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
+      tauxOrdonnement: v.cp > 0 ? (v.ord / v.cp) * 100 : 0,
       tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
       disponible: v.cp - v.engCP,
       cumulPrevJuin: v.prevByMonth['JUIN'] || 0,
@@ -504,7 +504,7 @@ export default function Dashboard() {
         engCP: r['ENG CP TOTAL'] || 0,
         ord: r['ORD TOTAL'] || 0,
         tauxEngagement: (r['TOTAL CP'] || 0) > 0 ? ((r['ENG CP TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
-        tauxOrdonnement: (r['ENG CP TOTAL'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['ENG CP TOTAL'] || 0)) * 100 : 0,
+        tauxOrdonnement: (r['TOTAL CP'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
         disponible: (r['TOTAL CP'] || 0) - (r['ENG CP TOTAL'] || 0),
       }))
   }, [filteredData])
@@ -595,7 +595,7 @@ export default function Dashboard() {
       name,
       ...v,
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
-      tauxOrdonnement: v.engCP > 0 ? (v.ord / v.engCP) * 100 : 0,
+      tauxOrdonnement: v.cp > 0 ? (v.ord / v.cp) * 100 : 0,
     })).sort((a, b) => b.cp - a.cp)
   }, [filteredData])
 
@@ -640,7 +640,7 @@ export default function Dashboard() {
           previsions: r['TOTAL PREV'] || 0,
           tauxEngagement: (r['TOTAL CP'] || 0) > 0 ? ((r['ENG CP TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
           tauxEngagementCE: (r['TOTAL CE'] || 0) > 0 ? ((r['ENG CE ULT'] || 0) / (r['TOTAL CE'] || 0)) * 100 : 0,
-          tauxOrdonnement: (r['ENG CP TOTAL'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['ENG CP TOTAL'] || 0)) * 100 : 0,
+          tauxOrdonnement: (r['TOTAL CP'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
           disponible: (r['TOTAL CP'] || 0) - (r['ENG CP TOTAL'] || 0),
         }))
 
@@ -655,7 +655,7 @@ export default function Dashboard() {
           previsions: groupPrevisions,
           tauxEngagement: groupCP > 0 ? (groupEngCP / groupCP) * 100 : 0,
           tauxEngagementCE: groupCE > 0 ? (groupEngCE / groupCE) * 100 : 0,
-          tauxOrdonnement: groupEngCP > 0 ? (groupOrd / groupEngCP) * 100 : 0,
+          tauxOrdonnement: groupCP > 0 ? (groupOrd / groupCP) * 100 : 0,
           disponible: groupCP - groupEngCP,
           projects,
         }
@@ -672,7 +672,7 @@ export default function Dashboard() {
         previsions: entityPrevisions,
         tauxEngagement: entityCP > 0 ? (entityEngCP / entityCP) * 100 : 0,
         tauxEngagementCE: entityCE > 0 ? (entityEngCE / entityCE) * 100 : 0,
-        tauxOrdonnement: entityEngCP > 0 ? (entityOrd / entityEngCP) * 100 : 0,
+        tauxOrdonnement: entityCP > 0 ? (entityOrd / entityCP) * 100 : 0,
         disponible: entityCP - entityEngCP,
         groups: groupsData,
       }
@@ -705,7 +705,7 @@ export default function Dashboard() {
         previsions: r['TOTAL PREV'] || 0,
         tauxEngagement: (r['TOTAL CP'] || 0) > 0 ? ((r['ENG CP TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
         tauxEngagementCE: (r['TOTAL CE'] || 0) > 0 ? ((r['ENG CE ULT'] || 0) / (r['TOTAL CE'] || 0)) * 100 : 0,
-        tauxOrdonnement: (r['ENG CP TOTAL'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['ENG CP TOTAL'] || 0)) * 100 : 0,
+        tauxOrdonnement: (r['TOTAL CP'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
         disponible: (r['TOTAL CP'] || 0) - (r['ENG CP TOTAL'] || 0),
       }))
   }, [filteredData])
@@ -749,7 +749,7 @@ export default function Dashboard() {
         ordConsolides: r['ORD CONSOLIDES'] || 0,
         ordNouveaux: r['ORD NOUVEAUX'] || 0,
         ordTotal: r['ORD TOTAL'] || 0,
-        tauxOrdonnement: (r['ENG CP TOTAL'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['ENG CP TOTAL'] || 0)) * 100 : 0,
+        tauxOrdonnement: (r['TOTAL CP'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
       }))
   }, [filteredData])
 
@@ -1920,7 +1920,7 @@ export default function Dashboard() {
                     </TableCell>
                     <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
                     <TableCell className="text-xs font-bold text-right">
-                      <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
+                      <span className={tauxColor(totCP > 0 ? (totOrd / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOrd / totCP) * 100 : 0)}</span>
                     </TableCell>
                     <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiements)}</TableCell>
                     <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPrevisions)}</TableCell>
@@ -3105,7 +3105,7 @@ export default function Dashboard() {
   const renderOrdonnancementsView = () => {
     const totalOrd = ordonnancementLines.reduce((s, r) => s + r.ordTotal, 0)
     const nbOrd = ordonnancementLines.length
-    const tauxGlobal = kpis.totalEngCP > 0 ? (totalOrd / kpis.totalEngCP) * 100 : 0
+    const tauxGlobal = kpis.totalCP > 0 ? (totalOrd / kpis.totalCP) * 100 : 0
     const PER_PAGE = 15
     const pLines = paginate(ordonnancementLines, ordPage, PER_PAGE) as typeof ordonnancementLines
     const tPages = totalPages(ordonnancementLines.length, PER_PAGE)
@@ -3333,7 +3333,7 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
                           <TableCell className="text-xs font-bold text-right">
-                            <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
+                            <span className={tauxColor(totCP > 0 ? (totOrd / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOrd / totCP) * 100 : 0)}</span>
                           </TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiements)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPrevisions)}</TableCell>
@@ -3435,7 +3435,7 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
                           <TableCell className="text-xs font-bold text-right">
-                            <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
+                            <span className={tauxColor(totCP > 0 ? (totOrd / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOrd / totCP) * 100 : 0)}</span>
                           </TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiements)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPrevisions)}</TableCell>
@@ -3537,7 +3537,7 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrd)}</TableCell>
                           <TableCell className="text-xs font-bold text-right">
-                            <span className={tauxColor(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}>{formatPercent(totEngCP > 0 ? (totOrd / totEngCP) * 100 : 0)}</span>
+                            <span className={tauxColor(totCP > 0 ? (totOrd / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOrd / totCP) * 100 : 0)}</span>
                           </TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiements)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPrevisions)}</TableCell>
