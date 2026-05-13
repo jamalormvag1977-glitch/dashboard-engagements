@@ -304,6 +304,7 @@ export default function Dashboard() {
     const totalOrdReports = filteredData.reduce((sum, r) => sum + (r['ORD REPORTS'] || 0), 0)
     const totalOrdNouveaux = filteredData.reduce((sum, r) => sum + (r['ORD NOUVEAUX'] || 0), 0)
     const totalEngReports = filteredData.reduce((sum, r) => sum + (r['ENG REPORT'] || 0), 0)
+    const totalEngConsolides = filteredData.reduce((sum, r) => sum + (r['ENG CONSOLIDES'] || 0), 0)
     const totalEngNouveaux = filteredData.reduce((sum, r) => sum + (r['ENG NOUVEAUX'] || 0), 0)
     const tauxEngagement = totalCP > 0 ? (totalEngCP / totalCP) * 100 : 0
     const tauxPaiement = totalEngCP > 0 ? (totalPaiements / totalEngCP) * 100 : 0
@@ -325,7 +326,7 @@ export default function Dashboard() {
     return {
       totalCP, totalCE, totalPaiements, totalPrevisions, totalEngCP, totalEngCE,
       totalReports, totalConsolides, totalNouveaux, totalOrd, totalOrdReports, totalOrdNouveaux,
-      totalEngReports, totalEngNouveaux, count: filteredData.length,
+      totalEngReports, totalEngConsolides, totalEngNouveaux, count: filteredData.length,
       tauxEngagement, tauxPaiement, tauxOrdonnement, disponible,
       cumulPrevJuin: cumulPrev['JUIN'],
       cumulPrevSeptembre: cumulPrev['SEPTEMBRE'],
@@ -904,7 +905,7 @@ export default function Dashboard() {
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Crédits</h3>
           
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Crédits Reportés */}
           <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
             <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
@@ -917,7 +918,24 @@ export default function Dashboard() {
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalReports)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
-                {kpis.totalCP > 0 ? formatPercent((kpis.totalReports / kpis.totalCP) * 100) : '0,0%'} du budget total
+                {kpis.totalCP > 0 ? formatPercent((kpis.totalReports / kpis.totalCP) * 100) : '0%'} du budget total
+              </p>
+            </div>
+          </div>
+
+          {/* Crédits Consolidés */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-orange-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
+                  <Database className="w-5 h-5 text-amber-600" />
+                </div>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalConsolides)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {kpis.totalCP > 0 ? formatPercent((kpis.totalConsolides / kpis.totalCP) * 100) : '0%'} du budget total
               </p>
             </div>
           </div>
@@ -934,7 +952,7 @@ export default function Dashboard() {
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalNouveaux)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
-                {kpis.totalCP > 0 ? formatPercent((kpis.totalNouveaux / kpis.totalCP) * 100) : '0,0%'} du budget total
+                {kpis.totalCP > 0 ? formatPercent((kpis.totalNouveaux / kpis.totalCP) * 100) : '0%'} du budget total
               </p>
             </div>
           </div>
@@ -978,7 +996,58 @@ export default function Dashboard() {
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Engagements</h3>
           
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+          {/* Engagement sur Report */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
+                  <RotateCcw className="w-5 h-5 text-blue-600" />
+                </div>
+                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Report</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngReports)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {kpis.totalEngCP > 0 ? formatPercent((kpis.totalEngReports / kpis.totalEngCP) * 100) : '0%'} du total engagé
+              </p>
+            </div>
+          </div>
+
+          {/* Engagement sur Consolidés */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-orange-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
+                  <Database className="w-5 h-5 text-amber-600" />
+                </div>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngConsolides)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {kpis.totalEngCP > 0 ? formatPercent((kpis.totalEngConsolides / kpis.totalEngCP) * 100) : '0%'} du total engagé
+              </p>
+            </div>
+          </div>
+
+          {/* Engagement sur Nouveaux */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
+                  <TrendingUp className="w-5 h-5 text-emerald-600" />
+                </div>
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngNouveaux)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {kpis.totalEngCP > 0 ? formatPercent((kpis.totalEngNouveaux / kpis.totalEngCP) * 100) : '0%'} du total engagé
+              </p>
+            </div>
+          </div>
+
           {/* Engagement CP */}
           <div className="kpi-card-premium rounded-xl border border-emerald-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)' }}>
             <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-teal-500" />
