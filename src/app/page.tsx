@@ -2778,11 +2778,11 @@ export default function Dashboard() {
                     <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Sur Report</TableHead>
                     <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Sur Consol.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Sur Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Total Ord.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Taux ord.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Ord/Report</TableHead>
                     <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Ord/Consol.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Ord/Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Total Ord.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Taux ord.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-gray-600 text-right">Paiements</TableHead>
                     <TableHead className="text-[10px] font-semibold text-gray-600 text-right">Prévisions</TableHead>
                     <TableHead className="text-[10px] font-semibold text-gray-600 text-right">Disponible</TableHead>
@@ -2807,11 +2807,11 @@ export default function Dashboard() {
                         <TableCell className="text-xs text-right"><span className={tauxColor(tauxEngReport)}>{formatPercent(tauxEngReport)}</span></TableCell>
                         <TableCell className="text-xs text-right"><span className={tauxColor(tauxEngConsolide)}>{formatPercent(tauxEngConsolide)}</span></TableCell>
                         <TableCell className="text-xs text-right"><span className={tauxColor(tauxEngNouveau)}>{formatPercent(tauxEngNouveau)}</span></TableCell>
-                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.ord)}</TableCell>
-                        <TableCell className="text-xs text-right"><span className={tauxColor(prog.tauxOrdonnement)}>{formatPercent(prog.tauxOrdonnement)}</span></TableCell>
                         <TableCell className="text-xs text-right"><span className={tauxColor(tauxOrdReport)}>{formatPercent(tauxOrdReport)}</span></TableCell>
                         <TableCell className="text-xs text-right"><span className={tauxColor(tauxOrdConsolide)}>{formatPercent(tauxOrdConsolide)}</span></TableCell>
                         <TableCell className="text-xs text-right"><span className={tauxColor(tauxOrdNouveau)}>{formatPercent(tauxOrdNouveau)}</span></TableCell>
+                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.ord)}</TableCell>
+                        <TableCell className="text-xs text-right"><span className={tauxColor(prog.tauxOrdonnement)}>{formatPercent(prog.tauxOrdonnement)}</span></TableCell>
                         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.paiements)}</TableCell>
                         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.previsions)}</TableCell>
                         <TableCell className="text-xs text-right"><span className={prog.disponible >= 0 ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'}>{formatMillions(prog.disponible)}</span></TableCell>
@@ -2859,11 +2859,11 @@ export default function Dashboard() {
                           <TableCell className="text-xs text-right"><span className={tauxColor(tTauxEngReport)}>{formatPercent(tTauxEngReport)}</span></TableCell>
                           <TableCell className="text-xs text-right"><span className={tauxColor(tTauxEngConsolide)}>{formatPercent(tTauxEngConsolide)}</span></TableCell>
                           <TableCell className="text-xs text-right"><span className={tauxColor(tTauxEngNouveau)}>{formatPercent(tTauxEngNouveau)}</span></TableCell>
-                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.ord)}</TableCell>
-                          <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrd)}>{formatPercent(tTauxOrd)}</span></TableCell>
                           <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrdReport)}>{formatPercent(tTauxOrdReport)}</span></TableCell>
                           <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrdConsolide)}>{formatPercent(tTauxOrdConsolide)}</span></TableCell>
                           <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrdNouveau)}>{formatPercent(tTauxOrdNouveau)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.ord)}</TableCell>
+                          <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrd)}>{formatPercent(tTauxOrd)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.paiements)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.previsions)}</TableCell>
                           <TableCell className="text-xs text-right"><span className={tot.disponible >= 0 ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>{formatMillions(tot.disponible)}</span></TableCell>
