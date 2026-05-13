@@ -2753,6 +2753,130 @@ export default function Dashboard() {
           )
         })()}
 
+        {/* ═══════════ TABLEAU D'ANALYSE PAR PROGRAMME ═══════════ */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700">Tableau d&apos;analyse par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-gray-50">
+                    <TableHead className="text-xs font-semibold text-gray-600" rowSpan={2}>Programme</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-center bg-blue-50/50" colSpan={3}>Crédits</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-center bg-emerald-50/50" colSpan={5}>Engagements</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-center bg-indigo-50/50" colSpan={5}>Ordonnancement</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 text-center" colSpan={3}>Autres</TableHead>
+                  </TableRow>
+                  <TableRow className="bg-gray-50/80">
+                    <TableHead className="text-[10px] font-semibold text-blue-600 text-right">Reports</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-blue-600 text-right">Consolidés</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-blue-600 text-right">Nouveaux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Sur Report</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Sur Consol.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Sur Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Total Ord.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Ord/Report</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Ord/Consol.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Ord/Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-gray-600 text-right">Paiements</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-gray-600 text-right">Prévisions</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-gray-600 text-right">Disponible</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {analysisByProgramme.map(prog => {
+                    const tauxEngReport = prog.cpReports > 0 ? (prog.engReports / prog.cpReports) * 100 : 0
+                    const tauxEngConsolide = prog.cpConsolides > 0 ? (prog.engConsolides / prog.cpConsolides) * 100 : 0
+                    const tauxEngNouveau = prog.cpNouveaux > 0 ? (prog.engNouveaux / prog.cpNouveaux) * 100 : 0
+                    const tauxOrdReport = prog.cpReports > 0 ? (prog.ordReports / prog.cpReports) * 100 : 0
+                    const tauxOrdConsolide = prog.cpConsolides > 0 ? (prog.ordConsolides / prog.cpConsolides) * 100 : 0
+                    const tauxOrdNouveau = prog.cpNouveaux > 0 ? (prog.ordNouveaux / prog.cpNouveaux) * 100 : 0
+                    return (
+                      <TableRow key={prog.name} className="hover:bg-gray-50">
+                        <TableCell className="text-xs font-bold text-gray-900">{prog.name}</TableCell>
+                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.cpReports)}</TableCell>
+                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.cpConsolides)}</TableCell>
+                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.cpNouveaux)}</TableCell>
+                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.engCP)}</TableCell>
+                        <TableCell className="text-xs text-right"><span className={tauxColor(prog.tauxEngagement)}>{formatPercent(prog.tauxEngagement)}</span></TableCell>
+                        <TableCell className="text-xs text-right"><span className={tauxColor(tauxEngReport)}>{formatPercent(tauxEngReport)}</span></TableCell>
+                        <TableCell className="text-xs text-right"><span className={tauxColor(tauxEngConsolide)}>{formatPercent(tauxEngConsolide)}</span></TableCell>
+                        <TableCell className="text-xs text-right"><span className={tauxColor(tauxEngNouveau)}>{formatPercent(tauxEngNouveau)}</span></TableCell>
+                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.ord)}</TableCell>
+                        <TableCell className="text-xs text-right"><span className={tauxColor(prog.tauxOrdonnement)}>{formatPercent(prog.tauxOrdonnement)}</span></TableCell>
+                        <TableCell className="text-xs text-right"><span className={tauxColor(tauxOrdReport)}>{formatPercent(tauxOrdReport)}</span></TableCell>
+                        <TableCell className="text-xs text-right"><span className={tauxColor(tauxOrdConsolide)}>{formatPercent(tauxOrdConsolide)}</span></TableCell>
+                        <TableCell className="text-xs text-right"><span className={tauxColor(tauxOrdNouveau)}>{formatPercent(tauxOrdNouveau)}</span></TableCell>
+                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.paiements)}</TableCell>
+                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.previsions)}</TableCell>
+                        <TableCell className="text-xs text-right"><span className={prog.disponible >= 0 ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'}>{formatMillions(prog.disponible)}</span></TableCell>
+                      </TableRow>
+                    )
+                  })}
+                  {/* Total row */}
+                  <TableRow className="bg-gray-50 font-bold border-t-2 border-gray-200">
+                    {(() => {
+                      const tot = analysisByProgramme.reduce((s, p) => ({
+                        cpReports: s.cpReports + p.cpReports,
+                        cpConsolides: s.cpConsolides + p.cpConsolides,
+                        cpNouveaux: s.cpNouveaux + p.cpNouveaux,
+                        engCP: s.engCP + p.engCP,
+                        engReports: s.engReports + p.engReports,
+                        engConsolides: s.engConsolides + p.engConsolides,
+                        engNouveaux: s.engNouveaux + p.engNouveaux,
+                        ord: s.ord + p.ord,
+                        ordReports: s.ordReports + p.ordReports,
+                        ordConsolides: s.ordConsolides + p.ordConsolides,
+                        ordNouveaux: s.ordNouveaux + p.ordNouveaux,
+                        paiements: s.paiements + p.paiements,
+                        previsions: s.previsions + p.previsions,
+                        disponible: s.disponible + p.disponible,
+                        cp: s.cp + p.cp,
+                        engCE: s.engCE + p.engCE,
+                        ce: s.ce + p.ce,
+                      }), { cpReports: 0, cpConsolides: 0, cpNouveaux: 0, engCP: 0, engReports: 0, engConsolides: 0, engNouveaux: 0, ord: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0, paiements: 0, previsions: 0, disponible: 0, cp: 0, engCE: 0, ce: 0 })
+                      const tTauxEng = tot.cp > 0 ? (tot.engCP / tot.cp) * 100 : 0
+                      const tTauxEngReport = tot.cpReports > 0 ? (tot.engReports / tot.cpReports) * 100 : 0
+                      const tTauxEngConsolide = tot.cpConsolides > 0 ? (tot.engConsolides / tot.cpConsolides) * 100 : 0
+                      const tTauxEngNouveau = tot.cpNouveaux > 0 ? (tot.engNouveaux / tot.cpNouveaux) * 100 : 0
+                      const tTauxOrd = tot.cp > 0 ? (tot.ord / tot.cp) * 100 : 0
+                      const tTauxOrdReport = tot.cpReports > 0 ? (tot.ordReports / tot.cpReports) * 100 : 0
+                      const tTauxOrdConsolide = tot.cpConsolides > 0 ? (tot.ordConsolides / tot.cpConsolides) * 100 : 0
+                      const tTauxOrdNouveau = tot.cpNouveaux > 0 ? (tot.ordNouveaux / tot.cpNouveaux) * 100 : 0
+                      return (
+                        <>
+                          <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.cpReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.cpConsolides)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.cpNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.engCP)}</TableCell>
+                          <TableCell className="text-xs text-right"><span className={tauxColor(tTauxEng)}>{formatPercent(tTauxEng)}</span></TableCell>
+                          <TableCell className="text-xs text-right"><span className={tauxColor(tTauxEngReport)}>{formatPercent(tTauxEngReport)}</span></TableCell>
+                          <TableCell className="text-xs text-right"><span className={tauxColor(tTauxEngConsolide)}>{formatPercent(tTauxEngConsolide)}</span></TableCell>
+                          <TableCell className="text-xs text-right"><span className={tauxColor(tTauxEngNouveau)}>{formatPercent(tTauxEngNouveau)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.ord)}</TableCell>
+                          <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrd)}>{formatPercent(tTauxOrd)}</span></TableCell>
+                          <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrdReport)}>{formatPercent(tTauxOrdReport)}</span></TableCell>
+                          <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrdConsolide)}>{formatPercent(tTauxOrdConsolide)}</span></TableCell>
+                          <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrdNouveau)}>{formatPercent(tTauxOrdNouveau)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.paiements)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.previsions)}</TableCell>
+                          <TableCell className="text-xs text-right"><span className={tot.disponible >= 0 ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>{formatMillions(tot.disponible)}</span></TableCell>
+                        </>
+                      )
+                    })()}
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
       </>
     )
   }
