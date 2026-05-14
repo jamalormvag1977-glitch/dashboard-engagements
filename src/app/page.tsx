@@ -913,7 +913,7 @@ export default function Dashboard() {
     totalEngReports: number; totalEngConsolides: number; totalEngNouveaux: number; totalEngCP: number; totalEngCE: number;
     tauxEngagement: number;
     totalOrdReports: number; totalOrdConsolides: number; totalOrdNouveaux: number; totalOrd: number; totalPaiements: number;
-    tauxOrdonnement: number;
+    tauxOrdonnement: number; tauxPaiement: number;
   }) => (
     <>
       {/* ═══════════ SECTION : CRÉDITS ═══════════ */}
@@ -1234,6 +1234,101 @@ export default function Dashboard() {
                 <div className="flex justify-between mt-1">
                   <span className="text-[10px] text-gray-400">{data.tauxOrdonnement >= 80 ? 'Bon' : data.tauxOrdonnement >= 50 ? 'Moyen' : 'Faible'}</span>
                   <span className="text-[10px] text-gray-400">Paiements : {formatMillions(data.totalPaiements)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════ SECTION : TAUX DE PAIEMENT ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-cyan-500 to-teal-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Taux de paiement</h3>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Taux de paiement global */}
+          <div className="kpi-card-premium rounded-xl border border-cyan-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #ecfeff 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-cyan-500 to-teal-600" />
+            <div className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-cyan-100 flex items-center justify-center transition-transform">
+                      <Wallet className="w-5 h-5 text-cyan-700" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-600">Taux de paiement</span>
+                  </div>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalPaiements)} M DH</p>
+                </div>
+                <div className="text-right">
+                  <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(data.tauxPaiement)}`}>
+                    {data.tauxPaiement >= 80 ? '✓' : data.tauxPaiement >= 50 ? '⚠' : '✗'}
+                    {formatPercent(data.tauxPaiement)}
+                  </span>
+                  <p className="text-[11px] text-gray-400 mt-0.5">
+                    {data.tauxPaiement >= 80 ? 'Bon' : data.tauxPaiement >= 50 ? 'Moyen' : 'Faible'}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-3">
+                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`kpi-progress-bar h-full rounded-full ${data.tauxPaiement >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : data.tauxPaiement >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(data.tauxPaiement, 100)}%` }} />
+                </div>
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-[10px] text-gray-400">0%</span>
+                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(data.totalEngCP - data.totalPaiements)}</span>
+                  <span className="text-[10px] text-gray-400">100%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Taux d'ordonnancement vs paiement */}
+          <div className="kpi-card-premium rounded-xl border border-indigo-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #eef2ff 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-indigo-400 to-violet-500" />
+            <div className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-indigo-100 flex items-center justify-center transition-transform">
+                      <Landmark className="w-5 h-5 text-indigo-700" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-600">Ord. vs Paiement</span>
+                  </div>
+                  <p className="text-xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalOrd)} → {formatMillions(data.totalPaiements)}</p>
+                </div>
+                <div className="text-right">
+                  {(() => {
+                    const tauxOrdVsPaiement = data.totalOrd > 0 ? (data.totalPaiements / data.totalOrd) * 100 : 0
+                    return (
+                      <>
+                        <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(tauxOrdVsPaiement)}`}>
+                          {tauxOrdVsPaiement >= 80 ? '✓' : tauxOrdVsPaiement >= 50 ? '⚠' : '✗'}
+                          {formatPercent(tauxOrdVsPaiement)}
+                        </span>
+                        <p className="text-[11px] text-gray-400 mt-0.5">
+                          Paiement / Ord.
+                        </p>
+                      </>
+                    )
+                  })()}
+                </div>
+              </div>
+              <div className="mt-3">
+                {(() => {
+                  const tauxOrdVsPaiement = data.totalOrd > 0 ? (data.totalPaiements / data.totalOrd) * 100 : 0
+                  return (
+                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className={`kpi-progress-bar h-full rounded-full ${tauxOrdVsPaiement >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxOrdVsPaiement >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxOrdVsPaiement, 100)}%` }} />
+                    </div>
+                  )
+                })()}
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-[10px] text-gray-400">0%</span>
+                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(data.totalOrd - data.totalPaiements)}</span>
+                  <span className="text-[10px] text-gray-400">100%</span>
                 </div>
               </div>
             </div>
