@@ -4224,16 +4224,12 @@ export default function Dashboard() {
       const ordReports = rows.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
       const paiementsReports = rows.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0)
       const cp = rows.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
-      // Cumulative prévisions for reports rows
-      const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
-      let cumulRep = 0, cumulCons = 0, cumulNouv = 0
-      const cumulByMonth: Record<string,number> = {}
-      for (const m of prevMonths) {
-        cumulRep += rows.reduce((s, r) => s + (r[`Previsions REPORTS ${m}`] || 0), 0)
-        cumulCons += rows.reduce((s, r) => s + (r[`Previsions CONSOLIDES ${m}`] || 0), 0)
-        cumulNouv += rows.reduce((s, r) => s + (r[`Previsions NOUVEAUX ${m}`] || 0), 0)
-        cumulByMonth[m] = cumulRep + cumulCons + cumulNouv
-      }
+      // Prévisions mensuelles des reports
+      const prevReportsJuin = rows.reduce((s, r) => s + (r['Previsions REPORTS JUIN'] || 0), 0)
+      const prevReportsSept = rows.reduce((s, r) => s + (r['Previsions REPORTS SEPTEMBRE'] || 0), 0)
+      const prevReportsOct = rows.reduce((s, r) => s + (r['Previsions REPORTS OCTOBRE'] || 0), 0)
+      const prevReportsNov = rows.reduce((s, r) => s + (r['Previsions REPORTS NOVEMBRE'] || 0), 0)
+      const prevReportsDec = rows.reduce((s, r) => s + (r['Previsions REPORTS DECEMBRE'] || 0), 0)
       return {
         name: e.name,
         reports,
@@ -4241,11 +4237,11 @@ export default function Dashboard() {
         ordReports,
         paiementsReports,
         cp,
-        prevJuin: cumulByMonth['JUIN'] || 0,
-        prevSept: cumulByMonth['SEPTEMBRE'] || 0,
-        prevOct: cumulByMonth['OCTOBRE'] || 0,
-        prevNov: cumulByMonth['NOVEMBRE'] || 0,
-        prevDec: cumulByMonth['DECEMBRE'] || 0,
+        prevJuin: prevReportsJuin,
+        prevSept: prevReportsSept,
+        prevOct: prevReportsOct,
+        prevNov: prevReportsNov,
+        prevDec: prevReportsDec,
         tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
         tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
         resteEngager: reports - engReports,
@@ -4261,15 +4257,12 @@ export default function Dashboard() {
       const ordReports = rows.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
       const paiementsReports = rows.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0)
       const cp = rows.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
-      const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
-      let cumulRep = 0, cumulCons = 0, cumulNouv = 0
-      const cumulByMonth: Record<string,number> = {}
-      for (const m of prevMonths) {
-        cumulRep += rows.reduce((s, r) => s + (r[`Previsions REPORTS ${m}`] || 0), 0)
-        cumulCons += rows.reduce((s, r) => s + (r[`Previsions CONSOLIDES ${m}`] || 0), 0)
-        cumulNouv += rows.reduce((s, r) => s + (r[`Previsions NOUVEAUX ${m}`] || 0), 0)
-        cumulByMonth[m] = cumulRep + cumulCons + cumulNouv
-      }
+      // Prévisions mensuelles des reports
+      const prevReportsJuin = rows.reduce((s, r) => s + (r['Previsions REPORTS JUIN'] || 0), 0)
+      const prevReportsSept = rows.reduce((s, r) => s + (r['Previsions REPORTS SEPTEMBRE'] || 0), 0)
+      const prevReportsOct = rows.reduce((s, r) => s + (r['Previsions REPORTS OCTOBRE'] || 0), 0)
+      const prevReportsNov = rows.reduce((s, r) => s + (r['Previsions REPORTS NOVEMBRE'] || 0), 0)
+      const prevReportsDec = rows.reduce((s, r) => s + (r['Previsions REPORTS DECEMBRE'] || 0), 0)
       return {
         name: g.name,
         reports,
@@ -4277,11 +4270,11 @@ export default function Dashboard() {
         ordReports,
         paiementsReports,
         cp,
-        prevJuin: cumulByMonth['JUIN'] || 0,
-        prevSept: cumulByMonth['SEPTEMBRE'] || 0,
-        prevOct: cumulByMonth['OCTOBRE'] || 0,
-        prevNov: cumulByMonth['NOVEMBRE'] || 0,
-        prevDec: cumulByMonth['DECEMBRE'] || 0,
+        prevJuin: prevReportsJuin,
+        prevSept: prevReportsSept,
+        prevOct: prevReportsOct,
+        prevNov: prevReportsNov,
+        prevDec: prevReportsDec,
         tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
         tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
         resteEngager: reports - engReports,
@@ -4457,11 +4450,11 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Taux eng.</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Fin Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Fin Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Fin Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Fin Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Rep. Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Rep. Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Rep. Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Rep. Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Rep. Déc.</TableHead>
                   </TableRow>
                   <TableRow className="bg-blue-50/40">
                     <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
@@ -4551,11 +4544,11 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Taux eng.</TableHead>
                     <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Fin Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Fin Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Fin Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Fin Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Rep. Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Rep. Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Rep. Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Rep. Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Rep. Déc.</TableHead>
                   </TableRow>
                   <TableRow className="bg-emerald-50/40">
                     <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
@@ -4645,11 +4638,11 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Taux eng.</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Fin Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Fin Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Fin Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Fin Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Rep. Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Rep. Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Rep. Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Rep. Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Rep. Déc.</TableHead>
                   </TableRow>
                   <TableRow className="bg-indigo-50/40">
                     <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
@@ -4674,13 +4667,11 @@ export default function Dashboard() {
                       const ordReports = rows.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
                       const paiementsReports = rows.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0)
                       const cp = rows.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
-                      let cumulRep = 0, cumulCons = 0, cumulNouv = 0
+                      let cumulRep = 0
                       const cumulByMonth: Record<string,number> = {}
                       for (const m of prevMonths) {
                         cumulRep += rows.reduce((s, r) => s + (r[`Previsions REPORTS ${m}`] || 0), 0)
-                        cumulCons += rows.reduce((s, r) => s + (r[`Previsions CONSOLIDES ${m}`] || 0), 0)
-                        cumulNouv += rows.reduce((s, r) => s + (r[`Previsions NOUVEAUX ${m}`] || 0), 0)
-                        cumulByMonth[m] = cumulRep + cumulCons + cumulNouv
+                        cumulByMonth[m] = cumulRep
                       }
                       return {
                         name: p.name,
