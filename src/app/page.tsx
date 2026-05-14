@@ -4103,6 +4103,8 @@ export default function Dashboard() {
                   <TableRow className="bg-amber-50/60">
                     <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Nomenclature</TableHead>
+                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>N° Engagement</TableHead>
                     <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Désignation</TableHead>
                     <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={3}>Fin Juin</TableHead>
@@ -4144,6 +4146,8 @@ export default function Dashboard() {
                       return {
                         projet: row.Projet || '',
                         entite: row.ENTITE || '',
+                        nomenclature: row.NOMENCLATURE || '-',
+                        numEngagement: row['N° ENGAGEMENT'] || '-',
                         designation: row['DETAIL DESIGNATION'] || '-',
                         cp,
                         cumulRepByMonth,
@@ -4182,6 +4186,8 @@ export default function Dashboard() {
                             <TableRow key={i} className={`hover:bg-gray-50 ${showProjetHeader && i > 0 ? 'border-t-2 border-amber-200' : ''}`}>
                               <TableCell className="text-xs font-medium text-gray-900 whitespace-nowrap">{p.projet}</TableCell>
                               <TableCell className="text-xs text-gray-600">{p.entite}</TableCell>
+                              <TableCell className="text-xs text-amber-600 font-mono whitespace-nowrap">{p.nomenclature}</TableCell>
+                              <TableCell className="text-xs font-medium text-gray-900">{p.numEngagement}</TableCell>
                               <TableCell className="text-xs text-gray-700" style={{minWidth:'250px',maxWidth:'400px',whiteSpace:'normal',lineHeight:'1.4'}}>{p.designation}</TableCell>
                               <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
                               <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.cumulRepByMonth['JUIN']||0)}</TableCell>
@@ -4198,7 +4204,7 @@ export default function Dashboard() {
                           )
                         })}
                         <TableRow className="bg-amber-50/40 font-bold">
-                          <TableCell className="text-xs font-bold text-gray-900" colSpan={3}>Total ({prestations.length} prestations)</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({prestations.length} prestations)</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totRepJuin)}</TableCell>
                           <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totConsJuin)}</TableCell>
