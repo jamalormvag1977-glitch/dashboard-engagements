@@ -4779,6 +4779,11 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-rose-700 text-right" rowSpan={2}>Crédits Report</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-emerald-600" colSpan={3}>Engagement</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={3}>Ordonnancement</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Rep. Cum. Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Rep. Cum. Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Rep. Cum. Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Rep. Cum. Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Rep. Cum. Déc.</TableHead>
                   </TableRow>
                   <TableRow className="bg-rose-50/40">
                     <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Eng. Rep.</TableHead>
@@ -4787,16 +4792,33 @@ export default function Dashboard() {
                     <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Ord. Rep.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Taux ord.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Reste</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Taux</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {(() => {
+                    const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
                     const prestations = filteredData
                       .map(row => {
                         const reports = row.REPORTS || 0
                         const engReports = row['ENG REPORT'] || 0
                         const ordReports = row['ORD REPORTS'] || 0
-                        const paiementsReports = row['PAIEMENTS SUR REPORTS'] || 0
+                        // Prévisions cumulées des reports
+                        let cumulRep = 0
+                        const cumulByMonth: Record<string,number> = {}
+                        for (const m of prevMonths) {
+                          cumulRep += (row[`Previsions REPORTS ${m}`] || 0)
+                          cumulByMonth[m] = cumulRep
+                        }
                         return {
                           programme: row.Programme || '',
                           projet: row.Projet || '',
@@ -4805,11 +4827,15 @@ export default function Dashboard() {
                           reports,
                           engReports,
                           ordReports,
-                          paiementsReports,
                           tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
                           tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
                           resteEngager: reports - engReports,
                           resteOrdonner: engReports - ordReports,
+                          prevJuin: cumulByMonth['JUIN'] || 0,
+                          prevSept: cumulByMonth['SEPTEMBRE'] || 0,
+                          prevOct: cumulByMonth['OCTOBRE'] || 0,
+                          prevNov: cumulByMonth['NOVEMBRE'] || 0,
+                          prevDec: cumulByMonth['DECEMBRE'] || 0,
                         }
                       })
                       .filter(p => p.reports > 0)
@@ -4818,9 +4844,13 @@ export default function Dashboard() {
                     const totReports = prestations.reduce((s, p) => s + p.reports, 0)
                     const totEngReports = prestations.reduce((s, p) => s + p.engReports, 0)
                     const totOrdReports = prestations.reduce((s, p) => s + p.ordReports, 0)
-                    const totPaiementsReports = prestations.reduce((s, p) => s + p.paiementsReports, 0)
                     const totResteEngager = prestations.reduce((s, p) => s + p.resteEngager, 0)
                     const totResteOrdonner = prestations.reduce((s, p) => s + p.resteOrdonner, 0)
+                    const totPrevJuin = prestations.reduce((s, p) => s + p.prevJuin, 0)
+                    const totPrevSept = prestations.reduce((s, p) => s + p.prevSept, 0)
+                    const totPrevOct = prestations.reduce((s, p) => s + p.prevOct, 0)
+                    const totPrevNov = prestations.reduce((s, p) => s + p.prevNov, 0)
+                    const totPrevDec = prestations.reduce((s, p) => s + p.prevDec, 0)
 
                     let currentProgramme = ''
                     return (
@@ -4841,6 +4871,16 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-blue-700 text-right">{formatMillions(p.ordReports)}</TableCell>
                               <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxOrdReports)}>{formatPercent(p.tauxOrdReports)}</span></TableCell>
                               <TableCell className="text-xs text-gray-600 text-right">{formatMillions(p.resteOrdonner)}</TableCell>
+                              <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.prevJuin)}</TableCell>
+                              <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevJuin / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevJuin / p.reports) * 100 : 0)}</span></TableCell>
+                              <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.prevSept)}</TableCell>
+                              <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevSept / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevSept / p.reports) * 100 : 0)}</span></TableCell>
+                              <TableCell className="text-xs text-orange-600 text-right">{formatMillions(p.prevOct)}</TableCell>
+                              <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevOct / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevOct / p.reports) * 100 : 0)}</span></TableCell>
+                              <TableCell className="text-xs text-purple-600 text-right">{formatMillions(p.prevNov)}</TableCell>
+                              <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevNov / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevNov / p.reports) * 100 : 0)}</span></TableCell>
+                              <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.prevDec)}</TableCell>
+                              <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevDec / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevDec / p.reports) * 100 : 0)}</span></TableCell>
                             </TableRow>
                           )
                         })}
@@ -4853,6 +4893,16 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totOrdReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totEngReports > 0 ? (totOrdReports / totEngReports) * 100 : 0)}>{formatPercent(totEngReports > 0 ? (totOrdReports / totEngReports) * 100 : 0)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteOrdonner)}</TableCell>
+                          <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totPrevJuin)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevJuin / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevJuin / totReports) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totPrevSept)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevSept / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevSept / totReports) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-orange-700 text-right">{formatMillions(totPrevOct)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevOct / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevOct / totReports) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totPrevNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevNov / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevNov / totReports) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totPrevDec)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevDec / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevDec / totReports) * 100 : 0)}</span></TableCell>
                         </TableRow>
                       </>
                     )
