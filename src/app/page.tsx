@@ -3226,11 +3226,11 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">N° Engagement</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Nomenclature</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Désignation</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Entité</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Nomenclature</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">N° Engagement</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Désignation</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Consolidés</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. Nouveaux</TableHead>
@@ -3241,11 +3241,11 @@ export default function Dashboard() {
                 <TableBody>
                   {pLines.map((r, idx) => (
                     <TableRow key={`${r.numEngagement}-${idx}`} className="hover:bg-gray-50">
-                      <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
-                      <TableCell className="text-xs text-gray-500 font-mono whitespace-nowrap">{r.nomenclature}</TableCell>
-                      <TableCell className="text-xs text-gray-700" style={{maxWidth:'300px',whiteSpace:'normal',lineHeight:'1.4'}}>{r.designation}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
                       <TableCell className="text-xs text-gray-600">{r.projet || 'Non classé'}</TableCell>
+                      <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
+                      <TableCell className="text-xs text-gray-500 font-mono whitespace-nowrap">{r.nomenclature}</TableCell>
+                      <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
+                      <TableCell className="text-xs text-gray-700" style={{maxWidth:'300px',whiteSpace:'normal',lineHeight:'1.4'}}>{r.designation}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.engReports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.engConsolides)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.engNouveaux)}</TableCell>
@@ -3310,11 +3310,11 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">N° Engagement</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Nomenclature</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Désignation</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Entité</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Nomenclature</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">N° Engagement</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Désignation</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Consolidés</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Nouveaux</TableHead>
@@ -3325,11 +3325,11 @@ export default function Dashboard() {
                 <TableBody>
                   {pLines.map((r, idx) => (
                     <TableRow key={`${r.numEngagement}-${idx}`} className="hover:bg-gray-50">
-                      <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{r.nomenclature}</TableCell>
-                      <TableCell className="text-xs text-gray-700 max-w-[200px] truncate">{r.designation}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
                       <TableCell className="text-xs text-gray-600">{r.projet || 'Non classé'}</TableCell>
+                      <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
+                      <TableCell className="text-xs text-gray-600">{r.nomenclature}</TableCell>
+                      <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
+                      <TableCell className="text-xs text-gray-700 max-w-[200px] truncate">{r.designation}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordReports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordConsolides)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordNouveaux)}</TableCell>
