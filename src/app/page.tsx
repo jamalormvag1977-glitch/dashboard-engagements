@@ -2889,10 +2889,6 @@ export default function Dashboard() {
   }
 
   const renderEngagementsView = () => {
-    const PER_PAGE = 15
-    const pLines = paginate(engagementLines, engPage, PER_PAGE) as typeof engagementLines
-    const tPages = totalPages(engagementLines.length, PER_PAGE)
-
     return (
       <>
         {renderKPISections(kpis)}
@@ -3246,14 +3242,14 @@ export default function Dashboard() {
                 <TableBody>
                   {(() => {
                     let currentProjet = ''
-                    const totCP = pLines.reduce((s, r) => s + r.cp, 0)
-                    const totEngRep = pLines.reduce((s, r) => s + r.engReports, 0)
-                    const totEngCons = pLines.reduce((s, r) => s + r.engConsolides, 0)
-                    const totEngNouv = pLines.reduce((s, r) => s + r.engNouveaux, 0)
-                    const totEngCPTotal = pLines.reduce((s, r) => s + r.engCPTotal, 0)
+                    const totCP = engagementLines.reduce((s, r) => s + r.cp, 0)
+                    const totEngRep = engagementLines.reduce((s, r) => s + r.engReports, 0)
+                    const totEngCons = engagementLines.reduce((s, r) => s + r.engConsolides, 0)
+                    const totEngNouv = engagementLines.reduce((s, r) => s + r.engNouveaux, 0)
+                    const totEngCPTotal = engagementLines.reduce((s, r) => s + r.engCPTotal, 0)
                     return (
                       <>
-                        {pLines.map((r, idx) => {
+                        {engagementLines.map((r, idx) => {
                           const showProjetHeader = (r.projet || 'Non classé') !== currentProjet
                           currentProjet = r.projet || 'Non classé'
                           return (
@@ -3274,7 +3270,7 @@ export default function Dashboard() {
                           )
                         })}
                         <TableRow className="bg-blue-50/40 font-bold">
-                          <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({pLines.length} prestations)</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({engagementLines.length} prestations)</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngRep)}</TableCell>
                           <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngCons)}</TableCell>
@@ -3292,41 +3288,11 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Pagination */}
-        {tPages > 1 && (
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-500">
-              {((engPage - 1) * PER_PAGE) + 1} - {Math.min(engPage * PER_PAGE, engagementLines.length)} sur {engagementLines.length}
-            </p>
-            <div className="flex items-center gap-1">
-              <Button variant="outline" size="sm" className="h-8 w-8 p-0" disabled={engPage === 1} onClick={() => setEngPage(p => p - 1)}>
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              {Array.from({ length: tPages }, (_, i) => i + 1)
-                .filter(p => p === 1 || p === tPages || Math.abs(p - engPage) <= 1)
-                .map((p, i, arr) => (
-                  <span key={p} className="flex items-center">
-                    {i > 0 && arr[i - 1] !== p - 1 && <span className="text-gray-400 text-xs px-1">...</span>}
-                    <Button variant={p === engPage ? 'default' : 'outline'} size="sm" className={`h-8 w-8 p-0 text-xs ${p === engPage ? 'bg-emerald-600 hover:bg-emerald-700' : ''}`} onClick={() => setEngPage(p)}>
-                      {p}
-                    </Button>
-                  </span>
-                ))}
-              <Button variant="outline" size="sm" className="h-8 w-8 p-0" disabled={engPage === tPages} onClick={() => setEngPage(p => p + 1)}>
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        )}
       </>
     )
   }
 
   const renderOrdonnancementsView = () => {
-    const PER_PAGE = 15
-    const pLines = paginate(ordonnancementLines, ordPage, PER_PAGE) as typeof ordonnancementLines
-    const tPages = totalPages(ordonnancementLines.length, PER_PAGE)
-
     return (
       <>
         {renderKPISections(kpis)}
@@ -3359,14 +3325,14 @@ export default function Dashboard() {
                 <TableBody>
                   {(() => {
                     let currentProjet = ''
-                    const totCP = pLines.reduce((s, r) => s + r.cp, 0)
-                    const totOrdRep = pLines.reduce((s, r) => s + r.ordReports, 0)
-                    const totOrdCons = pLines.reduce((s, r) => s + r.ordConsolides, 0)
-                    const totOrdNouv = pLines.reduce((s, r) => s + r.ordNouveaux, 0)
-                    const totOrdTotal = pLines.reduce((s, r) => s + r.ordTotal, 0)
+                    const totCP = ordonnancementLines.reduce((s, r) => s + r.cp, 0)
+                    const totOrdRep = ordonnancementLines.reduce((s, r) => s + r.ordReports, 0)
+                    const totOrdCons = ordonnancementLines.reduce((s, r) => s + r.ordConsolides, 0)
+                    const totOrdNouv = ordonnancementLines.reduce((s, r) => s + r.ordNouveaux, 0)
+                    const totOrdTotal = ordonnancementLines.reduce((s, r) => s + r.ordTotal, 0)
                     return (
                       <>
-                        {pLines.map((r, idx) => {
+                        {ordonnancementLines.map((r, idx) => {
                           const showProjetHeader = (r.projet || 'Non classé') !== currentProjet
                           currentProjet = r.projet || 'Non classé'
                           return (
@@ -3387,7 +3353,7 @@ export default function Dashboard() {
                           )
                         })}
                         <TableRow className="bg-emerald-50/40 font-bold">
-                          <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({pLines.length} prestations)</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({ordonnancementLines.length} prestations)</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdRep)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdCons)}</TableCell>
@@ -3405,32 +3371,6 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Pagination */}
-        {tPages > 1 && (
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-500">
-              {((ordPage - 1) * PER_PAGE) + 1} - {Math.min(ordPage * PER_PAGE, ordonnancementLines.length)} sur {ordonnancementLines.length}
-            </p>
-            <div className="flex items-center gap-1">
-              <Button variant="outline" size="sm" className="h-8 w-8 p-0" disabled={ordPage === 1} onClick={() => setOrdPage(p => p - 1)}>
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              {Array.from({ length: tPages }, (_, i) => i + 1)
-                .filter(p => p === 1 || p === tPages || Math.abs(p - ordPage) <= 1)
-                .map((p, i, arr) => (
-                  <span key={p} className="flex items-center">
-                    {i > 0 && arr[i - 1] !== p - 1 && <span className="text-gray-400 text-xs px-1">...</span>}
-                    <Button variant={p === ordPage ? 'default' : 'outline'} size="sm" className={`h-8 w-8 p-0 text-xs ${p === ordPage ? 'bg-emerald-600 hover:bg-emerald-700' : ''}`} onClick={() => setOrdPage(p)}>
-                      {p}
-                    </Button>
-                  </span>
-                ))}
-              <Button variant="outline" size="sm" className="h-8 w-8 p-0" disabled={ordPage === tPages} onClick={() => setOrdPage(p => p + 1)}>
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        )}
       </>
     )
   }
