@@ -4462,9 +4462,6 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Fin Oct.</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Fin Nov.</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Fin Déc.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Paiements</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Reste à eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Reste à ord.</TableHead>
                   </TableRow>
                   <TableRow className="bg-blue-50/40">
                     <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
@@ -4499,9 +4496,6 @@ export default function Dashboard() {
                       <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevNov / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevNov / e.cp) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(e.prevDec)}</TableCell>
                       <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevDec / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevDec / e.cp) * 100 : 0)}</span></TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.paiementsReports)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.resteEngager)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.resteOrdonner)}</TableCell>
                     </TableRow>
                   ))}
                   {(() => {
@@ -4531,9 +4525,6 @@ export default function Dashboard() {
                         <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totPrevDec)}</TableCell>
                         <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}</span></TableCell>
-                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiementsReports)}</TableCell>
-                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteEngagerReports)}</TableCell>
-                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteOrdonnerReports)}</TableCell>
                       </TableRow>
                     )
                   })()}
@@ -4565,9 +4556,6 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Fin Oct.</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Fin Nov.</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Fin Déc.</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Paiements</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Reste à eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Reste à ord.</TableHead>
                   </TableRow>
                   <TableRow className="bg-emerald-50/40">
                     <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
@@ -4602,9 +4590,6 @@ export default function Dashboard() {
                       <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevNov / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevNov / g.cp) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(g.prevDec)}</TableCell>
                       <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevDec / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevDec / g.cp) * 100 : 0)}</span></TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.paiementsReports)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.resteEngager)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.resteOrdonner)}</TableCell>
                     </TableRow>
                   ))}
                   {(() => {
@@ -4634,9 +4619,6 @@ export default function Dashboard() {
                         <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totPrevDec)}</TableCell>
                         <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}</span></TableCell>
-                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiementsReports)}</TableCell>
-                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteEngagerReports)}</TableCell>
-                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteOrdonnerReports)}</TableCell>
                       </TableRow>
                     )
                   })()}
@@ -4668,9 +4650,6 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Fin Oct.</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Fin Nov.</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Fin Déc.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Paiements</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Reste à eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Reste à ord.</TableHead>
                   </TableRow>
                   <TableRow className="bg-indigo-50/40">
                     <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
@@ -4756,9 +4735,6 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevNov / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevNov / p.cp) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.prevDec)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevDec / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevDec / p.cp) * 100 : 0)}</span></TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.paiementsReports)}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.resteEngager)}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.resteOrdonner)}</TableCell>
                           </TableRow>
                         ))}
                         <TableRow className="bg-indigo-50/40 font-bold">
@@ -4779,9 +4755,6 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totPrevDec)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}</span></TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiementsReports)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteEngager)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteOrdonner)}</TableCell>
                         </TableRow>
                       </>
                     )
@@ -4930,9 +4903,6 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-rose-700 text-right" rowSpan={2}>Crédits Report</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-emerald-600" colSpan={3}>Engagement</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={3}>Ordonnancement</TableHead>
-                    <TableHead className="text-xs font-semibold text-rose-700 text-right" rowSpan={2}>Paiements</TableHead>
-                    <TableHead className="text-xs font-semibold text-rose-700 text-right" rowSpan={2}>Reste à engager</TableHead>
-                    <TableHead className="text-xs font-semibold text-rose-700 text-right" rowSpan={2}>Reste à ordonner</TableHead>
                   </TableRow>
                   <TableRow className="bg-rose-50/40">
                     <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Eng. Rep.</TableHead>
@@ -4995,9 +4965,6 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-blue-700 text-right">{formatMillions(p.ordReports)}</TableCell>
                               <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxOrdReports)}>{formatPercent(p.tauxOrdReports)}</span></TableCell>
                               <TableCell className="text-xs text-gray-600 text-right">{formatMillions(p.resteOrdonner)}</TableCell>
-                              <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.paiementsReports)}</TableCell>
-                              <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.resteEngager)}</TableCell>
-                              <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.resteOrdonner)}</TableCell>
                             </TableRow>
                           )
                         })}
@@ -5009,9 +4976,6 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteEngager)}</TableCell>
                           <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totOrdReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totEngReports > 0 ? (totOrdReports / totEngReports) * 100 : 0)}>{formatPercent(totEngReports > 0 ? (totOrdReports / totEngReports) * 100 : 0)}</span></TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteOrdonner)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiementsReports)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteEngager)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteOrdonner)}</TableCell>
                         </TableRow>
                       </>
