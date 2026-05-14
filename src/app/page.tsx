@@ -5062,7 +5062,9 @@ export default function Dashboard() {
                 Réinitialiser
               </Button>
               <Badge variant="secondary" className="bg-gray-100 text-gray-600 text-xs">
-                {filteredData.length} lignes
+                {(activeNav === 'reports' || activeNav === 'assainissement')
+                  ? `${filteredData.filter(r => (r.REPORTS || 0) > 0).length} lignes (reports)`
+                  : `${filteredData.length} lignes`}
               </Badge>
             </div>
           </div>
