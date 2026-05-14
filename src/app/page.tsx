@@ -5065,6 +5065,7 @@ export default function Dashboard() {
                 </SelectContent>
               </Select>
               )}
+              {activeNav !== 'program' && activeNav !== 'project' && activeNav !== 'entity' && (
               <Select value={selectedNomenclature} onValueChange={setSelectedNomenclature}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
                   <SelectValue placeholder="Nomenclature" />
@@ -5074,6 +5075,7 @@ export default function Dashboard() {
                   {nomenclatures.map(n => <SelectItem key={n} value={n}>{n}</SelectItem>)}
                 </SelectContent>
               </Select>
+              )}
               <div className="relative w-[180px]">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                 <Input
