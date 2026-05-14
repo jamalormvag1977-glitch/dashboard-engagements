@@ -766,6 +766,7 @@ export default function Dashboard() {
       .sort((a, b) => (b['ORD TOTAL'] || 0) - (a['ORD TOTAL'] || 0))
       .map(r => ({
         numEngagement: r['N° ENGAGEMENT'] || '-',
+        nomenclature: r.NOMENCLATURE || '-',
         designation: r['DETAIL DESIGNATION'] || '-',
         entite: r.ENTITE,
         projet: r.Projet,
@@ -3310,8 +3311,9 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-gray-50">
                     <TableHead className="text-xs font-semibold text-gray-600">N° Engagement</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Nomenclature</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Désignation</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600">Entité</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Consolidés</TableHead>
@@ -3324,6 +3326,7 @@ export default function Dashboard() {
                   {pLines.map((r, idx) => (
                     <TableRow key={`${r.numEngagement}-${idx}`} className="hover:bg-gray-50">
                       <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
+                      <TableCell className="text-xs text-gray-600">{r.nomenclature}</TableCell>
                       <TableCell className="text-xs text-gray-700 max-w-[200px] truncate">{r.designation}</TableCell>
                       <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
                       <TableCell className="text-xs text-gray-600">{r.projet || 'Non classé'}</TableCell>
