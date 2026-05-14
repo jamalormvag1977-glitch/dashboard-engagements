@@ -4763,6 +4763,7 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>Programme</TableHead>
                     <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>Projet</TableHead>
                     <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>Nomenclature</TableHead>
                     <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>Désignation</TableHead>
                     <TableHead className="text-xs font-semibold text-rose-700 text-right" rowSpan={2}>Crédits Report</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-emerald-600" colSpan={3}>Engagement</TableHead>
@@ -4811,6 +4812,7 @@ export default function Dashboard() {
                           programme: row.Programme || '',
                           projet: row.Projet || '',
                           entite: row.ENTITE || '',
+                          nomenclature: row.NOMENCLATURE || '',
                           designation: row['DETAIL DESIGNATION'] || '-',
                           reports,
                           engReports,
@@ -4851,6 +4853,7 @@ export default function Dashboard() {
                               <TableCell className="text-xs font-medium text-gray-900 whitespace-nowrap">{p.programme}</TableCell>
                               <TableCell className="text-xs text-gray-600 whitespace-nowrap">{p.projet}</TableCell>
                               <TableCell className="text-xs text-gray-600">{p.entite}</TableCell>
+                              <TableCell className="text-xs text-gray-500 font-mono whitespace-nowrap">{p.nomenclature}</TableCell>
                               <TableCell className="text-xs text-gray-700" style={{minWidth:'250px',maxWidth:'400px',whiteSpace:'normal',lineHeight:'1.4'}}>{p.designation}</TableCell>
                               <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.reports)}</TableCell>
                               <TableCell className="text-xs text-emerald-700 text-right">{formatMillions(p.engReports)}</TableCell>
@@ -4873,7 +4876,7 @@ export default function Dashboard() {
                           )
                         })}
                         <TableRow className="bg-rose-50/40 font-bold">
-                          <TableCell className="text-xs font-bold text-gray-900" colSpan={4}>Total ({prestations.length} prestations)</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({prestations.length} prestations)</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totEngReports / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totEngReports / totReports) * 100 : 0)}</span></TableCell>
