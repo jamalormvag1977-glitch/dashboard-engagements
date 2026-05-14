@@ -3315,13 +3315,14 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>N° Engagement</TableHead>
                     <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Désignation</TableHead>
                     <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-rose-600" colSpan={3}>Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-rose-600" colSpan={4}>Ordonnancements</TableHead>
                     <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Taux ord.</TableHead>
                   </TableRow>
                   <TableRow className="bg-emerald-50/40">
                     <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Rep.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Cons.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Total</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3348,6 +3349,7 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-rose-600 text-right">{formatMillions(r.ordReports)}</TableCell>
                               <TableCell className="text-xs text-rose-600 text-right">{formatMillions(r.ordConsolides)}</TableCell>
                               <TableCell className="text-xs text-rose-600 text-right">{formatMillions(r.ordNouveaux)}</TableCell>
+                              <TableCell className="text-xs font-semibold text-rose-700 text-right">{formatMillions(r.ordTotal)}</TableCell>
                               <TableCell className="text-xs text-right">
                                 <span className={tauxColor(r.tauxOrdonnement)}>{formatPercent(r.tauxOrdonnement)}</span>
                               </TableCell>
@@ -3360,6 +3362,7 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdRep)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdCons)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdNouv)}</TableCell>
+                          <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdTotal)}</TableCell>
                           <TableCell className="text-xs font-bold text-right">
                             <span className={tauxColor(totCP > 0 ? (totOrdTotal / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOrdTotal / totCP) * 100 : 0)}</span>
                           </TableCell>
