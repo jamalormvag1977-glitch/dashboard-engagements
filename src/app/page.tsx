@@ -4484,15 +4484,15 @@ export default function Dashboard() {
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ordReports)}</TableCell>
                       <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxOrdReports)}>{formatPercent(e.tauxOrdReports)}</span></TableCell>
                       <TableCell className="text-xs text-blue-600 text-right">{formatMillions(e.prevJuin)}</TableCell>
-                      <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevJuin / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevJuin / e.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.reports > 0 ? (e.prevJuin / e.reports) * 100 : 0)}>{formatPercent(e.reports > 0 ? (e.prevJuin / e.reports) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-teal-600 text-right">{formatMillions(e.prevSept)}</TableCell>
-                      <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevSept / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevSept / e.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.reports > 0 ? (e.prevSept / e.reports) * 100 : 0)}>{formatPercent(e.reports > 0 ? (e.prevSept / e.reports) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-orange-600 text-right">{formatMillions(e.prevOct)}</TableCell>
-                      <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevOct / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevOct / e.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.reports > 0 ? (e.prevOct / e.reports) * 100 : 0)}>{formatPercent(e.reports > 0 ? (e.prevOct / e.reports) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-purple-600 text-right">{formatMillions(e.prevNov)}</TableCell>
-                      <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevNov / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevNov / e.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.reports > 0 ? (e.prevNov / e.reports) * 100 : 0)}>{formatPercent(e.reports > 0 ? (e.prevNov / e.reports) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(e.prevDec)}</TableCell>
-                      <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevDec / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevDec / e.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.reports > 0 ? (e.prevDec / e.reports) * 100 : 0)}>{formatPercent(e.reports > 0 ? (e.prevDec / e.reports) * 100 : 0)}</span></TableCell>
                     </TableRow>
                   ))}
                   {(() => {
@@ -4513,15 +4513,15 @@ export default function Dashboard() {
                         <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalOrdReports)}</TableCell>
                         <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totPrevJuin)}</TableCell>
-                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevJuin / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevJuin / totReports) * 100 : 0)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totPrevSept)}</TableCell>
-                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevSept / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevSept / totReports) * 100 : 0)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-orange-700 text-right">{formatMillions(totPrevOct)}</TableCell>
-                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevOct / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevOct / totReports) * 100 : 0)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totPrevNov)}</TableCell>
-                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevNov / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevNov / totReports) * 100 : 0)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totPrevDec)}</TableCell>
-                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevDec / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevDec / totReports) * 100 : 0)}</span></TableCell>
                       </TableRow>
                     )
                   })()}
@@ -4578,15 +4578,15 @@ export default function Dashboard() {
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ordReports)}</TableCell>
                       <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxOrdReports)}>{formatPercent(g.tauxOrdReports)}</span></TableCell>
                       <TableCell className="text-xs text-blue-600 text-right">{formatMillions(g.prevJuin)}</TableCell>
-                      <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevJuin / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevJuin / g.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.reports > 0 ? (g.prevJuin / g.reports) * 100 : 0)}>{formatPercent(g.reports > 0 ? (g.prevJuin / g.reports) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-teal-600 text-right">{formatMillions(g.prevSept)}</TableCell>
-                      <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevSept / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevSept / g.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.reports > 0 ? (g.prevSept / g.reports) * 100 : 0)}>{formatPercent(g.reports > 0 ? (g.prevSept / g.reports) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-orange-600 text-right">{formatMillions(g.prevOct)}</TableCell>
-                      <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevOct / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevOct / g.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.reports > 0 ? (g.prevOct / g.reports) * 100 : 0)}>{formatPercent(g.reports > 0 ? (g.prevOct / g.reports) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-purple-600 text-right">{formatMillions(g.prevNov)}</TableCell>
-                      <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevNov / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevNov / g.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.reports > 0 ? (g.prevNov / g.reports) * 100 : 0)}>{formatPercent(g.reports > 0 ? (g.prevNov / g.reports) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(g.prevDec)}</TableCell>
-                      <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevDec / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevDec / g.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.reports > 0 ? (g.prevDec / g.reports) * 100 : 0)}>{formatPercent(g.reports > 0 ? (g.prevDec / g.reports) * 100 : 0)}</span></TableCell>
                     </TableRow>
                   ))}
                   {(() => {
@@ -4607,15 +4607,15 @@ export default function Dashboard() {
                         <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalOrdReports)}</TableCell>
                         <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totPrevJuin)}</TableCell>
-                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevJuin / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevJuin / totReports) * 100 : 0)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totPrevSept)}</TableCell>
-                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevSept / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevSept / totReports) * 100 : 0)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-orange-700 text-right">{formatMillions(totPrevOct)}</TableCell>
-                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevOct / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevOct / totReports) * 100 : 0)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totPrevNov)}</TableCell>
-                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevNov / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevNov / totReports) * 100 : 0)}</span></TableCell>
                         <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totPrevDec)}</TableCell>
-                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevDec / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevDec / totReports) * 100 : 0)}</span></TableCell>
                       </TableRow>
                     )
                   })()}
@@ -4721,15 +4721,15 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ordReports)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxOrdReports)}>{formatPercent(p.tauxOrdReports)}</span></TableCell>
                             <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.prevJuin)}</TableCell>
-                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevJuin / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevJuin / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevJuin / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevJuin / p.reports) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.prevSept)}</TableCell>
-                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevSept / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevSept / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevSept / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevSept / p.reports) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-orange-600 text-right">{formatMillions(p.prevOct)}</TableCell>
-                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevOct / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevOct / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevOct / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevOct / p.reports) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-purple-600 text-right">{formatMillions(p.prevNov)}</TableCell>
-                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevNov / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevNov / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevNov / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevNov / p.reports) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.prevDec)}</TableCell>
-                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevDec / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevDec / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevDec / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevDec / p.reports) * 100 : 0)}</span></TableCell>
                           </TableRow>
                         ))}
                         <TableRow className="bg-indigo-50/40 font-bold">
@@ -4741,15 +4741,15 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totEngReports > 0 ? (totOrdReports / totEngReports) * 100 : 0)}>{formatPercent(totEngReports > 0 ? (totOrdReports / totEngReports) * 100 : 0)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totPrevJuin)}</TableCell>
-                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevJuin / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevJuin / totReports) * 100 : 0)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totPrevSept)}</TableCell>
-                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevSept / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevSept / totReports) * 100 : 0)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-orange-700 text-right">{formatMillions(totPrevOct)}</TableCell>
-                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevOct / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevOct / totReports) * 100 : 0)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totPrevNov)}</TableCell>
-                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevNov / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevNov / totReports) * 100 : 0)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totPrevDec)}</TableCell>
-                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevDec / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevDec / totReports) * 100 : 0)}</span></TableCell>
                         </TableRow>
                       </>
                     )
