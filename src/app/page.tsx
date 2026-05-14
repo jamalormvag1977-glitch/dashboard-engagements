@@ -308,7 +308,7 @@ export default function Dashboard() {
     const totalEngConsolides = filteredData.reduce((sum, r) => sum + (r['ENG CONSOLIDES'] || 0), 0)
     const totalEngNouveaux = filteredData.reduce((sum, r) => sum + (r['ENG NOUVEAUX'] || 0), 0)
     const tauxEngagement = totalCP > 0 ? (totalEngCP / totalCP) * 100 : 0
-    const tauxPaiement = totalEngCP > 0 ? (totalPaiements / totalEngCP) * 100 : 0
+    const tauxPaiement = totalCP > 0 ? (totalPaiements / totalCP) * 100 : 0
     const tauxOrdonnement = totalCP > 0 ? (totalOrd / totalCP) * 100 : 0
     const disponible = totalCP - totalEngCP
 
@@ -384,7 +384,7 @@ export default function Dashboard() {
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
       tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
       tauxOrdonnement: v.cp > 0 ? (v.ord / v.cp) * 100 : 0,
-      tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
+      tauxPaiement: v.cp > 0 ? (v.paiements / v.cp) * 100 : 0,
       disponible: v.cp - v.engCP,
       cumulPrevJuin: v.prevByMonth['JUIN'] || 0,
       cumulPrevSeptembre: v.prevByMonth['SEPTEMBRE'] || 0,
@@ -437,7 +437,7 @@ export default function Dashboard() {
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
       tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
       tauxOrdonnement: v.cp > 0 ? (v.ord / v.cp) * 100 : 0,
-      tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
+      tauxPaiement: v.cp > 0 ? (v.paiements / v.cp) * 100 : 0,
       disponible: v.cp - v.engCP,
       cumulPrevJuin: v.prevByMonth['JUIN'] || 0,
       cumulPrevSeptembre: v.prevByMonth['SEPTEMBRE'] || 0,
@@ -494,7 +494,7 @@ export default function Dashboard() {
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
       tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
       tauxOrdonnement: v.cp > 0 ? (v.ord / v.cp) * 100 : 0,
-      tauxPaiement: v.engCP > 0 ? (v.paiements / v.engCP) * 100 : 0,
+      tauxPaiement: v.cp > 0 ? (v.paiements / v.cp) * 100 : 0,
       disponible: v.cp - v.engCP,
       cumulPrevJuin: v.prevByMonth['JUIN'] || 0,
       cumulPrevSeptembre: v.prevByMonth['SEPTEMBRE'] || 0,
@@ -1278,7 +1278,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex justify-between mt-1.5">
                   <span className="text-[10px] text-gray-400">0%</span>
-                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(data.totalEngCP - data.totalPaiements)}</span>
+                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(data.totalCP - data.totalPaiements)}</span>
                   <span className="text-[10px] text-gray-400">100%</span>
                 </div>
               </div>
