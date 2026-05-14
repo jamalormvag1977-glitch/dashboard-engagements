@@ -770,6 +770,7 @@ export default function Dashboard() {
         designation: r['DETAIL DESIGNATION'] || '-',
         entite: r.ENTITE,
         projet: r.Projet,
+        cp: r['TOTAL CP'] || 0,
         ordReports: r['ORD REPORTS'] || 0,
         ordConsolides: r['ORD CONSOLIDES'] || 0,
         ordNouveaux: r['ORD NOUVEAUX'] || 0,
@@ -3303,42 +3304,71 @@ export default function Dashboard() {
         {/* Ordonnancement Lines Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Détail des ordonnancements ({ordonnancementLines.length} lignes)</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-700">Détail des ordonnancements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Nomenclature</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">N° Engagement</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600">Désignation</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Consolidés</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Nouveaux</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ord. Total</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
+                  <TableRow className="bg-emerald-50/60">
+                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Nomenclature</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>N° Engagement</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Désignation</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-rose-600" colSpan={3}>Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                  </TableRow>
+                  <TableRow className="bg-emerald-50/40">
+                    <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Nouv.</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {pLines.map((r, idx) => (
-                    <TableRow key={`${r.numEngagement}-${idx}`} className="hover:bg-gray-50">
-                      <TableCell className="text-xs text-gray-600">{r.projet || 'Non classé'}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
-                      <TableCell className="text-xs text-gray-600">{r.nomenclature}</TableCell>
-                      <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
-                      <TableCell className="text-xs text-gray-700 max-w-[200px] truncate">{r.designation}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordReports)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordConsolides)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatTableCell(r.ordNouveaux)}</TableCell>
-                      <TableCell className="text-xs font-medium text-gray-900 text-right">{formatTableCell(r.ordTotal)}</TableCell>
-                      <TableCell className="text-xs text-right">
-                        <span className={tauxColor(r.tauxOrdonnement)}>{formatPercent(r.tauxOrdonnement)}</span>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {(() => {
+                    let currentProjet = ''
+                    const totCP = pLines.reduce((s, r) => s + r.cp, 0)
+                    const totOrdRep = pLines.reduce((s, r) => s + r.ordReports, 0)
+                    const totOrdCons = pLines.reduce((s, r) => s + r.ordConsolides, 0)
+                    const totOrdNouv = pLines.reduce((s, r) => s + r.ordNouveaux, 0)
+                    const totOrdTotal = pLines.reduce((s, r) => s + r.ordTotal, 0)
+                    return (
+                      <>
+                        {pLines.map((r, idx) => {
+                          const showProjetHeader = (r.projet || 'Non classé') !== currentProjet
+                          currentProjet = r.projet || 'Non classé'
+                          return (
+                            <TableRow key={`${r.numEngagement}-${idx}`} className={`hover:bg-gray-50 ${showProjetHeader && idx > 0 ? 'border-t-2 border-emerald-200' : ''}`}>
+                              <TableCell className="text-xs font-medium text-gray-900 whitespace-nowrap">{r.projet || 'Non classé'}</TableCell>
+                              <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
+                              <TableCell className="text-xs text-emerald-600 font-mono whitespace-nowrap">{r.nomenclature}</TableCell>
+                              <TableCell className="text-xs font-medium text-gray-900">{r.numEngagement}</TableCell>
+                              <TableCell className="text-xs text-gray-700" style={{minWidth:'250px',maxWidth:'400px',whiteSpace:'normal',lineHeight:'1.4'}}>{r.designation}</TableCell>
+                              <TableCell className="text-xs text-gray-700 text-right">{formatMillions(r.cp)}</TableCell>
+                              <TableCell className="text-xs text-rose-600 text-right">{formatMillions(r.ordReports)}</TableCell>
+                              <TableCell className="text-xs text-rose-600 text-right">{formatMillions(r.ordConsolides)}</TableCell>
+                              <TableCell className="text-xs text-rose-600 text-right">{formatMillions(r.ordNouveaux)}</TableCell>
+                              <TableCell className="text-xs text-right">
+                                <span className={tauxColor(r.tauxOrdonnement)}>{formatPercent(r.tauxOrdonnement)}</span>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })}
+                        <TableRow className="bg-emerald-50/40 font-bold">
+                          <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({pLines.length} prestations)</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                          <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdRep)}</TableCell>
+                          <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdCons)}</TableCell>
+                          <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdNouv)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">
+                            <span className={tauxColor(totCP > 0 ? (totOrdTotal / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOrdTotal / totCP) * 100 : 0)}</span>
+                          </TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
                 </TableBody>
               </Table>
             </div>
