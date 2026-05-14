@@ -4497,6 +4497,7 @@ export default function Dashboard() {
                   ))}
                   {(() => {
                     const totCP = reportsByEntity.reduce((s, e) => s + e.cp, 0)
+                    const totReports = reportsByEntity.reduce((s, e) => s + e.reports, 0)
                     const totPrevJuin = reportsByEntity.reduce((s, e) => s + e.prevJuin, 0)
                     const totPrevSept = reportsByEntity.reduce((s, e) => s + e.prevSept, 0)
                     const totPrevOct = reportsByEntity.reduce((s, e) => s + e.prevOct, 0)
@@ -4591,6 +4592,7 @@ export default function Dashboard() {
                   ))}
                   {(() => {
                     const totCP = reportsByProjet.reduce((s, g) => s + g.cp, 0)
+                    const totReports = reportsByProjet.reduce((s, g) => s + g.reports, 0)
                     const totPrevJuin = reportsByProjet.reduce((s, g) => s + g.prevJuin, 0)
                     const totPrevSept = reportsByProjet.reduce((s, g) => s + g.prevSept, 0)
                     const totPrevOct = reportsByProjet.reduce((s, g) => s + g.prevOct, 0)
