@@ -2779,8 +2779,6 @@ export default function Dashboard() {
   }
 
   const renderEngagementsView = () => {
-    const totalEngCP = engagementLines.reduce((s, r) => s + r.engCPTotal, 0)
-    const totalEngCE = filteredData.reduce((s, r) => s + (r['ENG CE ULT'] || 0), 0)
     const PER_PAGE = 15
     const pLines = paginate(engagementLines, engPage, PER_PAGE) as typeof engagementLines
     const tPages = totalPages(engagementLines.length, PER_PAGE)
@@ -2788,167 +2786,6 @@ export default function Dashboard() {
     return (
       <>
         {renderKPISections(kpis)}
-        {/* ═══════════ SECTION 1 : ENGAGEMENTS CP & CE ═══════════ */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <div className="w-1 h-5 rounded-full bg-gradient-to-b from-emerald-500 to-teal-600" />
-            <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Engagements</h3>
-            
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Engagement CP */}
-            <div className="kpi-card-premium rounded-xl border border-emerald-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)' }}>
-              <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-teal-500" />
-              <div className="p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-emerald-100 flex items-center justify-center transition-transform">
-                        <TrendingUp className="w-5 h-5 text-emerald-700" />
-                      </div>
-                      <span className="text-sm font-semibold text-gray-600">Engagement CP</span>
-                    </div>
-                    <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(totalEngCP)}</p>
-                  </div>
-                  <div className="text-right">
-                    {(() => {
-                      const tauxEngCP = kpis.totalCP > 0 ? (totalEngCP / kpis.totalCP) * 100 : 0
-                      return (
-                        <>
-                          <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(tauxEngCP)}`}>
-                            {tauxEngCP >= 80 ? '✓' : tauxEngCP >= 50 ? '⚠' : '✗'}
-                            {formatPercent(tauxEngCP)}
-                          </span>
-                          <p className="text-[11px] text-gray-400 mt-0.5">
-                            {tauxEngCP >= 80 ? 'Bon' : tauxEngCP >= 50 ? 'Moyen' : 'Faible'}
-                          </p>
-                        </>
-                      )
-                    })()}
-                  </div>
-                </div>
-                <div className="mt-3">
-                  {(() => {
-                    const tauxEngCP = kpis.totalCP > 0 ? (totalEngCP / kpis.totalCP) * 100 : 0
-                    return (
-                      <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div className={`kpi-progress-bar h-full rounded-full ${tauxEngCP >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxEngCP >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxEngCP, 100)}%` }} />
-                      </div>
-                    )
-                  })()}
-                  <div className="flex justify-between mt-1.5">
-                    <span className="text-[10px] text-gray-400">0%</span>
-                    <span className="text-[10px] text-gray-400">Reste : {formatMillions(kpis.totalCP - totalEngCP)}</span>
-                    <span className="text-[10px] text-gray-400">100%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Engagement CE */}
-            <div className="kpi-card-premium rounded-xl border border-teal-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%)' }}>
-              <div className="h-1.5 bg-gradient-to-r from-teal-400 to-cyan-500" />
-              <div className="p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-teal-100 flex items-center justify-center transition-transform">
-                        <Landmark className="w-5 h-5 text-teal-700" />
-                      </div>
-                      <span className="text-sm font-semibold text-gray-600">Engagement CE</span>
-                    </div>
-                    <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(totalEngCE)}</p>
-                  </div>
-                  <div className="text-right">
-                    {(() => {
-                      const tauxEngCE = kpis.totalCE > 0 ? (totalEngCE / kpis.totalCE) * 100 : 0
-                      return (
-                        <>
-                          <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(tauxEngCE)}`}>
-                            {tauxEngCE >= 80 ? '✓' : tauxEngCE >= 50 ? '⚠' : '✗'}
-                            {formatPercent(tauxEngCE)}
-                          </span>
-                          <p className="text-[11px] text-gray-400 mt-0.5">
-                            {tauxEngCE >= 80 ? 'Bon' : tauxEngCE >= 50 ? 'Moyen' : 'Faible'}
-                          </p>
-                        </>
-                      )
-                    })()}
-                  </div>
-                </div>
-                <div className="mt-3">
-                  {(() => {
-                    const tauxEngCE = kpis.totalCE > 0 ? (totalEngCE / kpis.totalCE) * 100 : 0
-                    return (
-                      <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div className={`kpi-progress-bar h-full rounded-full ${tauxEngCE >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxEngCE >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxEngCE, 100)}%` }} />
-                      </div>
-                    )
-                  })()}
-                  <div className="flex justify-between mt-1.5">
-                    <span className="text-[10px] text-gray-400">0%</span>
-                    <span className="text-[10px] text-gray-400">Reste : {formatMillions(kpis.totalCE - totalEngCE)}</span>
-                    <span className="text-[10px] text-gray-400">100%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════ SECTION 2 : NOMBRE & RÉPARTITION ═══════════ */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
-            <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Volume</h3>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {/* Nb Engagements */}
-            <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-              <div className="h-1.5 bg-gradient-to-r from-violet-400 to-violet-600" />
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
-                    <FileText className="w-5 h-5 text-violet-600" />
-                  </div>
-                  <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">Lignes</Badge>
-                </div>
-                <p className="text-2xl font-black text-gray-900 tracking-tight">{engagementLines.length}</p>
-                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Engagements comptabilisés</p>
-              </div>
-            </div>
-
-            {/* Eng. Reports */}
-            <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-              <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
-                    <RotateCcw className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
-                </div>
-                <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(engagementBreakdown.engReports)}</p>
-                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">{formatPercent(engagementBreakdown.pctReports)} du total</p>
-              </div>
-            </div>
-
-            {/* Eng. Nouveaux */}
-            <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-              <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600" />
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
-                    <TrendingUp className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
-                </div>
-                <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(engagementBreakdown.engNouveaux)}</p>
-                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">{formatPercent(engagementBreakdown.pctNouveaux)} du total</p>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* ═══════════ Engagement par Programme ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
@@ -3345,9 +3182,6 @@ export default function Dashboard() {
   }
 
   const renderOrdonnancementsView = () => {
-    const totalOrd = ordonnancementLines.reduce((s, r) => s + r.ordTotal, 0)
-    const nbOrd = ordonnancementLines.length
-    const tauxGlobal = kpis.totalCP > 0 ? (totalOrd / kpis.totalCP) * 100 : 0
     const PER_PAGE = 15
     const pLines = paginate(ordonnancementLines, ordPage, PER_PAGE) as typeof ordonnancementLines
     const tPages = totalPages(ordonnancementLines.length, PER_PAGE)
@@ -3355,85 +3189,6 @@ export default function Dashboard() {
     return (
       <>
         {renderKPISections(kpis)}
-        {/* ═══════════ SECTION 1 : ORDONNANCEMENT GLOBAL ═══════════ */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-cyan-600" />
-            <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancements</h3>
-            
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Total Ordonnancements avec taux */}
-            <div className="kpi-card-premium rounded-xl border border-blue-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #eff6ff 100%)' }}>
-              <div className="h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600" />
-              <div className="p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-blue-100 flex items-center justify-center transition-transform">
-                        <Wallet className="w-5 h-5 text-blue-700" />
-                      </div>
-                      <span className="text-sm font-semibold text-gray-600">Total Ordonnancements</span>
-                    </div>
-                    <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(totalOrd)}</p>
-                  </div>
-                  <div className="text-right">
-                    <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(tauxGlobal)}`}>
-                      {tauxGlobal >= 80 ? '✓' : tauxGlobal >= 50 ? '⚠' : '✗'}
-                      {formatPercent(tauxGlobal)}
-                    </span>
-                    <p className="text-[11px] text-gray-400 mt-0.5">
-                      {tauxGlobal >= 80 ? 'Bon' : tauxGlobal >= 50 ? 'Moyen' : 'Faible'}
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className={`kpi-progress-bar h-full rounded-full ${tauxGlobal >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxGlobal >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxGlobal, 100)}%` }} />
-                  </div>
-                  <div className="flex justify-between mt-1.5">
-                    <span className="text-[10px] text-gray-400">0%</span>
-                    <span className="text-[10px] text-gray-400">Reste : {formatMillions(kpis.totalEngCP - totalOrd)}</span>
-                    <span className="text-[10px] text-gray-400">100%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Nb Ordonnancements + Volume */}
-            <div className="grid grid-cols-2 gap-4">
-              {/* Nb Ordonnancements */}
-              <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-                <div className="h-1.5 bg-gradient-to-r from-violet-400 to-violet-600" />
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
-                      <FileText className="w-5 h-5 text-violet-600" />
-                    </div>
-                    <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">Nb</Badge>
-                  </div>
-                  <p className="text-2xl font-black text-gray-900 tracking-tight">{nbOrd}</p>
-                  <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Ordonnancements</p>
-                </div>
-              </div>
-
-              {/* Paiements */}
-              <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-                <div className="h-1.5 bg-gradient-to-r from-cyan-400 to-cyan-600" />
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
-                      <Wallet className="w-5 h-5 text-cyan-600" />
-                    </div>
-                    <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">Paiements</Badge>
-                  </div>
-                  <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalPaiements)}</p>
-                  <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Total paiements</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Ordonnancement Lines Table */}
         <Card className="border border-gray-100 shadow-sm">
