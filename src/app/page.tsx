@@ -4700,85 +4700,117 @@ export default function Dashboard() {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-emerald-50/60">
-                    <TableHead className="text-xs font-semibold text-emerald-700">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700">Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700">Désignation</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Prév. Rep.</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Prév. Cons.</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Prév. Nouv.</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total Prév.</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux Prév.</TableHead>
+                  <TableRow className="bg-amber-50/60">
+                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Désignation</TableHead>
+                    <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={3}>Fin Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={3}>Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={3}>Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Taux Déc.</TableHead>
+                  </TableRow>
+                  <TableRow className="bg-amber-50/40">
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Nouv.</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {(() => {
                     const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
-                    // Build prestation-level data with cumulative prévisions
+                    // Build prestation-level data with cumulative prévisions per category
                     const prestations = filteredData.map(row => {
                       let cumulRep = 0, cumulCons = 0, cumulNouv = 0
+                      const cumulRepByMonth: Record<string,number> = {}
+                      const cumulConsByMonth: Record<string,number> = {}
+                      const cumulNouvByMonth: Record<string,number> = {}
                       for (const m of prevMonths) {
                         cumulRep += row[`Previsions REPORTS ${m}`] || 0
                         cumulCons += row[`Previsions CONSOLIDES ${m}`] || 0
                         cumulNouv += row[`Previsions NOUVEAUX ${m}`] || 0
+                        cumulRepByMonth[m] = cumulRep
+                        cumulConsByMonth[m] = cumulCons
+                        cumulNouvByMonth[m] = cumulNouv
                       }
-                      const totalPrev = cumulRep + cumulCons + cumulNouv
+                      const totDec = cumulRep + cumulCons + cumulNouv
                       const cp = row['TOTAL CP'] || 0
                       return {
                         projet: row.Projet || '',
                         entite: row.ENTITE || '',
                         designation: row['DETAIL DESIGNATION'] || '-',
                         cp,
-                        engCP: row['ENG CP TOTAL'] || 0,
-                        cumulRep,
-                        cumulCons,
-                        cumulNouv,
-                        totalPrev,
-                        tauxPrev: cp > 0 ? (totalPrev / cp) * 100 : 0,
+                        cumulRepByMonth,
+                        cumulConsByMonth,
+                        cumulNouvByMonth,
+                        totDec,
                       }
-                    }).filter(p => p.totalPrev > 0).sort((a, b) => b.totalPrev - a.totalPrev)
+                    }).filter(p => p.totDec > 0).sort((a, b) => b.totDec - a.totDec)
 
                     // Totals
-                    const totCP = prestations.reduce((s, p) => s + p.cp, 0)
-                    const totEngCP = prestations.reduce((s, p) => s + p.engCP, 0)
-                    const totRep = prestations.reduce((s, p) => s + p.cumulRep, 0)
-                    const totCons = prestations.reduce((s, p) => s + p.cumulCons, 0)
-                    const totNouv = prestations.reduce((s, p) => s + p.cumulNouv, 0)
-                    const totPrev = prestations.reduce((s, p) => s + p.totalPrev, 0)
+                    let totCP = 0
+                    let totRepJuin = 0, totConsJuin = 0, totNouvJuin = 0
+                    let totRepSept = 0, totConsSept = 0, totNouvSept = 0
+                    let totRepDec = 0, totConsDec = 0, totNouvDec = 0
+                    prestations.forEach(p => {
+                      totCP += p.cp
+                      totRepJuin += p.cumulRepByMonth['JUIN'] || 0
+                      totConsJuin += p.cumulConsByMonth['JUIN'] || 0
+                      totNouvJuin += p.cumulNouvByMonth['JUIN'] || 0
+                      totRepSept += p.cumulRepByMonth['SEPTEMBRE'] || 0
+                      totConsSept += p.cumulConsByMonth['SEPTEMBRE'] || 0
+                      totNouvSept += p.cumulNouvByMonth['SEPTEMBRE'] || 0
+                      totRepDec += p.cumulRepByMonth['DECEMBRE'] || 0
+                      totConsDec += p.cumulConsByMonth['DECEMBRE'] || 0
+                      totNouvDec += p.cumulNouvByMonth['DECEMBRE'] || 0
+                    })
+                    const totPrevDec = totRepDec + totConsDec + totNouvDec
 
-                    // Group by projet for subtotals
                     let currentProjet = ''
                     return (
                       <>
                         {prestations.map((p, i) => {
                           const showProjetHeader = p.projet !== currentProjet
                           currentProjet = p.projet
+                          const pTotDec = (p.cumulRepByMonth['DECEMBRE']||0) + (p.cumulConsByMonth['DECEMBRE']||0) + (p.cumulNouvByMonth['DECEMBRE']||0)
                           return (
-                            <TableRow key={i} className={`hover:bg-gray-50 ${showProjetHeader && i > 0 ? 'border-t-2 border-emerald-200' : ''}`}>
+                            <TableRow key={i} className={`hover:bg-gray-50 ${showProjetHeader && i > 0 ? 'border-t-2 border-amber-200' : ''}`}>
                               <TableCell className="text-xs font-medium text-gray-900 whitespace-nowrap">{p.projet}</TableCell>
                               <TableCell className="text-xs text-gray-600">{p.entite}</TableCell>
-                              <TableCell className="text-xs text-gray-700 max-w-[300px] truncate" title={p.designation}>{p.designation}</TableCell>
+                              <TableCell className="text-xs text-gray-700 max-w-[250px] truncate" title={p.designation}>{p.designation}</TableCell>
                               <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
-                              <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engCP)}</TableCell>
-                              <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.cumulRep)}</TableCell>
-                              <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.cumulCons)}</TableCell>
-                              <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.cumulNouv)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-gray-900 text-right">{formatMillions(p.totalPrev)}</TableCell>
-                              <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxPrev)}>{formatPercent(p.tauxPrev)}</span></TableCell>
+                              <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.cumulRepByMonth['JUIN']||0)}</TableCell>
+                              <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.cumulConsByMonth['JUIN']||0)}</TableCell>
+                              <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.cumulNouvByMonth['JUIN']||0)}</TableCell>
+                              <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.cumulRepByMonth['SEPTEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.cumulConsByMonth['SEPTEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.cumulNouvByMonth['SEPTEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.cumulRepByMonth['DECEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.cumulConsByMonth['DECEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.cumulNouvByMonth['DECEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (pTotDec / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (pTotDec / p.cp) * 100 : 0)}</span></TableCell>
                             </TableRow>
                           )
                         })}
-                        <TableRow className="bg-emerald-50/40 font-bold">
+                        <TableRow className="bg-amber-50/40 font-bold">
                           <TableCell className="text-xs font-bold text-gray-900" colSpan={3}>Total ({prestations.length} prestations)</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngCP)}</TableCell>
-                          <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totRep)}</TableCell>
-                          <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totCons)}</TableCell>
-                          <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totNouv)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPrev)}</TableCell>
-                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrev / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrev / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totRepJuin)}</TableCell>
+                          <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totConsJuin)}</TableCell>
+                          <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totNouvJuin)}</TableCell>
+                          <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totRepSept)}</TableCell>
+                          <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totConsSept)}</TableCell>
+                          <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totNouvSept)}</TableCell>
+                          <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totRepDec)}</TableCell>
+                          <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totConsDec)}</TableCell>
+                          <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totNouvDec)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}</span></TableCell>
                         </TableRow>
                       </>
                     )
