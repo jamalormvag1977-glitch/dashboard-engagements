@@ -4216,19 +4216,36 @@ export default function Dashboard() {
     const resteEngagerReports = totalReports - totalEngReports
     const resteOrdonnerReports = totalEngReports - totalOrdReports
 
-    // Group by entity for reports analysis
+    // Group by entity for reports analysis (with prévisions)
     const reportsByEntity = analysisByEntity.map(e => {
       const rows = filteredData.filter(r => r.ENTITE === e.name)
       const reports = rows.reduce((s, r) => s + (r.REPORTS || 0), 0)
       const engReports = rows.reduce((s, r) => s + (r['ENG REPORT'] || 0), 0)
       const ordReports = rows.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
       const paiementsReports = rows.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0)
+      const cp = rows.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
+      // Cumulative prévisions for reports rows
+      const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
+      let cumulRep = 0, cumulCons = 0, cumulNouv = 0
+      const cumulByMonth: Record<string,number> = {}
+      for (const m of prevMonths) {
+        cumulRep += rows.reduce((s, r) => s + (r[`Previsions REPORTS ${m}`] || 0), 0)
+        cumulCons += rows.reduce((s, r) => s + (r[`Previsions CONSOLIDES ${m}`] || 0), 0)
+        cumulNouv += rows.reduce((s, r) => s + (r[`Previsions NOUVEAUX ${m}`] || 0), 0)
+        cumulByMonth[m] = cumulRep + cumulCons + cumulNouv
+      }
       return {
         name: e.name,
         reports,
         engReports,
         ordReports,
         paiementsReports,
+        cp,
+        prevJuin: cumulByMonth['JUIN'] || 0,
+        prevSept: cumulByMonth['SEPTEMBRE'] || 0,
+        prevOct: cumulByMonth['OCTOBRE'] || 0,
+        prevNov: cumulByMonth['NOVEMBRE'] || 0,
+        prevDec: cumulByMonth['DECEMBRE'] || 0,
         tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
         tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
         resteEngager: reports - engReports,
@@ -4236,19 +4253,35 @@ export default function Dashboard() {
       }
     }).filter(e => e.reports > 0).sort((a, b) => b.reports - a.reports)
 
-    // Group by projet for reports analysis
+    // Group by projet for reports analysis (with prévisions)
     const reportsByProjet = analysisByGroup.map(g => {
       const rows = filteredData.filter(r => r.Projet === g.name)
       const reports = rows.reduce((s, r) => s + (r.REPORTS || 0), 0)
       const engReports = rows.reduce((s, r) => s + (r['ENG REPORT'] || 0), 0)
       const ordReports = rows.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
       const paiementsReports = rows.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0)
+      const cp = rows.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
+      const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
+      let cumulRep = 0, cumulCons = 0, cumulNouv = 0
+      const cumulByMonth: Record<string,number> = {}
+      for (const m of prevMonths) {
+        cumulRep += rows.reduce((s, r) => s + (r[`Previsions REPORTS ${m}`] || 0), 0)
+        cumulCons += rows.reduce((s, r) => s + (r[`Previsions CONSOLIDES ${m}`] || 0), 0)
+        cumulNouv += rows.reduce((s, r) => s + (r[`Previsions NOUVEAUX ${m}`] || 0), 0)
+        cumulByMonth[m] = cumulRep + cumulCons + cumulNouv
+      }
       return {
         name: g.name,
         reports,
         engReports,
         ordReports,
         paiementsReports,
+        cp,
+        prevJuin: cumulByMonth['JUIN'] || 0,
+        prevSept: cumulByMonth['SEPTEMBRE'] || 0,
+        prevOct: cumulByMonth['OCTOBRE'] || 0,
+        prevNov: cumulByMonth['NOVEMBRE'] || 0,
+        prevDec: cumulByMonth['DECEMBRE'] || 0,
         tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
         tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
         resteEngager: reports - engReports,
@@ -4417,42 +4450,93 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-blue-50/60">
-                    <TableHead className="text-xs font-semibold text-blue-700">Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Crédits Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Eng. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Ord. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Paiements Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Reste à engager</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Reste à ordonner</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Crédits Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Taux eng.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Fin Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Fin Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Paiements</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Reste à eng.</TableHead>
+                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Reste à ord.</TableHead>
+                  </TableRow>
+                  <TableRow className="bg-blue-50/40">
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Taux</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {reportsByEntity.map(e => (
                     <TableRow key={e.name} className="hover:bg-gray-50">
                       <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.reports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engReports)}</TableCell>
                       <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxEngReports)}>{formatPercent(e.tauxEngReports)}</span></TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ordReports)}</TableCell>
                       <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxOrdReports)}>{formatPercent(e.tauxOrdReports)}</span></TableCell>
+                      <TableCell className="text-xs text-blue-600 text-right">{formatMillions(e.prevJuin)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevJuin / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevJuin / e.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-teal-600 text-right">{formatMillions(e.prevSept)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevSept / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevSept / e.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-orange-600 text-right">{formatMillions(e.prevOct)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevOct / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevOct / e.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-purple-600 text-right">{formatMillions(e.prevNov)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevNov / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevNov / e.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(e.prevDec)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.prevDec / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.prevDec / e.cp) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.paiementsReports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.resteEngager)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.resteOrdonner)}</TableCell>
                     </TableRow>
                   ))}
-                  <TableRow className="bg-blue-50/40 font-bold">
-                    <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalReports)}</TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngReports)}</TableCell>
-                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalOrdReports)}</TableCell>
-                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0))}</TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteEngagerReports)}</TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteOrdonnerReports)}</TableCell>
-                  </TableRow>
+                  {(() => {
+                    const totCP = reportsByEntity.reduce((s, e) => s + e.cp, 0)
+                    const totPrevJuin = reportsByEntity.reduce((s, e) => s + e.prevJuin, 0)
+                    const totPrevSept = reportsByEntity.reduce((s, e) => s + e.prevSept, 0)
+                    const totPrevOct = reportsByEntity.reduce((s, e) => s + e.prevOct, 0)
+                    const totPrevNov = reportsByEntity.reduce((s, e) => s + e.prevNov, 0)
+                    const totPrevDec = reportsByEntity.reduce((s, e) => s + e.prevDec, 0)
+                    const totPaiementsReports = reportsByEntity.reduce((s, e) => s + e.paiementsReports, 0)
+                    return (
+                      <TableRow className="bg-blue-50/40 font-bold">
+                        <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalReports)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngReports)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalOrdReports)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totPrevJuin)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totPrevSept)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-orange-700 text-right">{formatMillions(totPrevOct)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totPrevNov)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totPrevDec)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiementsReports)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteEngagerReports)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteOrdonnerReports)}</TableCell>
+                      </TableRow>
+                    )
+                  })()}
                 </TableBody>
               </Table>
             </div>
@@ -4469,42 +4553,93 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-emerald-50/60">
-                    <TableHead className="text-xs font-semibold text-emerald-700">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Crédits Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Ord. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Paiements Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Reste à engager</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Reste à ordonner</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Projet</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Crédits Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Taux eng.</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Fin Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Fin Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Paiements</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Reste à eng.</TableHead>
+                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Reste à ord.</TableHead>
+                  </TableRow>
+                  <TableRow className="bg-emerald-50/40">
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Taux</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {reportsByProjet.map(g => (
                     <TableRow key={g.name} className="hover:bg-gray-50">
                       <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.reports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engReports)}</TableCell>
                       <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxEngReports)}>{formatPercent(g.tauxEngReports)}</span></TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ordReports)}</TableCell>
                       <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxOrdReports)}>{formatPercent(g.tauxOrdReports)}</span></TableCell>
+                      <TableCell className="text-xs text-blue-600 text-right">{formatMillions(g.prevJuin)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevJuin / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevJuin / g.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-teal-600 text-right">{formatMillions(g.prevSept)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevSept / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevSept / g.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-orange-600 text-right">{formatMillions(g.prevOct)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevOct / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevOct / g.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-purple-600 text-right">{formatMillions(g.prevNov)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevNov / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevNov / g.cp) * 100 : 0)}</span></TableCell>
+                      <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(g.prevDec)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.prevDec / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.prevDec / g.cp) * 100 : 0)}</span></TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.paiementsReports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.resteEngager)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.resteOrdonner)}</TableCell>
                     </TableRow>
                   ))}
-                  <TableRow className="bg-emerald-50/40 font-bold">
-                    <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalReports)}</TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngReports)}</TableCell>
-                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalOrdReports)}</TableCell>
-                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0))}</TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteEngagerReports)}</TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteOrdonnerReports)}</TableCell>
-                  </TableRow>
+                  {(() => {
+                    const totCP = reportsByProjet.reduce((s, g) => s + g.cp, 0)
+                    const totPrevJuin = reportsByProjet.reduce((s, g) => s + g.prevJuin, 0)
+                    const totPrevSept = reportsByProjet.reduce((s, g) => s + g.prevSept, 0)
+                    const totPrevOct = reportsByProjet.reduce((s, g) => s + g.prevOct, 0)
+                    const totPrevNov = reportsByProjet.reduce((s, g) => s + g.prevNov, 0)
+                    const totPrevDec = reportsByProjet.reduce((s, g) => s + g.prevDec, 0)
+                    const totPaiementsReports = reportsByProjet.reduce((s, g) => s + g.paiementsReports, 0)
+                    return (
+                      <TableRow className="bg-emerald-50/40 font-bold">
+                        <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalReports)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngReports)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalOrdReports)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totPrevJuin)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totPrevSept)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-orange-700 text-right">{formatMillions(totPrevOct)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totPrevNov)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totPrevDec)}</TableCell>
+                        <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}</span></TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiementsReports)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteEngagerReports)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(resteOrdonnerReports)}</TableCell>
+                      </TableRow>
+                    )
+                  })()}
                 </TableBody>
               </Table>
             </div>
@@ -4521,31 +4656,65 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-indigo-50/60">
-                    <TableHead className="text-xs font-semibold text-indigo-700">Programme</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Crédits Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Ord. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Paiements Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Reste à engager</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Reste à ordonner</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700" rowSpan={2}>Programme</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Crédits Report</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Taux eng.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Fin Juin</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Fin Oct.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Paiements</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Reste à eng.</TableHead>
+                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Reste à ord.</TableHead>
+                  </TableRow>
+                  <TableRow className="bg-indigo-50/40">
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Taux</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {(() => {
+                    const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
                     const reportsByProgramme = analysisByProgramme.map(p => {
                       const rows = filteredData.filter(r => (r.Programme || 'Sans nom') === p.name)
                       const reports = rows.reduce((s, r) => s + (r.REPORTS || 0), 0)
                       const engReports = rows.reduce((s, r) => s + (r['ENG REPORT'] || 0), 0)
                       const ordReports = rows.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
                       const paiementsReports = rows.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0)
+                      const cp = rows.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
+                      let cumulRep = 0, cumulCons = 0, cumulNouv = 0
+                      const cumulByMonth: Record<string,number> = {}
+                      for (const m of prevMonths) {
+                        cumulRep += rows.reduce((s, r) => s + (r[`Previsions REPORTS ${m}`] || 0), 0)
+                        cumulCons += rows.reduce((s, r) => s + (r[`Previsions CONSOLIDES ${m}`] || 0), 0)
+                        cumulNouv += rows.reduce((s, r) => s + (r[`Previsions NOUVEAUX ${m}`] || 0), 0)
+                        cumulByMonth[m] = cumulRep + cumulCons + cumulNouv
+                      }
                       return {
                         name: p.name,
                         reports,
                         engReports,
                         ordReports,
                         paiementsReports,
+                        cp,
+                        prevJuin: cumulByMonth['JUIN'] || 0,
+                        prevSept: cumulByMonth['SEPTEMBRE'] || 0,
+                        prevOct: cumulByMonth['OCTOBRE'] || 0,
+                        prevNov: cumulByMonth['NOVEMBRE'] || 0,
+                        prevDec: cumulByMonth['DECEMBRE'] || 0,
                         tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
                         tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
                         resteEngager: reports - engReports,
@@ -4559,17 +4728,34 @@ export default function Dashboard() {
                     const totPaiementsReports = reportsByProgramme.reduce((s, p) => s + p.paiementsReports, 0)
                     const totResteEngager = reportsByProgramme.reduce((s, p) => s + p.resteEngager, 0)
                     const totResteOrdonner = reportsByProgramme.reduce((s, p) => s + p.resteOrdonner, 0)
+                    const totCP = reportsByProgramme.reduce((s, p) => s + p.cp, 0)
+                    const totPrevJuin = reportsByProgramme.reduce((s, p) => s + p.prevJuin, 0)
+                    const totPrevSept = reportsByProgramme.reduce((s, p) => s + p.prevSept, 0)
+                    const totPrevOct = reportsByProgramme.reduce((s, p) => s + p.prevOct, 0)
+                    const totPrevNov = reportsByProgramme.reduce((s, p) => s + p.prevNov, 0)
+                    const totPrevDec = reportsByProgramme.reduce((s, p) => s + p.prevDec, 0)
 
                     return (
                       <>
                         {reportsByProgramme.map(p => (
                           <TableRow key={p.name} className="hover:bg-gray-50">
                             <TableCell className="text-xs font-medium text-gray-900">{p.name}</TableCell>
+                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.reports)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engReports)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxEngReports)}>{formatPercent(p.tauxEngReports)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ordReports)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxOrdReports)}>{formatPercent(p.tauxOrdReports)}</span></TableCell>
+                            <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.prevJuin)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevJuin / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevJuin / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.prevSept)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevSept / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevSept / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-orange-600 text-right">{formatMillions(p.prevOct)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevOct / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevOct / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-purple-600 text-right">{formatMillions(p.prevNov)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevNov / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevNov / p.cp) * 100 : 0)}</span></TableCell>
+                            <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.prevDec)}</TableCell>
+                            <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.prevDec / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.prevDec / p.cp) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.paiementsReports)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.resteEngager)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.resteOrdonner)}</TableCell>
@@ -4577,11 +4763,22 @@ export default function Dashboard() {
                         ))}
                         <TableRow className="bg-indigo-50/40 font-bold">
                           <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totEngReports / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totEngReports / totReports) * 100 : 0)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totOrdReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totEngReports > 0 ? (totOrdReports / totEngReports) * 100 : 0)}>{formatPercent(totEngReports > 0 ? (totOrdReports / totEngReports) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totPrevJuin)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevJuin / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totPrevSept)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevSept / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-orange-700 text-right">{formatMillions(totPrevOct)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevOct / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totPrevNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevNov / totCP) * 100 : 0)}</span></TableCell>
+                          <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totPrevDec)}</TableCell>
+                          <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPrevDec / totCP) * 100 : 0)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiementsReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteEngager)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteOrdonner)}</TableCell>
