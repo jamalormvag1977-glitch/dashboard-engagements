@@ -3230,13 +3230,14 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-blue-700" rowSpan={2}>N° Engagement</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700" rowSpan={2}>Désignation</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-emerald-600" colSpan={3}>Engagements</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-emerald-600" colSpan={4}>Engagements</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Taux eng.</TableHead>
                   </TableRow>
                   <TableRow className="bg-blue-50/40">
                     <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Rep.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Cons.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Total</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3263,6 +3264,7 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-emerald-600 text-right">{formatMillions(r.engReports)}</TableCell>
                               <TableCell className="text-xs text-emerald-600 text-right">{formatMillions(r.engConsolides)}</TableCell>
                               <TableCell className="text-xs text-emerald-600 text-right">{formatMillions(r.engNouveaux)}</TableCell>
+                              <TableCell className="text-xs font-semibold text-emerald-700 text-right">{formatMillions(r.engCPTotal)}</TableCell>
                               <TableCell className="text-xs text-right">
                                 <span className={tauxColor(r.tauxEngagement)}>{formatPercent(r.tauxEngagement)}</span>
                               </TableCell>
@@ -3275,6 +3277,7 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngRep)}</TableCell>
                           <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngCons)}</TableCell>
                           <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngNouv)}</TableCell>
+                          <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngCPTotal)}</TableCell>
                           <TableCell className="text-xs font-bold text-right">
                             <span className={tauxColor(totCP > 0 ? (totEngCPTotal / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totEngCPTotal / totCP) * 100 : 0)}</span>
                           </TableCell>
