@@ -5251,6 +5251,7 @@ export default function Dashboard() {
                   {filters.programmes.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
               </Select>
+              {activeNav !== 'project' && (
               <Select value={selectedProjet} onValueChange={setSelectedProjet}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[150px]">
                   <SelectValue placeholder="Projet" />
@@ -5260,6 +5261,8 @@ export default function Dashboard() {
                   {filters.projets.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
                 </SelectContent>
               </Select>
+              )}
+              {activeNav !== 'project' && (
               <Select value={selectedEntite} onValueChange={setSelectedEntite}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
                   <SelectValue placeholder="entité" />
@@ -5269,6 +5272,7 @@ export default function Dashboard() {
                   {filters.entites.map(e => <SelectItem key={e} value={e}>{e}</SelectItem>)}
                 </SelectContent>
               </Select>
+              )}
               <div className="relative w-[180px]">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                 <Input
