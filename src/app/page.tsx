@@ -5242,6 +5242,7 @@ export default function Dashboard() {
 
             {/* Filter Bar */}
             <div className="flex flex-wrap items-center gap-2 mt-3">
+              {activeNav !== 'program' && (
               <Select value={selectedProgramme} onValueChange={setSelectedProgramme}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
                   <SelectValue placeholder="Programme" />
@@ -5251,6 +5252,7 @@ export default function Dashboard() {
                   {filters.programmes.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
               </Select>
+              )}
               {activeNav !== 'project' && (
               <Select value={selectedProjet} onValueChange={setSelectedProjet}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[150px]">
@@ -5262,7 +5264,7 @@ export default function Dashboard() {
                 </SelectContent>
               </Select>
               )}
-              {activeNav !== 'project' && (
+              {activeNav !== 'project' && activeNav !== 'program' && (
               <Select value={selectedEntite} onValueChange={setSelectedEntite}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
                   <SelectValue placeholder="entité" />
