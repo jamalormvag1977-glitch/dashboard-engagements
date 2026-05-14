@@ -4753,13 +4753,12 @@ export default function Dashboard() {
                       }
                     }).filter(p => p.totDec > 0).sort((a, b) => b.totDec - a.totDec)
 
-                    // Totals
-                    let totCP = 0
+                    // Totals — use ALL filteredData for Total CP (not just rows with prévisions)
+                    const totCP = filteredData.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
                     let totRepJuin = 0, totConsJuin = 0, totNouvJuin = 0
                     let totRepSept = 0, totConsSept = 0, totNouvSept = 0
                     let totRepDec = 0, totConsDec = 0, totNouvDec = 0
                     prestations.forEach(p => {
-                      totCP += p.cp
                       totRepJuin += p.cumulRepByMonth['JUIN'] || 0
                       totConsJuin += p.cumulConsByMonth['JUIN'] || 0
                       totNouvJuin += p.cumulNouvByMonth['JUIN'] || 0
