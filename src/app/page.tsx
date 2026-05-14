@@ -763,7 +763,6 @@ export default function Dashboard() {
   // Ordonnancement lines for ordonnancement view
   const ordonnancementLines = useMemo(() => {
     return [...filteredData]
-      .filter(r => (r['ORD TOTAL'] || 0) > 0)
       .sort((a, b) => (b['ORD TOTAL'] || 0) - (a['ORD TOTAL'] || 0))
       .map(r => ({
         numEngagement: r['N° ENGAGEMENT'] || '-',
