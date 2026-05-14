@@ -158,7 +158,7 @@ const NAV_ITEMS = [
   { key: 'entity', label: 'Par entité', icon: List },
   { key: 'engagements', label: 'Engagement', icon: FileText },
   { key: 'ordonnancements', label: 'Ordonnancement', icon: FileText },
-  { key: 'previsions', label: 'Prévisions', icon: TrendingUp },
+  { key: 'previsions', label: "Prévisions d'ordonnancement", icon: TrendingUp },
   { key: 'assainissement', label: 'Assainissement des reports', icon: RotateCcw },
 ]
 
