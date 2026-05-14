@@ -3989,6 +3989,7 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={4}>Fin Juin</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={4}>Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={4}>Fin Nov.</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={4}>Fin Déc.</TableHead>
                     <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Taux Déc.</TableHead>
                   </TableRow>
@@ -4001,6 +4002,10 @@ export default function Dashboard() {
                     <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Cons.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Nouv.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Total</TableHead>
                     <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Rep.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Cons.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Nouv.</TableHead>
@@ -4039,6 +4044,7 @@ export default function Dashboard() {
                     // Totals
                     let totCP = 0, totRepJuin = 0, totConsJuin = 0, totNouvJuin = 0
                     let totRepSept = 0, totConsSept = 0, totNouvSept = 0
+                    let totRepNov = 0, totConsNov = 0, totNouvNov = 0
                     let totRepDec = 0, totConsDec = 0, totNouvDec = 0
                     sorted.forEach(([, v]) => {
                       totCP += v.cp
@@ -4048,6 +4054,9 @@ export default function Dashboard() {
                       totRepSept += v.cumulRepByMonth['SEPTEMBRE'] || 0
                       totConsSept += v.cumulConsByMonth['SEPTEMBRE'] || 0
                       totNouvSept += v.cumulNouvByMonth['SEPTEMBRE'] || 0
+                      totRepNov += v.cumulRepByMonth['NOVEMBRE'] || 0
+                      totConsNov += v.cumulConsByMonth['NOVEMBRE'] || 0
+                      totNouvNov += v.cumulNouvByMonth['NOVEMBRE'] || 0
                       totRepDec += v.cumulRepByMonth['DECEMBRE'] || 0
                       totConsDec += v.cumulConsByMonth['DECEMBRE'] || 0
                       totNouvDec += v.cumulNouvByMonth['DECEMBRE'] || 0
@@ -4055,11 +4064,13 @@ export default function Dashboard() {
                     const totPrevDec = totRepDec + totConsDec + totNouvDec
                     const totJuinTotal = totRepJuin + totConsJuin + totNouvJuin
                     const totSeptTotal = totRepSept + totConsSept + totNouvSept
+                    const totNovTotal = totRepNov + totConsNov + totNouvNov
                     return (
                       <>
                         {sorted.map(([name, v]) => {
                           const totJuin = (v.cumulRepByMonth['JUIN']||0) + (v.cumulConsByMonth['JUIN']||0) + (v.cumulNouvByMonth['JUIN']||0)
                           const totSept = (v.cumulRepByMonth['SEPTEMBRE']||0) + (v.cumulConsByMonth['SEPTEMBRE']||0) + (v.cumulNouvByMonth['SEPTEMBRE']||0)
+                          const totNov = (v.cumulRepByMonth['NOVEMBRE']||0) + (v.cumulConsByMonth['NOVEMBRE']||0) + (v.cumulNouvByMonth['NOVEMBRE']||0)
                           const totDec = (v.cumulRepByMonth['DECEMBRE']||0) + (v.cumulConsByMonth['DECEMBRE']||0) + (v.cumulNouvByMonth['DECEMBRE']||0)
                           return (
                             <TableRow key={name} className="hover:bg-gray-50">
@@ -4073,6 +4084,10 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(v.cumulConsByMonth['SEPTEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(v.cumulNouvByMonth['SEPTEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs font-semibold text-teal-700 text-right">{formatMillions(totSept)}</TableCell>
+                              <TableCell className="text-xs text-purple-600 text-right">{formatMillions(v.cumulRepByMonth['NOVEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs text-purple-600 text-right">{formatMillions(v.cumulConsByMonth['NOVEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs text-purple-600 text-right">{formatMillions(v.cumulNouvByMonth['NOVEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs font-semibold text-purple-700 text-right">{formatMillions(totNov)}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(v.cumulRepByMonth['DECEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(v.cumulConsByMonth['DECEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(v.cumulNouvByMonth['DECEMBRE']||0)}</TableCell>
@@ -4092,6 +4107,10 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totConsSept)}</TableCell>
                           <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totNouvSept)}</TableCell>
                           <TableCell className="text-xs font-bold text-teal-800 text-right">{formatMillions(totSeptTotal)}</TableCell>
+                          <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totRepNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totConsNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totNouvNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-purple-800 text-right">{formatMillions(totNovTotal)}</TableCell>
                           <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totRepDec)}</TableCell>
                           <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totConsDec)}</TableCell>
                           <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totNouvDec)}</TableCell>
@@ -4125,6 +4144,7 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={4}>Fin Juin</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={4}>Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={4}>Fin Nov.</TableHead>
                     <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={4}>Fin Déc.</TableHead>
                     <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Taux Déc.</TableHead>
                   </TableRow>
@@ -4137,6 +4157,10 @@ export default function Dashboard() {
                     <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Cons.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Nouv.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Total</TableHead>
                     <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Rep.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Cons.</TableHead>
                     <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Nouv.</TableHead>
@@ -4180,6 +4204,7 @@ export default function Dashboard() {
                     const totCP = filteredData.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
                     let totRepJuin = 0, totConsJuin = 0, totNouvJuin = 0
                     let totRepSept = 0, totConsSept = 0, totNouvSept = 0
+                    let totRepNov = 0, totConsNov = 0, totNouvNov = 0
                     let totRepDec = 0, totConsDec = 0, totNouvDec = 0
                     prestations.forEach(p => {
                       totRepJuin += p.cumulRepByMonth['JUIN'] || 0
@@ -4188,6 +4213,9 @@ export default function Dashboard() {
                       totRepSept += p.cumulRepByMonth['SEPTEMBRE'] || 0
                       totConsSept += p.cumulConsByMonth['SEPTEMBRE'] || 0
                       totNouvSept += p.cumulNouvByMonth['SEPTEMBRE'] || 0
+                      totRepNov += p.cumulRepByMonth['NOVEMBRE'] || 0
+                      totConsNov += p.cumulConsByMonth['NOVEMBRE'] || 0
+                      totNouvNov += p.cumulNouvByMonth['NOVEMBRE'] || 0
                       totRepDec += p.cumulRepByMonth['DECEMBRE'] || 0
                       totConsDec += p.cumulConsByMonth['DECEMBRE'] || 0
                       totNouvDec += p.cumulNouvByMonth['DECEMBRE'] || 0
@@ -4195,6 +4223,7 @@ export default function Dashboard() {
                     const totPrevDec = totRepDec + totConsDec + totNouvDec
                     const totJuinTotal = totRepJuin + totConsJuin + totNouvJuin
                     const totSeptTotal = totRepSept + totConsSept + totNouvSept
+                    const totNovTotal = totRepNov + totConsNov + totNouvNov
 
                     let currentProjet = ''
                     return (
@@ -4219,6 +4248,10 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.cumulConsByMonth['SEPTEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.cumulNouvByMonth['SEPTEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs font-semibold text-teal-700 text-right">{formatMillions((p.cumulRepByMonth['SEPTEMBRE']||0)+(p.cumulConsByMonth['SEPTEMBRE']||0)+(p.cumulNouvByMonth['SEPTEMBRE']||0))}</TableCell>
+                              <TableCell className="text-xs text-purple-600 text-right">{formatMillions(p.cumulRepByMonth['NOVEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs text-purple-600 text-right">{formatMillions(p.cumulConsByMonth['NOVEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs text-purple-600 text-right">{formatMillions(p.cumulNouvByMonth['NOVEMBRE']||0)}</TableCell>
+                              <TableCell className="text-xs font-semibold text-purple-700 text-right">{formatMillions((p.cumulRepByMonth['NOVEMBRE']||0)+(p.cumulConsByMonth['NOVEMBRE']||0)+(p.cumulNouvByMonth['NOVEMBRE']||0))}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.cumulRepByMonth['DECEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.cumulConsByMonth['DECEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.cumulNouvByMonth['DECEMBRE']||0)}</TableCell>
@@ -4238,6 +4271,10 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totConsSept)}</TableCell>
                           <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totNouvSept)}</TableCell>
                           <TableCell className="text-xs font-bold text-teal-800 text-right">{formatMillions(totSeptTotal)}</TableCell>
+                          <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totRepNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totConsNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totNouvNov)}</TableCell>
+                          <TableCell className="text-xs font-bold text-purple-800 text-right">{formatMillions(totNovTotal)}</TableCell>
                           <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totRepDec)}</TableCell>
                           <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totConsDec)}</TableCell>
                           <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totNouvDec)}</TableCell>
