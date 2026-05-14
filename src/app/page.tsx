@@ -302,6 +302,7 @@ export default function Dashboard() {
     const totalNouveaux = filteredData.reduce((sum, r) => sum + (r['NOUVEAUX'] || 0), 0)
     const totalOrd = filteredData.reduce((sum, r) => sum + (r['ORD TOTAL'] || 0), 0)
     const totalOrdReports = filteredData.reduce((sum, r) => sum + (r['ORD REPORTS'] || 0), 0)
+    const totalOrdConsolides = filteredData.reduce((sum, r) => sum + (r['ORD CONSOLIDES'] || 0), 0)
     const totalOrdNouveaux = filteredData.reduce((sum, r) => sum + (r['ORD NOUVEAUX'] || 0), 0)
     const totalEngReports = filteredData.reduce((sum, r) => sum + (r['ENG REPORT'] || 0), 0)
     const totalEngConsolides = filteredData.reduce((sum, r) => sum + (r['ENG CONSOLIDES'] || 0), 0)
@@ -325,7 +326,7 @@ export default function Dashboard() {
 
     return {
       totalCP, totalCE, totalPaiements, totalPrevisions, totalEngCP, totalEngCE,
-      totalReports, totalConsolides, totalNouveaux, totalOrd, totalOrdReports, totalOrdNouveaux,
+      totalReports, totalConsolides, totalNouveaux, totalOrd, totalOrdReports, totalOrdConsolides, totalOrdNouveaux,
       totalEngReports, totalEngConsolides, totalEngNouveaux, count: filteredData.length,
       tauxEngagement, tauxPaiement, tauxOrdonnement, disponible,
       cumulPrevJuin: cumulPrev['JUIN'],
@@ -339,10 +340,10 @@ export default function Dashboard() {
   // Analysis by Entity
   const analysisByEntity = useMemo(() => {
     const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
-    const entities: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; prevByMonth: Record<string, number>; cpReports: number; cpConsolides: number; cpNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number }> = {}
+    const entities: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; prevByMonth: Record<string, number>; cpReports: number; cpConsolides: number; cpNouveaux: number; engReports: number; engConsolides: number; engNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number }> = {}
     filteredData.forEach(row => {
       const e = row.ENTITE
-      if (!entities[e]) entities[e] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, prevByMonth: {}, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0 }
+      if (!entities[e]) entities[e] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, prevByMonth: {}, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, engReports: 0, engConsolides: 0, engNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0 }
       entities[e].cp += row['TOTAL CP'] || 0
       entities[e].ce += row['TOTAL CE'] || 0
       entities[e].engCP += row['ENG CP TOTAL'] || 0
@@ -354,6 +355,9 @@ export default function Dashboard() {
       entities[e].cpReports += row.REPORTS || 0
       entities[e].cpConsolides += row.CONSOLIDES || 0
       entities[e].cpNouveaux += row.NOUVEAUX || 0
+      entities[e].engReports += row['ENG REPORT'] || 0
+      entities[e].engConsolides += row['ENG CONSOLIDES'] || 0
+      entities[e].engNouveaux += row['ENG NOUVEAUX'] || 0
       entities[e].ordReports += row['ORD REPORTS'] || 0
       entities[e].ordConsolides += row['ORD CONSOLIDES'] || 0
       entities[e].ordNouveaux += row['ORD NOUVEAUX'] || 0
@@ -375,6 +379,7 @@ export default function Dashboard() {
       cp: v.cp, ce: v.ce, engCP: v.engCP, engCE: v.engCE,
       paiements: v.paiements, previsions: v.previsions, count: v.count, ord: v.ord,
       cpReports: v.cpReports, cpConsolides: v.cpConsolides, cpNouveaux: v.cpNouveaux,
+      engReports: v.engReports, engConsolides: v.engConsolides, engNouveaux: v.engNouveaux,
       ordReports: v.ordReports, ordConsolides: v.ordConsolides, ordNouveaux: v.ordNouveaux,
       tauxEngagement: v.cp > 0 ? (v.engCP / v.cp) * 100 : 0,
       tauxEngagementCE: v.ce > 0 ? (v.engCE / v.ce) * 100 : 0,
@@ -392,10 +397,10 @@ export default function Dashboard() {
   // Analysis by Group (Programme)
   const analysisByGroup = useMemo(() => {
     const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
-    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number; prevByMonth: Record<string, number> }> = {}
+    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; engReports: number; engConsolides: number; engNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number; prevByMonth: Record<string, number> }> = {}
     filteredData.forEach(row => {
       const g = row.Projet
-      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0, prevByMonth: {} }
+      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, engReports: 0, engConsolides: 0, engNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0, prevByMonth: {} }
       groups[g].cp += row['TOTAL CP'] || 0
       groups[g].ce += row['TOTAL CE'] || 0
       groups[g].engCP += row['ENG CP TOTAL'] || 0
@@ -407,6 +412,9 @@ export default function Dashboard() {
       groups[g].cpReports += row.REPORTS || 0
       groups[g].cpConsolides += row.CONSOLIDES || 0
       groups[g].cpNouveaux += row.NOUVEAUX || 0
+      groups[g].engReports += row['ENG REPORT'] || 0
+      groups[g].engConsolides += row['ENG CONSOLIDES'] || 0
+      groups[g].engNouveaux += row['ENG NOUVEAUX'] || 0
       groups[g].ordReports += row['ORD REPORTS'] || 0
       groups[g].ordConsolides += row['ORD CONSOLIDES'] || 0
       groups[g].ordNouveaux += row['ORD NOUVEAUX'] || 0
@@ -899,6 +907,342 @@ export default function Dashboard() {
 
   // ==================== VIEW RENDERERS ====================
 
+  // Shared KPI sections renderer - same indicators as Vue d'ensemble for all sidebar views
+  const renderKPISections = (data: {
+    totalReports: number; totalConsolides: number; totalNouveaux: number; totalCP: number; totalCE: number;
+    totalEngReports: number; totalEngConsolides: number; totalEngNouveaux: number; totalEngCP: number; totalEngCE: number;
+    tauxEngagement: number;
+    totalOrdReports: number; totalOrdConsolides: number; totalOrdNouveaux: number; totalOrd: number; totalPaiements: number;
+    tauxOrdonnement: number;
+  }) => (
+    <>
+      {/* ═══════════ SECTION : CRÉDITS ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Crédits</h3>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+          {/* Crédits Reportés */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
+                  <RotateCcw className="w-5 h-5 text-blue-600" />
+                </div>
+                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalReports)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {data.totalCP > 0 ? formatPercent((data.totalReports / data.totalCP) * 100) : '0%'} du budget total
+              </p>
+            </div>
+          </div>
+
+          {/* Crédits Consolidés */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-orange-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
+                  <Database className="w-5 h-5 text-amber-600" />
+                </div>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalConsolides)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {data.totalCP > 0 ? formatPercent((data.totalConsolides / data.totalCP) * 100) : '0%'} du budget total
+              </p>
+            </div>
+          </div>
+
+          {/* Crédits Nouveaux */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
+                  <TrendingUp className="w-5 h-5 text-emerald-600" />
+                </div>
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalNouveaux)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {data.totalCP > 0 ? formatPercent((data.totalNouveaux / data.totalCP) * 100) : '0%'} du budget total
+              </p>
+            </div>
+          </div>
+
+          {/* Total CP */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-violet-400 to-violet-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
+                  <Scale className="w-5 h-5 text-violet-600" />
+                </div>
+                <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">CP</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalCP)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits de paiement (LFI)</p>
+            </div>
+          </div>
+
+          {/* Total CE */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-indigo-400 to-indigo-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center transition-transform">
+                  <Landmark className="w-5 h-5 text-indigo-600" />
+                </div>
+                <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-[10px] font-semibold rounded-full px-2.5">CE</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalCE)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits d&apos;engagement</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════ SECTION : ENGAGEMENTS ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-emerald-500 to-teal-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Engagements</h3>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+          {/* Engagement sur Report */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
+                  <RotateCcw className="w-5 h-5 text-blue-600" />
+                </div>
+                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Report</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalEngReports)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {data.totalEngCP > 0 ? formatPercent((data.totalEngReports / data.totalEngCP) * 100) : '0%'} du total engagé
+              </p>
+            </div>
+          </div>
+
+          {/* Engagement sur Consolidés */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-orange-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
+                  <Database className="w-5 h-5 text-amber-600" />
+                </div>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalEngConsolides)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {data.totalEngCP > 0 ? formatPercent((data.totalEngConsolides / data.totalEngCP) * 100) : '0%'} du total engagé
+              </p>
+            </div>
+          </div>
+
+          {/* Engagement sur Nouveaux */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
+                  <TrendingUp className="w-5 h-5 text-emerald-600" />
+                </div>
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalEngNouveaux)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                {data.totalEngCP > 0 ? formatPercent((data.totalEngNouveaux / data.totalEngCP) * 100) : '0%'} du total engagé
+              </p>
+            </div>
+          </div>
+
+          {/* Engagement CP */}
+          <div className="kpi-card-premium rounded-xl border border-emerald-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-teal-500" />
+            <div className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-emerald-100 flex items-center justify-center transition-transform">
+                      <TrendingUp className="w-5 h-5 text-emerald-700" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-600">Engagement CP</span>
+                  </div>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalEngCP)} M DH</p>
+                </div>
+                <div className="text-right">
+                  <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(data.tauxEngagement)}`}>
+                    {data.tauxEngagement >= 80 ? '✓' : data.tauxEngagement >= 50 ? '⚠' : '✗'}
+                    {formatPercent(data.tauxEngagement)}
+                  </span>
+                  <p className="text-[11px] text-gray-400 mt-0.5">
+                    {data.tauxEngagement >= 80 ? 'Bon' : data.tauxEngagement >= 50 ? 'Moyen' : 'Faible'}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-3">
+                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`kpi-progress-bar h-full rounded-full ${data.tauxEngagement >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : data.tauxEngagement >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(data.tauxEngagement, 100)}%` }} />
+                </div>
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-[10px] text-gray-400">0%</span>
+                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(data.totalCP - data.totalEngCP)}</span>
+                  <span className="text-[10px] text-gray-400">100%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Engagement CE */}
+          <div className="kpi-card-premium rounded-xl border border-teal-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-teal-400 to-cyan-500" />
+            <div className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-teal-100 flex items-center justify-center transition-transform">
+                      <Landmark className="w-5 h-5 text-teal-700" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-600">Engagement CE</span>
+                  </div>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalEngCE)} M DH</p>
+                </div>
+                <div className="text-right">
+                  {(() => {
+                    const tauxCE = data.totalCE > 0 ? (data.totalEngCE / data.totalCE) * 100 : 0
+                    return (
+                      <>
+                        <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(tauxCE)}`}>
+                          {tauxCE >= 80 ? '✓' : tauxCE >= 50 ? '⚠' : '✗'}
+                          {formatPercent(tauxCE)}
+                        </span>
+                        <p className="text-[11px] text-gray-400 mt-0.5">
+                          {tauxCE >= 80 ? 'Bon' : tauxCE >= 50 ? 'Moyen' : 'Faible'}
+                        </p>
+                      </>
+                    )
+                  })()}
+                </div>
+              </div>
+              <div className="mt-3">
+                {(() => {
+                  const tauxCE = data.totalCE > 0 ? (data.totalEngCE / data.totalCE) * 100 : 0
+                  return (
+                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className={`kpi-progress-bar h-full rounded-full ${tauxCE >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxCE >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxCE, 100)}%` }} />
+                    </div>
+                  )
+                })()}
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-[10px] text-gray-400">0%</span>
+                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(data.totalCE - data.totalEngCE)}</span>
+                  <span className="text-[10px] text-gray-400">100%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════ SECTION : ORDONNANCEMENTS & PAIEMENTS ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-cyan-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancements & Paiements</h3>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Ord. sur Reports */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-sky-400 to-blue-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center transition-transform">
+                  <RotateCcw className="w-5 h-5 text-sky-600" />
+                </div>
+                <Badge className="bg-sky-50 text-sky-700 border-sky-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalOrdReports)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                Taux : <span className={tauxColor(data.totalEngReports > 0 ? (data.totalOrdReports / data.totalEngReports) * 100 : 0)}>{formatPercent(data.totalEngReports > 0 ? (data.totalOrdReports / data.totalEngReports) * 100 : 0)}</span> / eng.
+              </p>
+            </div>
+          </div>
+
+          {/* Ord. sur Consolidés */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-orange-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
+                  <Database className="w-5 h-5 text-amber-600" />
+                </div>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalOrdConsolides)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                Taux : <span className={tauxColor(data.totalEngConsolides > 0 ? (data.totalOrdConsolides / data.totalEngConsolides) * 100 : 0)}>{formatPercent(data.totalEngConsolides > 0 ? (data.totalOrdConsolides / data.totalEngConsolides) * 100 : 0)}</span> / eng.
+              </p>
+            </div>
+          </div>
+
+          {/* Ord. sur Nouveaux */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-cyan-400 to-teal-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
+                  <TrendingUp className="w-5 h-5 text-cyan-600" />
+                </div>
+                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalOrdNouveaux)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                Taux : <span className={tauxColor(data.totalEngNouveaux > 0 ? (data.totalOrdNouveaux / data.totalEngNouveaux) * 100 : 0)}>{formatPercent(data.totalEngNouveaux > 0 ? (data.totalOrdNouveaux / data.totalEngNouveaux) * 100 : 0)}</span> / eng.
+              </p>
+            </div>
+          </div>
+
+          {/* Total Ordonnancements */}
+          <div className="kpi-card-premium rounded-xl border border-blue-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #eff6ff 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center transition-transform">
+                    <Wallet className="w-5 h-5 text-blue-700" />
+                  </div>
+                  <span className="text-sm font-semibold text-gray-600">Total Ord.</span>
+                </div>
+                <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(data.tauxOrdonnement)}`}>
+                  {data.tauxOrdonnement >= 80 ? '✓' : data.tauxOrdonnement >= 50 ? '⚠' : '✗'}
+                  {formatPercent(data.tauxOrdonnement)}
+                </span>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalOrd)} M DH</p>
+              <div className="mt-2">
+                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`kpi-progress-bar h-full rounded-full ${data.tauxOrdonnement >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : data.tauxOrdonnement >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(data.tauxOrdonnement, 100)}%` }} />
+                </div>
+                <div className="flex justify-between mt-1">
+                  <span className="text-[10px] text-gray-400">{data.tauxOrdonnement >= 80 ? 'Bon' : data.tauxOrdonnement >= 50 ? 'Moyen' : 'Faible'}</span>
+                  <span className="text-[10px] text-gray-400">Paiements : {formatMillions(data.totalPaiements)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+
   const renderOverview = () => (
     <>
       {/* ═══════════ SECTION 1 : CRÉDITS ═══════════ */}
@@ -1146,7 +1490,7 @@ export default function Dashboard() {
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancements & Paiements</h3>
           
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Ord. sur Reports */}
           <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
             <div className="h-1.5 bg-gradient-to-r from-sky-400 to-blue-500" />
@@ -1160,6 +1504,23 @@ export default function Dashboard() {
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdReports)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
                 Taux : <span className={tauxColor(kpis.totalEngReports > 0 ? (kpis.totalOrdReports / kpis.totalEngReports) * 100 : 0)}>{formatPercent(kpis.totalEngReports > 0 ? (kpis.totalOrdReports / kpis.totalEngReports) * 100 : 0)}</span> / eng.
+              </p>
+            </div>
+          </div>
+
+          {/* Ord. sur Consolidés */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-orange-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
+                  <Database className="w-5 h-5 text-amber-600" />
+                </div>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdConsolides)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                Taux : <span className={tauxColor(kpis.totalEngConsolides > 0 ? (kpis.totalOrdConsolides / kpis.totalEngConsolides) * 100 : 0)}>{formatPercent(kpis.totalEngConsolides > 0 ? (kpis.totalOrdConsolides / kpis.totalEngConsolides) * 100 : 0)}</span> / eng.
               </p>
             </div>
           </div>
@@ -1686,6 +2047,7 @@ export default function Dashboard() {
 
     return (
       <>
+        {renderKPISections(kpis)}
         {/* ═══════════ SECTION 1 : CRÉDITS ═══════════ */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -2014,6 +2376,7 @@ export default function Dashboard() {
 
     return (
       <>
+        {renderKPISections(kpis)}
         {/* ═══════════ SECTION 1 : CRÉDITS ═══════════ */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -2346,6 +2709,7 @@ export default function Dashboard() {
 
     return (
       <>
+        {renderKPISections(kpis)}
         {/* ═══════════ SECTION 1 : CRÉDITS ═══════════ */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -2890,6 +3254,7 @@ export default function Dashboard() {
 
     return (
       <>
+        {renderKPISections(kpis)}
         {/* ═══════════ SECTION 1 : ENGAGEMENTS CP & CE ═══════════ */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -3456,6 +3821,7 @@ export default function Dashboard() {
 
     return (
       <>
+        {renderKPISections(kpis)}
         {/* ═══════════ SECTION 1 : ORDONNANCEMENT GLOBAL ═══════════ */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
