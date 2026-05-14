@@ -4782,7 +4782,7 @@ export default function Dashboard() {
                             <TableRow key={i} className={`hover:bg-gray-50 ${showProjetHeader && i > 0 ? 'border-t-2 border-amber-200' : ''}`}>
                               <TableCell className="text-xs font-medium text-gray-900 whitespace-nowrap">{p.projet}</TableCell>
                               <TableCell className="text-xs text-gray-600">{p.entite}</TableCell>
-                              <TableCell className="text-xs text-gray-700 max-w-[250px] truncate" title={p.designation}>{p.designation}</TableCell>
+                              <TableCell className="text-xs text-gray-700" style={{minWidth:'250px',maxWidth:'400px',whiteSpace:'normal',lineHeight:'1.4'}}>{p.designation}</TableCell>
                               <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
                               <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.cumulRepByMonth['JUIN']||0)}</TableCell>
                               <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.cumulConsByMonth['JUIN']||0)}</TableCell>
