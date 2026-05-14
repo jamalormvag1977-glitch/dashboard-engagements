@@ -110,6 +110,7 @@ interface FilterData {
   programmes: string[]
   projets: string[]
   entites: string[]
+  nomenclatures: string[]
 }
 
 // Format number in millions with 1 decimal (French format)
@@ -191,11 +192,12 @@ const BarLabel = (props: { x: number; y: number; width: number; height: number; 
 
 export default function Dashboard() {
   const [data, setData] = useState<DataRow[]>([])
-  const [filters, setFilters] = useState<FilterData>({ programmes: [], projets: [], entites: [] })
+  const [filters, setFilters] = useState<FilterData>({ programmes: [], projets: [], entites: [], nomenclatures: [] })
   const [loading, setLoading] = useState(true)
   const [selectedProgramme, setSelectedProgramme] = useState<string>('all')
   const [selectedProjet, setSelectedProjet] = useState<string>('all')
   const [selectedEntite, setSelectedEntite] = useState<string>('all')
+  const [selectedNomenclature, setSelectedNomenclature] = useState<string>('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [uploading, setUploading] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<string | null>(null)
@@ -223,7 +225,7 @@ export default function Dashboard() {
       if (!res.ok) throw new Error('Failed to fetch')
       const response = await res.json()
       setData(response.data || [])
-      setFilters(response.filters || { programmes: [], projets: [], entites: [] })
+      setFilters(response.filters || { programmes: [], projets: [], entites: [], nomenclatures: [] })
       setLastUpdated(response.lastUpdated || null)
       setRefreshStatus('updated')
       setTimeout(() => setRefreshStatus('idle'), 2000)
@@ -270,6 +272,7 @@ export default function Dashboard() {
     setSelectedProgramme('all')
     setSelectedProjet('all')
     setSelectedEntite('all')
+    setSelectedNomenclature('all')
     setSearchTerm('')
   }
 
@@ -278,6 +281,7 @@ export default function Dashboard() {
       if (selectedProgramme !== 'all' && row.Programme !== selectedProgramme) return false
       if (selectedProjet !== 'all' && row.Projet !== selectedProjet) return false
       if (selectedEntite !== 'all' && row.ENTITE !== selectedEntite) return false
+      if (selectedNomenclature !== 'all' && String(row.NOMENCLATURE || '') !== selectedNomenclature) return false
       if (searchTerm) {
         const search = searchTerm.toLowerCase()
         const designation = (row['DETAIL DESIGNATION'] || '').toLowerCase()
@@ -287,7 +291,14 @@ export default function Dashboard() {
       }
       return true
     })
-  }, [data, selectedProgramme, selectedProjet, selectedEntite, searchTerm])
+  }, [data, selectedProgramme, selectedProjet, selectedEntite, selectedNomenclature, searchTerm])
+
+  // Compute nomenclatures list from data (not stored in filters)
+  const nomenclatures = useMemo(() => {
+    const set = new Set<string>()
+    data.forEach(r => { const n = String(r.NOMENCLATURE || ''); if (n) set.add(n) })
+    return Array.from(set).sort()
+  }, [data])
 
   // KPI calculations
   const kpis = useMemo(() => {
@@ -5054,6 +5065,15 @@ export default function Dashboard() {
                 </SelectContent>
               </Select>
               )}
+              <Select value={selectedNomenclature} onValueChange={setSelectedNomenclature}>
+                <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
+                  <SelectValue placeholder="Nomenclature" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes nomenclatures</SelectItem>
+                  {nomenclatures.map(n => <SelectItem key={n} value={n}>{n}</SelectItem>)}
+                </SelectContent>
+              </Select>
               <div className="relative w-[180px]">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                 <Input
