@@ -4448,7 +4448,6 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-blue-50/60">
                     <TableHead className="text-xs font-semibold text-blue-700" rowSpan={2}>Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Crédits Report</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Taux eng.</TableHead>
@@ -4477,7 +4476,6 @@ export default function Dashboard() {
                   {reportsByEntity.map(e => (
                     <TableRow key={e.name} className="hover:bg-gray-50">
                       <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.reports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engReports)}</TableCell>
                       <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxEngReports)}>{formatPercent(e.tauxEngReports)}</span></TableCell>
@@ -4496,7 +4494,6 @@ export default function Dashboard() {
                     </TableRow>
                   ))}
                   {(() => {
-                    const totCP = reportsByEntity.reduce((s, e) => s + e.cp, 0)
                     const totReports = reportsByEntity.reduce((s, e) => s + e.reports, 0)
                     const totPrevJuin = reportsByEntity.reduce((s, e) => s + e.prevJuin, 0)
                     const totPrevSept = reportsByEntity.reduce((s, e) => s + e.prevSept, 0)
@@ -4507,7 +4504,6 @@ export default function Dashboard() {
                     return (
                       <TableRow className="bg-blue-50/40 font-bold">
                         <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
-                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                         <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalReports)}</TableCell>
                         <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngReports)}</TableCell>
                         <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></TableCell>
@@ -4543,7 +4539,6 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-emerald-50/60">
                     <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Crédits Report</TableHead>
                     <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Taux eng.</TableHead>
@@ -4572,7 +4567,6 @@ export default function Dashboard() {
                   {reportsByProjet.map(g => (
                     <TableRow key={g.name} className="hover:bg-gray-50">
                       <TableCell className="text-xs font-medium text-gray-900">{g.name}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.reports)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engReports)}</TableCell>
                       <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxEngReports)}>{formatPercent(g.tauxEngReports)}</span></TableCell>
@@ -4591,7 +4585,6 @@ export default function Dashboard() {
                     </TableRow>
                   ))}
                   {(() => {
-                    const totCP = reportsByProjet.reduce((s, g) => s + g.cp, 0)
                     const totReports = reportsByProjet.reduce((s, g) => s + g.reports, 0)
                     const totPrevJuin = reportsByProjet.reduce((s, g) => s + g.prevJuin, 0)
                     const totPrevSept = reportsByProjet.reduce((s, g) => s + g.prevSept, 0)
@@ -4602,7 +4595,6 @@ export default function Dashboard() {
                     return (
                       <TableRow className="bg-emerald-50/40 font-bold">
                         <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
-                        <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                         <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalReports)}</TableCell>
                         <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngReports)}</TableCell>
                         <TableCell className="text-xs font-bold text-right"><span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></TableCell>
@@ -4638,7 +4630,6 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-indigo-50/60">
                     <TableHead className="text-xs font-semibold text-indigo-700" rowSpan={2}>Programme</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Total CP</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Crédits Report</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
                     <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Taux eng.</TableHead>
@@ -4704,7 +4695,6 @@ export default function Dashboard() {
                     const totPaiementsReports = reportsByProgramme.reduce((s, p) => s + p.paiementsReports, 0)
                     const totResteEngager = reportsByProgramme.reduce((s, p) => s + p.resteEngager, 0)
                     const totResteOrdonner = reportsByProgramme.reduce((s, p) => s + p.resteOrdonner, 0)
-                    const totCP = reportsByProgramme.reduce((s, p) => s + p.cp, 0)
                     const totPrevJuin = reportsByProgramme.reduce((s, p) => s + p.prevJuin, 0)
                     const totPrevSept = reportsByProgramme.reduce((s, p) => s + p.prevSept, 0)
                     const totPrevOct = reportsByProgramme.reduce((s, p) => s + p.prevOct, 0)
@@ -4716,7 +4706,6 @@ export default function Dashboard() {
                         {reportsByProgramme.map(p => (
                           <TableRow key={p.name} className="hover:bg-gray-50">
                             <TableCell className="text-xs font-medium text-gray-900">{p.name}</TableCell>
-                            <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.reports)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engReports)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxEngReports)}>{formatPercent(p.tauxEngReports)}</span></TableCell>
@@ -4736,7 +4725,6 @@ export default function Dashboard() {
                         ))}
                         <TableRow className="bg-indigo-50/40 font-bold">
                           <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totEngReports / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totEngReports / totReports) * 100 : 0)}</span></TableCell>
