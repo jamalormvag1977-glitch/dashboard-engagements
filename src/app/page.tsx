@@ -3243,7 +3243,7 @@ export default function Dashboard() {
                 <TableBody>
                   {(() => {
                     let currentProjet = ''
-                    const totCP = engagementLines.reduce((s, r) => s + r.cp, 0)
+                    const totCP = filteredData.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
                     const totEngRep = engagementLines.reduce((s, r) => s + r.engReports, 0)
                     const totEngCons = engagementLines.reduce((s, r) => s + r.engConsolides, 0)
                     const totEngNouv = engagementLines.reduce((s, r) => s + r.engNouveaux, 0)
@@ -3328,7 +3328,7 @@ export default function Dashboard() {
                 <TableBody>
                   {(() => {
                     let currentProjet = ''
-                    const totCP = ordonnancementLines.reduce((s, r) => s + r.cp, 0)
+                    const totCP = filteredData.reduce((s, r) => s + (r['TOTAL CP'] || 0), 0)
                     const totOrdRep = ordonnancementLines.reduce((s, r) => s + r.ordReports, 0)
                     const totOrdCons = ordonnancementLines.reduce((s, r) => s + r.ordConsolides, 0)
                     const totOrdNouv = ordonnancementLines.reduce((s, r) => s + r.ordNouveaux, 0)
