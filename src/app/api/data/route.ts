@@ -15,9 +15,9 @@ function getDataFilePath(): string {
   return directPath
 }
 
-// Column name mapping: raw Excel headers → normalized frontend names
+// Column name mapping: seulement pour l'ancien format GROUPE→Projet
+// PROGRAMME et PROJET sont déjà les bons noms dans le fichier actuel
 const COLUMN_MAP: Record<string, string> = {
-  'PROJET': 'Programme',
   'GROUPE': 'Projet',
 }
 
@@ -29,12 +29,12 @@ function normalizeRow(row: Record<string, unknown>): Record<string, unknown> {
     normalized[mappedKey] = value
   }
 
-  // Ensure Programme field: if empty, use Projet (GROUPE) as fallback
-  if (!normalized['Programme'] && normalized['Projet']) {
-    normalized['Programme'] = normalized['Projet']
+  // Ensure Programme field: if empty, use ENTITE as fallback
+  if (!normalized['Programme'] || normalized['Programme'] === '') {
+    normalized['Programme'] = normalized['ENTITE'] || 'Non classé'
   }
 
-  // Ensure Projet field: if missing, use ENTITE as fallback (GROUPE → Projet mapping)
+  // Ensure Projet field: if missing, use ENTITE as fallback
   if (!normalized['Projet'] || normalized['Projet'] === '') {
     normalized['Projet'] = normalized['ENTITE'] || 'Non classé'
   }

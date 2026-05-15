@@ -12,17 +12,12 @@ function getDataFilePath(): string {
   return directPath
 }
 
-// Known column name mapping: Excel header → normalized name
-// Supports both old format (PROJET/GROUPE) and new format (Programme/Projet)
+// Column name mapping: Excel header (uppercase) → normalized field name
+// PROGRAMME = Programme, PROJET = Projet — gardés tels quels
 const KNOWN_COLUMNS: Record<string, string> = {
-  // Old format: PROJET column → Programme field
-  'PROJET': 'Programme',
-  // Old format: GROUPE column → Projet field
-  'GROUPE': 'Projet',
-  // New format: already correct names
   'PROGRAMME': 'Programme',
-  // Note: 'PROJET' as a column header in the new format maps to 'Projet' below
-  // We handle this with special logic in the detection
+  'PROJET': 'Projet',
+  'GROUPE': 'Projet',  // ancien nom, gardé pour compatibilité si jamais présent
   'SOURCE FINANCEMENT': 'SOURCE FINANCEMENT',
   'NOMENCLATURE': 'NOMENCLATURE',
   'N° ENGAGEMENT': 'N° ENGAGEMENT',
@@ -115,50 +110,17 @@ export async function POST(request: Request) {
     const headerRow = rawData[headerRowIndex].map(v => String(v || '').trim().toUpperCase())
     const columnMap: Record<number, string> = {}
 
-    // Smart detection: check if Excel has both PROGRAMME and PROJET columns
-    // If both exist: PROGRAMME → Programme, PROJET → Projet (keep as-is)
-    // If only PROJET exists (old format): PROJET → Programme, GROUPE → Projet
-    const hasProgrammeColumn = headerRow.some(h => h === 'PROGRAMME')
-    const hasProjetColumn = headerRow.some(h => h === 'PROJET')
-    const hasGroupeColumn = headerRow.some(h => h === 'GROUPE')
-
-    // Build the appropriate mapping based on detected columns
-    let effectiveMapping: Record<string, string>
-    if (hasProgrammeColumn && hasProjetColumn) {
-      // New format: Programme and Projet are separate columns, keep as-is
-      effectiveMapping = { ...KNOWN_COLUMNS }
-      // Override: PROJET should map to Projet (not Programme) when PROGRAMME column also exists
-      effectiveMapping['PROJET'] = 'Projet'
-    } else if (hasProgrammeColumn && !hasProjetColumn) {
-      // Only Programme column exists, no Projet column
-      effectiveMapping = { ...KNOWN_COLUMNS }
-      delete effectiveMapping['PROJET'] // Don't map PROJET since it doesn't exist
-    } else if (hasProjetColumn && hasGroupeColumn) {
-      // Old format: PROJET is actually the programme, GROUPE is the project
-      effectiveMapping = { ...KNOWN_COLUMNS }
-      // Keep default: PROJET → Programme, GROUPE → Projet
-    } else if (hasProjetColumn && !hasGroupeColumn) {
-      // Only PROJET column exists, no GROUPE - treat PROJET as Projet (the actual project name)
-      effectiveMapping = { ...KNOWN_COLUMNS }
-      effectiveMapping['PROJET'] = 'Projet'
-    } else {
-      effectiveMapping = { ...KNOWN_COLUMNS }
-    }
-
-    console.log('Column detection:', { hasProgrammeColumn, hasProjetColumn, hasGroupeColumn, effectiveProjetMapping: effectiveMapping['PROJET'] })
-
-    // First pass: map known column headers
+    // Map known column headers directly (PROGRAMME→Programme, PROJET→Projet, etc.)
     headerRow.forEach((header, index) => {
       if (!header) return
       // Direct match
-      if (effectiveMapping[header]) {
-        columnMap[index] = effectiveMapping[header]
+      if (KNOWN_COLUMNS[header]) {
+        columnMap[index] = KNOWN_COLUMNS[header]
         return
       }
       // Partial match for month columns
       for (const month of MONTHS) {
         if (header.includes(month)) {
-          // Determine the type (REPORTS, CONSOLIDES, NOUVEAUX)
           let prefix = 'Previsions '
           if (header.includes('REPORT')) prefix += 'REPORTS '
           else if (header.includes('CONSOLID')) prefix += 'CONSOLIDES '
@@ -218,9 +180,9 @@ export async function POST(request: Request) {
         }
       }
 
-      // Ensure Programme field: use Projet (GROUPE) as fallback if Programme (PROJET) is empty
-      if (!row['Programme'] && row['Projet']) {
-        row['Programme'] = row['Projet']
+      // Ensure Programme field: use ENTITE as fallback if missing
+      if (!row['Programme'] || row['Programme'] === '') {
+        row['Programme'] = row['ENTITE'] || 'Non classé'
       }
 
       // Ensure Projet field: use ENTITE as fallback if missing
