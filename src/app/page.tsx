@@ -1379,24 +1379,24 @@ export default function Dashboard() {
                     </div>
                     <span className="text-sm font-bold text-gray-700">Reste à payer</span>
                   </div>
-                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalCP - data.totalPaiements)} M DH</p>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalOrd - data.totalPaiements)} M DH</p>
                 </div>
                 <div className="text-right">
                   <span className="inline-flex items-center gap-1 text-sm font-bold text-red-600">
-                    {data.totalCP > 0 ? formatPercent(((data.totalCP - data.totalPaiements) / data.totalCP) * 100) : '0%'}
+                    {data.totalCP > 0 ? formatPercent(((data.totalOrd - data.totalPaiements) / data.totalCP) * 100) : '0%'}
                   </span>
                   <p className="text-[11px] text-gray-400 mt-0.5">
-                    du Total CP
+                    Reste à payer / Total CP
                   </p>
                 </div>
               </div>
               <div className="mt-3">
                 <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="kpi-progress-bar h-full rounded-full bg-gradient-to-r from-red-400 to-rose-500" style={{ width: `${Math.min(data.totalCP > 0 ? ((data.totalCP - data.totalPaiements) / data.totalCP) * 100 : 0, 100)}%` }} />
+                  <div className="kpi-progress-bar h-full rounded-full bg-gradient-to-r from-red-400 to-rose-500" style={{ width: `${Math.min(data.totalCP > 0 ? ((data.totalOrd - data.totalPaiements) / data.totalCP) * 100 : 0, 100)}%` }} />
                 </div>
                 <div className="flex justify-between mt-1.5">
                   <span className="text-[10px] text-gray-400">0%</span>
-                  <span className="text-[10px] text-gray-400">Reste / Total CP</span>
+                  <span className="text-[10px] text-gray-400">Ord. - Paiement / Total CP</span>
                   <span className="text-[10px] text-gray-400">100%</span>
                 </div>
               </div>
@@ -2011,24 +2011,24 @@ export default function Dashboard() {
                     </div>
                     <span className="text-sm font-bold text-gray-700">Reste à payer</span>
                   </div>
-                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCP - kpis.totalPaiements)} M DH</p>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrd - kpis.totalPaiements)} M DH</p>
                 </div>
                 <div className="text-right">
                   <span className="inline-flex items-center gap-1 text-sm font-bold text-red-600">
-                    {kpis.totalCP > 0 ? formatPercent(((kpis.totalCP - kpis.totalPaiements) / kpis.totalCP) * 100) : '0%'}
+                    {kpis.totalCP > 0 ? formatPercent(((kpis.totalOrd - kpis.totalPaiements) / kpis.totalCP) * 100) : '0%'}
                   </span>
                   <p className="text-[11px] text-gray-400 mt-0.5">
-                    du Total CP
+                    Reste à payer / Total CP
                   </p>
                 </div>
               </div>
               <div className="mt-3">
                 <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="kpi-progress-bar h-full rounded-full bg-gradient-to-r from-red-400 to-rose-500" style={{ width: `${Math.min(kpis.totalCP > 0 ? ((kpis.totalCP - kpis.totalPaiements) / kpis.totalCP) * 100 : 0, 100)}%` }} />
+                  <div className="kpi-progress-bar h-full rounded-full bg-gradient-to-r from-red-400 to-rose-500" style={{ width: `${Math.min(kpis.totalCP > 0 ? ((kpis.totalOrd - kpis.totalPaiements) / kpis.totalCP) * 100 : 0, 100)}%` }} />
                 </div>
                 <div className="flex justify-between mt-1.5">
                   <span className="text-[10px] text-gray-400">0%</span>
-                  <span className="text-[10px] text-gray-400">Reste / Total CP</span>
+                  <span className="text-[10px] text-gray-400">Ord. - Paiement / Total CP</span>
                   <span className="text-[10px] text-gray-400">100%</span>
                 </div>
               </div>
