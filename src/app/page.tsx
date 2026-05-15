@@ -199,7 +199,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const [authChecked, setAuthChecked] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
   const [passwordError, setPasswordError] = useState(false)
-  const DASHBOARD_PASSWORD = 'budget2025'
+  const DASHBOARD_PASSWORD = 'budget2025'  // ← Changez le mot de passe ici
 
   useEffect(() => {
     const stored = localStorage.getItem('dashboard-auth')
