@@ -21,17 +21,47 @@ const COLUMN_MAP: Record<string, string> = {
   'GROUPE': 'Projet',
 }
 
-// Normalize a single row's column names
+// Normalize a single row's column names and ensure required fields exist
 function normalizeRow(row: Record<string, unknown>): Record<string, unknown> {
   const normalized: Record<string, unknown> = {}
   for (const [key, value] of Object.entries(row)) {
     const mappedKey = COLUMN_MAP[key] || key
     normalized[mappedKey] = value
   }
+
   // Ensure Programme field: if empty, use Projet (GROUPE) as fallback
   if (!normalized['Programme'] && normalized['Projet']) {
     normalized['Programme'] = normalized['Projet']
   }
+
+  // Ensure Projet field: if missing, use ENTITE as fallback (GROUPE → Projet mapping)
+  if (!normalized['Projet'] || normalized['Projet'] === '') {
+    normalized['Projet'] = normalized['ENTITE'] || 'Non classé'
+  }
+
+  // Ensure all required numeric fields have default 0 instead of null/undefined
+  const requiredNumericFields = [
+    'REPORTS', 'CONSOLIDES', 'NOUVEAUX', 'TOTAL CP',
+    'CE CONSOLIDES', 'CE NOUVEAUX', 'TOTAL CE',
+    'ENG REPORT', 'ENG CONSOLIDES', 'ENG NOUVEAUX', 'ENG CP TOTAL', 'ENG CE ULT',
+    'ORD REPORTS', 'ORD CONSOLIDES', 'ORD NOUVEAUX', 'ORD TOTAL',
+    'PAIEMENTS SUR REPORTS', 'PAIEMENTS SUR CONSOLIDES', 'PAIEMENTS SUR NOUVEAUX', 'PAIEMENTS TOTAL',
+    'TOTAL PREV', 'TRESORERIE', 'SUBVENTION DEMANDEE',
+  ]
+  for (const field of requiredNumericFields) {
+    if (normalized[field] === undefined || normalized[field] === null) {
+      normalized[field] = 0
+    }
+  }
+
+  // Ensure required string fields have defaults
+  const requiredStringFields = ['Programme', 'Projet', 'ENTITE', 'SOURCE FINANCEMENT']
+  for (const field of requiredStringFields) {
+    if (!normalized[field] || normalized[field] === '') {
+      normalized[field] = field === 'SOURCE FINANCEMENT' ? 'Non spécifié' : 'Non classé'
+    }
+  }
+
   return normalized
 }
 

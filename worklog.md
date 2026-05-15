@@ -99,3 +99,30 @@ Stage Summary:
 - Prévisions data now visible in entity/program/project detail tables
 - Engagements CE and Taux eng. CE columns added to all tables
 - Consistent column layout across all views: Budget CP | Eng. CP | Taux eng. CP | Total CE | Eng. CE | Taux eng. CE | Ordonn. | Taux ord. | Paiements | Prévisions | Disponible
+---
+Task ID: 1
+Agent: Main Agent
+Task: Save/backup data and make data pipeline robust to prevent data display issues
+
+Work Log:
+- Created backup directory at /home/z/my-project/data/backups/
+- Backed up original data file (390KB, 206 rows)
+- Fixed data: added missing 'Projet' column to all 206 rows (using ENTITE as fallback)
+- Enhanced data route (/api/data/route.ts) with robust normalization:
+  - Column name mapping (PROJET→Programme, GROUPE→Projet)
+  - Projet field fallback (uses ENTITE if missing)
+  - Required numeric fields default to 0 instead of null
+  - Required string fields get default values
+- Enhanced upload route (/api/upload/route.ts) with:
+  - Same fallback logic for missing columns
+  - Auto-backup before each upload (keeps 5 pre-upload backups)
+- Created backup/restore script at /home/z/my-project/data/backup-restore.sh
+- Verified API returns correct data with all required fields
+- Built and restarted PM2
+
+Stage Summary:
+- Data now has all required columns including 'Projet' (previously missing)
+- API returns 206 rows with proper Programme, Projet, ENTITE, SOURCE FINANCEMENT
+- Backups saved at /home/z/my-project/data/backups/
+- Auto-backup on every upload prevents data loss
+- Backup script supports: backup, restore, list, verify commands

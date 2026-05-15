@@ -179,6 +179,26 @@ export async function POST(request: Request) {
         row['Programme'] = row['Projet']
       }
 
+      // Ensure Projet field: use ENTITE as fallback if missing
+      if (!row['Projet'] || row['Projet'] === '') {
+        row['Projet'] = row['ENTITE'] || 'Non classé'
+      }
+
+      // Ensure all required numeric fields have default 0
+      const requiredNumericFields = [
+        'REPORTS', 'CONSOLIDES', 'NOUVEAUX', 'TOTAL CP',
+        'CE CONSOLIDES', 'CE NOUVEAUX', 'TOTAL CE',
+        'ENG REPORT', 'ENG CONSOLIDES', 'ENG NOUVEAUX', 'ENG CP TOTAL', 'ENG CE ULT',
+        'ORD REPORTS', 'ORD CONSOLIDES', 'ORD NOUVEAUX', 'ORD TOTAL',
+        'PAIEMENTS SUR REPORTS', 'PAIEMENTS SUR CONSOLIDES', 'PAIEMENTS SUR NOUVEAUX', 'PAIEMENTS TOTAL',
+        'TOTAL PREV', 'TRESORERIE', 'SUBVENTION DEMANDEE',
+      ]
+      for (const field of requiredNumericFields) {
+        if (row[field] === undefined || row[field] === null) {
+          row[field] = 0
+        }
+      }
+
       dataRows.push(row)
     }
 
@@ -198,6 +218,29 @@ export async function POST(request: Request) {
     // Save to data file(s)
     const dataFile = getDataFilePath()
     const dataDir = path.dirname(dataFile)
+
+    // Auto-backup before overwriting
+    if (fs.existsSync(dataFile)) {
+      const backupDir = path.join(dataDir, 'backups')
+      if (!fs.existsSync(backupDir)) {
+        fs.mkdirSync(backupDir, { recursive: true })
+      }
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19)
+      const backupFile = path.join(backupDir, `dashboard-data-pre-upload-${timestamp}.json`)
+      fs.copyFileSync(dataFile, backupFile)
+      console.log(`Auto-backup created: ${backupFile}`)
+
+      // Keep only last 5 pre-upload backups
+      const backups = fs.readdirSync(backupDir)
+        .filter(f => f.startsWith('dashboard-data-pre-upload-'))
+        .sort()
+      if (backups.length > 5) {
+        backups.slice(0, backups.length - 5).forEach(f => {
+          fs.unlinkSync(path.join(backupDir, f))
+        })
+      }
+    }
+
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true })
     }
