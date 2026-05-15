@@ -313,6 +313,25 @@ export default function Dashboard() {
     return Array.from(set).sort()
   }, [data])
 
+  // Cascading filter options: filter projets/entites based on selected programme
+  const filteredProjets = useMemo(() => {
+    if (selectedProgramme === 'all') return filters.projets
+    const set = new Set<string>()
+    data.forEach(r => { if (r.Programme === selectedProgramme && r.Projet) set.add(r.Projet) })
+    return Array.from(set).sort()
+  }, [data, selectedProgramme, filters.projets])
+
+  const filteredEntites = useMemo(() => {
+    const base = data.filter(r => {
+      if (selectedProgramme !== 'all' && r.Programme !== selectedProgramme) return false
+      if (selectedProjet !== 'all' && r.Projet !== selectedProjet) return false
+      return true
+    })
+    const set = new Set<string>()
+    base.forEach(r => { if (r.ENTITE) set.add(r.ENTITE) })
+    return Array.from(set).sort()
+  }, [data, selectedProgramme, selectedProjet])
+
   // KPI calculations
   const kpis = useMemo(() => {
     const totalCP = filteredData.reduce((sum, r) => sum + (r['TOTAL CP'] || 0), 0)
@@ -5256,7 +5275,7 @@ export default function Dashboard() {
             {/* Filter Bar */}
             <div className="flex flex-wrap items-center gap-2 mt-3">
               {activeNav !== 'program' && activeNav !== 'entity' && (
-              <Select value={selectedProgramme} onValueChange={setSelectedProgramme}>
+              <Select value={selectedProgramme} onValueChange={(v) => { setSelectedProgramme(v); setSelectedProjet('all'); setSelectedEntite('all'); }}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
                   <SelectValue placeholder="Programme" />
                 </SelectTrigger>
@@ -5267,13 +5286,13 @@ export default function Dashboard() {
               </Select>
               )}
               {activeNav !== 'project' && activeNav !== 'entity' && (
-              <Select value={selectedProjet} onValueChange={setSelectedProjet}>
+              <Select value={selectedProjet} onValueChange={(v) => { setSelectedProjet(v); setSelectedEntite('all'); }}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[150px]">
                   <SelectValue placeholder="Projet" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tous les projets</SelectItem>
-                  {filters.projets.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
+                  {filteredProjets.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
                 </SelectContent>
               </Select>
               )}
@@ -5284,7 +5303,7 @@ export default function Dashboard() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Toutes les entités</SelectItem>
-                  {filters.entites.map(e => <SelectItem key={e} value={e}>{e}</SelectItem>)}
+                  {filteredEntites.map(e => <SelectItem key={e} value={e}>{e}</SelectItem>)}
                 </SelectContent>
               </Select>
               )}
