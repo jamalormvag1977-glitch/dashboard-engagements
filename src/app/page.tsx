@@ -3077,7 +3077,6 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-bold text-blue-700 text-center bg-blue-50/50" colSpan={3}>Crédits</TableHead>
                     <TableHead className="text-xs font-bold text-emerald-700 text-center bg-emerald-50/50" colSpan={5}>Engagements</TableHead>
                     <TableHead className="text-xs font-bold text-indigo-700 text-center bg-indigo-50/50" colSpan={5}>Ordonnancement</TableHead>
-                    <TableHead className="text-xs font-bold text-gray-600 text-center" colSpan={3}>Autres</TableHead>
                   </TableRow>
                   <TableRow className="bg-gray-50/80">
                     <TableHead className="text-[10px] font-bold text-blue-600 text-right">Reports</TableHead>
@@ -3093,8 +3092,6 @@ export default function Dashboard() {
                     <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Ord/Nouv.</TableHead>
                     <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Total Ord.</TableHead>
                     <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-[10px] font-bold text-gray-600 text-right">Paiements</TableHead>
-                    <TableHead className="text-[10px] font-bold text-gray-600 text-right">Taux paiement</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3121,8 +3118,6 @@ export default function Dashboard() {
                         <TableCell className="text-xs text-right"><span className={tauxColor(tauxOrdNouveau)}>{formatPercent(tauxOrdNouveau)}</span></TableCell>
                         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.ord)}</TableCell>
                         <TableCell className="text-xs text-right"><span className={tauxColor(prog.tauxOrdonnement)}>{formatPercent(prog.tauxOrdonnement)}</span></TableCell>
-                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.paiements)}</TableCell>
-                        <TableCell className="text-xs text-right"><span className={tauxColor(prog.tauxPaiement)}>{formatPercent(prog.tauxPaiement)}</span></TableCell>
                       </TableRow>
                     )
                   })}
@@ -3172,8 +3167,6 @@ export default function Dashboard() {
                           <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrdNouveau)}>{formatPercent(tTauxOrdNouveau)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.ord)}</TableCell>
                           <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrd)}>{formatPercent(tTauxOrd)}</span></TableCell>
-                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.paiements)}</TableCell>
-                          <TableCell className="text-xs text-right"><span className={tauxColor(tot.cp > 0 ? (tot.paiements / tot.cp) * 100 : 0)}>{formatPercent(tot.cp > 0 ? (tot.paiements / tot.cp) * 100 : 0)}</span></TableCell>
                         </>
                       )
                     })()}
