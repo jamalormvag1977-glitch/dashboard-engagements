@@ -3472,11 +3472,234 @@ export default function Dashboard() {
   }
 
   const renderOrdonnancementsView = () => {
+    // Ordonnancement par Programme
+    const ordByProgramme = analysisByProgramme.map(p => ({
+      name: p.name,
+      cp: p.cp,
+      ordReports: p.ordReports,
+      ordConsolides: p.ordConsolides,
+      ordNouveaux: p.ordNouveaux,
+      ord: p.ord,
+      paiements: p.paiements,
+      tauxOrdonnement: p.tauxOrdonnement,
+      tauxPaiement: p.tauxPaiement,
+    }))
+    const totProgCP = ordByProgramme.reduce((s, p) => s + p.cp, 0)
+    const totProgOrdRep = ordByProgramme.reduce((s, p) => s + p.ordReports, 0)
+    const totProgOrdCons = ordByProgramme.reduce((s, p) => s + p.ordConsolides, 0)
+    const totProgOrdNouv = ordByProgramme.reduce((s, p) => s + p.ordNouveaux, 0)
+    const totProgOrd = ordByProgramme.reduce((s, p) => s + p.ord, 0)
+    const totProgPaiements = ordByProgramme.reduce((s, p) => s + p.paiements, 0)
+
+    // Ordonnancement par Projet
+    const ordByProjet = analysisByGroup.map(g => ({
+      name: g.name,
+      cp: g.cp,
+      ordReports: g.ordReports,
+      ordConsolides: g.ordConsolides,
+      ordNouveaux: g.ordNouveaux,
+      ord: g.ord,
+      paiements: g.paiements,
+      tauxOrdonnement: g.tauxOrdonnement,
+      tauxPaiement: g.tauxPaiement,
+    }))
+    const totProjCP = ordByProjet.reduce((s, p) => s + p.cp, 0)
+    const totProjOrdRep = ordByProjet.reduce((s, p) => s + p.ordReports, 0)
+    const totProjOrdCons = ordByProjet.reduce((s, p) => s + p.ordConsolides, 0)
+    const totProjOrdNouv = ordByProjet.reduce((s, p) => s + p.ordNouveaux, 0)
+    const totProjOrd = ordByProjet.reduce((s, p) => s + p.ord, 0)
+    const totProjPaiements = ordByProjet.reduce((s, p) => s + p.paiements, 0)
+
+    // Ordonnancement par Entité
+    const ordByEntity = analysisByEntity.map(e => ({
+      name: e.name,
+      cp: e.cp,
+      ordReports: e.ordReports,
+      ordConsolides: e.ordConsolides,
+      ordNouveaux: e.ordNouveaux,
+      ord: e.ord,
+      paiements: e.paiements,
+      tauxOrdonnement: e.tauxOrdonnement,
+      tauxPaiement: e.tauxPaiement,
+    }))
+    const totEntCP = ordByEntity.reduce((s, e) => s + e.cp, 0)
+    const totEntOrdRep = ordByEntity.reduce((s, e) => s + e.ordReports, 0)
+    const totEntOrdCons = ordByEntity.reduce((s, e) => s + e.ordConsolides, 0)
+    const totEntOrdNouv = ordByEntity.reduce((s, e) => s + e.ordNouveaux, 0)
+    const totEntOrd = ordByEntity.reduce((s, e) => s + e.ord, 0)
+    const totEntPaiements = ordByEntity.reduce((s, e) => s + e.paiements, 0)
+
     return (
       <>
-        {renderKPISections(kpis)}
+        {/* ═══════════ TABLEAU 1 : ORDONNANCEMENT PAR PROGRAMME ═══════════ */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancement par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-indigo-50/60">
+                    <TableHead className="text-xs font-bold text-indigo-700" rowSpan={2}>Programme</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-rose-600" colSpan={4}>Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-cyan-600" colSpan={2}>Paiements</TableHead>
+                  </TableRow>
+                  <TableRow className="bg-indigo-50/40">
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-cyan-500 text-right">Montant</TableHead>
+                    <TableHead className="text-[10px] font-bold text-cyan-500 text-right">Taux paiem.</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {ordByProgramme.map(p => (
+                    <TableRow key={p.name} className="hover:bg-gray-50">
+                      <TableCell className="text-xs font-medium text-gray-900">{p.name}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
+                      <TableCell className="text-xs text-rose-600 text-right">{formatMillions(p.ordReports)}</TableCell>
+                      <TableCell className="text-xs text-rose-600 text-right">{formatMillions(p.ordConsolides)}</TableCell>
+                      <TableCell className="text-xs text-rose-600 text-right">{formatMillions(p.ordNouveaux)}</TableCell>
+                      <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(p.ord)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxOrdonnement)}>{formatPercent(p.tauxOrdonnement)}</span></TableCell>
+                      <TableCell className="text-xs text-cyan-700 text-right font-medium">{formatMillions(p.paiements)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxPaiement)}>{formatPercent(p.tauxPaiement)}</span></TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow className="bg-indigo-50/40 font-bold-total">
+                    <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totProgCP)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totProgOrdRep)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totProgOrdCons)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totProgOrdNouv)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totProgOrd)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totProgCP > 0 ? (totProgOrd / totProgCP) * 100 : 0)}>{formatPercent(totProgCP > 0 ? (totProgOrd / totProgCP) * 100 : 0)}</span></TableCell>
+                    <TableCell className="text-xs font-bold text-cyan-700 text-right">{formatMillions(totProgPaiements)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totProgCP > 0 ? (totProgPaiements / totProgCP) * 100 : 0)}>{formatPercent(totProgCP > 0 ? (totProgPaiements / totProgCP) * 100 : 0)}</span></TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Ordonnancement Lines Table */}
+        {/* ═══════════ TABLEAU 2 : ORDONNANCEMENT PAR PROJET ═══════════ */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancement par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-emerald-50/60">
+                    <TableHead className="text-xs font-bold text-emerald-700" rowSpan={2}>Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-rose-600" colSpan={4}>Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-cyan-600" colSpan={2}>Paiements</TableHead>
+                  </TableRow>
+                  <TableRow className="bg-emerald-50/40">
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-cyan-500 text-right">Montant</TableHead>
+                    <TableHead className="text-[10px] font-bold text-cyan-500 text-right">Taux paiem.</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {ordByProjet.map(p => (
+                    <TableRow key={p.name} className="hover:bg-gray-50">
+                      <TableCell className="text-xs font-medium text-gray-900">{p.name}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
+                      <TableCell className="text-xs text-rose-600 text-right">{formatMillions(p.ordReports)}</TableCell>
+                      <TableCell className="text-xs text-rose-600 text-right">{formatMillions(p.ordConsolides)}</TableCell>
+                      <TableCell className="text-xs text-rose-600 text-right">{formatMillions(p.ordNouveaux)}</TableCell>
+                      <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(p.ord)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxOrdonnement)}>{formatPercent(p.tauxOrdonnement)}</span></TableCell>
+                      <TableCell className="text-xs text-cyan-700 text-right font-medium">{formatMillions(p.paiements)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxPaiement)}>{formatPercent(p.tauxPaiement)}</span></TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow className="bg-emerald-50/40 font-bold-total">
+                    <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totProjCP)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totProjOrdRep)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totProjOrdCons)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totProjOrdNouv)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totProjOrd)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totProjCP > 0 ? (totProjOrd / totProjCP) * 100 : 0)}>{formatPercent(totProjCP > 0 ? (totProjOrd / totProjCP) * 100 : 0)}</span></TableCell>
+                    <TableCell className="text-xs font-bold text-cyan-700 text-right">{formatMillions(totProjPaiements)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totProjCP > 0 ? (totProjPaiements / totProjCP) * 100 : 0)}>{formatPercent(totProjCP > 0 ? (totProjPaiements / totProjCP) * 100 : 0)}</span></TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* ═══════════ TABLEAU 3 : ORDONNANCEMENT PAR ENTITÉ ═══════════ */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancement par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-slate-50/60">
+                    <TableHead className="text-xs font-bold text-slate-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-rose-600" colSpan={4}>Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-cyan-600" colSpan={2}>Paiements</TableHead>
+                  </TableRow>
+                  <TableRow className="bg-slate-50/40">
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-cyan-500 text-right">Montant</TableHead>
+                    <TableHead className="text-[10px] font-bold text-cyan-500 text-right">Taux paiem.</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {ordByEntity.map(e => (
+                    <TableRow key={e.name} className="hover:bg-gray-50">
+                      <TableCell className="text-xs font-medium text-gray-900">{e.name}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp)}</TableCell>
+                      <TableCell className="text-xs text-rose-600 text-right">{formatMillions(e.ordReports)}</TableCell>
+                      <TableCell className="text-xs text-rose-600 text-right">{formatMillions(e.ordConsolides)}</TableCell>
+                      <TableCell className="text-xs text-rose-600 text-right">{formatMillions(e.ordNouveaux)}</TableCell>
+                      <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(e.ord)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span></TableCell>
+                      <TableCell className="text-xs text-cyan-700 text-right font-medium">{formatMillions(e.paiements)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxPaiement)}>{formatPercent(e.tauxPaiement)}</span></TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow className="bg-slate-50/40 font-bold-total">
+                    <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEntCP)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totEntOrdRep)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totEntOrdCons)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totEntOrdNouv)}</TableCell>
+                    <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totEntOrd)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totEntCP > 0 ? (totEntOrd / totEntCP) * 100 : 0)}>{formatPercent(totEntCP > 0 ? (totEntOrd / totEntCP) * 100 : 0)}</span></TableCell>
+                    <TableCell className="text-xs font-bold text-cyan-700 text-right">{formatMillions(totEntPaiements)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totEntCP > 0 ? (totEntPaiements / totEntCP) * 100 : 0)}>{formatPercent(totEntCP > 0 ? (totEntPaiements / totEntCP) * 100 : 0)}</span></TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Détail des ordonnancements */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Détail des ordonnancements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
