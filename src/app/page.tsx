@@ -193,6 +193,79 @@ const BarLabel = (props: { x: number; y: number; width: number; height: number; 
   )
 }
 
+// ═══════════ AUTH: Password protection wrapper ═══════════
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [authChecked, setAuthChecked] = useState(false)
+  const [passwordInput, setPasswordInput] = useState('')
+  const [passwordError, setPasswordError] = useState(false)
+  const DASHBOARD_PASSWORD = 'budget2025'
+
+  useEffect(() => {
+    const stored = localStorage.getItem('dashboard-auth')
+    if (stored === 'true') setIsAuthenticated(true)
+    setAuthChecked(true)
+  }, [])
+
+  if (!authChecked) return null
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] via-[#2a4a6f] to-[#1a3050]">
+        <div className="w-full max-w-md px-4">
+          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className="p-8">
+              <div className="flex flex-col items-center mb-8">
+                <div className="w-16 h-16 bg-[#1e3a5f] rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                  <Landmark className="w-8 h-8 text-white" />
+                </div>
+                <h1 className="text-xl font-bold text-gray-900 tracking-tight">Budget Investissement</h1>
+                <p className="text-sm text-gray-500 mt-1">Tableau de bord — Accès réservé</p>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">Mot de passe</label>
+                  <Input
+                    type="password"
+                    placeholder="Entrez le mot de passe"
+                    value={passwordInput}
+                    onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false) }}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && passwordInput === DASHBOARD_PASSWORD) { setIsAuthenticated(true); localStorage.setItem('dashboard-auth', 'true'); setPasswordError(false); } else if (e.key === 'Enter') { setPasswordError(true); } }}
+                    className={`h-12 text-base ${passwordError ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                  />
+                  {passwordError && (
+                    <p className="text-sm text-red-500 mt-1.5 font-medium">Mot de passe incorrect. Veuillez réessayer.</p>
+                  )}
+                </div>
+                <Button
+                  onClick={() => {
+                    if (passwordInput === DASHBOARD_PASSWORD) {
+                      setIsAuthenticated(true)
+                      localStorage.setItem('dashboard-auth', 'true')
+                      setPasswordError(false)
+                    } else {
+                      setPasswordError(true)
+                    }
+                  }}
+                  className="w-full h-12 text-base font-bold bg-[#1e3a5f] hover:bg-[#2a4a6f] text-white"
+                >
+                  Se connecter
+                </Button>
+              </div>
+            </div>
+            <div className="bg-gray-50 px-8 py-4 text-center">
+              <p className="text-xs text-gray-400">Accès autorisé uniquement sur invitation</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return <>{children}</>
+}
+// ═══════════ END AUTH ═══════════
+
 export default function Dashboard() {
   const [data, setData] = useState<DataRow[]>([])
   const [filters, setFilters] = useState<FilterData>({ programmes: [], projets: [], entites: [], nomenclatures: [], sources: [] })
@@ -220,77 +293,6 @@ export default function Dashboard() {
   const [refreshInterval, setRefreshInterval] = useState(30)
   const [numberFormat, setNumberFormat] = useState<'millions' | 'full'>('millions')
   const [defaultPage, setDefaultPage] = useState('overview')
-
-  // ═══════════ AUTH: Password protection ═══════════
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [authChecked, setAuthChecked] = useState(false)
-  const [passwordInput, setPasswordInput] = useState('')
-  const [passwordError, setPasswordError] = useState(false)
-  const DASHBOARD_PASSWORD = 'budget2025'
-
-  useEffect(() => {
-    const stored = localStorage.getItem('dashboard-auth')
-    if (stored === 'true') setIsAuthenticated(true)
-    setAuthChecked(true)
-  }, [])
-
-  const handleLogin = () => {
-    if (passwordInput === DASHBOARD_PASSWORD) {
-      setIsAuthenticated(true)
-      localStorage.setItem('dashboard-auth', 'true')
-      setPasswordError(false)
-    } else {
-      setPasswordError(true)
-    }
-  }
-
-  if (!authChecked) return null
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] via-[#2a4a6f] to-[#1a3050]">
-        <div className="w-full max-w-md px-4">
-          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <div className="p-8">
-              <div className="flex flex-col items-center mb-8">
-                <div className="w-16 h-16 bg-[#1e3a5f] rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-                  <Landmark className="w-8 h-8 text-white" />
-                </div>
-                <h1 className="text-xl font-bold text-gray-900 tracking-tight">Budget Investissement</h1>
-                <p className="text-sm text-gray-500 mt-1">Tableau de bord — Accès réservé</p>
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">Mot de passe</label>
-                  <Input
-                    type="password"
-                    placeholder="Entrez le mot de passe"
-                    value={passwordInput}
-                    onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false) }}
-                    onKeyDown={(e) => { if (e.key === 'Enter') handleLogin() }}
-                    className={`h-12 text-base ${passwordError ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
-                  />
-                  {passwordError && (
-                    <p className="text-sm text-red-500 mt-1.5 font-medium">Mot de passe incorrect. Veuillez réessayer.</p>
-                  )}
-                </div>
-                <Button
-                  onClick={handleLogin}
-                  className="w-full h-12 text-base font-bold bg-[#1e3a5f] hover:bg-[#2a4a6f] text-white"
-                >
-                  Se connecter
-                </Button>
-              </div>
-            </div>
-            <div className="bg-gray-50 px-8 py-4 text-center">
-              <p className="text-xs text-gray-400">Accès autorisé uniquement sur invitation</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-  // ═══════════ END AUTH ═══════════
 
   const fetchData = useCallback(async (silent = false) => {
     try {
@@ -1030,7 +1032,7 @@ export default function Dashboard() {
       {/* Logout */}
       <div className="px-4 py-3 border-t border-white/10">
         <button
-          onClick={() => { localStorage.removeItem('dashboard-auth'); setIsAuthenticated(false) }}
+          onClick={() => { localStorage.removeItem('dashboard-auth'); window.location.reload() }}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70 hover:bg-white/5 hover:text-white transition-colors"
         >
           <Info className="w-4 h-4 flex-shrink-0" />
@@ -5320,6 +5322,7 @@ export default function Dashboard() {
   }
 
   return (
+    <AuthGuard>
     <div className="min-h-screen bg-white flex">
       {/* Desktop Sidebar */}
       <aside
@@ -5496,6 +5499,7 @@ export default function Dashboard() {
         </div>
       </main>
     </div>
+    </AuthGuard>
   )
 }
 
