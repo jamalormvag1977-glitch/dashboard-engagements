@@ -1330,7 +1330,7 @@ export default function Dashboard() {
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Paiements</h3>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Taux de paiement global */}
+          {/* Taux de paiement */}
           <div className="kpi-card-premium rounded-xl border border-cyan-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #ecfeff 100%)' }}>
             <div className="h-1.5 bg-gradient-to-r from-cyan-500 to-teal-600" />
             <div className="p-5">
@@ -1360,44 +1360,43 @@ export default function Dashboard() {
                 </div>
                 <div className="flex justify-between mt-1.5">
                   <span className="text-[10px] text-gray-400">0%</span>
-                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(data.totalCP - data.totalPaiements)}</span>
+                  <span className="text-[10px] text-gray-400">Paiement / Total CP</span>
                   <span className="text-[10px] text-gray-400">100%</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Taux de paiement (Paiement / Total CP) */}
-          <div className="kpi-card-premium rounded-xl border border-cyan-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #ecfeff 100%)' }}>
-            <div className="h-1.5 bg-gradient-to-r from-cyan-500 to-teal-600" />
+          {/* Reste à payer */}
+          <div className="kpi-card-premium rounded-xl border border-red-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #fef2f2 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-red-400 to-rose-500" />
             <div className="p-5">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-cyan-100 flex items-center justify-center transition-transform">
-                      <Wallet className="w-5 h-5 text-cyan-700" />
+                    <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-red-100 flex items-center justify-center transition-transform">
+                      <Scale className="w-5 h-5 text-red-700" />
                     </div>
-                    <span className="text-sm font-bold text-gray-700">Taux de paiement</span>
+                    <span className="text-sm font-bold text-gray-700">Reste à payer</span>
                   </div>
-                  <p className="text-xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalPaiements)} M DH</p>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalCP - data.totalPaiements)} M DH</p>
                 </div>
                 <div className="text-right">
-                  <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(data.tauxPaiement)}`}>
-                    {data.tauxPaiement >= 80 ? '✓' : data.tauxPaiement >= 50 ? '⚠' : '✗'}
-                    {formatPercent(data.tauxPaiement)}
+                  <span className="inline-flex items-center gap-1 text-sm font-bold text-red-600">
+                    {data.totalCP > 0 ? formatPercent(((data.totalCP - data.totalPaiements) / data.totalCP) * 100) : '0%'}
                   </span>
                   <p className="text-[11px] text-gray-400 mt-0.5">
-                    Paiement / Total CP
+                    du Total CP
                   </p>
                 </div>
               </div>
               <div className="mt-3">
                 <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div className={`kpi-progress-bar h-full rounded-full ${data.tauxPaiement >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : data.tauxPaiement >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(data.tauxPaiement, 100)}%` }} />
+                  <div className="kpi-progress-bar h-full rounded-full bg-gradient-to-r from-red-400 to-rose-500" style={{ width: `${Math.min(data.totalCP > 0 ? ((data.totalCP - data.totalPaiements) / data.totalCP) * 100 : 0, 100)}%` }} />
                 </div>
                 <div className="flex justify-between mt-1.5">
                   <span className="text-[10px] text-gray-400">0%</span>
-                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(data.totalCP - data.totalPaiements)} M DH</span>
+                  <span className="text-[10px] text-gray-400">Reste / Total CP</span>
                   <span className="text-[10px] text-gray-400">100%</span>
                 </div>
               </div>
@@ -1962,82 +1961,75 @@ export default function Dashboard() {
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-cyan-500 to-teal-600" />
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Paiements</h3>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Paiements sur Reports */}
-          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-            <div className="h-1.5 bg-gradient-to-r from-sky-400 to-blue-500" />
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center transition-transform">
-                  <RotateCcw className="w-5 h-5 text-sky-600" />
-                </div>
-                <Badge className="bg-sky-50 text-sky-700 border-sky-200 text-[10px] font-bold rounded-full px-2.5">Reports</Badge>
-              </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0))} M DH</p>
-              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
-                Taux : <span className={tauxColor(kpis.totalOrdReports > 0 ? (filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0) / kpis.totalOrdReports) * 100 : 0)}>{formatPercent(kpis.totalOrdReports > 0 ? (filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0) / kpis.totalOrdReports) * 100 : 0)}</span> / ord.
-              </p>
-            </div>
-          </div>
-
-          {/* Paiements sur Consolidés */}
-          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-orange-500" />
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
-                  <Database className="w-5 h-5 text-amber-600" />
-                </div>
-                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-bold rounded-full px-2.5">Consolidés</Badge>
-              </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR CONSOLIDES'] || 0), 0))} M DH</p>
-              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
-                Taux : <span className={tauxColor(kpis.totalOrdConsolides > 0 ? (filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR CONSOLIDES'] || 0), 0) / kpis.totalOrdConsolides) * 100 : 0)}>{formatPercent(kpis.totalOrdConsolides > 0 ? (filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR CONSOLIDES'] || 0), 0) / kpis.totalOrdConsolides) * 100 : 0)}</span> / ord.
-              </p>
-            </div>
-          </div>
-
-          {/* Paiements sur Nouveaux */}
-          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-            <div className="h-1.5 bg-gradient-to-r from-cyan-400 to-teal-500" />
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
-                  <TrendingUp className="w-5 h-5 text-cyan-600" />
-                </div>
-                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-bold rounded-full px-2.5">Nouveaux</Badge>
-              </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR NOUVEAUX'] || 0), 0))} M DH</p>
-              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
-                Taux : <span className={tauxColor(kpis.totalOrdNouveaux > 0 ? (filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR NOUVEAUX'] || 0), 0) / kpis.totalOrdNouveaux) * 100 : 0)}>{formatPercent(kpis.totalOrdNouveaux > 0 ? (filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR NOUVEAUX'] || 0), 0) / kpis.totalOrdNouveaux) * 100 : 0)}</span> / ord.
-              </p>
-            </div>
-          </div>
-
-          {/* Total Paiements + Taux de paiement */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Taux de paiement */}
           <div className="kpi-card-premium rounded-xl border border-cyan-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #ecfeff 100%)' }}>
             <div className="h-1.5 bg-gradient-to-r from-cyan-500 to-teal-600" />
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center transition-transform">
-                    <Wallet className="w-5 h-5 text-cyan-700" />
+            <div className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-cyan-100 flex items-center justify-center transition-transform">
+                      <Wallet className="w-5 h-5 text-cyan-700" />
+                    </div>
+                    <span className="text-sm font-bold text-gray-700">Taux de paiement</span>
                   </div>
-                  <span className="text-sm font-bold text-gray-700">Total Paiements</span>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalPaiements)} M DH</p>
                 </div>
-                <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(kpis.tauxPaiement)}`}>
-                  {kpis.tauxPaiement >= 80 ? '✓' : kpis.tauxPaiement >= 50 ? '⚠' : '✗'}
-                  {formatPercent(kpis.tauxPaiement)}
-                </span>
+                <div className="text-right">
+                  <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(kpis.tauxPaiement)}`}>
+                    {kpis.tauxPaiement >= 80 ? '✓' : kpis.tauxPaiement >= 50 ? '⚠' : '✗'}
+                    {formatPercent(kpis.tauxPaiement)}
+                  </span>
+                  <p className="text-[11px] text-gray-400 mt-0.5">
+                    {kpis.tauxPaiement >= 80 ? 'Bon' : kpis.tauxPaiement >= 50 ? 'Moyen' : 'Faible'}
+                  </p>
+                </div>
               </div>
-              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalPaiements)} M DH</p>
-              <div className="mt-2">
+              <div className="mt-3">
                 <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                   <div className={`kpi-progress-bar h-full rounded-full ${kpis.tauxPaiement >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : kpis.tauxPaiement >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(kpis.tauxPaiement, 100)}%` }} />
                 </div>
-                <div className="flex justify-between mt-1">
-                  <span className="text-[10px] text-gray-400">{kpis.tauxPaiement >= 80 ? 'Bon' : kpis.tauxPaiement >= 50 ? 'Moyen' : 'Faible'}</span>
-                  <span className="text-[10px] text-gray-400">Reste : {formatMillions(kpis.totalCP - kpis.totalPaiements)} M DH</span>
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-[10px] text-gray-400">0%</span>
+                  <span className="text-[10px] text-gray-400">Paiement / Total CP</span>
+                  <span className="text-[10px] text-gray-400">100%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Reste à payer */}
+          <div className="kpi-card-premium rounded-xl border border-red-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #fef2f2 100%)' }}>
+            <div className="h-1.5 bg-gradient-to-r from-red-400 to-rose-500" />
+            <div className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-red-100 flex items-center justify-center transition-transform">
+                      <Scale className="w-5 h-5 text-red-700" />
+                    </div>
+                    <span className="text-sm font-bold text-gray-700">Reste à payer</span>
+                  </div>
+                  <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCP - kpis.totalPaiements)} M DH</p>
+                </div>
+                <div className="text-right">
+                  <span className="inline-flex items-center gap-1 text-sm font-bold text-red-600">
+                    {kpis.totalCP > 0 ? formatPercent(((kpis.totalCP - kpis.totalPaiements) / kpis.totalCP) * 100) : '0%'}
+                  </span>
+                  <p className="text-[11px] text-gray-400 mt-0.5">
+                    du Total CP
+                  </p>
+                </div>
+              </div>
+              <div className="mt-3">
+                <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="kpi-progress-bar h-full rounded-full bg-gradient-to-r from-red-400 to-rose-500" style={{ width: `${Math.min(kpis.totalCP > 0 ? ((kpis.totalCP - kpis.totalPaiements) / kpis.totalCP) * 100 : 0, 100)}%` }} />
+                </div>
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-[10px] text-gray-400">0%</span>
+                  <span className="text-[10px] text-gray-400">Reste / Total CP</span>
+                  <span className="text-[10px] text-gray-400">100%</span>
                 </div>
               </div>
             </div>
