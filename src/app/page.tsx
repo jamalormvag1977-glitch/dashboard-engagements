@@ -2334,8 +2334,6 @@ export default function Dashboard() {
 
     return (
       <>
-        {renderKPISections(kpis)}
-
         {/* ═══════════ SECTION 3 : INDICATEURS PAR ENTITÉ ═══════════ */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -2518,8 +2516,6 @@ export default function Dashboard() {
 
     return (
       <>
-        {renderKPISections(kpis)}
-
         {/* ═══════════ SECTION 3 : INDICATEURS PAR PROJET ═══════════ */}
         {(() => {
           const projectColors = [
@@ -2701,8 +2697,6 @@ export default function Dashboard() {
   const renderProjectView = () => {
     return (
       <>
-        {renderKPISections(kpis)}
-
         {/* ═══════════ SECTION 3 : ANALYSE PAR PROGRAMME ═══════════ */}
         {(() => {
           const progColors = [
