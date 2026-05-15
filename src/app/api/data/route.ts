@@ -15,19 +15,9 @@ function getDataFilePath(): string {
   return directPath
 }
 
-// Column name mapping: seulement pour l'ancien format GROUPE→Projet
-// PROGRAMME et PROJET sont déjà les bons noms dans le fichier actuel
-const COLUMN_MAP: Record<string, string> = {
-  'GROUPE': 'Projet',
-}
-
 // Normalize a single row's column names and ensure required fields exist
 function normalizeRow(row: Record<string, unknown>): Record<string, unknown> {
-  const normalized: Record<string, unknown> = {}
-  for (const [key, value] of Object.entries(row)) {
-    const mappedKey = COLUMN_MAP[key] || key
-    normalized[mappedKey] = value
-  }
+  const normalized: Record<string, unknown> = { ...row }
 
   // Ensure Programme field: if empty, use ENTITE as fallback
   if (!normalized['Programme'] || normalized['Programme'] === '') {

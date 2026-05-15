@@ -17,7 +17,6 @@ function getDataFilePath(): string {
 const KNOWN_COLUMNS: Record<string, string> = {
   'PROGRAMME': 'Programme',
   'PROJET': 'Projet',
-  'GROUPE': 'Projet',  // ancien nom, gardé pour compatibilité si jamais présent
   'SOURCE FINANCEMENT': 'SOURCE FINANCEMENT',
   'NOMENCLATURE': 'NOMENCLATURE',
   'N° ENGAGEMENT': 'N° ENGAGEMENT',
