@@ -2049,9 +2049,10 @@ export default function Dashboard() {
       <Card className="border border-gray-100 shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-semibold text-gray-700">
-              Analyse par programme
-            </CardTitle>
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-5 rounded-full bg-gradient-to-b from-indigo-500 to-violet-600" />
+              <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Analyse par programme</h3>
+            </div>
             <button onClick={() => handleNavChange('project')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
             </button>
@@ -2117,9 +2118,10 @@ export default function Dashboard() {
       <Card className="border border-gray-100 shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-semibold text-gray-700">
-              Analyse par projet
-            </CardTitle>
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-5 rounded-full bg-gradient-to-b from-emerald-500 to-teal-600" />
+              <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Analyse par projet</h3>
+            </div>
             <button onClick={() => handleNavChange('program')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
             </button>
@@ -2185,9 +2187,10 @@ export default function Dashboard() {
       <Card className="border border-gray-100 shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-semibold text-gray-700">
-              Analyse par entité
-            </CardTitle>
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-5 rounded-full bg-gradient-to-b from-slate-500 to-gray-600" />
+              <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Analyse par entité</h3>
+            </div>
             <button onClick={() => handleNavChange('entity')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
             </button>
