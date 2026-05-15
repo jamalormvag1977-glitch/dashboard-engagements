@@ -45,10 +45,11 @@ function normalizeData(rawData: { data?: unknown[]; filters?: Record<string, unk
   const projets = [...new Set(normalizedRows.map(r => r['Projet'] as string).filter(Boolean))].sort()
   const entites = [...new Set(normalizedRows.map(r => r['ENTITE'] as string).filter(Boolean))].sort()
   const nomenclatures = [...new Set(normalizedRows.map(r => String(r['NOMENCLATURE'] || '')).filter(Boolean))].sort()
+  const sources = [...new Set(normalizedRows.map(r => r['SOURCE FINANCEMENT'] as string).filter(Boolean))].sort()
 
   return {
     data: normalizedRows,
-    filters: { programmes, projets, entites, nomenclatures },
+    filters: { programmes, projets, entites, nomenclatures, sources },
     totalCount: normalizedRows.length,
     lastUpdated: rawData.lastUpdated || new Date().toISOString(),
   }

@@ -113,6 +113,7 @@ interface FilterData {
   projets: string[]
   entites: string[]
   nomenclatures: string[]
+  sources: string[]
 }
 
 // Format number in millions with 1 decimal (French format)
@@ -194,12 +195,13 @@ const BarLabel = (props: { x: number; y: number; width: number; height: number; 
 
 export default function Dashboard() {
   const [data, setData] = useState<DataRow[]>([])
-  const [filters, setFilters] = useState<FilterData>({ programmes: [], projets: [], entites: [], nomenclatures: [] })
+  const [filters, setFilters] = useState<FilterData>({ programmes: [], projets: [], entites: [], nomenclatures: [], sources: [] })
   const [loading, setLoading] = useState(true)
   const [selectedProgramme, setSelectedProgramme] = useState<string>('all')
   const [selectedProjet, setSelectedProjet] = useState<string>('all')
   const [selectedEntite, setSelectedEntite] = useState<string>('all')
   const [selectedNomenclature, setSelectedNomenclature] = useState<string>('all')
+  const [selectedSource, setSelectedSource] = useState<string>('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [uploading, setUploading] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<string | null>(null)
@@ -275,6 +277,7 @@ export default function Dashboard() {
     setSelectedProjet('all')
     setSelectedEntite('all')
     setSelectedNomenclature('all')
+    setSelectedSource('all')
     setSearchTerm('')
   }
 
@@ -284,6 +287,7 @@ export default function Dashboard() {
       if (selectedProjet !== 'all' && row.Projet !== selectedProjet) return false
       if (selectedEntite !== 'all' && row.ENTITE !== selectedEntite) return false
       if (selectedNomenclature !== 'all' && String(row.NOMENCLATURE || '') !== selectedNomenclature) return false
+      if (selectedSource !== 'all' && row['SOURCE FINANCEMENT'] !== selectedSource) return false
       if (searchTerm) {
         const search = searchTerm.toLowerCase()
         const designation = (row['DETAIL DESIGNATION'] || '').toLowerCase()
@@ -293,12 +297,19 @@ export default function Dashboard() {
       }
       return true
     })
-  }, [data, selectedProgramme, selectedProjet, selectedEntite, selectedNomenclature, searchTerm])
+  }, [data, selectedProgramme, selectedProjet, selectedEntite, selectedNomenclature, selectedSource, searchTerm])
 
   // Compute nomenclatures list from data (not stored in filters)
   const nomenclatures = useMemo(() => {
     const set = new Set<string>()
     data.forEach(r => { const n = String(r.NOMENCLATURE || ''); if (n) set.add(n) })
+    return Array.from(set).sort()
+  }, [data])
+
+  // Compute sources list from data
+  const sources = useMemo(() => {
+    const set = new Set<string>()
+    data.forEach(r => { const s = r['SOURCE FINANCEMENT'] || ''; if (s) set.add(s) })
     return Array.from(set).sort()
   }, [data])
 
@@ -1202,11 +1213,11 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ═══════════ SECTION : ORDONNANCEMENTS & PAIEMENTS ═══════════ */}
+      {/* ═══════════ SECTION : ORDONNANCEMENT ═══════════ */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-cyan-600" />
-          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancements & Paiements</h3>
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancement</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Ord. sur Reports */}
@@ -1291,11 +1302,11 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ═══════════ SECTION : TAUX DE PAIEMENT ═══════════ */}
+      {/* ═══════════ SECTION : PAIEMENTS ═══════════ */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-cyan-500 to-teal-600" />
-          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Taux de paiement</h3>
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Paiements</h3>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Taux de paiement global */}
@@ -1390,6 +1401,111 @@ export default function Dashboard() {
 
   const renderOverview = () => (
     <>
+      {/* ═══════════ SECTION : PERFORMANCE ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-violet-500 to-purple-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Performance</h3>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Pie Chart - Total CP par Programme */}
+          <Card className="border border-gray-100 shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xs font-semibold text-gray-600">Total CP par programme</CardTitle>
+            </CardHeader>
+            <CardContent className="p-2">
+              <div className="h-[180px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map(p => ({ name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name, value: Math.round(p.cp / 1e6 * 10) / 10 }))}
+                      cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={2} dataKey="value"
+                    >
+                      {analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map((_, index) => (
+                        <Cell key={`cell-cp-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: number) => `${value} M DH`} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Pie Chart - Taux Engagement */}
+          <Card className="border border-gray-100 shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xs font-semibold text-gray-600">Taux d'engagement par programme</CardTitle>
+            </CardHeader>
+            <CardContent className="p-2">
+              <div className="h-[180px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map(p => ({ name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name, value: Math.round(p.tauxEngagement * 10) / 10 }))}
+                      cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={2} dataKey="value"
+                    >
+                      {analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map((_, index) => (
+                        <Cell key={`cell-eng-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: number) => `${value}%`} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Pie Chart - Taux Ordonnancement */}
+          <Card className="border border-gray-100 shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xs font-semibold text-gray-600">Taux d'ordonnancement par programme</CardTitle>
+            </CardHeader>
+            <CardContent className="p-2">
+              <div className="h-[180px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map(p => ({ name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name, value: Math.round(p.tauxOrdonnement * 10) / 10 }))}
+                      cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={2} dataKey="value"
+                    >
+                      {analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map((_, index) => (
+                        <Cell key={`cell-ord-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: number) => `${value}%`} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Pie Chart - Taux Paiement */}
+          <Card className="border border-gray-100 shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xs font-semibold text-gray-600">Taux de paiement par programme</CardTitle>
+            </CardHeader>
+            <CardContent className="p-2">
+              <div className="h-[180px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map(p => ({ name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name, value: Math.round(p.tauxPaiement * 10) / 10 }))}
+                      cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={2} dataKey="value"
+                    >
+                      {analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map((_, index) => (
+                        <Cell key={`cell-pai-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: number) => `${value}%`} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
       {/* ═══════════ SECTION 1 : CRÉDITS ═══════════ */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
@@ -1658,11 +1774,11 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ═══════════ SECTION 3 : ORDONNANCEMENTS & PAIEMENTS ═══════════ */}
+      {/* ═══════════ SECTION 3 : ORDONNANCEMENT ═══════════ */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-cyan-600" />
-          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancements & Paiements</h3>
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Ordonnancement</h3>
           
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -5215,6 +5331,17 @@ export default function Dashboard() {
                 <SelectContent>
                   <SelectItem value="all">Toutes nomenclatures</SelectItem>
                   {nomenclatures.map(n => <SelectItem key={n} value={n}>{n}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              )}
+              {['overview', 'engagements', 'ordonnancements', 'previsions', 'assainissement'].includes(activeNav) && (
+              <Select value={selectedSource} onValueChange={setSelectedSource}>
+                <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
+                  <SelectValue placeholder="Source fin." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes sources</SelectItem>
+                  {sources.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                 </SelectContent>
               </Select>
               )}
