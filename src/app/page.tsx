@@ -899,7 +899,7 @@ export default function Dashboard() {
 
       {/* Active Filters */}
       <div className="px-4 py-3 border-t border-white/10 space-y-2">
-        <p className="text-[11px] font-semibold text-white/50 uppercase tracking-wider">Filtres actifs</p>
+        <p className="text-[11px] font-bold text-white/50 uppercase tracking-wider">Filtres actifs</p>
         <div className="flex flex-wrap gap-1.5">
           <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
             Exercice : 2026
@@ -962,7 +962,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
                   <RotateCcw className="w-5 h-5 text-blue-600" />
                 </div>
-                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
+                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-bold rounded-full px-2.5">Reports</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalReports)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -979,7 +979,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
                   <Database className="w-5 h-5 text-amber-600" />
                 </div>
-                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-bold rounded-full px-2.5">Consolidés</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalConsolides)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -996,7 +996,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
                   <TrendingUp className="w-5 h-5 text-emerald-600" />
                 </div>
-                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-bold rounded-full px-2.5">Nouveaux</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalNouveaux)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1013,7 +1013,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
                   <Scale className="w-5 h-5 text-violet-600" />
                 </div>
-                <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">CP</Badge>
+                <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-bold rounded-full px-2.5">CP</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalCP)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits de paiement (LFI)</p>
@@ -1028,7 +1028,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center transition-transform">
                   <Landmark className="w-5 h-5 text-indigo-600" />
                 </div>
-                <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-[10px] font-semibold rounded-full px-2.5">CE</Badge>
+                <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-[10px] font-bold rounded-full px-2.5">CE</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalCE)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits d&apos;engagement</p>
@@ -1043,7 +1043,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
                   <Wallet className="w-5 h-5 text-cyan-600" />
                 </div>
-                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">BO</Badge>
+                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-bold rounded-full px-2.5">BO</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalTresorerie || 0)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Trésorerie</p>
@@ -1058,7 +1058,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center transition-transform">
                   <Landmark className="w-5 h-5 text-pink-600" />
                 </div>
-                <Badge className="bg-pink-50 text-pink-700 border-pink-200 text-[10px] font-semibold rounded-full px-2.5">BN</Badge>
+                <Badge className="bg-pink-50 text-pink-700 border-pink-200 text-[10px] font-bold rounded-full px-2.5">BN</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalSubvention || 0)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Subvention demandée</p>
@@ -1082,7 +1082,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
                   <RotateCcw className="w-5 h-5 text-blue-600" />
                 </div>
-                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Report</Badge>
+                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-bold rounded-full px-2.5">Report</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalEngReports)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1099,7 +1099,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
                   <Database className="w-5 h-5 text-amber-600" />
                 </div>
-                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-bold rounded-full px-2.5">Consolidés</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalEngConsolides)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1116,7 +1116,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
                   <TrendingUp className="w-5 h-5 text-emerald-600" />
                 </div>
-                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-bold rounded-full px-2.5">Nouveaux</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalEngNouveaux)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1228,7 +1228,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center transition-transform">
                   <RotateCcw className="w-5 h-5 text-sky-600" />
                 </div>
-                <Badge className="bg-sky-50 text-sky-700 border-sky-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
+                <Badge className="bg-sky-50 text-sky-700 border-sky-200 text-[10px] font-bold rounded-full px-2.5">Reports</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalOrdReports)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1245,7 +1245,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
                   <Database className="w-5 h-5 text-amber-600" />
                 </div>
-                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-bold rounded-full px-2.5">Consolidés</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalOrdConsolides)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1262,7 +1262,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
                   <TrendingUp className="w-5 h-5 text-cyan-600" />
                 </div>
-                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-bold rounded-full px-2.5">Nouveaux</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalOrdNouveaux)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1560,7 +1560,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
                   <RotateCcw className="w-5 h-5 text-blue-600" />
                 </div>
-                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
+                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-bold rounded-full px-2.5">Reports</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalReports)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1577,7 +1577,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
                   <Database className="w-5 h-5 text-amber-600" />
                 </div>
-                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-bold rounded-full px-2.5">Consolidés</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalConsolides)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1594,7 +1594,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
                   <TrendingUp className="w-5 h-5 text-emerald-600" />
                 </div>
-                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-bold rounded-full px-2.5">Nouveaux</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalNouveaux)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1611,7 +1611,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
                   <Scale className="w-5 h-5 text-violet-600" />
                 </div>
-                <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">CP</Badge>
+                <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-bold rounded-full px-2.5">CP</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCP)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits de paiement (LFI)</p>
@@ -1626,7 +1626,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center transition-transform">
                   <Landmark className="w-5 h-5 text-indigo-600" />
                 </div>
-                <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-[10px] font-semibold rounded-full px-2.5">CE</Badge>
+                <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 text-[10px] font-bold rounded-full px-2.5">CE</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCE)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits d&apos;engagement</p>
@@ -1641,7 +1641,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
                   <Wallet className="w-5 h-5 text-cyan-600" />
                 </div>
-                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">BO</Badge>
+                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-bold rounded-full px-2.5">BO</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalTresorerie)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Trésorerie</p>
@@ -1656,7 +1656,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center transition-transform">
                   <Landmark className="w-5 h-5 text-pink-600" />
                 </div>
-                <Badge className="bg-pink-50 text-pink-700 border-pink-200 text-[10px] font-semibold rounded-full px-2.5">BN</Badge>
+                <Badge className="bg-pink-50 text-pink-700 border-pink-200 text-[10px] font-bold rounded-full px-2.5">BN</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalSubvention)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Subvention demandée</p>
@@ -1681,7 +1681,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
                   <RotateCcw className="w-5 h-5 text-blue-600" />
                 </div>
-                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Report</Badge>
+                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-bold rounded-full px-2.5">Report</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngReports)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1698,7 +1698,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
                   <Database className="w-5 h-5 text-amber-600" />
                 </div>
-                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-bold rounded-full px-2.5">Consolidés</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngConsolides)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1715,7 +1715,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
                   <TrendingUp className="w-5 h-5 text-emerald-600" />
                 </div>
-                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-bold rounded-full px-2.5">Nouveaux</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngNouveaux)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1828,7 +1828,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center transition-transform">
                   <RotateCcw className="w-5 h-5 text-sky-600" />
                 </div>
-                <Badge className="bg-sky-50 text-sky-700 border-sky-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
+                <Badge className="bg-sky-50 text-sky-700 border-sky-200 text-[10px] font-bold rounded-full px-2.5">Reports</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdReports)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1845,7 +1845,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
                   <Database className="w-5 h-5 text-amber-600" />
                 </div>
-                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-bold rounded-full px-2.5">Consolidés</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdConsolides)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1862,7 +1862,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
                   <TrendingUp className="w-5 h-5 text-cyan-600" />
                 </div>
-                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-bold rounded-full px-2.5">Nouveaux</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrdNouveaux)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1918,7 +1918,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center transition-transform">
                   <RotateCcw className="w-5 h-5 text-sky-600" />
                 </div>
-                <Badge className="bg-sky-50 text-sky-700 border-sky-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
+                <Badge className="bg-sky-50 text-sky-700 border-sky-200 text-[10px] font-bold rounded-full px-2.5">Reports</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR REPORTS'] || 0), 0))} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1935,7 +1935,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center transition-transform">
                   <Database className="w-5 h-5 text-amber-600" />
                 </div>
-                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-semibold rounded-full px-2.5">Consolidés</Badge>
+                <Badge className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] font-bold rounded-full px-2.5">Consolidés</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR CONSOLIDES'] || 0), 0))} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -1952,7 +1952,7 @@ export default function Dashboard() {
                 <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
                   <TrendingUp className="w-5 h-5 text-cyan-600" />
                 </div>
-                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">Nouveaux</Badge>
+                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-bold rounded-full px-2.5">Nouveaux</Badge>
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(filteredData.reduce((s, r) => s + (r['PAIEMENTS SUR NOUVEAUX'] || 0), 0))} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
@@ -2024,7 +2024,7 @@ export default function Dashboard() {
                     <div className={`kpi-icon-wrap w-8 h-8 rounded-full ${c.iconBg} flex items-center justify-center`}>
                       <Icon className={`w-4 h-4 ${c.iconText}`} />
                     </div>
-                    <Badge className={`${c.badgeBg} ${c.badgeText} ${c.badgeBorder} text-[9px] font-semibold rounded-full px-2`}>{label}</Badge>
+                    <Badge className={`${c.badgeBg} ${c.badgeText} ${c.badgeBorder} text-[9px] font-bold rounded-full px-2`}>{label}</Badge>
                   </div>
                   <p className="text-lg font-black text-gray-900 tracking-tight">{formatMillions(value)} M DH</p>
                   <div className="mt-2">
@@ -2063,18 +2063,18 @@ export default function Dashboard() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-indigo-50/60">
-                  <TableHead className="text-xs font-semibold text-indigo-700">Programme</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CP</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CP</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux eng. CP</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CE</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CE</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux eng. CE</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Ordonn.</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux ord.</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Paiements</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prévisions</TableHead>
-                  <TableHead className="text-xs font-semibold text-indigo-700 text-right">Disponible</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700">Programme</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Total CP</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Eng. CP</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux eng. CP</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Total CE</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Eng. CE</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux eng. CE</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Ordonn.</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux ord.</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Paiements</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Prévisions</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Disponible</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -2132,18 +2132,18 @@ export default function Dashboard() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-emerald-50/60">
-                  <TableHead className="text-xs font-semibold text-emerald-700">Projet</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total CP</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. CP</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux eng. CP</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total CE</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. CE</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux eng. CE</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Ordonn.</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux ord.</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Paiements</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Prévisions</TableHead>
-                  <TableHead className="text-xs font-semibold text-emerald-700 text-right">Disponible</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700">Projet</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Total CP</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Eng. CP</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Taux eng. CP</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Total CE</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Eng. CE</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Taux eng. CE</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Ordonn.</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Taux ord.</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Paiements</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Prévisions</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Disponible</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -2201,18 +2201,18 @@ export default function Dashboard() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-slate-50/60">
-                  <TableHead className="text-xs font-semibold text-slate-700">Entité</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Total CP</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. CP</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Taux eng. CP</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Total CE</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. CE</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Taux eng. CE</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Ordonn.</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Taux ord.</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Paiements</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Prévisions</TableHead>
-                  <TableHead className="text-xs font-semibold text-slate-700 text-right">Disponible</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700">Entité</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Total CP</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Eng. CP</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Taux eng. CP</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Total CE</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Eng. CE</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Taux eng. CE</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Ordonn.</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Taux ord.</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Paiements</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Prévisions</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Disponible</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -2283,17 +2283,17 @@ export default function Dashboard() {
                 </TableRow>
                 <TableRow className="bg-teal-50/30">
                   <TableHead className="text-[10px] text-gray-500" />
-                  <TableHead className="text-[10px] font-semibold text-emerald-600 text-right bg-emerald-50/20">CP</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-teal-600 text-right">Prév.</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-teal-600 text-right">Taux</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-cyan-600 text-right">Prév.</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-cyan-600 text-right">Taux</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-sky-600 text-right">Prév.</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-sky-600 text-right">Taux</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Prév.</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Taux</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-violet-600 text-right bg-violet-50/20">Prév.</TableHead>
-                  <TableHead className="text-[10px] font-semibold text-violet-600 text-right bg-violet-50/20">Taux</TableHead>
+                  <TableHead className="text-[10px] font-bold text-emerald-600 text-right bg-emerald-50/20">CP</TableHead>
+                  <TableHead className="text-[10px] font-bold text-teal-600 text-right">Prév.</TableHead>
+                  <TableHead className="text-[10px] font-bold text-teal-600 text-right">Taux</TableHead>
+                  <TableHead className="text-[10px] font-bold text-cyan-600 text-right">Prév.</TableHead>
+                  <TableHead className="text-[10px] font-bold text-cyan-600 text-right">Taux</TableHead>
+                  <TableHead className="text-[10px] font-bold text-sky-600 text-right">Prév.</TableHead>
+                  <TableHead className="text-[10px] font-bold text-sky-600 text-right">Taux</TableHead>
+                  <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Prév.</TableHead>
+                  <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Taux</TableHead>
+                  <TableHead className="text-[10px] font-bold text-violet-600 text-right bg-violet-50/20">Prév.</TableHead>
+                  <TableHead className="text-[10px] font-bold text-violet-600 text-right bg-violet-50/20">Taux</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -2305,7 +2305,7 @@ export default function Dashboard() {
                   const tauxNov = e.cp > 0 ? (e.cumulPrevNovembre / e.cp) * 100 : 0
                   return (
                     <TableRow key={e.name} className="hover:bg-teal-50/30 transition-colors">
-                      <TableCell className="text-xs font-semibold text-gray-900">{e.name}</TableCell>
+                      <TableCell className="text-xs font-bold text-gray-900">{e.name}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right font-medium bg-emerald-50/10">{formatMillions(e.cp)}</TableCell>
                       <TableCell className="text-xs text-gray-700 text-right bg-teal-50/20">{formatMillions(e.cumulPrevJuin)}</TableCell>
                       <TableCell className="text-xs text-right bg-teal-50/20">
@@ -2316,7 +2316,7 @@ export default function Dashboard() {
                           <span className={`text-[10px] font-bold ${tauxColor(tauxJuin)}`}>
                             {tauxJuin >= 80 ? '✓' : tauxJuin >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
                           </span>
-                          <span className={`text-[10px] font-semibold ${tauxColor(tauxJuin)}`}>{e.cp > 0 ? formatPercent(tauxJuin) : '—'}</span>
+                          <span className={`text-[10px] font-bold ${tauxColor(tauxJuin)}`}>{e.cp > 0 ? formatPercent(tauxJuin) : '—'}</span>
                         </div>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right bg-cyan-50/20">{formatMillions(e.cumulPrevSeptembre)}</TableCell>
@@ -2328,7 +2328,7 @@ export default function Dashboard() {
                           <span className={`text-[10px] font-bold ${tauxColor(tauxSept)}`}>
                             {tauxSept >= 80 ? '✓' : tauxSept >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
                           </span>
-                          <span className={`text-[10px] font-semibold ${tauxColor(tauxSept)}`}>{e.cp > 0 ? formatPercent(tauxSept) : '—'}</span>
+                          <span className={`text-[10px] font-bold ${tauxColor(tauxSept)}`}>{e.cp > 0 ? formatPercent(tauxSept) : '—'}</span>
                         </div>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right bg-sky-50/20">{formatMillions(e.cumulPrevOctobre)}</TableCell>
@@ -2340,7 +2340,7 @@ export default function Dashboard() {
                           <span className={`text-[10px] font-bold ${tauxColor(tauxOct)}`}>
                             {tauxOct >= 80 ? '✓' : tauxOct >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
                           </span>
-                          <span className={`text-[10px] font-semibold ${tauxColor(tauxOct)}`}>{e.cp > 0 ? formatPercent(tauxOct) : '—'}</span>
+                          <span className={`text-[10px] font-bold ${tauxColor(tauxOct)}`}>{e.cp > 0 ? formatPercent(tauxOct) : '—'}</span>
                         </div>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right bg-indigo-50/20">{formatMillions(e.cumulPrevNovembre)}</TableCell>
@@ -2352,7 +2352,7 @@ export default function Dashboard() {
                           <span className={`text-[10px] font-bold ${tauxColor(tauxNov)}`}>
                             {tauxNov >= 80 ? '✓' : tauxNov >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
                           </span>
-                          <span className={`text-[10px] font-semibold ${tauxColor(tauxNov)}`}>{e.cp > 0 ? formatPercent(tauxNov) : '—'}</span>
+                          <span className={`text-[10px] font-bold ${tauxColor(tauxNov)}`}>{e.cp > 0 ? formatPercent(tauxNov) : '—'}</span>
                         </div>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right font-medium bg-violet-50/10">{formatMillions(e.cumulPrevDecembre)}</TableCell>
@@ -2364,7 +2364,7 @@ export default function Dashboard() {
                           <span className={`text-[10px] font-bold ${tauxColor(tauxDec)}`}>
                             {tauxDec >= 80 ? '✓' : tauxDec >= 50 ? '⚠' : e.cp > 0 ? '✗' : '—'}
                           </span>
-                          <span className={`text-[10px] font-semibold ${tauxColor(tauxDec)}`}>{e.cp > 0 ? formatPercent(tauxDec) : '—'}</span>
+                          <span className={`text-[10px] font-bold ${tauxColor(tauxDec)}`}>{e.cp > 0 ? formatPercent(tauxDec) : '—'}</span>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -2503,14 +2503,14 @@ export default function Dashboard() {
                     <div className="grid grid-cols-2 gap-3">
                       <div className={`${color.light} rounded-lg p-2.5`}>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Eng. CP</span>
+                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Eng. CP</span>
                           <span className={`text-xs font-bold ${tauxColor(entity.tauxEngagement)}`}>{formatPercent(entity.tauxEngagement)}</span>
                         </div>
                         {renderMiniBar(entity.tauxEngagement, 100, color.bar)}
                       </div>
                       <div className={`${color.light} rounded-lg p-2.5`}>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Ordonn.</span>
+                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Ordonn.</span>
                           <span className={`text-xs font-bold ${tauxColor(entity.tauxOrdonnement)}`}>{formatPercent(entity.tauxOrdonnement)}</span>
                         </div>
                         {renderMiniBar(entity.tauxOrdonnement, 100, color.bar)}
@@ -2520,14 +2520,14 @@ export default function Dashboard() {
                     <div className="grid grid-cols-2 gap-3">
                       <div className={`${color.light} rounded-lg p-2.5`}>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Eng. CE</span>
+                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Eng. CE</span>
                           <span className={`text-xs font-bold ${tauxColor(entity.tauxEngagementCE)}`}>{entity.ce > 0 ? formatPercent(entity.tauxEngagementCE) : '0,0%'}</span>
                         </div>
                         {renderMiniBar(entity.tauxEngagementCE, 100, color.bar)}
                       </div>
                       <div className={`${color.light} rounded-lg p-2.5`}>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Paiement</span>
+                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Paiement</span>
                           <span className={`text-xs font-bold ${tauxColor(entity.tauxPaiement)}`}>{formatPercent(entity.tauxPaiement)}</span>
                         </div>
                         {renderMiniBar(entity.tauxPaiement, 100, color.bar)}
@@ -2575,18 +2575,18 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Paiements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Prévisions</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600">entité</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux eng. CE</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Ordonn.</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Paiements</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Prévisions</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Disponible</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -2705,14 +2705,14 @@ export default function Dashboard() {
                         <div className="grid grid-cols-2 gap-3">
                           <div className={`${color.light} rounded-lg p-2.5`}>
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Eng. CP</span>
+                              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Eng. CP</span>
                               <span className={`text-xs font-bold ${tauxColor(proj.tauxEngagement)}`}>{formatPercent(proj.tauxEngagement)}</span>
                             </div>
                             {renderMiniBar(proj.tauxEngagement, 100, color.bar)}
                           </div>
                           <div className={`${color.light} rounded-lg p-2.5`}>
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Ordonn.</span>
+                              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Ordonn.</span>
                               <span className={`text-xs font-bold ${tauxColor(proj.tauxOrdonnement)}`}>{formatPercent(proj.tauxOrdonnement)}</span>
                             </div>
                             {renderMiniBar(proj.tauxOrdonnement, 100, color.bar)}
@@ -2722,14 +2722,14 @@ export default function Dashboard() {
                         <div className="grid grid-cols-2 gap-3">
                           <div className={`${color.light} rounded-lg p-2.5`}>
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Eng. CE</span>
+                              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Eng. CE</span>
                               <span className={`text-xs font-bold ${tauxColor(proj.tauxEngagementCE)}`}>{proj.ce > 0 ? formatPercent(proj.tauxEngagementCE) : '0,0%'}</span>
                             </div>
                             {renderMiniBar(proj.tauxEngagementCE, 100, color.bar)}
                           </div>
                           <div className={`${color.light} rounded-lg p-2.5`}>
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Paiement</span>
+                              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Paiement</span>
                               <span className={`text-xs font-bold ${tauxColor(proj.tauxPaiement)}`}>{formatPercent(proj.tauxPaiement)}</span>
                             </div>
                             {renderMiniBar(proj.tauxPaiement, 100, color.bar)}
@@ -2779,18 +2779,18 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Total CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonn.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Paiements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Prévisions</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600">Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux eng. CE</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Ordonn.</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Paiements</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Prévisions</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Disponible</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -2885,11 +2885,11 @@ export default function Dashboard() {
                       <div className="p-4 space-y-3">
                         {/* Row 1: Crédits breakdown */}
                         <div>
-                          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Crédits</p>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Crédits</p>
                           <div className="grid grid-cols-3 gap-2">
                             <div className={`${color.light} rounded-lg p-2`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Reports</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase">Reports</span>
                                 <span className="text-[10px] font-bold text-gray-700">{formatMillions(prog.cpReports)}</span>
                               </div>
                               <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -2899,7 +2899,7 @@ export default function Dashboard() {
                             </div>
                             <div className={`${color.light} rounded-lg p-2`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Consolidés</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase">Consolidés</span>
                                 <span className="text-[10px] font-bold text-gray-700">{formatMillions(prog.cpConsolides)}</span>
                               </div>
                               <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -2909,7 +2909,7 @@ export default function Dashboard() {
                             </div>
                             <div className={`${color.light} rounded-lg p-2`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Nouveaux</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase">Nouveaux</span>
                                 <span className="text-[10px] font-bold text-gray-700">{formatMillions(prog.cpNouveaux)}</span>
                               </div>
                               <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -2922,11 +2922,11 @@ export default function Dashboard() {
 
                         {/* Row 2: Taux d'engagement */}
                         <div>
-                          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Taux d&apos;engagement</p>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Taux d&apos;engagement</p>
                           <div className="grid grid-cols-2 gap-3">
                             <div className={`${color.light} rounded-lg p-2.5`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Eng. CP</span>
+                                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Eng. CP</span>
                                 <span className={`text-xs font-bold ${tauxColor(prog.tauxEngagement)}`}>{formatPercent(prog.tauxEngagement)}</span>
                               </div>
                               {renderMiniBar(prog.tauxEngagement, 100, color.bar)}
@@ -2934,7 +2934,7 @@ export default function Dashboard() {
                             </div>
                             <div className={`${color.light} rounded-lg p-2.5`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Eng. CE</span>
+                                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Eng. CE</span>
                                 <span className={`text-xs font-bold ${tauxColor(prog.tauxEngagementCE)}`}>{prog.ce > 0 ? formatPercent(prog.tauxEngagementCE) : '0%'}</span>
                               </div>
                               {renderMiniBar(prog.tauxEngagementCE, 100, color.bar)}
@@ -2945,11 +2945,11 @@ export default function Dashboard() {
 
                         {/* Row 3: Engagement par type */}
                         <div>
-                          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Engagement par type</p>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Engagement par type</p>
                           <div className="grid grid-cols-3 gap-2">
                             <div className={`${color.light} rounded-lg p-2`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Sur Report</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase">Sur Report</span>
                                 <span className={`text-[10px] font-bold ${tauxColor(tauxEngReport)}`}>{formatPercent(tauxEngReport)}</span>
                               </div>
                               <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -2959,7 +2959,7 @@ export default function Dashboard() {
                             </div>
                             <div className={`${color.light} rounded-lg p-2`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Sur Consol.</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase">Sur Consol.</span>
                                 <span className={`text-[10px] font-bold ${tauxColor(tauxEngConsolide)}`}>{formatPercent(tauxEngConsolide)}</span>
                               </div>
                               <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -2969,7 +2969,7 @@ export default function Dashboard() {
                             </div>
                             <div className={`${color.light} rounded-lg p-2`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Sur Nouv.</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase">Sur Nouv.</span>
                                 <span className={`text-[10px] font-bold ${tauxColor(tauxEngNouveau)}`}>{formatPercent(tauxEngNouveau)}</span>
                               </div>
                               <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -2982,11 +2982,11 @@ export default function Dashboard() {
 
                         {/* Row 4: Ordonnancement */}
                         <div>
-                          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Ordonnancement</p>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Ordonnancement</p>
                           <div className="grid grid-cols-2 gap-3 mb-2">
                             <div className={`${color.light} rounded-lg p-2.5`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Taux ord. CP</span>
+                                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Taux ord. CP</span>
                                 <span className={`text-xs font-bold ${tauxColor(prog.tauxOrdonnement)}`}>{formatPercent(prog.tauxOrdonnement)}</span>
                               </div>
                               {renderMiniBar(prog.tauxOrdonnement, 100, color.bar)}
@@ -2994,7 +2994,7 @@ export default function Dashboard() {
                             </div>
                             <div className={`${color.light} rounded-lg p-2.5`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Taux paiement</span>
+                                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Taux paiement</span>
                                 <span className={`text-xs font-bold ${tauxColor(prog.tauxPaiement)}`}>{formatPercent(prog.tauxPaiement)}</span>
                               </div>
                               {renderMiniBar(prog.tauxPaiement, 100, color.bar)}
@@ -3004,7 +3004,7 @@ export default function Dashboard() {
                           <div className="grid grid-cols-3 gap-2">
                             <div className={`${color.light} rounded-lg p-2`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Ord/Report</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase">Ord/Report</span>
                                 <span className={`text-[10px] font-bold ${tauxColor(tauxOrdReport)}`}>{formatPercent(tauxOrdReport)}</span>
                               </div>
                               <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -3013,7 +3013,7 @@ export default function Dashboard() {
                             </div>
                             <div className={`${color.light} rounded-lg p-2`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Ord/Consol.</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase">Ord/Consol.</span>
                                 <span className={`text-[10px] font-bold ${tauxColor(tauxOrdConsolide)}`}>{formatPercent(tauxOrdConsolide)}</span>
                               </div>
                               <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -3022,7 +3022,7 @@ export default function Dashboard() {
                             </div>
                             <div className={`${color.light} rounded-lg p-2`}>
                               <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-gray-500 uppercase">Ord/Nouv.</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase">Ord/Nouv.</span>
                                 <span className={`text-[10px] font-bold ${tauxColor(tauxOrdNouveau)}`}>{formatPercent(tauxOrdNouveau)}</span>
                               </div>
                               <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -3081,29 +3081,29 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600" rowSpan={2}>Programme</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-center bg-blue-50/50" colSpan={3}>Crédits</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-center bg-emerald-50/50" colSpan={5}>Engagements</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-center bg-indigo-50/50" colSpan={5}>Ordonnancement</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-center" colSpan={3}>Autres</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600" rowSpan={2}>Programme</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-center bg-blue-50/50" colSpan={3}>Crédits</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-center bg-emerald-50/50" colSpan={5}>Engagements</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-center bg-indigo-50/50" colSpan={5}>Ordonnancement</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-center" colSpan={3}>Autres</TableHead>
                   </TableRow>
                   <TableRow className="bg-gray-50/80">
-                    <TableHead className="text-[10px] font-semibold text-blue-600 text-right">Reports</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-600 text-right">Consolidés</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-600 text-right">Nouveaux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Eng. CP</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Taux eng. CP</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Sur Report</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Sur Consol.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-emerald-600 text-right">Sur Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Ord/Report</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Ord/Consol.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Ord/Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Total Ord.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-600 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-gray-600 text-right">Paiements</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-gray-600 text-right">Prévisions</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-gray-600 text-right">Disponible</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-600 text-right">Reports</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-600 text-right">Consolidés</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-600 text-right">Nouveaux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-600 text-right">Eng. CP</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-600 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-600 text-right">Sur Report</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-600 text-right">Sur Consol.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-600 text-right">Sur Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Ord/Report</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Ord/Consol.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Ord/Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Total Ord.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-gray-600 text-right">Paiements</TableHead>
+                    <TableHead className="text-[10px] font-bold text-gray-600 text-right">Prévisions</TableHead>
+                    <TableHead className="text-[10px] font-bold text-gray-600 text-right">Disponible</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3132,7 +3132,7 @@ export default function Dashboard() {
                         <TableCell className="text-xs text-right"><span className={tauxColor(prog.tauxOrdonnement)}>{formatPercent(prog.tauxOrdonnement)}</span></TableCell>
                         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.paiements)}</TableCell>
                         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.previsions)}</TableCell>
-                        <TableCell className="text-xs text-right"><span className={prog.disponible >= 0 ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'}>{formatMillions(prog.disponible)}</span></TableCell>
+                        <TableCell className="text-xs text-right"><span className={prog.disponible >= 0 ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>{formatMillions(prog.disponible)}</span></TableCell>
                       </TableRow>
                     )
                   })}
@@ -3214,24 +3214,24 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-indigo-50/60">
-                    <TableHead className="text-xs font-semibold text-indigo-700">Programme</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Crédits Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Crédits Consolidés</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Crédits Nouveaux</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. Consolidés</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% Consolidé</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. Nouveaux</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% Nouveaux</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CP Total</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Reste à engager CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">% CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Reste à engager CE</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700">Programme</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Crédits Report</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Crédits Consolidés</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Crédits Nouveaux</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">% Report</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Eng. Consolidés</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">% Consolidé</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Eng. Nouveaux</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">% Nouveaux</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Eng. CP Total</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Reste à engager CP</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">% CE</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Reste à engager CE</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3273,11 +3273,11 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.cpConsolides > 0 ? (p.engConsolides / p.cpConsolides) * 100 : 0)}>{formatPercent(p.cpConsolides > 0 ? (p.engConsolides / p.cpConsolides) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.engNouveaux)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.cpNouveaux > 0 ? (p.engNouveaux / p.cpNouveaux) * 100 : 0)}>{formatPercent(p.cpNouveaux > 0 ? (p.engNouveaux / p.cpNouveaux) * 100 : 0)}</span></TableCell>
-                            <TableCell className="text-xs font-semibold text-emerald-700 text-right">{formatMillions(p.engCP)}</TableCell>
+                            <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(p.engCP)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxEngagement)}>{formatPercent(p.tauxEngagement)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp - p.engCP)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ce)}</TableCell>
-                            <TableCell className="text-xs font-semibold text-teal-700 text-right">{formatMillions(p.engCE)}</TableCell>
+                            <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(p.engCE)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.ce > 0 ? (p.engCE / p.ce) * 100 : 0)}>{formatPercent(p.ce > 0 ? (p.engCE / p.ce) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ce - p.engCE)}</TableCell>
                           </TableRow>
@@ -3321,24 +3321,24 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-emerald-50/60">
-                    <TableHead className="text-xs font-semibold text-emerald-700">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Crédits Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Crédits Consolidés</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Crédits Nouveaux</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">% Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. Consolidés</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">% Consolidé</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. Nouveaux</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">% Nouveaux</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. CP Total</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Taux eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Reste à engager CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Total CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">% CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right">Reste à engager CE</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700">Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Crédits Report</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Crédits Consolidés</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Crédits Nouveaux</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">% Report</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Eng. Consolidés</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">% Consolidé</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Eng. Nouveaux</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">% Nouveaux</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Eng. CP Total</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Reste à engager CP</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">% CE</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right">Reste à engager CE</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3380,11 +3380,11 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-right"><span className={tauxColor(g.cpConsolides > 0 ? (g.engConsolides / g.cpConsolides) * 100 : 0)}>{formatPercent(g.cpConsolides > 0 ? (g.engConsolides / g.cpConsolides) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.engNouveaux)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(g.cpNouveaux > 0 ? (g.engNouveaux / g.cpNouveaux) * 100 : 0)}>{formatPercent(g.cpNouveaux > 0 ? (g.engNouveaux / g.cpNouveaux) * 100 : 0)}</span></TableCell>
-                            <TableCell className="text-xs font-semibold text-emerald-700 text-right">{formatMillions(g.engCP)}</TableCell>
+                            <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(g.engCP)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxEngagement)}>{formatPercent(g.tauxEngagement)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.cp - g.engCP)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ce)}</TableCell>
-                            <TableCell className="text-xs font-semibold text-teal-700 text-right">{formatMillions(g.engCE)}</TableCell>
+                            <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(g.engCE)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(g.ce > 0 ? (g.engCE / g.ce) * 100 : 0)}>{formatPercent(g.ce > 0 ? (g.engCE / g.ce) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ce - g.engCE)}</TableCell>
                           </TableRow>
@@ -3428,24 +3428,24 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-slate-50/60">
-                    <TableHead className="text-xs font-semibold text-slate-700">Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Crédits Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Crédits Consolidés</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Crédits Nouveaux</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">% Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. Consolidés</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">% Consolidé</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. Nouveaux</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">% Nouveaux</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. CP Total</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Taux eng. CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Reste à engager CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Total CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Eng. CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">% CE</TableHead>
-                    <TableHead className="text-xs font-semibold text-slate-700 text-right">Reste à engager CE</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700">Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Crédits Report</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Crédits Consolidés</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Crédits Nouveaux</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">% Report</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Eng. Consolidés</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">% Consolidé</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Eng. Nouveaux</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">% Nouveaux</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Eng. CP Total</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Taux eng. CP</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Reste à engager CP</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Total CE</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Eng. CE</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">% CE</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-700 text-right">Reste à engager CE</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3487,11 +3487,11 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-right"><span className={tauxColor(e.cpConsolides > 0 ? (e.engConsolides / e.cpConsolides) * 100 : 0)}>{formatPercent(e.cpConsolides > 0 ? (e.engConsolides / e.cpConsolides) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.engNouveaux)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(e.cpNouveaux > 0 ? (e.engNouveaux / e.cpNouveaux) * 100 : 0)}>{formatPercent(e.cpNouveaux > 0 ? (e.engNouveaux / e.cpNouveaux) * 100 : 0)}</span></TableCell>
-                            <TableCell className="text-xs font-semibold text-emerald-700 text-right">{formatMillions(e.engCP)}</TableCell>
+                            <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(e.engCP)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxEngagement)}>{formatPercent(e.tauxEngagement)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.cp - e.engCP)}</TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ce)}</TableCell>
-                            <TableCell className="text-xs font-semibold text-teal-700 text-right">{formatMillions(e.engCE)}</TableCell>
+                            <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(e.engCE)}</TableCell>
                             <TableCell className="text-xs text-right"><span className={tauxColor(e.ce > 0 ? (e.engCE / e.ce) * 100 : 0)}>{formatPercent(e.ce > 0 ? (e.engCE / e.ce) * 100 : 0)}</span></TableCell>
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ce - e.engCE)}</TableCell>
                           </TableRow>
@@ -3535,20 +3535,20 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-blue-50/60">
-                    <TableHead className="text-xs font-semibold text-blue-700" rowSpan={2}>Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700" rowSpan={2}>Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700" rowSpan={2}>Nomenclature</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700" rowSpan={2}>N° Engagement</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700" rowSpan={2}>Désignation</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-emerald-600" colSpan={4}>Engagements</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Taux eng.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700" rowSpan={2}>Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700" rowSpan={2}>Nomenclature</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700" rowSpan={2}>N° Engagement</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700" rowSpan={2}>Désignation</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-emerald-600" colSpan={4}>Engagements</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right" rowSpan={2}>Taux eng.</TableHead>
                   </TableRow>
                   <TableRow className="bg-blue-50/40">
-                    <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-500 text-right">Total</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3575,7 +3575,7 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-emerald-600 text-right">{formatMillions(r.engReports)}</TableCell>
                               <TableCell className="text-xs text-emerald-600 text-right">{formatMillions(r.engConsolides)}</TableCell>
                               <TableCell className="text-xs text-emerald-600 text-right">{formatMillions(r.engNouveaux)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-emerald-700 text-right">{formatMillions(r.engCPTotal)}</TableCell>
+                              <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(r.engCPTotal)}</TableCell>
                               <TableCell className="text-xs text-right">
                                 <span className={tauxColor(r.tauxEngagement)}>{formatPercent(r.tauxEngagement)}</span>
                               </TableCell>
@@ -3621,20 +3621,20 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-emerald-50/60">
-                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Nomenclature</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>N° Engagement</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Désignation</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-rose-600" colSpan={4}>Ordonnancements</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700" rowSpan={2}>Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700" rowSpan={2}>Nomenclature</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700" rowSpan={2}>N° Engagement</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700" rowSpan={2}>Désignation</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-rose-600" colSpan={4}>Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Taux ord.</TableHead>
                   </TableRow>
                   <TableRow className="bg-emerald-50/40">
-                    <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-rose-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-rose-500 text-right">Total</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3661,7 +3661,7 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-rose-600 text-right">{formatMillions(r.ordReports)}</TableCell>
                               <TableCell className="text-xs text-rose-600 text-right">{formatMillions(r.ordConsolides)}</TableCell>
                               <TableCell className="text-xs text-rose-600 text-right">{formatMillions(r.ordNouveaux)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-rose-700 text-right">{formatMillions(r.ordTotal)}</TableCell>
+                              <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(r.ordTotal)}</TableCell>
                               <TableCell className="text-xs text-right">
                                 <span className={tauxColor(r.tauxOrdonnement)}>{formatPercent(r.tauxOrdonnement)}</span>
                               </TableCell>
@@ -3711,7 +3711,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
                     <Scale className="w-5 h-5 text-blue-600" />
                   </div>
-                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Budget</Badge>
+                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-bold rounded-full px-2.5">Budget</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCP)}</p>
                 <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Total CP</p>
@@ -3726,7 +3726,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
                     <TrendingUp className="w-5 h-5 text-emerald-600" />
                   </div>
-                  <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Eng.</Badge>
+                  <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-bold rounded-full px-2.5">Eng.</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngCP)}</p>
                 <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Total engagements</p>
@@ -3741,7 +3741,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
                     <Wallet className="w-5 h-5 text-blue-600" />
                   </div>
-                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Ord.</Badge>
+                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-bold rounded-full px-2.5">Ord.</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalOrd)}</p>
                 <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Total ordonnancements</p>
@@ -3756,7 +3756,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
                     <Landmark className="w-5 h-5 text-violet-600" />
                   </div>
-                  <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">Reste</Badge>
+                  <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-bold rounded-full px-2.5">Reste</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.disponible)}</p>
                 <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Disponible</p>
@@ -3775,13 +3775,13 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonnancements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Disponible</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600">entité</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Budget</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Engagements</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux eng.</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Disponible</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3860,13 +3860,13 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="text-xs font-semibold text-gray-600">Source</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Budget (LFI)</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Engagements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Ordonnancements</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 text-right">Nb lignes</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600">Source</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Budget (LFI)</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Engagements</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux eng.</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Ordonnancements</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Nb lignes</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4075,18 +4075,18 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-blue-50/60">
-                    <TableHead className="text-xs font-semibold text-blue-700">Programme</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prév. Fin Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prév. Fin Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prév. Fin Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prév. Fin Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Prév. Fin Déc.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right">Taux Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700">Programme</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Prév. Fin Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Taux Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Prév. Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Taux Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Prév. Fin Oct.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Taux Oct.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Prév. Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Taux Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right">Taux Déc.</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4149,18 +4149,18 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-teal-50/60">
-                    <TableHead className="text-xs font-semibold text-teal-700">Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prév. Fin Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prév. Fin Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prév. Fin Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prév. Fin Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Prév. Fin Déc.</TableHead>
-                    <TableHead className="text-xs font-semibold text-teal-700 text-right">Taux Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700">Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Prév. Fin Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Taux Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Prév. Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Taux Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Prév. Fin Oct.</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Taux Oct.</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Prév. Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Taux Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-teal-700 text-right">Taux Déc.</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4223,18 +4223,18 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-indigo-50/60">
-                    <TableHead className="text-xs font-semibold text-indigo-700">Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prév. Fin Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prév. Fin Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prév. Fin Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prév. Fin Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Prév. Fin Déc.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right">Taux Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700">Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Prév. Fin Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Prév. Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Prév. Fin Oct.</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux Oct.</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Prév. Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Prév. Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux Déc.</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4297,31 +4297,31 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-amber-50/60">
-                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={4}>Fin Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={4}>Fin Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={4}>Fin Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={4}>Fin Déc.</TableHead>
-                    <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Taux Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-blue-600" colSpan={4}>Fin Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-teal-600" colSpan={4}>Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-purple-600" colSpan={4}>Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-indigo-600" colSpan={4}>Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-700 text-right" rowSpan={2}>Taux Déc.</TableHead>
                   </TableRow>
                   <TableRow className="bg-amber-50/40">
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Total</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Total</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Total</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Total</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4391,19 +4391,19 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-blue-600 text-right">{formatMillions(v.cumulRepByMonth['JUIN']||0)}</TableCell>
                               <TableCell className="text-xs text-blue-600 text-right">{formatMillions(v.cumulConsByMonth['JUIN']||0)}</TableCell>
                               <TableCell className="text-xs text-blue-600 text-right">{formatMillions(v.cumulNouvByMonth['JUIN']||0)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-blue-700 text-right">{formatMillions(totJuin)}</TableCell>
+                              <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totJuin)}</TableCell>
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(v.cumulRepByMonth['SEPTEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(v.cumulConsByMonth['SEPTEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(v.cumulNouvByMonth['SEPTEMBRE']||0)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-teal-700 text-right">{formatMillions(totSept)}</TableCell>
+                              <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totSept)}</TableCell>
                               <TableCell className="text-xs text-purple-600 text-right">{formatMillions(v.cumulRepByMonth['NOVEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-purple-600 text-right">{formatMillions(v.cumulConsByMonth['NOVEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-purple-600 text-right">{formatMillions(v.cumulNouvByMonth['NOVEMBRE']||0)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-purple-700 text-right">{formatMillions(totNov)}</TableCell>
+                              <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions(totNov)}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(v.cumulRepByMonth['DECEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(v.cumulConsByMonth['DECEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(v.cumulNouvByMonth['DECEMBRE']||0)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-indigo-700 text-right">{formatMillions(totDec)}</TableCell>
+                              <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions(totDec)}</TableCell>
                               <TableCell className="text-xs text-right"><span className={tauxColor(v.cp > 0 ? (totDec / v.cp) * 100 : 0)}>{formatPercent(v.cp > 0 ? (totDec / v.cp) * 100 : 0)}</span></TableCell>
                             </TableRow>
                           )
@@ -4448,35 +4448,35 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-amber-50/60">
-                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Nomenclature</TableHead>
-                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>N° Engagement</TableHead>
-                    <TableHead className="text-xs font-semibold text-amber-700" rowSpan={2}>Désignation</TableHead>
-                    <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Total CP</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={4}>Fin Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={4}>Fin Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={4}>Fin Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={4}>Fin Déc.</TableHead>
-                    <TableHead className="text-xs font-semibold text-amber-700 text-right" rowSpan={2}>Taux Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-700" rowSpan={2}>Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-700" rowSpan={2}>Nomenclature</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-700" rowSpan={2}>N° Engagement</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-700" rowSpan={2}>Désignation</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-700 text-right" rowSpan={2}>Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-blue-600" colSpan={4}>Fin Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-teal-600" colSpan={4}>Fin Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-purple-600" colSpan={4}>Fin Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-indigo-600" colSpan={4}>Fin Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-700 text-right" rowSpan={2}>Taux Déc.</TableHead>
                   </TableRow>
                   <TableRow className="bg-amber-50/40">
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Total</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Total</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Total</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Cons.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Nouv.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Total</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4555,19 +4555,19 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.cumulRepByMonth['JUIN']||0)}</TableCell>
                               <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.cumulConsByMonth['JUIN']||0)}</TableCell>
                               <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.cumulNouvByMonth['JUIN']||0)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-blue-700 text-right">{formatMillions((p.cumulRepByMonth['JUIN']||0)+(p.cumulConsByMonth['JUIN']||0)+(p.cumulNouvByMonth['JUIN']||0))}</TableCell>
+                              <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions((p.cumulRepByMonth['JUIN']||0)+(p.cumulConsByMonth['JUIN']||0)+(p.cumulNouvByMonth['JUIN']||0))}</TableCell>
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.cumulRepByMonth['SEPTEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.cumulConsByMonth['SEPTEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.cumulNouvByMonth['SEPTEMBRE']||0)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-teal-700 text-right">{formatMillions((p.cumulRepByMonth['SEPTEMBRE']||0)+(p.cumulConsByMonth['SEPTEMBRE']||0)+(p.cumulNouvByMonth['SEPTEMBRE']||0))}</TableCell>
+                              <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions((p.cumulRepByMonth['SEPTEMBRE']||0)+(p.cumulConsByMonth['SEPTEMBRE']||0)+(p.cumulNouvByMonth['SEPTEMBRE']||0))}</TableCell>
                               <TableCell className="text-xs text-purple-600 text-right">{formatMillions(p.cumulRepByMonth['NOVEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-purple-600 text-right">{formatMillions(p.cumulConsByMonth['NOVEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-purple-600 text-right">{formatMillions(p.cumulNouvByMonth['NOVEMBRE']||0)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-purple-700 text-right">{formatMillions((p.cumulRepByMonth['NOVEMBRE']||0)+(p.cumulConsByMonth['NOVEMBRE']||0)+(p.cumulNouvByMonth['NOVEMBRE']||0))}</TableCell>
+                              <TableCell className="text-xs font-bold text-purple-700 text-right">{formatMillions((p.cumulRepByMonth['NOVEMBRE']||0)+(p.cumulConsByMonth['NOVEMBRE']||0)+(p.cumulNouvByMonth['NOVEMBRE']||0))}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.cumulRepByMonth['DECEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.cumulConsByMonth['DECEMBRE']||0)}</TableCell>
                               <TableCell className="text-xs text-indigo-600 text-right">{formatMillions(p.cumulNouvByMonth['DECEMBRE']||0)}</TableCell>
-                              <TableCell className="text-xs font-semibold text-indigo-700 text-right">{formatMillions((p.cumulRepByMonth['DECEMBRE']||0)+(p.cumulConsByMonth['DECEMBRE']||0)+(p.cumulNouvByMonth['DECEMBRE']||0))}</TableCell>
+                              <TableCell className="text-xs font-bold text-indigo-700 text-right">{formatMillions((p.cumulRepByMonth['DECEMBRE']||0)+(p.cumulConsByMonth['DECEMBRE']||0)+(p.cumulNouvByMonth['DECEMBRE']||0))}</TableCell>
                               <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (pTotDec / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (pTotDec / p.cp) * 100 : 0)}</span></TableCell>
                             </TableRow>
                           )
@@ -4703,7 +4703,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
                     <RotateCcw className="w-5 h-5 text-blue-600" />
                   </div>
-                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-semibold rounded-full px-2.5">Reports</Badge>
+                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-bold rounded-full px-2.5">Reports</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalReports)}</p>
                 <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits reportés</p>
@@ -4718,7 +4718,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
                     <TrendingUp className="w-5 h-5 text-emerald-600" />
                   </div>
-                  <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-semibold rounded-full px-2.5">Eng.</Badge>
+                  <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-bold rounded-full px-2.5">Eng.</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalEngReports)}</p>
                 <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Taux : <span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></p>
@@ -4733,7 +4733,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
                     <Wallet className="w-5 h-5 text-violet-600" />
                   </div>
-                  <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-semibold rounded-full px-2.5">Ord.</Badge>
+                  <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-bold rounded-full px-2.5">Ord.</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalOrdReports)}</p>
                 <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Taux : <span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></p>
@@ -4748,7 +4748,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-red-50 flex items-center justify-center transition-transform">
                     <Landmark className="w-5 h-5 text-red-600" />
                   </div>
-                  <Badge className="bg-red-50 text-red-700 border-red-200 text-[10px] font-semibold rounded-full px-2.5">Reste</Badge>
+                  <Badge className="bg-red-50 text-red-700 border-red-200 text-[10px] font-bold rounded-full px-2.5">Reste</Badge>
                 </div>
                 <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(resteEngagerReports)}</p>
                 <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Reste à ordonner : {formatMillions(resteOrdonnerReports)}</p>
@@ -4846,29 +4846,29 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-blue-50/60">
-                    <TableHead className="text-xs font-semibold text-blue-700" rowSpan={2}>Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Crédits Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-blue-700 text-right" rowSpan={2}>Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Rep. Cum. Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Rep. Cum. Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Rep. Cum. Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Rep. Cum. Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Rep. Cum. Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right" rowSpan={2}>Crédits Report</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right" rowSpan={2}>Taux eng.</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-blue-600" colSpan={2}>Prév. Rep. Cum. Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-teal-600" colSpan={2}>Prév. Rep. Cum. Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-orange-600" colSpan={2}>Prév. Rep. Cum. Oct.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-purple-600" colSpan={2}>Prév. Rep. Cum. Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-indigo-600" colSpan={2}>Prév. Rep. Cum. Déc.</TableHead>
                   </TableRow>
                   <TableRow className="bg-blue-50/40">
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-orange-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-orange-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Taux</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4937,29 +4937,29 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-emerald-50/60">
-                    <TableHead className="text-xs font-semibold text-emerald-700" rowSpan={2}>Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Crédits Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-emerald-700 text-right" rowSpan={2}>Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Rep. Cum. Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Rep. Cum. Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Rep. Cum. Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Rep. Cum. Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Rep. Cum. Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700" rowSpan={2}>Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Crédits Report</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Taux eng.</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-blue-600" colSpan={2}>Prév. Rep. Cum. Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-teal-600" colSpan={2}>Prév. Rep. Cum. Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-orange-600" colSpan={2}>Prév. Rep. Cum. Oct.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-purple-600" colSpan={2}>Prév. Rep. Cum. Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-indigo-600" colSpan={2}>Prév. Rep. Cum. Déc.</TableHead>
                   </TableRow>
                   <TableRow className="bg-emerald-50/40">
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-orange-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-orange-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Taux</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -5028,29 +5028,29 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-indigo-50/60">
-                    <TableHead className="text-xs font-semibold text-indigo-700" rowSpan={2}>Programme</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Crédits Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Taux eng.</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
-                    <TableHead className="text-xs font-semibold text-indigo-700 text-right" rowSpan={2}>Taux ord.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Rep. Cum. Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Rep. Cum. Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Rep. Cum. Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Rep. Cum. Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Rep. Cum. Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700" rowSpan={2}>Programme</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right" rowSpan={2}>Crédits Report</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right" rowSpan={2}>Eng. Reports</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right" rowSpan={2}>Taux eng.</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right" rowSpan={2}>Ord. Reports</TableHead>
+                    <TableHead className="text-xs font-bold text-indigo-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-blue-600" colSpan={2}>Prév. Rep. Cum. Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-teal-600" colSpan={2}>Prév. Rep. Cum. Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-orange-600" colSpan={2}>Prév. Rep. Cum. Oct.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-purple-600" colSpan={2}>Prév. Rep. Cum. Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-indigo-600" colSpan={2}>Prév. Rep. Cum. Déc.</TableHead>
                   </TableRow>
                   <TableRow className="bg-indigo-50/40">
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-orange-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-orange-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Taux</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -5159,38 +5159,38 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-rose-50/60">
-                    <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>Programme</TableHead>
-                    <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>Projet</TableHead>
-                    <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>Entité</TableHead>
-                    <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>Nomenclature</TableHead>
-                    <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>N° Engagement</TableHead>
-                    <TableHead className="text-xs font-semibold text-rose-700" rowSpan={2}>Désignation</TableHead>
-                    <TableHead className="text-xs font-semibold text-rose-700 text-right" rowSpan={2}>Crédits Report</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-emerald-600" colSpan={3}>Engagement</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={3}>Ordonnancement</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-blue-600" colSpan={2}>Prév. Rep. Cum. Juin</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-teal-600" colSpan={2}>Prév. Rep. Cum. Sept.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-orange-600" colSpan={2}>Prév. Rep. Cum. Oct.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-purple-600" colSpan={2}>Prév. Rep. Cum. Nov.</TableHead>
-                    <TableHead className="text-xs font-semibold text-center text-indigo-600" colSpan={2}>Prév. Rep. Cum. Déc.</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>Programme</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>Nomenclature</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>N° Engagement</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>Désignation</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700 text-right" rowSpan={2}>Crédits Report</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-emerald-600" colSpan={3}>Engagement</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-blue-600" colSpan={3}>Ordonnancement</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-blue-600" colSpan={2}>Prév. Rep. Cum. Juin</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-teal-600" colSpan={2}>Prév. Rep. Cum. Sept.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-orange-600" colSpan={2}>Prév. Rep. Cum. Oct.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-purple-600" colSpan={2}>Prév. Rep. Cum. Nov.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-indigo-600" colSpan={2}>Prév. Rep. Cum. Déc.</TableHead>
                   </TableRow>
                   <TableRow className="bg-rose-50/40">
-                    <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Eng. Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Taux eng.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-emerald-500 text-right">Reste</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Ord. Rep.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Reste</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-blue-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-teal-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-orange-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-purple-500 text-right">Taux</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Prév.</TableHead>
-                    <TableHead className="text-[10px] font-semibold text-indigo-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-500 text-right">Eng. Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-500 text-right">Taux eng.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-emerald-500 text-right">Reste</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Ord. Rep.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Taux ord.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Reste</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-teal-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-orange-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-orange-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-purple-500 text-right">Taux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Prév.</TableHead>
+                    <TableHead className="text-[10px] font-bold text-indigo-500 text-right">Taux</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -5563,7 +5563,7 @@ function EntityRow({
   return (
     <>
       <TableRow className="bg-white hover:bg-gray-50 cursor-pointer" onClick={onToggleEntity}>
-        <TableCell className="text-xs font-semibold text-gray-900">
+        <TableCell className="text-xs font-bold text-gray-900">
           <div className="flex items-center gap-2">
             {expanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
             {entity.name}
