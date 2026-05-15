@@ -2568,7 +2568,7 @@ export default function Dashboard() {
         {/* Entity Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Détail par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Détail par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -2772,7 +2772,7 @@ export default function Dashboard() {
         {/* Programme Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Détail par projet</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Détail par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3074,7 +3074,7 @@ export default function Dashboard() {
         {/* ═══════════ TABLEAU D'ANALYSE PAR PROGRAMME ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Tableau d&apos;analyse par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Tableau d&apos;analyse par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3207,7 +3207,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Programme ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Engagements par Programme</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Engagements par Programme</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3314,7 +3314,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Projet ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Engagements par Projet</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Engagements par Projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3421,7 +3421,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Entité ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Engagements par Entité</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Engagements par Entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3528,7 +3528,7 @@ export default function Dashboard() {
         {/* Engagement Lines Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Détail des engagements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Détail des engagements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3614,7 +3614,7 @@ export default function Dashboard() {
         {/* Ordonnancement Lines Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Détail des ordonnancements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Détail des ordonnancements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3768,7 +3768,7 @@ export default function Dashboard() {
         {/* Entity Comparison Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Résumé comparatif par entité</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Résumé comparatif par entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3809,7 +3809,7 @@ export default function Dashboard() {
         {/* Budget Structure Pie Chart */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800 flex items-center gap-2">
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase flex items-center gap-2">
               <PieChartIcon className="w-4 h-4" />
               Structure budgétaire
             </CardTitle>
@@ -3853,7 +3853,7 @@ export default function Dashboard() {
         {/* Source de financement */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Source de financement</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Source de financement</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3905,12 +3905,12 @@ export default function Dashboard() {
   const renderSettingsView = () => {
     return (
       <>
-        <h2 className="text-lg font-bold text-gray-900">Paramètres</h2>
+        <h2 className="text-lg font-bold text-gray-900 tracking-wide uppercase">Paramètres</h2>
 
         {/* Auto-refresh */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800 flex items-center gap-2">
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase flex items-center gap-2">
               <Zap className="w-4 h-4" />
               Actualisation automatique
             </CardTitle>
@@ -3947,7 +3947,7 @@ export default function Dashboard() {
         {/* Display Preferences */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800 flex items-center gap-2">
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
               Préférences d&apos;affichage
             </CardTitle>
@@ -3990,7 +3990,7 @@ export default function Dashboard() {
         {/* Data Management */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800 flex items-center gap-2">
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase flex items-center gap-2">
               <Database className="w-4 h-4" />
               Gestion des données
             </CardTitle>
@@ -4034,7 +4034,7 @@ export default function Dashboard() {
         {/* About */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">À propos</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">À propos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -4068,7 +4068,7 @@ export default function Dashboard() {
         {/* Prévisions par Programme */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Prévisions cumulées par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Prévisions cumulées par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4142,7 +4142,7 @@ export default function Dashboard() {
         {/* Prévisions par Projet */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Prévisions cumulées par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Prévisions cumulées par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4216,7 +4216,7 @@ export default function Dashboard() {
         {/* Prévisions par Entité */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Prévisions cumulées par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Prévisions cumulées par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4290,7 +4290,7 @@ export default function Dashboard() {
         {/* Détail des prévisions cumulées par entité (Reports / Consolidés / Nouveaux) */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Détail des prévisions cumulées <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Détail des prévisions cumulées <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4441,7 +4441,7 @@ export default function Dashboard() {
         {/* Détail des prévisions par prestation */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Détail des prévisions par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Détail des prévisions par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4839,7 +4839,7 @@ export default function Dashboard() {
         {/* Table by Entity */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Assainissement par entité</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Assainissement par entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4930,7 +4930,7 @@ export default function Dashboard() {
         {/* Table by Projet */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Assainissement par projet</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Assainissement par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5021,7 +5021,7 @@ export default function Dashboard() {
         {/* ═══════════ Analyse assainissement par programme ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Assainissement par programme</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Assainissement par programme</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5152,7 +5152,7 @@ export default function Dashboard() {
         {/* ═══════════ Détail des assainissement par prestation ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-gray-800">Détail des assainissement par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Détail des assainissement par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5372,7 +5372,7 @@ export default function Dashboard() {
                   <Menu className="w-4 h-4" />
                 </Button>
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-gray-900">
+                  <h2 className="text-base sm:text-lg font-bold text-gray-900 tracking-wide uppercase">
                     Situation d'exécution du budget d'investissement
                   </h2>
                   <p className="text-xs text-gray-500 hidden sm:block">
