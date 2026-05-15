@@ -4564,8 +4564,7 @@ export default function Dashboard() {
     const totalOrdReports = filteredData.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
     const tauxEngReports = totalReports > 0 ? (totalEngReports / totalReports) * 100 : 0
     const tauxOrdReports = totalEngReports > 0 ? (totalOrdReports / totalEngReports) * 100 : 0
-    const resteEngagerReports = totalReports - totalEngReports
-    const resteOrdonnerReports = totalEngReports - totalOrdReports
+
 
     // Group by entity for reports analysis (with prévisions)
     const reportsByEntity = analysisByEntity.map(e => {
@@ -4597,8 +4596,6 @@ export default function Dashboard() {
         prevDec: cumulByMonth['DECEMBRE'] || 0,
         tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
         tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
-        resteEngager: reports - engReports,
-        resteOrdonner: engReports - ordReports,
       }
     }).filter(e => e.reports > 0).sort((a, b) => b.reports - a.reports)
 
@@ -4632,8 +4629,6 @@ export default function Dashboard() {
         prevDec: cumulByMonth['DECEMBRE'] || 0,
         tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
         tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
-        resteEngager: reports - engReports,
-        resteOrdonner: engReports - ordReports,
       }
     }).filter(g => g.reports > 0).sort((a, b) => b.reports - a.reports)
 
@@ -4646,7 +4641,7 @@ export default function Dashboard() {
             <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Reports</h3>
             
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             {/* Crédits reportés */}
             <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
               <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
@@ -4692,20 +4687,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Reste à engager */}
-            <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-              <div className="h-1.5 bg-gradient-to-r from-red-400 to-red-500" />
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-red-50 flex items-center justify-center transition-transform">
-                    <Landmark className="w-5 h-5 text-red-600" />
-                  </div>
-                  <Badge className="bg-red-50 text-red-700 border-red-200 text-[10px] font-bold rounded-full px-2.5">Reste</Badge>
-                </div>
-                <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(resteEngagerReports)}</p>
-                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Reste à ordonner : {formatMillions(resteOrdonnerReports)}</p>
-              </div>
-            </div>
+
           </div>
         </div>
 
@@ -4744,7 +4726,6 @@ export default function Dashboard() {
                   </div>
                   <div className="flex justify-between mt-1.5">
                     <span className="text-[10px] text-gray-400">0%</span>
-                    <span className="text-[10px] text-gray-400">Reste : {formatMillions(resteEngagerReports)}</span>
                     <span className="text-[10px] text-gray-400">100%</span>
                   </div>
                 </div>
@@ -4779,7 +4760,6 @@ export default function Dashboard() {
                   </div>
                   <div className="flex justify-between mt-1.5">
                     <span className="text-[10px] text-gray-400">0%</span>
-                    <span className="text-[10px] text-gray-400">Reste : {formatMillions(resteOrdonnerReports)}</span>
                     <span className="text-[10px] text-gray-400">100%</span>
                   </div>
                 </div>
@@ -5035,8 +5015,6 @@ export default function Dashboard() {
                         prevDec: cumulByMonth['DECEMBRE'] || 0,
                         tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
                         tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
-                        resteEngager: reports - engReports,
-                        resteOrdonner: engReports - ordReports,
                       }
                     }).filter(p => p.reports > 0).sort((a, b) => b.reports - a.reports)
 
@@ -5044,8 +5022,6 @@ export default function Dashboard() {
                     const totEngReports = reportsByProgramme.reduce((s, p) => s + p.engReports, 0)
                     const totOrdReports = reportsByProgramme.reduce((s, p) => s + p.ordReports, 0)
                     const totPaiementsReports = reportsByProgramme.reduce((s, p) => s + p.paiementsReports, 0)
-                    const totResteEngager = reportsByProgramme.reduce((s, p) => s + p.resteEngager, 0)
-                    const totResteOrdonner = reportsByProgramme.reduce((s, p) => s + p.resteOrdonner, 0)
                     const totPrevJuin = reportsByProgramme.reduce((s, p) => s + p.prevJuin, 0)
                     const totPrevSept = reportsByProgramme.reduce((s, p) => s + p.prevSept, 0)
                     const totPrevOct = reportsByProgramme.reduce((s, p) => s + p.prevOct, 0)
@@ -5118,8 +5094,8 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>N° Engagement</TableHead>
                     <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>Désignation</TableHead>
                     <TableHead className="text-xs font-bold text-rose-700 text-right" rowSpan={2}>Crédits Report</TableHead>
-                    <TableHead className="text-xs font-bold text-center text-emerald-600" colSpan={3}>Engagement</TableHead>
-                    <TableHead className="text-xs font-bold text-center text-blue-600" colSpan={3}>Ordonnancement</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-emerald-600" colSpan={2}>Engagement</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-blue-600" colSpan={2}>Ordonnancement</TableHead>
                     <TableHead className="text-xs font-bold text-center text-blue-600" colSpan={2}>Prév. Rep. Cum. Juin</TableHead>
                     <TableHead className="text-xs font-bold text-center text-teal-600" colSpan={2}>Prév. Rep. Cum. Sept.</TableHead>
                     <TableHead className="text-xs font-bold text-center text-orange-600" colSpan={2}>Prév. Rep. Cum. Oct.</TableHead>
@@ -5129,10 +5105,8 @@ export default function Dashboard() {
                   <TableRow className="bg-rose-50/40">
                     <TableHead className="text-[10px] font-bold text-emerald-500 text-right">Eng. Rep.</TableHead>
                     <TableHead className="text-[10px] font-bold text-emerald-500 text-right">Taux eng.</TableHead>
-                    <TableHead className="text-[10px] font-bold text-emerald-500 text-right">Reste</TableHead>
                     <TableHead className="text-[10px] font-bold text-blue-500 text-right">Ord. Rep.</TableHead>
                     <TableHead className="text-[10px] font-bold text-blue-500 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-[10px] font-bold text-blue-500 text-right">Reste</TableHead>
                     <TableHead className="text-[10px] font-bold text-blue-500 text-right">Prév.</TableHead>
                     <TableHead className="text-[10px] font-bold text-blue-500 text-right">Taux</TableHead>
                     <TableHead className="text-[10px] font-bold text-teal-500 text-right">Prév.</TableHead>
@@ -5172,8 +5146,6 @@ export default function Dashboard() {
                           ordReports,
                           tauxEngReports: reports > 0 ? (engReports / reports) * 100 : 0,
                           tauxOrdReports: engReports > 0 ? (ordReports / engReports) * 100 : 0,
-                          resteEngager: reports - engReports,
-                          resteOrdonner: engReports - ordReports,
                           prevJuin: cumulByMonth['JUIN'] || 0,
                           prevSept: cumulByMonth['SEPTEMBRE'] || 0,
                           prevOct: cumulByMonth['OCTOBRE'] || 0,
@@ -5187,8 +5159,6 @@ export default function Dashboard() {
                     const totReports = prestations.reduce((s, p) => s + p.reports, 0)
                     const totEngReports = prestations.reduce((s, p) => s + p.engReports, 0)
                     const totOrdReports = prestations.reduce((s, p) => s + p.ordReports, 0)
-                    const totResteEngager = prestations.reduce((s, p) => s + p.resteEngager, 0)
-                    const totResteOrdonner = prestations.reduce((s, p) => s + p.resteOrdonner, 0)
                     const totPrevJuin = prestations.reduce((s, p) => s + p.prevJuin, 0)
                     const totPrevSept = prestations.reduce((s, p) => s + p.prevSept, 0)
                     const totPrevOct = prestations.reduce((s, p) => s + p.prevOct, 0)
@@ -5212,10 +5182,8 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.reports)}</TableCell>
                               <TableCell className="text-xs text-emerald-700 text-right">{formatMillions(p.engReports)}</TableCell>
                               <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxEngReports)}>{formatPercent(p.tauxEngReports)}</span></TableCell>
-                              <TableCell className="text-xs text-gray-600 text-right">{formatMillions(p.resteEngager)}</TableCell>
                               <TableCell className="text-xs text-blue-700 text-right">{formatMillions(p.ordReports)}</TableCell>
                               <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxOrdReports)}>{formatPercent(p.tauxOrdReports)}</span></TableCell>
-                              <TableCell className="text-xs text-gray-600 text-right">{formatMillions(p.resteOrdonner)}</TableCell>
                               <TableCell className="text-xs text-blue-600 text-right">{formatMillions(p.prevJuin)}</TableCell>
                               <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevJuin / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevJuin / p.reports) * 100 : 0)}</span></TableCell>
                               <TableCell className="text-xs text-teal-600 text-right">{formatMillions(p.prevSept)}</TableCell>
@@ -5234,10 +5202,8 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totEngReports / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totEngReports / totReports) * 100 : 0)}</span></TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteEngager)}</TableCell>
                           <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totOrdReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totEngReports > 0 ? (totOrdReports / totEngReports) * 100 : 0)}>{formatPercent(totEngReports > 0 ? (totOrdReports / totEngReports) * 100 : 0)}</span></TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totResteOrdonner)}</TableCell>
                           <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totPrevJuin)}</TableCell>
                           <TableCell className="text-xs font-bold text-right"><span className={tauxColor(totReports > 0 ? (totPrevJuin / totReports) * 100 : 0)}>{formatPercent(totReports > 0 ? (totPrevJuin / totReports) * 100 : 0)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-teal-700 text-right">{formatMillions(totPrevSept)}</TableCell>
