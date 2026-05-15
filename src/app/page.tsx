@@ -2532,7 +2532,9 @@ export default function Dashboard() {
                     </div>
                     <div className="text-right">
                       <p className="text-lg font-black text-white">{formatMillions(entity.cp)}</p>
-                      <p className="text-[10px] text-white/70 font-medium">MDh Budget</p>
+                      <p className="text-[10px] text-white/70 font-medium">Total CP</p>
+                      <p className="text-xs font-bold text-white/90 mt-0.5">{formatMillions(entity.ce)}</p>
+                      <p className="text-[10px] text-white/70 font-medium">CE</p>
                     </div>
                   </div>
                   {/* Key indicators body */}
@@ -2735,7 +2737,9 @@ export default function Dashboard() {
                         </div>
                         <div className="text-right">
                           <p className="text-lg font-black text-white">{formatMillions(proj.cp)}</p>
-                          <p className="text-[10px] text-white/70 font-medium">MDh Budget</p>
+                          <p className="text-[10px] text-white/70 font-medium">Total CP</p>
+                          <p className="text-xs font-bold text-white/90 mt-0.5">{formatMillions(proj.ce)}</p>
+                          <p className="text-[10px] text-white/70 font-medium">CE</p>
                         </div>
                       </div>
                       {/* Key indicators body */}
@@ -2916,7 +2920,9 @@ export default function Dashboard() {
                         </div>
                         <div className="text-right">
                           <p className="text-lg font-black text-white">{formatMillions(prog.cp)}</p>
-                          <p className="text-[10px] text-white/70 font-medium">MDh Budget</p>
+                          <p className="text-[10px] text-white/70 font-medium">Total CP</p>
+                          <p className="text-xs font-bold text-white/90 mt-0.5">{formatMillions(prog.ce)}</p>
+                          <p className="text-[10px] text-white/70 font-medium">CE</p>
                         </div>
                       </div>
 
