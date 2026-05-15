@@ -103,6 +103,8 @@ interface DataRow {
   'PAIEMENTS SUR NOUVEAUX': number | null
   'PAIEMENTS TOTAL': number | null
   'TOTAL PREV': number | null
+  TRESORERIE: number | null
+  'SUBVENTION DEMANDEE': number | null
   [key: string]: string | number | null
 }
 
@@ -322,6 +324,8 @@ export default function Dashboard() {
     const tauxPaiement = totalCP > 0 ? (totalPaiements / totalCP) * 100 : 0
     const tauxOrdonnement = totalCP > 0 ? (totalOrd / totalCP) * 100 : 0
     const disponible = totalCP - totalEngCP
+    const totalTresorerie = filteredData.reduce((sum, r) => sum + (r['TRESORERIE'] || 0), 0)
+    const totalSubvention = filteredData.reduce((sum, r) => sum + (r['SUBVENTION DEMANDEE'] || 0), 0)
 
     // Cumulative forecasts by month
     const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
@@ -340,6 +344,7 @@ export default function Dashboard() {
       totalReports, totalConsolides, totalNouveaux, totalOrd, totalOrdReports, totalOrdConsolides, totalOrdNouveaux,
       totalEngReports, totalEngConsolides, totalEngNouveaux, count: filteredData.length,
       tauxEngagement, tauxPaiement, tauxOrdonnement, disponible,
+      totalTresorerie, totalSubvention,
       cumulPrevJuin: cumulPrev['JUIN'],
       cumulPrevSeptembre: cumulPrev['SEPTEMBRE'],
       cumulPrevOctobre: cumulPrev['OCTOBRE'],
@@ -928,6 +933,7 @@ export default function Dashboard() {
     tauxEngagement: number;
     totalOrdReports: number; totalOrdConsolides: number; totalOrdNouveaux: number; totalOrd: number; totalPaiements: number;
     tauxOrdonnement: number; tauxPaiement: number;
+    totalTresorerie?: number; totalSubvention?: number;
   }) => (
     <>
       {/* ═══════════ SECTION : CRÉDITS ═══════════ */}
@@ -936,7 +942,7 @@ export default function Dashboard() {
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-indigo-600" />
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Crédits</h3>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-7 gap-4">
           {/* Crédits Reportés */}
           <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
             <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
@@ -1015,6 +1021,36 @@ export default function Dashboard() {
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalCE)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits d&apos;engagement</p>
+            </div>
+          </div>
+
+          {/* Trésorerie - Colonne BO */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-cyan-400 to-teal-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
+                  <Wallet className="w-5 h-5 text-cyan-600" />
+                </div>
+                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">BO</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalTresorerie || 0)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Trésorerie</p>
+            </div>
+          </div>
+
+          {/* Subvention demandée - Colonne BN */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-pink-400 to-rose-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center transition-transform">
+                  <Landmark className="w-5 h-5 text-pink-600" />
+                </div>
+                <Badge className="bg-pink-50 text-pink-700 border-pink-200 text-[10px] font-semibold rounded-full px-2.5">BN</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalSubvention || 0)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Subvention demandée</p>
             </div>
           </div>
         </div>
@@ -1361,7 +1397,7 @@ export default function Dashboard() {
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Crédits</h3>
           
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-7 gap-4">
           {/* Crédits Reportés */}
           <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
             <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
@@ -1440,6 +1476,36 @@ export default function Dashboard() {
               </div>
               <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCE)} M DH</p>
               <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits d&apos;engagement</p>
+            </div>
+          </div>
+
+          {/* Trésorerie - Colonne BO */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-cyan-400 to-teal-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center transition-transform">
+                  <Wallet className="w-5 h-5 text-cyan-600" />
+                </div>
+                <Badge className="bg-cyan-50 text-cyan-700 border-cyan-200 text-[10px] font-semibold rounded-full px-2.5">BO</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalTresorerie)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Trésorerie</p>
+            </div>
+          </div>
+
+          {/* Subvention demandée - Colonne BN */}
+          <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+            <div className="h-1.5 bg-gradient-to-r from-pink-400 to-rose-500" />
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center transition-transform">
+                  <Landmark className="w-5 h-5 text-pink-600" />
+                </div>
+                <Badge className="bg-pink-50 text-pink-700 border-pink-200 text-[10px] font-semibold rounded-full px-2.5">BN</Badge>
+              </div>
+              <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalSubvention)} M DH</p>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Subvention demandée</p>
             </div>
           </div>
         </div>
