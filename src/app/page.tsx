@@ -812,7 +812,9 @@ export default function Dashboard() {
         ordConsolides: r['ORD CONSOLIDES'] || 0,
         ordNouveaux: r['ORD NOUVEAUX'] || 0,
         ordTotal: r['ORD TOTAL'] || 0,
+        paiements: r['PAIEMENTS TOTAL'] || 0,
         tauxOrdonnement: (r['TOTAL CP'] || 0) > 0 ? ((r['ORD TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
+        tauxPaiement: (r['TOTAL CP'] || 0) > 0 ? ((r['PAIEMENTS TOTAL'] || 0) / (r['TOTAL CP'] || 0)) * 100 : 0,
       }))
   }, [filteredData])
 
@@ -3656,12 +3658,15 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Total CP</TableHead>
                     <TableHead className="text-xs font-bold text-center text-rose-600" colSpan={4}>Ordonnancements</TableHead>
                     <TableHead className="text-xs font-bold text-emerald-700 text-right" rowSpan={2}>Taux ord.</TableHead>
+                    <TableHead className="text-xs font-bold text-center text-cyan-600" colSpan={2}>Paiements</TableHead>
                   </TableRow>
                   <TableRow className="bg-emerald-50/40">
                     <TableHead className="text-[10px] font-bold text-rose-500 text-right">Rep.</TableHead>
                     <TableHead className="text-[10px] font-bold text-rose-500 text-right">Cons.</TableHead>
                     <TableHead className="text-[10px] font-bold text-rose-500 text-right">Nouv.</TableHead>
                     <TableHead className="text-[10px] font-bold text-rose-500 text-right">Total</TableHead>
+                    <TableHead className="text-[10px] font-bold text-cyan-500 text-right">Montant</TableHead>
+                    <TableHead className="text-[10px] font-bold text-cyan-500 text-right">Taux paiem.</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3692,6 +3697,10 @@ export default function Dashboard() {
                               <TableCell className="text-xs text-right">
                                 <span className={tauxColor(r.tauxOrdonnement)}>{formatPercent(r.tauxOrdonnement)}</span>
                               </TableCell>
+                              <TableCell className="text-xs text-cyan-700 text-right font-medium">{formatMillions(r.paiements)}</TableCell>
+                              <TableCell className="text-xs text-right">
+                                <span className={tauxColor(r.tauxPaiement)}>{formatPercent(r.tauxPaiement)}</span>
+                              </TableCell>
                             </TableRow>
                           )
                         })}
@@ -3704,6 +3713,10 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdTotal)}</TableCell>
                           <TableCell className="text-xs font-bold text-right">
                             <span className={tauxColor(totCP > 0 ? (totOrdTotal / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOrdTotal / totCP) * 100 : 0)}</span>
+                          </TableCell>
+                          <TableCell className="text-xs font-bold text-cyan-700 text-right">{formatMillions(ordonnancementLines.reduce((s, r) => s + r.paiements, 0))}</TableCell>
+                          <TableCell className="text-xs font-bold text-right">
+                            <span className={tauxColor(totCP > 0 ? (ordonnancementLines.reduce((s, r) => s + r.paiements, 0) / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (ordonnancementLines.reduce((s, r) => s + r.paiements, 0) / totCP) * 100 : 0)}</span>
                           </TableCell>
                         </TableRow>
                       </>
