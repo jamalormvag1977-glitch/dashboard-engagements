@@ -1850,7 +1850,7 @@ export default function Dashboard() {
                     <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.disponible)}</TableCell>
                   </TableRow>
                 ))}
-                <TableRow className="bg-indigo-50/40 font-bold">
+                <TableRow className="bg-indigo-50/40 font-bold-total">
                   <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCP)}</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalEngCP)}</TableCell>
@@ -1918,7 +1918,7 @@ export default function Dashboard() {
                     <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.disponible)}</TableCell>
                   </TableRow>
                 ))}
-                <TableRow className="bg-emerald-50/40 font-bold">
+                <TableRow className="bg-emerald-50/40 font-bold-total">
                   <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCP)}</TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalEngCP)}</TableCell>
@@ -3036,7 +3036,7 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ce - p.engCE)}</TableCell>
                           </TableRow>
                         ))}
-                        <TableRow className="bg-indigo-50/40 font-bold">
+                        <TableRow className="bg-indigo-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
@@ -3143,7 +3143,7 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ce - g.engCE)}</TableCell>
                           </TableRow>
                         ))}
-                        <TableRow className="bg-emerald-50/40 font-bold">
+                        <TableRow className="bg-emerald-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCpConsolides)}</TableCell>
@@ -3336,7 +3336,7 @@ export default function Dashboard() {
                             </TableRow>
                           )
                         })}
-                        <TableRow className="bg-blue-50/40 font-bold">
+                        <TableRow className="bg-blue-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({engagementLines.length} prestations)</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-emerald-700 text-right">{formatMillions(totEngRep)}</TableCell>
@@ -3422,7 +3422,7 @@ export default function Dashboard() {
                             </TableRow>
                           )
                         })}
-                        <TableRow className="bg-emerald-50/40 font-bold">
+                        <TableRow className="bg-emerald-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({ordonnancementLines.length} prestations)</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-right">{formatMillions(totOrdRep)}</TableCell>
@@ -3870,7 +3870,7 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.cp > 0 ? (p.cumulPrevDecembre / p.cp) * 100 : 0)}>{formatPercent(p.cp > 0 ? (p.cumulPrevDecembre / p.cp) * 100 : 0)}</span></TableCell>
                           </TableRow>
                         ))}
-                        <TableRow className="bg-blue-50/40 font-bold">
+                        <TableRow className="bg-blue-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totJuin)}</TableCell>
@@ -3944,7 +3944,7 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-right"><span className={tauxColor(g.cp > 0 ? (g.cumulPrevDecembre / g.cp) * 100 : 0)}>{formatPercent(g.cp > 0 ? (g.cumulPrevDecembre / g.cp) * 100 : 0)}</span></TableCell>
                           </TableRow>
                         ))}
-                        <TableRow className="bg-teal-50/40 font-bold">
+                        <TableRow className="bg-teal-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totJuin)}</TableCell>
@@ -4018,7 +4018,7 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-right"><span className={tauxColor(e.cp > 0 ? (e.cumulPrevDecembre / e.cp) * 100 : 0)}>{formatPercent(e.cp > 0 ? (e.cumulPrevDecembre / e.cp) * 100 : 0)}</span></TableCell>
                           </TableRow>
                         ))}
-                        <TableRow className="bg-indigo-50/40 font-bold">
+                        <TableRow className="bg-indigo-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totJuin)}</TableCell>
@@ -4162,7 +4162,7 @@ export default function Dashboard() {
                             </TableRow>
                           )
                         })}
-                        <TableRow className="bg-amber-50/40 font-bold">
+                        <TableRow className="bg-amber-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900">Total</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totRepJuin)}</TableCell>
@@ -4326,7 +4326,7 @@ export default function Dashboard() {
                             </TableRow>
                           )
                         })}
-                        <TableRow className="bg-amber-50/40 font-bold">
+                        <TableRow className="bg-amber-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({prestations.length} prestations)</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-blue-700 text-right">{formatMillions(totRepJuin)}</TableCell>
@@ -4655,7 +4655,7 @@ export default function Dashboard() {
                     const totPrevDec = reportsByEntity.reduce((s, e) => s + e.prevDec, 0)
                     const totPaiementsReports = reportsByEntity.reduce((s, e) => s + e.paiementsReports, 0)
                     return (
-                      <TableRow className="bg-blue-50/40 font-bold">
+                      <TableRow className="bg-blue-50/40 font-bold-total">
                         <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
                         <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalReports)}</TableCell>
                         <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngReports)}</TableCell>
@@ -4746,7 +4746,7 @@ export default function Dashboard() {
                     const totPrevDec = reportsByProjet.reduce((s, g) => s + g.prevDec, 0)
                     const totPaiementsReports = reportsByProjet.reduce((s, g) => s + g.paiementsReports, 0)
                     return (
-                      <TableRow className="bg-emerald-50/40 font-bold">
+                      <TableRow className="bg-emerald-50/40 font-bold-total">
                         <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
                         <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalReports)}</TableCell>
                         <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totalEngReports)}</TableCell>
@@ -4876,7 +4876,7 @@ export default function Dashboard() {
                             <TableCell className="text-xs text-right"><span className={tauxColor(p.reports > 0 ? (p.prevDec / p.reports) * 100 : 0)}>{formatPercent(p.reports > 0 ? (p.prevDec / p.reports) * 100 : 0)}</span></TableCell>
                           </TableRow>
                         ))}
-                        <TableRow className="bg-indigo-50/40 font-bold">
+                        <TableRow className="bg-indigo-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totEngReports)}</TableCell>
