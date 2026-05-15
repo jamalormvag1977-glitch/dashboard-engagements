@@ -1135,7 +1135,7 @@ export default function Dashboard() {
                     <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-emerald-100 flex items-center justify-center transition-transform">
                       <TrendingUp className="w-5 h-5 text-emerald-700" />
                     </div>
-                    <span className="text-sm font-semibold text-gray-600">Engagement CP</span>
+                    <span className="text-sm font-bold text-gray-700">Engagement CP</span>
                   </div>
                   <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalEngCP)} M DH</p>
                 </div>
@@ -1172,7 +1172,7 @@ export default function Dashboard() {
                     <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-teal-100 flex items-center justify-center transition-transform">
                       <Landmark className="w-5 h-5 text-teal-700" />
                     </div>
-                    <span className="text-sm font-semibold text-gray-600">Engagement CE</span>
+                    <span className="text-sm font-bold text-gray-700">Engagement CE</span>
                   </div>
                   <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalEngCE)} M DH</p>
                 </div>
@@ -1280,7 +1280,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center transition-transform">
                     <Wallet className="w-5 h-5 text-blue-700" />
                   </div>
-                  <span className="text-sm font-semibold text-gray-600">Total Ord.</span>
+                  <span className="text-sm font-bold text-gray-700">Total Ord.</span>
                 </div>
                 <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(data.tauxOrdonnement)}`}>
                   {data.tauxOrdonnement >= 80 ? '✓' : data.tauxOrdonnement >= 50 ? '⚠' : '✗'}
@@ -1319,7 +1319,7 @@ export default function Dashboard() {
                     <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-cyan-100 flex items-center justify-center transition-transform">
                       <Wallet className="w-5 h-5 text-cyan-700" />
                     </div>
-                    <span className="text-sm font-semibold text-gray-600">Taux de paiement</span>
+                    <span className="text-sm font-bold text-gray-700">Taux de paiement</span>
                   </div>
                   <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalPaiements)} M DH</p>
                 </div>
@@ -1356,7 +1356,7 @@ export default function Dashboard() {
                     <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-cyan-100 flex items-center justify-center transition-transform">
                       <Wallet className="w-5 h-5 text-cyan-700" />
                     </div>
-                    <span className="text-sm font-semibold text-gray-600">Taux de paiement</span>
+                    <span className="text-sm font-bold text-gray-700">Taux de paiement</span>
                   </div>
                   <p className="text-xl font-black text-gray-900 tracking-tight">{formatMillions(data.totalPaiements)} M DH</p>
                 </div>
@@ -1399,7 +1399,7 @@ export default function Dashboard() {
           {/* Gauge - Total CP */}
           <Card className="border border-gray-100 shadow-sm overflow-hidden">
             <CardHeader className="pb-1 pt-3 px-4">
-              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total CP</CardTitle>
+              <CardTitle className="text-xs font-bold text-gray-600 uppercase tracking-wider">Total CP</CardTitle>
             </CardHeader>
             <CardContent className="p-2 flex flex-col items-center">
               <div className="h-[160px] w-full relative">
@@ -1434,7 +1434,7 @@ export default function Dashboard() {
           {/* Gauge - Taux Engagement */}
           <Card className="border border-gray-100 shadow-sm overflow-hidden">
             <CardHeader className="pb-1 pt-3 px-4">
-              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Taux Engagement</CardTitle>
+              <CardTitle className="text-xs font-bold text-gray-600 uppercase tracking-wider">Taux Engagement</CardTitle>
             </CardHeader>
             <CardContent className="p-2 flex flex-col items-center">
               <div className="h-[160px] w-full relative">
@@ -1471,7 +1471,7 @@ export default function Dashboard() {
           {/* Gauge - Taux Ordonnancement */}
           <Card className="border border-gray-100 shadow-sm overflow-hidden">
             <CardHeader className="pb-1 pt-3 px-4">
-              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Taux Ordonnancement</CardTitle>
+              <CardTitle className="text-xs font-bold text-gray-600 uppercase tracking-wider">Taux Ordonnancement</CardTitle>
             </CardHeader>
             <CardContent className="p-2 flex flex-col items-center">
               <div className="h-[160px] w-full relative">
@@ -1508,7 +1508,7 @@ export default function Dashboard() {
           {/* Gauge - Taux de Paiement */}
           <Card className="border border-gray-100 shadow-sm overflow-hidden">
             <CardHeader className="pb-1 pt-3 px-4">
-              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Taux de Paiement</CardTitle>
+              <CardTitle className="text-xs font-bold text-gray-600 uppercase tracking-wider">Taux de Paiement</CardTitle>
             </CardHeader>
             <CardContent className="p-2 flex flex-col items-center">
               <div className="h-[160px] w-full relative">
@@ -1734,7 +1734,7 @@ export default function Dashboard() {
                     <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-emerald-100 flex items-center justify-center transition-transform">
                       <TrendingUp className="w-5 h-5 text-emerald-700" />
                     </div>
-                    <span className="text-sm font-semibold text-gray-600">Engagement CP</span>
+                    <span className="text-sm font-bold text-gray-700">Engagement CP</span>
                   </div>
                   <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngCP)} M DH</p>
                 </div>
@@ -1771,7 +1771,7 @@ export default function Dashboard() {
                     <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-teal-100 flex items-center justify-center transition-transform">
                       <Landmark className="w-5 h-5 text-teal-700" />
                     </div>
-                    <span className="text-sm font-semibold text-gray-600">Engagement CE</span>
+                    <span className="text-sm font-bold text-gray-700">Engagement CE</span>
                   </div>
                   <p className="text-3xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalEngCE)} M DH</p>
                 </div>
@@ -1880,7 +1880,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center transition-transform">
                     <Wallet className="w-5 h-5 text-blue-700" />
                   </div>
-                  <span className="text-sm font-semibold text-gray-600">Total Ord.</span>
+                  <span className="text-sm font-bold text-gray-700">Total Ord.</span>
                 </div>
                 <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(kpis.tauxOrdonnement)}`}>
                   {kpis.tauxOrdonnement >= 80 ? '✓' : kpis.tauxOrdonnement >= 50 ? '⚠' : '✗'}
@@ -1970,7 +1970,7 @@ export default function Dashboard() {
                   <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center transition-transform">
                     <Wallet className="w-5 h-5 text-cyan-700" />
                   </div>
-                  <span className="text-sm font-semibold text-gray-600">Total Paiements</span>
+                  <span className="text-sm font-bold text-gray-700">Total Paiements</span>
                 </div>
                 <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(kpis.tauxPaiement)}`}>
                   {kpis.tauxPaiement >= 80 ? '✓' : kpis.tauxPaiement >= 50 ? '⚠' : '✗'}
@@ -2568,7 +2568,7 @@ export default function Dashboard() {
         {/* Entity Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Détail par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Détail par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -2772,7 +2772,7 @@ export default function Dashboard() {
         {/* Programme Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Détail par projet</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Détail par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3074,7 +3074,7 @@ export default function Dashboard() {
         {/* ═══════════ TABLEAU D'ANALYSE PAR PROGRAMME ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Tableau d&apos;analyse par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Tableau d&apos;analyse par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3207,7 +3207,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Programme ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Programme</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Engagements par Programme</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3314,7 +3314,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Projet ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Projet</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Engagements par Projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3421,7 +3421,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Entité ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Engagements par Entité</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Engagements par Entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3528,7 +3528,7 @@ export default function Dashboard() {
         {/* Engagement Lines Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Détail des engagements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Détail des engagements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3614,7 +3614,7 @@ export default function Dashboard() {
         {/* Ordonnancement Lines Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Détail des ordonnancements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Détail des ordonnancements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3768,7 +3768,7 @@ export default function Dashboard() {
         {/* Entity Comparison Table */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Résumé comparatif par entité</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Résumé comparatif par entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3809,7 +3809,7 @@ export default function Dashboard() {
         {/* Budget Structure Pie Chart */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+            <CardTitle className="text-sm font-bold text-gray-800 flex items-center gap-2">
               <PieChartIcon className="w-4 h-4" />
               Structure budgétaire
             </CardTitle>
@@ -3853,7 +3853,7 @@ export default function Dashboard() {
         {/* Source de financement */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Source de financement</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Source de financement</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3910,7 +3910,7 @@ export default function Dashboard() {
         {/* Auto-refresh */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+            <CardTitle className="text-sm font-bold text-gray-800 flex items-center gap-2">
               <Zap className="w-4 h-4" />
               Actualisation automatique
             </CardTitle>
@@ -3947,7 +3947,7 @@ export default function Dashboard() {
         {/* Display Preferences */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+            <CardTitle className="text-sm font-bold text-gray-800 flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
               Préférences d&apos;affichage
             </CardTitle>
@@ -3990,7 +3990,7 @@ export default function Dashboard() {
         {/* Data Management */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+            <CardTitle className="text-sm font-bold text-gray-800 flex items-center gap-2">
               <Database className="w-4 h-4" />
               Gestion des données
             </CardTitle>
@@ -4034,7 +4034,7 @@ export default function Dashboard() {
         {/* About */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">À propos</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">À propos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -4068,7 +4068,7 @@ export default function Dashboard() {
         {/* Prévisions par Programme */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Prévisions cumulées par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Prévisions cumulées par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4142,7 +4142,7 @@ export default function Dashboard() {
         {/* Prévisions par Projet */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Prévisions cumulées par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Prévisions cumulées par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4216,7 +4216,7 @@ export default function Dashboard() {
         {/* Prévisions par Entité */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Prévisions cumulées par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Prévisions cumulées par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4290,7 +4290,7 @@ export default function Dashboard() {
         {/* Détail des prévisions cumulées par entité (Reports / Consolidés / Nouveaux) */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Détail des prévisions cumulées <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Détail des prévisions cumulées <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4441,7 +4441,7 @@ export default function Dashboard() {
         {/* Détail des prévisions par prestation */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Détail des prévisions par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Détail des prévisions par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4774,7 +4774,7 @@ export default function Dashboard() {
                       <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-emerald-100 flex items-center justify-center transition-transform">
                         <TrendingUp className="w-5 h-5 text-emerald-700" />
                       </div>
-                      <span className="text-sm font-semibold text-gray-600">Taux eng. reports</span>
+                      <span className="text-sm font-bold text-gray-700">Taux eng. reports</span>
                     </div>
                     <p className="text-3xl font-black text-gray-900 tracking-tight">{formatPercent(tauxEngReports)}</p>
                   </div>
@@ -4809,7 +4809,7 @@ export default function Dashboard() {
                       <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-blue-100 flex items-center justify-center transition-transform">
                         <Wallet className="w-5 h-5 text-blue-700" />
                       </div>
-                      <span className="text-sm font-semibold text-gray-600">Taux ord. reports</span>
+                      <span className="text-sm font-bold text-gray-700">Taux ord. reports</span>
                     </div>
                     <p className="text-3xl font-black text-gray-900 tracking-tight">{formatPercent(tauxOrdReports)}</p>
                   </div>
@@ -4839,7 +4839,7 @@ export default function Dashboard() {
         {/* Table by Entity */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Assainissement par entité</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Assainissement par entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4930,7 +4930,7 @@ export default function Dashboard() {
         {/* Table by Projet */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Assainissement par projet</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Assainissement par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5021,7 +5021,7 @@ export default function Dashboard() {
         {/* ═══════════ Analyse assainissement par programme ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Assainissement par programme</CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Assainissement par programme</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5152,7 +5152,7 @@ export default function Dashboard() {
         {/* ═══════════ Détail des assainissement par prestation ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-700">Détail des assainissement par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-gray-800">Détail des assainissement par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
