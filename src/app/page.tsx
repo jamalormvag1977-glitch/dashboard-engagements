@@ -2073,8 +2073,7 @@ export default function Dashboard() {
                   <TableHead className="text-xs font-bold text-indigo-700 text-right">Ordonn.</TableHead>
                   <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux ord.</TableHead>
                   <TableHead className="text-xs font-bold text-indigo-700 text-right">Paiements</TableHead>
-                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Prévisions</TableHead>
-                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Disponible</TableHead>
+                  <TableHead className="text-xs font-bold text-indigo-700 text-right">Taux paiement</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -2090,8 +2089,7 @@ export default function Dashboard() {
                     <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.ord)}</TableCell>
                     <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxOrdonnement)}>{formatPercent(p.tauxOrdonnement)}</span></TableCell>
                     <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.paiements)}</TableCell>
-                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.previsions)}</TableCell>
-                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.disponible)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(p.tauxPaiement)}>{formatPercent(p.tauxPaiement)}</span></TableCell>
                   </TableRow>
                 ))}
                 <TableRow className="bg-indigo-50/40 font-bold-total">
@@ -2105,8 +2103,7 @@ export default function Dashboard() {
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalOrd)}</TableCell>
                   <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span></TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPaiements)}</TableCell>
-                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPrevisions)}</TableCell>
-                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.disponible)}</TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxPaiement)}>{formatPercent(kpis.tauxPaiement)}</span></TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -2142,8 +2139,7 @@ export default function Dashboard() {
                   <TableHead className="text-xs font-bold text-emerald-700 text-right">Ordonn.</TableHead>
                   <TableHead className="text-xs font-bold text-emerald-700 text-right">Taux ord.</TableHead>
                   <TableHead className="text-xs font-bold text-emerald-700 text-right">Paiements</TableHead>
-                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Prévisions</TableHead>
-                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Disponible</TableHead>
+                  <TableHead className="text-xs font-bold text-emerald-700 text-right">Taux paiement</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -2159,8 +2155,7 @@ export default function Dashboard() {
                     <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.ord)}</TableCell>
                     <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxOrdonnement)}>{formatPercent(g.tauxOrdonnement)}</span></TableCell>
                     <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.paiements)}</TableCell>
-                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.previsions)}</TableCell>
-                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.disponible)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(g.tauxPaiement)}>{formatPercent(g.tauxPaiement)}</span></TableCell>
                   </TableRow>
                 ))}
                 <TableRow className="bg-emerald-50/40 font-bold-total">
@@ -2174,8 +2169,7 @@ export default function Dashboard() {
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalOrd)}</TableCell>
                   <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span></TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPaiements)}</TableCell>
-                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPrevisions)}</TableCell>
-                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.disponible)}</TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxPaiement)}>{formatPercent(kpis.tauxPaiement)}</span></TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -2211,8 +2205,7 @@ export default function Dashboard() {
                   <TableHead className="text-xs font-bold text-slate-700 text-right">Ordonn.</TableHead>
                   <TableHead className="text-xs font-bold text-slate-700 text-right">Taux ord.</TableHead>
                   <TableHead className="text-xs font-bold text-slate-700 text-right">Paiements</TableHead>
-                  <TableHead className="text-xs font-bold text-slate-700 text-right">Prévisions</TableHead>
-                  <TableHead className="text-xs font-bold text-slate-700 text-right">Disponible</TableHead>
+                  <TableHead className="text-xs font-bold text-slate-700 text-right">Taux paiement</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -2228,8 +2221,7 @@ export default function Dashboard() {
                     <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.ord)}</TableCell>
                     <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span></TableCell>
                     <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.paiements)}</TableCell>
-                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.previsions)}</TableCell>
-                    <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.disponible)}</TableCell>
+                    <TableCell className="text-xs text-right"><span className={tauxColor(e.tauxPaiement)}>{formatPercent(e.tauxPaiement)}</span></TableCell>
                   </TableRow>
                 ))}
                 <TableRow className="bg-slate-50/40 font-bold">
@@ -2243,8 +2235,7 @@ export default function Dashboard() {
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalOrd)}</TableCell>
                   <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span></TableCell>
                   <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPaiements)}</TableCell>
-                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalPrevisions)}</TableCell>
-                  <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.disponible)}</TableCell>
+                  <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.tauxPaiement)}>{formatPercent(kpis.tauxPaiement)}</span></TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -2585,8 +2576,7 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-bold text-gray-600 text-right">Ordonn.</TableHead>
                     <TableHead className="text-xs font-bold text-gray-600 text-right">Taux ord.</TableHead>
                     <TableHead className="text-xs font-bold text-gray-600 text-right">Paiements</TableHead>
-                    <TableHead className="text-xs font-bold text-gray-600 text-right">Prévisions</TableHead>
-                    <TableHead className="text-xs font-bold text-gray-600 text-right">Disponible</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux paiement</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -2608,8 +2598,9 @@ export default function Dashboard() {
                         <span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.paiements)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.previsions)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.disponible)}</TableCell>
+                      <TableCell className="text-xs text-right">
+                        <span className={tauxColor(e.tauxPaiement)}>{formatPercent(e.tauxPaiement)}</span>
+                      </TableCell>
                     </TableRow>
                   ))}
                   {/* Total Row */}
@@ -2630,8 +2621,9 @@ export default function Dashboard() {
                       <span className={tauxColor(totCP > 0 ? (totOrd / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totOrd / totCP) * 100 : 0)}</span>
                     </TableCell>
                     <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPaiements)}</TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totPrevisions)}</TableCell>
-                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(totDisponible)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right">
+                      <span className={tauxColor(totCP > 0 ? (totPaiements / totCP) * 100 : 0)}>{formatPercent(totCP > 0 ? (totPaiements / totCP) * 100 : 0)}</span>
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -2789,8 +2781,7 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-bold text-gray-600 text-right">Ordonn.</TableHead>
                     <TableHead className="text-xs font-bold text-gray-600 text-right">Taux ord.</TableHead>
                     <TableHead className="text-xs font-bold text-gray-600 text-right">Paiements</TableHead>
-                    <TableHead className="text-xs font-bold text-gray-600 text-right">Prévisions</TableHead>
-                    <TableHead className="text-xs font-bold text-gray-600 text-right">Disponible</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux paiement</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -2812,8 +2803,9 @@ export default function Dashboard() {
                         <span className={tauxColor(g.tauxOrdonnement)}>{formatPercent(g.tauxOrdonnement)}</span>
                       </TableCell>
                       <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.paiements)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.previsions)}</TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(g.disponible)}</TableCell>
+                      <TableCell className="text-xs text-right">
+                        <span className={tauxColor(g.tauxPaiement)}>{formatPercent(g.tauxPaiement)}</span>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -3102,8 +3094,7 @@ export default function Dashboard() {
                     <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Total Ord.</TableHead>
                     <TableHead className="text-[10px] font-bold text-indigo-600 text-right">Taux ord.</TableHead>
                     <TableHead className="text-[10px] font-bold text-gray-600 text-right">Paiements</TableHead>
-                    <TableHead className="text-[10px] font-bold text-gray-600 text-right">Prévisions</TableHead>
-                    <TableHead className="text-[10px] font-bold text-gray-600 text-right">Disponible</TableHead>
+                    <TableHead className="text-[10px] font-bold text-gray-600 text-right">Taux paiement</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3131,8 +3122,7 @@ export default function Dashboard() {
                         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.ord)}</TableCell>
                         <TableCell className="text-xs text-right"><span className={tauxColor(prog.tauxOrdonnement)}>{formatPercent(prog.tauxOrdonnement)}</span></TableCell>
                         <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.paiements)}</TableCell>
-                        <TableCell className="text-xs text-gray-700 text-right">{formatMillions(prog.previsions)}</TableCell>
-                        <TableCell className="text-xs text-right"><span className={prog.disponible >= 0 ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>{formatMillions(prog.disponible)}</span></TableCell>
+                        <TableCell className="text-xs text-right"><span className={tauxColor(prog.tauxPaiement)}>{formatPercent(prog.tauxPaiement)}</span></TableCell>
                       </TableRow>
                     )
                   })}
@@ -3183,8 +3173,7 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.ord)}</TableCell>
                           <TableCell className="text-xs text-right"><span className={tauxColor(tTauxOrd)}>{formatPercent(tTauxOrd)}</span></TableCell>
                           <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.paiements)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-800 text-right">{formatMillions(tot.previsions)}</TableCell>
-                          <TableCell className="text-xs text-right"><span className={tot.disponible >= 0 ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>{formatMillions(tot.disponible)}</span></TableCell>
+                          <TableCell className="text-xs text-right"><span className={tauxColor(tot.cp > 0 ? (tot.paiements / tot.cp) * 100 : 0)}>{formatPercent(tot.cp > 0 ? (tot.paiements / tot.cp) * 100 : 0)}</span></TableCell>
                         </>
                       )
                     })()}
@@ -3781,7 +3770,8 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-bold text-gray-600 text-right">Taux eng.</TableHead>
                     <TableHead className="text-xs font-bold text-gray-600 text-right">Ordonnancements</TableHead>
                     <TableHead className="text-xs font-bold text-gray-600 text-right">Taux ord.</TableHead>
-                    <TableHead className="text-xs font-bold text-gray-600 text-right">Disponible</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Paiements</TableHead>
+                    <TableHead className="text-xs font-bold text-gray-600 text-right">Taux paiement</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -3797,7 +3787,10 @@ export default function Dashboard() {
                       <TableCell className="text-xs text-right">
                         <span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span>
                       </TableCell>
-                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.disponible)}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(e.paiements)}</TableCell>
+                      <TableCell className="text-xs text-right">
+                        <span className={tauxColor(e.tauxPaiement)}>{formatPercent(e.tauxPaiement)}</span>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
