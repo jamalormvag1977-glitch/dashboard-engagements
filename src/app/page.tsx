@@ -500,10 +500,10 @@ export default function Dashboard() {
   // Analysis by Programme (row.Programme field - actual project names)
   const analysisByProgramme = useMemo(() => {
     const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
-    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; cpReports: number; cpConsolides: number; cpNouveaux: number; engReports: number; engConsolides: number; engNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number; prevByMonth: Record<string, number> }> = {}
+    const groups: Record<string, { cp: number; ce: number; engCP: number; engCE: number; paiements: number; previsions: number; count: number; ord: number; tresorerie: number; subvention: number; cpReports: number; cpConsolides: number; cpNouveaux: number; engReports: number; engConsolides: number; engNouveaux: number; ordReports: number; ordConsolides: number; ordNouveaux: number; prevByMonth: Record<string, number> }> = {}
     filteredData.forEach(row => {
       const g = row.Programme
-      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, engReports: 0, engConsolides: 0, engNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0, prevByMonth: {} }
+      if (!groups[g]) groups[g] = { cp: 0, ce: 0, engCP: 0, engCE: 0, paiements: 0, previsions: 0, count: 0, ord: 0, tresorerie: 0, subvention: 0, cpReports: 0, cpConsolides: 0, cpNouveaux: 0, engReports: 0, engConsolides: 0, engNouveaux: 0, ordReports: 0, ordConsolides: 0, ordNouveaux: 0, prevByMonth: {} }
       groups[g].cp += row['TOTAL CP'] || 0
       groups[g].ce += row['TOTAL CE'] || 0
       groups[g].engCP += row['ENG CP TOTAL'] || 0
@@ -521,6 +521,8 @@ export default function Dashboard() {
       groups[g].ordReports += row['ORD REPORTS'] || 0
       groups[g].ordConsolides += row['ORD CONSOLIDES'] || 0
       groups[g].ordNouveaux += row['ORD NOUVEAUX'] || 0
+      groups[g].tresorerie += row['TRESORERIE'] || 0
+      groups[g].subvention += row['SUBVENTION DEMANDEE'] || 0
     })
     // Calculate cumulative previsions by programme
     Object.keys(groups).forEach(g => {
@@ -2062,6 +2064,116 @@ export default function Dashboard() {
             )
           })}
         </div>
+      </div>
+
+      {/* ═══════════ SECTION : TRÉSORERIE ET SUBVENTION ═══════════ */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-amber-500 to-orange-600" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Trésorerie et Subvention</h3>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Trésorerie totale */}
+          <Card className="border border-amber-100 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Trésorerie</p>
+                  <p className="text-xl font-black text-amber-700">{formatMillions(kpis.totalTresorerie)}</p>
+                  <p className="text-[9px] text-gray-400">M DH</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          {/* Subvention demandée */}
+          <Card className="border border-orange-100 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Subvention demandée</p>
+                  <p className="text-xl font-black text-orange-700">{formatMillions(kpis.totalSubvention)}</p>
+                  <p className="text-[9px] text-gray-400">M DH</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          {/* Taux trésorerie / CP */}
+          <Card className="border border-yellow-100 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Trésorerie / Total CP</p>
+                  <p className="text-xl font-black text-yellow-700">{kpis.totalCP > 0 ? formatPercent((kpis.totalTresorerie / kpis.totalCP) * 100) : '0,0%'}</p>
+                  <p className="text-[9px] text-gray-400">Taux de couverture</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          {/* Taux subvention / CP */}
+          <Card className="border border-red-100 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Subvention / Total CP</p>
+                  <p className="text-xl font-black text-red-700">{kpis.totalCP > 0 ? formatPercent((kpis.totalSubvention / kpis.totalCP) * 100) : '0,0%'}</p>
+                  <p className="text-[9px] text-gray-400">Taux de demande</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Détail par programme */}
+        <Card className="border border-gray-100 shadow-sm">
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-amber-50/60">
+                    <TableHead className="text-xs font-bold text-amber-800">Programme</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-800 text-right">Total CP</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-800 text-right">Trésorerie</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-800 text-right">Trésor. / CP</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-800 text-right">Subvention demandée</TableHead>
+                    <TableHead className="text-xs font-bold text-amber-800 text-right">Subv. / CP</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {analysisByProgramme.map(p => (
+                    <TableRow key={p.name} className="hover:bg-gray-50">
+                      <TableCell className="text-xs font-medium text-gray-900 max-w-[200px] truncate">{p.name}</TableCell>
+                      <TableCell className="text-xs text-gray-700 text-right">{formatMillions(p.cp)}</TableCell>
+                      <TableCell className="text-xs text-right"><span className={p.tresorerie > 0 ? 'text-amber-700 font-bold' : 'text-gray-400'}>{formatMillions(p.tresorerie)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={p.cp > 0 && (p.tresorerie / p.cp) >= 0.8 ? 'text-green-600' : p.cp > 0 && (p.tresorerie / p.cp) >= 0.5 ? 'text-orange-500' : p.tresorerie > 0 ? 'text-red-500' : 'text-gray-400'}>{p.cp > 0 ? formatPercent((p.tresorerie / p.cp) * 100) : '-'}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={p.subvention > 0 ? 'text-orange-700 font-bold' : 'text-gray-400'}>{formatMillions(p.subvention)}</span></TableCell>
+                      <TableCell className="text-xs text-right"><span className={p.cp > 0 && (p.subvention / p.cp) >= 0.8 ? 'text-green-600' : p.cp > 0 && (p.subvention / p.cp) >= 0.5 ? 'text-orange-500' : p.subvention > 0 ? 'text-red-500' : 'text-gray-400'}>{p.cp > 0 ? formatPercent((p.subvention / p.cp) * 100) : '-'}</span></TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow className="bg-amber-50/40 font-bold">
+                    <TableCell className="text-xs font-bold text-gray-900">TOTAL</TableCell>
+                    <TableCell className="text-xs font-bold text-gray-900 text-right">{formatMillions(kpis.totalCP)}</TableCell>
+                    <TableCell className="text-xs font-bold text-amber-700 text-right">{formatMillions(kpis.totalTresorerie)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.totalCP > 0 ? (kpis.totalTresorerie / kpis.totalCP) * 100 : 0)}>{kpis.totalCP > 0 ? formatPercent((kpis.totalTresorerie / kpis.totalCP) * 100) : '-'}</span></TableCell>
+                    <TableCell className="text-xs font-bold text-orange-700 text-right">{formatMillions(kpis.totalSubvention)}</TableCell>
+                    <TableCell className="text-xs font-bold text-right"><span className={tauxColor(kpis.totalCP > 0 ? (kpis.totalSubvention / kpis.totalCP) * 100 : 0)}>{kpis.totalCP > 0 ? formatPercent((kpis.totalSubvention / kpis.totalCP) * 100) : '-'}</span></TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* ═══════════ TABLEAU : ANALYSE PAR PROGRAMME ═══════════ */}
