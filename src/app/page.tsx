@@ -1401,105 +1401,155 @@ export default function Dashboard() {
 
   const renderOverview = () => (
     <>
-      {/* ═══════════ SECTION : PERFORMANCE ═══════════ */}
+      {/* ═══════════ SECTION : PERFORMANCE GLOBALE ═══════════ */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-violet-500 to-purple-600" />
-          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Performance</h3>
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Performance Globale</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Pie Chart - Total CP par Programme */}
-          <Card className="border border-gray-100 shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-semibold text-gray-600">Total CP par programme</CardTitle>
+          {/* Gauge - Total CP */}
+          <Card className="border border-gray-100 shadow-sm overflow-hidden">
+            <CardHeader className="pb-1 pt-3 px-4">
+              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total CP</CardTitle>
             </CardHeader>
-            <CardContent className="p-2">
-              <div className="h-[180px]">
+            <CardContent className="p-2 flex flex-col items-center">
+              <div className="h-[160px] w-full relative">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map(p => ({ name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name, value: Math.round(p.cp / 1e6 * 10) / 10 }))}
-                      cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={2} dataKey="value"
+                      data={[
+                        { name: 'Engagé', value: Math.round(kpis.totalEngCP / 1e6 * 10) / 10 },
+                        { name: 'Disponible', value: Math.max(0, Math.round((kpis.totalCP - kpis.totalEngCP) / 1e6 * 10) / 10) },
+                      ]}
+                      cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                      startAngle={90} endAngle={-270}
+                      stroke="none"
                     >
-                      {analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map((_, index) => (
-                        <Cell key={`cell-cp-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                      ))}
+                      <Cell fill="#6366f1" />
+                      <Cell fill="#e0e7ff" />
                     </Pie>
-                    <Tooltip formatter={(value: number) => `${value} M DH`} />
                   </PieChart>
                 </ResponsiveContainer>
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(kpis.totalCP)}</span>
+                  <span className="text-[10px] text-gray-400 font-medium">M DH</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 mt-1 text-[10px]">
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-500" />Engagé</span>
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-100" />Disponible</span>
               </div>
             </CardContent>
           </Card>
 
-          {/* Pie Chart - Taux Engagement */}
-          <Card className="border border-gray-100 shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-semibold text-gray-600">Taux d'engagement par programme</CardTitle>
+          {/* Gauge - Taux Engagement */}
+          <Card className="border border-gray-100 shadow-sm overflow-hidden">
+            <CardHeader className="pb-1 pt-3 px-4">
+              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Taux Engagement</CardTitle>
             </CardHeader>
-            <CardContent className="p-2">
-              <div className="h-[180px]">
+            <CardContent className="p-2 flex flex-col items-center">
+              <div className="h-[160px] w-full relative">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map(p => ({ name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name, value: Math.round(p.tauxEngagement * 10) / 10 }))}
-                      cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={2} dataKey="value"
+                      data={[
+                        { name: 'Engagé', value: kpis.tauxEngagement },
+                        { name: 'Reste', value: Math.max(0, 100 - kpis.tauxEngagement) },
+                      ]}
+                      cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                      startAngle={90} endAngle={-270}
+                      stroke="none"
                     >
-                      {analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map((_, index) => (
-                        <Cell key={`cell-eng-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                      ))}
+                      <Cell fill={kpis.tauxEngagement >= 80 ? '#10b981' : kpis.tauxEngagement >= 50 ? '#f59e0b' : '#ef4444'} />
+                      <Cell fill="#f3f4f6" />
                     </Pie>
-                    <Tooltip formatter={(value: number) => `${value}%`} />
                   </PieChart>
                 </ResponsiveContainer>
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span className={`text-2xl font-black tracking-tight ${tauxColor(kpis.tauxEngagement)}`}>{formatPercent(kpis.tauxEngagement)}</span>
+                  <span className="text-[10px] text-gray-400 font-medium">
+                    {kpis.tauxEngagement >= 80 ? 'Bon' : kpis.tauxEngagement >= 50 ? 'Moyen' : 'Faible'}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 mt-1">
+                <span className={`w-2 h-2 rounded-full ${kpis.tauxEngagement >= 80 ? 'bg-emerald-500' : kpis.tauxEngagement >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalEngCP)} M DH engagé</span>
               </div>
             </CardContent>
           </Card>
 
-          {/* Pie Chart - Taux Ordonnancement */}
-          <Card className="border border-gray-100 shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-semibold text-gray-600">Taux d'ordonnancement par programme</CardTitle>
+          {/* Gauge - Taux Ordonnancement */}
+          <Card className="border border-gray-100 shadow-sm overflow-hidden">
+            <CardHeader className="pb-1 pt-3 px-4">
+              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Taux Ordonnancement</CardTitle>
             </CardHeader>
-            <CardContent className="p-2">
-              <div className="h-[180px]">
+            <CardContent className="p-2 flex flex-col items-center">
+              <div className="h-[160px] w-full relative">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map(p => ({ name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name, value: Math.round(p.tauxOrdonnement * 10) / 10 }))}
-                      cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={2} dataKey="value"
+                      data={[
+                        { name: 'Ordonnancé', value: kpis.tauxOrdonnement },
+                        { name: 'Reste', value: Math.max(0, 100 - kpis.tauxOrdonnement) },
+                      ]}
+                      cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                      startAngle={90} endAngle={-270}
+                      stroke="none"
                     >
-                      {analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map((_, index) => (
-                        <Cell key={`cell-ord-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                      ))}
+                      <Cell fill={kpis.tauxOrdonnement >= 80 ? '#10b981' : kpis.tauxOrdonnement >= 50 ? '#f59e0b' : '#ef4444'} />
+                      <Cell fill="#f3f4f6" />
                     </Pie>
-                    <Tooltip formatter={(value: number) => `${value}%`} />
                   </PieChart>
                 </ResponsiveContainer>
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span className={`text-2xl font-black tracking-tight ${tauxColor(kpis.tauxOrdonnement)}`}>{formatPercent(kpis.tauxOrdonnement)}</span>
+                  <span className="text-[10px] text-gray-400 font-medium">
+                    {kpis.tauxOrdonnement >= 80 ? 'Bon' : kpis.tauxOrdonnement >= 50 ? 'Moyen' : 'Faible'}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 mt-1">
+                <span className={`w-2 h-2 rounded-full ${kpis.tauxOrdonnement >= 80 ? 'bg-emerald-500' : kpis.tauxOrdonnement >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrd)} M DH ordonnancé</span>
               </div>
             </CardContent>
           </Card>
 
-          {/* Pie Chart - Taux Paiement */}
-          <Card className="border border-gray-100 shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-semibold text-gray-600">Taux de paiement par programme</CardTitle>
+          {/* Gauge - Taux de Paiement */}
+          <Card className="border border-gray-100 shadow-sm overflow-hidden">
+            <CardHeader className="pb-1 pt-3 px-4">
+              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Taux de Paiement</CardTitle>
             </CardHeader>
-            <CardContent className="p-2">
-              <div className="h-[180px]">
+            <CardContent className="p-2 flex flex-col items-center">
+              <div className="h-[160px] w-full relative">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map(p => ({ name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name, value: Math.round(p.tauxPaiement * 10) / 10 }))}
-                      cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={2} dataKey="value"
+                      data={[
+                        { name: 'Payé', value: kpis.tauxPaiement },
+                        { name: 'Reste', value: Math.max(0, 100 - kpis.tauxPaiement) },
+                      ]}
+                      cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                      startAngle={90} endAngle={-270}
+                      stroke="none"
                     >
-                      {analysisByProgramme.filter(p => p.cp > 0).slice(0, 6).map((_, index) => (
-                        <Cell key={`cell-pai-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                      ))}
+                      <Cell fill={kpis.tauxPaiement >= 80 ? '#06b6d4' : kpis.tauxPaiement >= 50 ? '#f59e0b' : '#ef4444'} />
+                      <Cell fill="#f3f4f6" />
                     </Pie>
-                    <Tooltip formatter={(value: number) => `${value}%`} />
                   </PieChart>
                 </ResponsiveContainer>
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span className={`text-2xl font-black tracking-tight ${tauxColor(kpis.tauxPaiement)}`}>{formatPercent(kpis.tauxPaiement)}</span>
+                  <span className="text-[10px] text-gray-400 font-medium">
+                    {kpis.tauxPaiement >= 80 ? 'Bon' : kpis.tauxPaiement >= 50 ? 'Moyen' : 'Faible'}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 mt-1">
+                <span className={`w-2 h-2 rounded-full ${kpis.tauxPaiement >= 80 ? 'bg-cyan-500' : kpis.tauxPaiement >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalPaiements)} M DH payé</span>
               </div>
             </CardContent>
           </Card>
