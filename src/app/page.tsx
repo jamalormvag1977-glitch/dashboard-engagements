@@ -2261,7 +2261,7 @@ export default function Dashboard() {
                 <FileSpreadsheet className="w-4 h-4 text-white" />
               </div>
               <div>
-                <CardTitle className="text-sm font-bold text-gray-800">Prévisions d&apos;ordonnancement cumulées par entité</CardTitle>
+                <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase">Prévisions d&apos;ordonnancement cumulées par entité</CardTitle>
                 <p className="text-[11px] text-gray-400 mt-0.5">Taux = Prévisions d&apos;ordonnancement cumulées / Crédits Total CP</p>
               </div>
             </div>
