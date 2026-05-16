@@ -3472,7 +3472,11 @@ export default function Dashboard() {
     return (
       <>
         {/* ═══════════ TITRE : ENGAGEMENTS GLOBAUX ═══════════ */}
-        <h2 className="text-base font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-7">1.</span>Engagements globaux</h2>
+        <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
+          <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
+            <CardTitle className="text-base font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-7">1.</span>Engagements globaux</CardTitle>
+          </CardHeader>
+        </Card>
 
         {renderKPISections(kpis)}
 
