@@ -2505,105 +2505,6 @@ export default function Dashboard() {
 
     return (
       <>
-        {/* ═══════════ SECTION 3 : INDICATEURS PAR ENTITÉ ═══════════ */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <div className="w-1 h-5 rounded-full bg-gradient-to-b from-violet-500 to-fuchsia-600" />
-            <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par entité</h3>
-            <span className="text-[11px] text-gray-400 font-medium">({analysisByEntity.length} entités)</span>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {analysisByEntity.map((entity, idx) => {
-              const color = getEntityColor(idx)
-              const pctBudget = entityTotalBudget > 0 ? (entity.cp / entityTotalBudget) * 100 : 0
-              return (
-                <div key={entity.name} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                  {/* Entity header */}
-                  <div className={`bg-gradient-to-r ${color.bg} px-4 py-3 flex items-center justify-between`}>
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                        <Landmark className="w-4 h-4 text-white" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-white leading-tight">{entity.name}</h4>
-                        <p className="text-[10px] text-white/70 font-medium">{entity.count} lignes</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-lg font-black text-white">{formatMillions(entity.cp)}</p>
-                      <p className="text-[10px] text-white/70 font-medium">Total CP</p>
-                      <p className="text-xs font-bold text-white/90 mt-0.5">{formatMillions(entity.ce)}</p>
-                      <p className="text-[10px] text-white/70 font-medium">CE</p>
-                    </div>
-                  </div>
-                  {/* Key indicators body */}
-                  <div className="p-4 space-y-3">
-                    {/* Row 1: Engagement & Ordonnancement rates */}
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className={`${color.light} rounded-lg p-2.5`}>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Eng. CP</span>
-                          <span className={`text-xs font-bold ${tauxColor(entity.tauxEngagement)}`}>{formatPercent(entity.tauxEngagement)}</span>
-                        </div>
-                        {renderMiniBar(entity.tauxEngagement, 100, color.bar)}
-                      </div>
-                      <div className={`${color.light} rounded-lg p-2.5`}>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Ordonn.</span>
-                          <span className={`text-xs font-bold ${tauxColor(entity.tauxOrdonnement)}`}>{formatPercent(entity.tauxOrdonnement)}</span>
-                        </div>
-                        {renderMiniBar(entity.tauxOrdonnement, 100, color.bar)}
-                      </div>
-                    </div>
-                    {/* Row 2: CE engagement & Paiement rates */}
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className={`${color.light} rounded-lg p-2.5`}>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Eng. CE</span>
-                          <span className={`text-xs font-bold ${tauxColor(entity.tauxEngagementCE)}`}>{entity.ce > 0 ? formatPercent(entity.tauxEngagementCE) : '0,0%'}</span>
-                        </div>
-                        {renderMiniBar(entity.tauxEngagementCE, 100, color.bar)}
-                      </div>
-                      <div className={`${color.light} rounded-lg p-2.5`}>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Paiement</span>
-                          <span className={`text-xs font-bold ${tauxColor(entity.tauxPaiement)}`}>{formatPercent(entity.tauxPaiement)}</span>
-                        </div>
-                        {renderMiniBar(entity.tauxPaiement, 100, color.bar)}
-                      </div>
-                    </div>
-                    {/* Row 3: Key financial figures */}
-                    <div className="grid grid-cols-3 gap-2 pt-1 border-t border-gray-100">
-                      <div className="text-center">
-                        <p className="text-[10px] text-gray-400 font-medium">Eng. CP</p>
-                        <p className="text-xs font-bold text-gray-800">{formatMillions(entity.engCP)}</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-[10px] text-gray-400 font-medium">Ordonn.</p>
-                        <p className="text-xs font-bold text-gray-800">{formatMillions(entity.ord)}</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-[10px] text-gray-400 font-medium">Disponible</p>
-                        <p className={`text-xs font-bold ${entity.disponible >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>{formatMillions(entity.disponible)}</p>
-                      </div>
-                    </div>
-                    {/* Row 4: Part du budget */}
-                    <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
-                      <span className="text-[10px] text-gray-400 font-medium">Part du budget</span>
-                      <div className="flex-1">
-                        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                          <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${Math.min(pctBudget, 100)}%` }} />
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-bold text-gray-600">{pctBudget.toFixed(1)}%</span>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
         {/* ═══════════ CAMEMBERTS CP & CE : RÉPARTITION PAR ENTITÉ ═══════════ */}
         <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
           <CardContent className="p-0">
@@ -2783,6 +2684,105 @@ export default function Dashboard() {
             </div>
           </CardContent>
         </Card>
+
+        {/* ═══════════ SECTION 3 : INDICATEURS PAR ENTITÉ ═══════════ */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <div className="w-1 h-5 rounded-full bg-gradient-to-b from-violet-500 to-fuchsia-600" />
+            <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par entité</h3>
+            <span className="text-[11px] text-gray-400 font-medium">({analysisByEntity.length} entités)</span>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {analysisByEntity.map((entity, idx) => {
+              const color = getEntityColor(idx)
+              const pctBudget = entityTotalBudget > 0 ? (entity.cp / entityTotalBudget) * 100 : 0
+              return (
+                <div key={entity.name} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                  {/* Entity header */}
+                  <div className={`bg-gradient-to-r ${color.bg} px-4 py-3 flex items-center justify-between`}>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                        <Landmark className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-white leading-tight">{entity.name}</h4>
+                        <p className="text-[10px] text-white/70 font-medium">{entity.count} lignes</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-black text-white">{formatMillions(entity.cp)}</p>
+                      <p className="text-[10px] text-white/70 font-medium">Total CP</p>
+                      <p className="text-xs font-bold text-white/90 mt-0.5">{formatMillions(entity.ce)}</p>
+                      <p className="text-[10px] text-white/70 font-medium">CE</p>
+                    </div>
+                  </div>
+                  {/* Key indicators body */}
+                  <div className="p-4 space-y-3">
+                    {/* Row 1: Engagement & Ordonnancement rates */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className={`${color.light} rounded-lg p-2.5`}>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Eng. CP</span>
+                          <span className={`text-xs font-bold ${tauxColor(entity.tauxEngagement)}`}>{formatPercent(entity.tauxEngagement)}</span>
+                        </div>
+                        {renderMiniBar(entity.tauxEngagement, 100, color.bar)}
+                      </div>
+                      <div className={`${color.light} rounded-lg p-2.5`}>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Ordonn.</span>
+                          <span className={`text-xs font-bold ${tauxColor(entity.tauxOrdonnement)}`}>{formatPercent(entity.tauxOrdonnement)}</span>
+                        </div>
+                        {renderMiniBar(entity.tauxOrdonnement, 100, color.bar)}
+                      </div>
+                    </div>
+                    {/* Row 2: CE engagement & Paiement rates */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className={`${color.light} rounded-lg p-2.5`}>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Eng. CE</span>
+                          <span className={`text-xs font-bold ${tauxColor(entity.tauxEngagementCE)}`}>{entity.ce > 0 ? formatPercent(entity.tauxEngagementCE) : '0,0%'}</span>
+                        </div>
+                        {renderMiniBar(entity.tauxEngagementCE, 100, color.bar)}
+                      </div>
+                      <div className={`${color.light} rounded-lg p-2.5`}>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Paiement</span>
+                          <span className={`text-xs font-bold ${tauxColor(entity.tauxPaiement)}`}>{formatPercent(entity.tauxPaiement)}</span>
+                        </div>
+                        {renderMiniBar(entity.tauxPaiement, 100, color.bar)}
+                      </div>
+                    </div>
+                    {/* Row 3: Key financial figures */}
+                    <div className="grid grid-cols-3 gap-2 pt-1 border-t border-gray-100">
+                      <div className="text-center">
+                        <p className="text-[10px] text-gray-400 font-medium">Eng. CP</p>
+                        <p className="text-xs font-bold text-gray-800">{formatMillions(entity.engCP)}</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-[10px] text-gray-400 font-medium">Ordonn.</p>
+                        <p className="text-xs font-bold text-gray-800">{formatMillions(entity.ord)}</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-[10px] text-gray-400 font-medium">Disponible</p>
+                        <p className={`text-xs font-bold ${entity.disponible >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>{formatMillions(entity.disponible)}</p>
+                      </div>
+                    </div>
+                    {/* Row 4: Part du budget */}
+                    <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
+                      <span className="text-[10px] text-gray-400 font-medium">Part du budget</span>
+                      <div className="flex-1">
+                        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                          <div className={`h-full rounded-full bg-gradient-to-r ${color.bar}`} style={{ width: `${Math.min(pctBudget, 100)}%` }} />
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold text-gray-600">{pctBudget.toFixed(1)}%</span>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
 
         {/* Entity Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
