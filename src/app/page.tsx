@@ -4255,11 +4255,11 @@ export default function Dashboard() {
               <p className="text-sm font-bold text-gray-800">{new Date().toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
             </div>
           </div>
-          {(filterProgramme !== 'all' || filterProjet !== 'all' || filterEntity !== 'all') && (
+          {(selectedProgramme !== 'all' || selectedProjet !== 'all' || selectedEntite !== 'all') && (
             <div className="mt-3 flex flex-wrap gap-2">
-              {filterProgramme !== 'all' && <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">Programme : {filterProgramme}</span>}
-              {filterProjet !== 'all' && <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">Projet : {filterProjet}</span>}
-              {filterEntity !== 'all' && <span className="text-xs bg-violet-100 text-violet-800 px-2 py-0.5 rounded">Entité : {filterEntity}</span>}
+              {selectedProgramme !== 'all' && <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">Programme : {selectedProgramme}</span>}
+              {selectedProjet !== 'all' && <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">Projet : {selectedProjet}</span>}
+              {selectedEntite !== 'all' && <span className="text-xs bg-violet-100 text-violet-800 px-2 py-0.5 rounded">Entité : {selectedEntite}</span>}
             </div>
           )}
         </div>
