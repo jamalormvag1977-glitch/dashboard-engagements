@@ -1616,9 +1616,15 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ═══════════ SECTION 1 : CRÉDITS ═══════════ */}
+      {/* ═══════════ SECTION : INDICATEURS GLOBAUX ═══════════ */}
+      <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
+        <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
+          <CardTitle className="text-base font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-7">3.</span>Indicateurs globaux</CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 space-y-6">
+
       <div className="space-y-3">
-        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase">Crédits</h3>
+        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">3.1.</span>Crédits</h3>
           
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Crédits Reportés */}
@@ -1705,9 +1711,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ═══════════ SECTION 2 : ENGAGEMENTS ═══════════ */}
       <div className="space-y-3">
-        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase">Engagements</h3>
+        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">3.2.</span>Engagements</h3>
           
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Engagement sur Report */}
@@ -1851,7 +1856,7 @@ export default function Dashboard() {
 
       {/* ═══════════ SECTION 3 : ORDONNANCEMENT ═══════════ */}
       <div className="space-y-3">
-        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">5.</span>Ordonnancement</h3>
+        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">3.3.</span>Ordonnancement</h3>
           
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Ord. sur Reports */}
@@ -1939,7 +1944,7 @@ export default function Dashboard() {
 
       {/* ═══════════ SECTION 4 : PAIEMENTS ═══════════ */}
       <div className="space-y-3">
-        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">6.</span>Paiements</h3>
+        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">3.4.</span>Paiements</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Taux de paiement */}
           <div className="kpi-card-premium rounded-xl border border-cyan-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #ecfeff 100%)' }}>
@@ -2018,7 +2023,7 @@ export default function Dashboard() {
 
       {/* ═══════════ SECTION 4.5 : PRÉVISIONS ORDONNANCEMENT CUMULÉES ═══════════ */}
       <div className="space-y-3">
-        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">7.</span>Prévisions d&apos;ordonnancement cumulées</h3>
+        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">3.5.</span>Prévisions d&apos;ordonnancement cumulées</h3>
           
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {[
@@ -2066,11 +2071,14 @@ export default function Dashboard() {
         </div>
       </div>
 
+        </CardContent>
+      </Card>
+
       {/* ═══════════ TABLEAU : ANALYSE PAR PROGRAMME ═══════════ */}
       <Card className="border-2 border-blue-800 shadow-sm">
         <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">8.</span>État d'avancement par programme</h3>
+            <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">4.</span>État d'avancement par programme</h3>
             <button onClick={() => handleNavChange('project')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
             </button>
@@ -2133,7 +2141,7 @@ export default function Dashboard() {
       <Card className="border-2 border-blue-800 shadow-sm">
         <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">9.</span>État d'avancement par projet</h3>
+            <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">5.</span>État d'avancement par projet</h3>
             <button onClick={() => handleNavChange('program')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
             </button>
@@ -2196,7 +2204,7 @@ export default function Dashboard() {
       <Card className="border-2 border-blue-800 shadow-sm">
         <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">10.</span>État d'avancement par entité</h3>
+            <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">6.</span>État d'avancement par entité</h3>
             <button onClick={() => handleNavChange('entity')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
             </button>
@@ -2264,7 +2272,7 @@ export default function Dashboard() {
                 <FileSpreadsheet className="w-4 h-4 text-white" />
               </div>
               <div>
-                <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">11.</span>Prévisions d&apos;ordonnancement cumulées par entité</CardTitle>
+                <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">7.</span>Prévisions d&apos;ordonnancement cumulées par entité</CardTitle>
                 <p className="text-[11px] text-gray-400 mt-0.5">Taux = Prévisions d&apos;ordonnancement cumulées / Crédits Total CP</p>
               </div>
             </div>
