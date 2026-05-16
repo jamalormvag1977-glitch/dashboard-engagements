@@ -2610,8 +2610,93 @@ export default function Dashboard() {
   const renderProgramView = () => {
     const progTotalBudget = analysisByGroup.reduce((s, g) => s + g.cp, 0)
 
+    // Pie chart data for programme distribution
+    const programmePieData = useMemo(() => {
+      return analysisByGroup.map(g => ({
+        name: g.name,
+        value: Math.round(g.cp / 1e6 * 10) / 10,
+        cp: g.cp,
+        engCP: g.engCP,
+        tauxEngagement: g.tauxEngagement,
+        tauxOrdonnement: g.tauxOrdonnement,
+      }))
+    }, [analysisByGroup])
+
+    const PROGRAMME_PIE_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16', '#e11d48']
+
     return (
       <>
+        {/* ═══════════ TITRE : INDICATEURS CLÉS PAR PROGRAMME ═══════════ */}
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500" />
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs clés par programme</h3>
+        </div>
+
+        {/* ═══════════ CAMEMBERT : RÉPARTITION PAR PROJET ═══════════ */}
+        <Card className="bg-white border border-gray-100 shadow-sm">
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Pie Chart */}
+              <div className="flex items-center justify-center">
+                <ResponsiveContainer width="100%" height={320}>
+                  <PieChart>
+                    <Pie
+                      data={programmePieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={120}
+                      paddingAngle={2}
+                      dataKey="value"
+                      nameKey="name"
+                      label={({ name, percent }: { name: string; percent: number }) => {
+                        const displayName = name.length > 18 ? name.substring(0, 18) + '…' : name
+                        return `${displayName} ${(percent * 100).toFixed(1)}%`
+                      }}
+                      labelLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
+                    >
+                      {programmePieData.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={PROGRAMME_PIE_COLORS[index % PROGRAMME_PIE_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(value: number, name: string) => [`${value} M DH`, name]}
+                      contentStyle={{ borderRadius: '8px', fontSize: '12px', border: '1px solid #e5e7eb' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              {/* Legend + Key Figures */}
+              <div className="flex flex-col justify-center space-y-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <PieChartIcon className="w-4 h-4 text-indigo-500" />
+                  <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wide">Répartition du budget CP par projet</h4>
+                </div>
+                <div className="space-y-2 max-h-[280px] overflow-y-auto pr-1">
+                  {programmePieData.map((item, idx) => {
+                    const pctBudget = progTotalBudget > 0 ? (item.cp / progTotalBudget) * 100 : 0
+                    return (
+                      <div key={item.name} className="flex items-center gap-2.5 bg-gray-50 rounded-lg px-3 py-2">
+                        <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-gray-800 truncate">{item.name}</p>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <span className="text-[10px] text-gray-500">{formatMillions(item.cp)} M DH</span>
+                            <span className="text-[10px] font-bold text-indigo-600">{pctBudget.toFixed(1)}%</span>
+                          </div>
+                        </div>
+                        <div className="text-right flex-shrink-0">
+                          <span className={`text-[10px] font-bold ${tauxColor(item.tauxEngagement)}`}>Eng. {formatPercent(item.tauxEngagement)}</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* ═══════════ SECTION 3 : INDICATEURS PAR PROJET ═══════════ */}
         {(() => {
           const projectColors = [
