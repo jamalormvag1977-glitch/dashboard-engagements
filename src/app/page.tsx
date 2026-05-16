@@ -1309,55 +1309,55 @@ export default function Dashboard() {
     <>
       {/* ═══════════ TITRE : TRÉSORERIE ET SUBVENTION ═══════════ */}
       <div className="flex items-center gap-2">
-        <div className="w-1 h-5 rounded-full bg-gradient-to-b from-cyan-500 to-blue-600" />
+        <div className="w-1 h-5 rounded-full bg-gradient-to-b from-sky-400 to-blue-500" />
         <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Trésorerie et subvention</h3>
       </div>
 
       {/* ═══════════ SECTION : TRÉSORERIE ET SUBVENTION ═══════════ */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {/* ─── Trésorerie ─── */}
-        <Card className="border-0 shadow-lg shadow-cyan-200/50 overflow-hidden rounded-2xl">
+        <Card className="border-0 shadow-lg shadow-sky-100/80 overflow-hidden rounded-2xl">
           <div className="relative">
             {/* Background layers */}
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-600 via-teal-600 to-emerald-700" />
-            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-white/15 to-transparent rounded-bl-full" />
-            <div className="absolute bottom-0 left-0 w-28 h-28 bg-gradient-to-tr from-black/10 to-transparent rounded-tr-full" />
+            <div className="absolute inset-0 bg-gradient-to-br from-sky-400 via-blue-400 to-indigo-400" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-white/25 to-transparent rounded-bl-full" />
+            <div className="absolute bottom-0 left-0 w-28 h-28 bg-gradient-to-tr from-white/5 to-transparent rounded-tr-full" />
             {/* Decorative dots */}
-            <div className="absolute top-4 right-4 grid grid-cols-3 gap-1.5 opacity-20">
+            <div className="absolute top-4 right-4 grid grid-cols-3 gap-1.5 opacity-25">
               {[...Array(9)].map((_, i) => <div key={i} className="w-1.5 h-1.5 rounded-full bg-white" />)}
             </div>
             {/* Content */}
             <div className="relative z-10 p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/10">
+                  <div className="w-11 h-11 rounded-xl bg-white/30 backdrop-blur-md flex items-center justify-center border border-white/20">
                     <Wallet className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-semibold text-cyan-100 uppercase tracking-[0.2em]">Trésorerie</p>
-                    <p className="text-[9px] text-white/50 mt-0.5">Disponibilités financières</p>
+                    <p className="text-[10px] font-semibold text-white/90 uppercase tracking-[0.2em]">Trésorerie</p>
+                    <p className="text-[9px] text-white/60 mt-0.5">Disponibilités financières</p>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-white/70" />
+                <div className="w-10 h-10 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-white/80" />
                 </div>
               </div>
               <div className="mb-4">
-                <p className="text-2xl font-black tracking-tight text-white">{formatMillions(kpis.totalTresorerie)} <span className="text-xs font-medium text-white/60">M DH</span></p>
+                <p className="text-2xl font-black tracking-tight text-white">{formatMillions(kpis.totalTresorerie)} <span className="text-xs font-medium text-white/70">M DH</span></p>
               </div>
               {kpis.totalCP > 0 && (
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/5">
+                <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 border border-white/10">
                   <div className="flex items-center justify-between text-[11px] mb-2">
-                    <span className="text-cyan-100/80 font-medium">Part du budget CP</span>
+                    <span className="text-white/80 font-medium">Part du budget CP</span>
                     <span className="font-bold text-white text-sm">{((kpis.totalTresorerie / kpis.totalCP) * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="w-full bg-black/20 rounded-full h-2 overflow-hidden">
+                  <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
                     <div
-                      className="h-2 rounded-full bg-gradient-to-r from-white/80 to-cyan-200 transition-all duration-700 ease-out"
+                      className="h-2 rounded-full bg-gradient-to-r from-white/70 to-sky-100 transition-all duration-700 ease-out"
                       style={{ width: `${Math.min(100, (kpis.totalTresorerie / kpis.totalCP) * 100)}%` }}
                     />
                   </div>
-                  <div className="flex justify-between mt-1.5 text-[9px] text-white/40">
+                  <div className="flex justify-between mt-1.5 text-[9px] text-white/50">
                     <span>0%</span>
                     <span>100%</span>
                   </div>
@@ -1368,48 +1368,48 @@ export default function Dashboard() {
         </Card>
 
         {/* ─── Subvention demandée ─── */}
-        <Card className="border-0 shadow-lg shadow-violet-200/50 overflow-hidden rounded-2xl">
+        <Card className="border-0 shadow-lg shadow-rose-100/80 overflow-hidden rounded-2xl">
           <div className="relative">
             {/* Background layers */}
-            <div className="absolute inset-0 bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-700" />
-            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-white/15 to-transparent rounded-bl-full" />
-            <div className="absolute bottom-0 left-0 w-28 h-28 bg-gradient-to-tr from-black/10 to-transparent rounded-tr-full" />
+            <div className="absolute inset-0 bg-gradient-to-br from-rose-400 via-pink-400 to-orange-300" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-white/25 to-transparent rounded-bl-full" />
+            <div className="absolute bottom-0 left-0 w-28 h-28 bg-gradient-to-tr from-white/5 to-transparent rounded-tr-full" />
             {/* Decorative dots */}
-            <div className="absolute top-4 right-4 grid grid-cols-3 gap-1.5 opacity-20">
+            <div className="absolute top-4 right-4 grid grid-cols-3 gap-1.5 opacity-25">
               {[...Array(9)].map((_, i) => <div key={i} className="w-1.5 h-1.5 rounded-full bg-white" />)}
             </div>
             {/* Content */}
             <div className="relative z-10 p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/10">
+                  <div className="w-11 h-11 rounded-xl bg-white/30 backdrop-blur-md flex items-center justify-center border border-white/20">
                     <Landmark className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-semibold text-violet-100 uppercase tracking-[0.2em]">Subvention</p>
-                    <p className="text-[9px] text-white/50 mt-0.5">Subvention demandée</p>
+                    <p className="text-[10px] font-semibold text-white/90 uppercase tracking-[0.2em]">Subvention</p>
+                    <p className="text-[9px] text-white/60 mt-0.5">Subvention demandée</p>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                  <Scale className="w-5 h-5 text-white/70" />
+                <div className="w-10 h-10 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center">
+                  <Scale className="w-5 h-5 text-white/80" />
                 </div>
               </div>
               <div className="mb-4">
-                <p className="text-2xl font-black tracking-tight text-white">{formatMillions(kpis.totalSubvention)} <span className="text-xs font-medium text-white/60">M DH</span></p>
+                <p className="text-2xl font-black tracking-tight text-white">{formatMillions(kpis.totalSubvention)} <span className="text-xs font-medium text-white/70">M DH</span></p>
               </div>
               {kpis.totalCP > 0 && (
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/5">
+                <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 border border-white/10">
                   <div className="flex items-center justify-between text-[11px] mb-2">
-                    <span className="text-violet-100/80 font-medium">Part du budget CP</span>
+                    <span className="text-white/80 font-medium">Part du budget CP</span>
                     <span className="font-bold text-white text-sm">{((kpis.totalSubvention / kpis.totalCP) * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="w-full bg-black/20 rounded-full h-2 overflow-hidden">
+                  <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
                     <div
-                      className="h-2 rounded-full bg-gradient-to-r from-white/80 to-fuchsia-200 transition-all duration-700 ease-out"
+                      className="h-2 rounded-full bg-gradient-to-r from-white/70 to-rose-100 transition-all duration-700 ease-out"
                       style={{ width: `${Math.min(100, (kpis.totalSubvention / kpis.totalCP) * 100)}%` }}
                     />
                   </div>
-                  <div className="flex justify-between mt-1.5 text-[9px] text-white/40">
+                  <div className="flex justify-between mt-1.5 text-[9px] text-white/50">
                     <span>0%</span>
                     <span>100%</span>
                   </div>
