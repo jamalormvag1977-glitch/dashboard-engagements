@@ -252,6 +252,11 @@ nav button {
     page-break-before: always;
   }
 
+  /* Ensure each page fills properly */
+  .print-page-1, .print-page-2 {
+    break-inside: avoid;
+  }
+
   /* Avoid breaking inside tables and KPI blocks */
   .grid {
     page-break-inside: avoid;
@@ -276,8 +281,10 @@ nav button {
   /* Print-friendly colors for backgrounds */
   .bg-blue-50, .bg-blue-50\/50, .bg-blue-50\/60, .bg-blue-50\/40,
   .bg-emerald-50, .bg-violet-50, .bg-gray-50,
-  [class*="bg-blue-50"], [class*="bg-emerald-50"], [class*="bg-violet-50"] {
-    background-color: #f0f4ff !important;
+  [class*="bg-blue-50"], [class*="bg-emerald-50"], [class*="bg-violet-50"],
+  [class*="bg-slate-50"], [class*="from-blue-"], [class*="from-emerald-"],
+  [class*="from-violet-"], [class*="from-amber-"], [class*="from-indigo-"],
+  [class*="from-teal-"], [class*="from-orange-"], [class*="from-slate-"] {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
