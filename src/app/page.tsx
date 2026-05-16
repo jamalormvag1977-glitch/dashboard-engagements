@@ -2607,22 +2607,21 @@ export default function Dashboard() {
     )
   }
 
+  // Pie chart data for programme distribution (must be at component level for useMemo)
+  const PROGRAMME_PIE_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16', '#e11d48']
+  const programmePieData = useMemo(() => {
+    return analysisByGroup.map(g => ({
+      name: g.name,
+      value: Math.round(g.cp / 1e6 * 10) / 10,
+      cp: g.cp,
+      engCP: g.engCP,
+      tauxEngagement: g.tauxEngagement,
+      tauxOrdonnement: g.tauxOrdonnement,
+    }))
+  }, [analysisByGroup])
+
   const renderProgramView = () => {
     const progTotalBudget = analysisByGroup.reduce((s, g) => s + g.cp, 0)
-
-    // Pie chart data for programme distribution
-    const programmePieData = useMemo(() => {
-      return analysisByGroup.map(g => ({
-        name: g.name,
-        value: Math.round(g.cp / 1e6 * 10) / 10,
-        cp: g.cp,
-        engCP: g.engCP,
-        tauxEngagement: g.tauxEngagement,
-        tauxOrdonnement: g.tauxOrdonnement,
-      }))
-    }, [analysisByGroup])
-
-    const PROGRAMME_PIE_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16', '#e11d48']
 
     return (
       <>
