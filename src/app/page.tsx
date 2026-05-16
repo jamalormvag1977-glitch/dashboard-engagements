@@ -2669,86 +2669,54 @@ export default function Dashboard() {
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par projet</h3>
         </div>
 
-        {/* ═══════════ CAMEMBERT : RÉPARTITION PAR PROJET ═══════════ */}
+        {/* ═══════════ CAMEMBERTS CP & CE : RÉPARTITION PAR PROJET ═══════════ */}
         <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
           <CardContent className="p-0">
             {/* Header */}
             <div className="flex items-center gap-2 px-6 pt-5 pb-3">
               <PieChartIcon className="w-5 h-5 text-indigo-500" />
-              <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition du budget CP par projet</h4>
+              <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition CP et CE par projet</h4>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-              {/* Pie Chart - takes 3 columns */}
-              <div className="lg:col-span-3 flex items-center justify-center bg-gradient-to-br from-gray-50/50 to-white p-6 border-r border-gray-100">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+              {/* ─── CP Pie Chart ─── */}
+              <div className="flex flex-col items-center bg-gradient-to-br from-indigo-50/20 to-white p-4 border-r border-gray-100">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+                  <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">Budget CP</span>
+                </div>
                 {programmePieData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={440}>
+                <ResponsiveContainer width="100%" height={340}>
                   <PieChart>
                     <Pie
                       data={programmePieData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={65}
-                      outerRadius={130}
-                      paddingAngle={3}
+                      innerRadius={50}
+                      outerRadius={105}
+                      paddingAngle={2}
                       dataKey="value"
                       nameKey="name"
                       strokeWidth={2}
                       stroke="#ffffff"
-                      labelLine={(props: Record<string, unknown>) => {
-                        const cx = (props.cx as number) || 0
-                        const cy = (props.cy as number) || 0
-                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
-                        const percent = (props.percent as number) || 0
-                        const outerRadius = (props.outerRadius as number) || 140
-                        if (percent < 0.04) return <g key="empty-line" />
-                        const radius = outerRadius + 6
-                        const x1 = cx + radius * Math.cos(-midAngle)
-                        const y1 = cy + radius * Math.sin(-midAngle)
-                        const x2End = cx + (outerRadius + 35) * Math.cos(-midAngle)
-                        const y2End = cy + (outerRadius + 35) * Math.sin(-midAngle)
-                        const x3End = x2End > cx ? x2End + 15 : x2End - 15
-                        return (
-                          <path key={`line-${props.name}-${percent}`} d={`M${x1},${y1}L${x2End},${y2End}L${x3End},${y2End}`} stroke="#9ca3af" fill="none" strokeWidth={1} />
-                        )
-                      }}
+                      labelLine={false}
                       label={(props: Record<string, unknown>) => {
                         const cx = (props.cx as number) || 0
                         const cy = (props.cy as number) || 0
                         const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
                         const percent = (props.percent as number) || 0
-                        const outerRadius = (props.outerRadius as number) || 140
+                        const outerRadius = (props.outerRadius as number) || 105
                         const nameVal = (props.name as string) || ''
                         const valueVal = (props.value as number) || 0
-                        if (percent < 0.04) return null
-                        const radius = outerRadius + 35
+                        if (percent < 0.05) return null
+                        const radius = outerRadius + 20
                         const x = cx + radius * Math.cos(-midAngle)
                         const y = cy + radius * Math.sin(-midAngle)
                         const textAnchor = x > cx ? 'start' : 'end'
-                        const displayName = nameVal.length > 18 ? nameVal.substring(0, 18) + '…' : nameVal
+                        const displayName = nameVal.length > 14 ? nameVal.substring(0, 14) + '…' : nameVal
                         return (
                           <g key={`label-${nameVal}-${percent}`}>
-                            <text
-                              x={x}
-                              y={y - 7}
-                              fill="#1f2937"
-                              textAnchor={textAnchor}
-                              dominantBaseline="central"
-                              fontSize={11}
-                              fontWeight={700}
-                            >
-                              {displayName}
-                            </text>
-                            <text
-                              x={x}
-                              y={y + 8}
-                              fill="#6b7280"
-                              textAnchor={textAnchor}
-                              dominantBaseline="central"
-                              fontSize={10}
-                              fontWeight={500}
-                            >
-                              {`${valueVal} M DH (${Math.round(percent * 100)}%)`}
-                            </text>
+                            <text x={x} y={y - 5} fill="#1f2937" textAnchor={textAnchor} dominantBaseline="central" fontSize={9} fontWeight={700}>{displayName}</text>
+                            <text x={x} y={y + 7} fill="#6b7280" textAnchor={textAnchor} dominantBaseline="central" fontSize={8} fontWeight={500}>{`${valueVal} M DH (${Math.round(percent * 100)}%)`}</text>
                           </g>
                         )
                       }}
@@ -2757,126 +2725,52 @@ export default function Dashboard() {
                         <Cell key={`cell-${index}`} fill={PROGRAMME_PIE_COLORS[index % PROGRAMME_PIE_COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip
-                      formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]}
-                      contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                    />
+                    <Tooltip formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]} contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }} />
                   </PieChart>
                 </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-[440px] text-gray-400 text-sm">Aucune donnée disponible</div>
+                  <div className="flex items-center justify-center h-[340px] text-gray-400 text-sm">Aucune donnée CP</div>
                 )}
               </div>
-              {/* Legend + Key Figures - takes 2 columns */}
-              <div className="lg:col-span-2 flex flex-col justify-center p-5">
-                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
-                  {programmePieData.map((item, idx) => {
-                    const pctBudget = progTotalBudget > 0 ? (item.cp / progTotalBudget) * 100 : 0
-                    return (
-                      <div key={item.name} className="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-colors">
-                        <div className="w-3.5 h-3.5 rounded-sm flex-shrink-0" style={{ backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-gray-800 truncate">{item.name}</p>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[10px] text-gray-500">{formatMillions(item.cp)} M DH</span>
-                            <span className="text-[10px] font-bold text-indigo-600">{Math.round(pctBudget)}%</span>
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                              <div className="h-full rounded-full" style={{ width: `${Math.min(pctBudget, 100)}%`, backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-right flex-shrink-0">
-                          <span className={`text-[10px] font-bold ${tauxColor(item.tauxEngagement)}`}>Eng. {Math.round(item.tauxEngagement)}%</span>
-                        </div>
-                      </div>
-                    )
-                  })}
+              {/* ─── CE Pie Chart ─── */}
+              <div className="flex flex-col items-center bg-gradient-to-br from-emerald-50/20 to-white p-4">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">Budget CE</span>
                 </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* ═══════════ CAMEMBERT : RÉPARTITION CE PAR PROJET ═══════════ */}
-        <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
-          <CardContent className="p-0">
-            {/* Header */}
-            <div className="flex items-center gap-2 px-6 pt-5 pb-3">
-              <PieChartIcon className="w-5 h-5 text-emerald-500" />
-              <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition du budget CE par projet</h4>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-              {/* Pie Chart - takes 3 columns */}
-              <div className="lg:col-span-3 flex items-center justify-center bg-gradient-to-br from-emerald-50/30 to-white p-6 border-r border-gray-100">
                 {programmeCEPieData.filter(d => d.value > 0).length > 0 ? (
-                <ResponsiveContainer width="100%" height={440}>
+                <ResponsiveContainer width="100%" height={340}>
                   <PieChart>
                     <Pie
                       data={programmeCEPieData.filter(d => d.value > 0)}
                       cx="50%"
                       cy="50%"
-                      innerRadius={65}
-                      outerRadius={130}
-                      paddingAngle={3}
+                      innerRadius={50}
+                      outerRadius={105}
+                      paddingAngle={2}
                       dataKey="value"
                       nameKey="name"
                       strokeWidth={2}
                       stroke="#ffffff"
-                      labelLine={(props: Record<string, unknown>) => {
-                        const cx = (props.cx as number) || 0
-                        const cy = (props.cy as number) || 0
-                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
-                        const percent = (props.percent as number) || 0
-                        const outerRadius = (props.outerRadius as number) || 130
-                        if (percent < 0.04) return <g key="empty-line" />
-                        const radius = outerRadius + 6
-                        const x1 = cx + radius * Math.cos(-midAngle)
-                        const y1 = cy + radius * Math.sin(-midAngle)
-                        const x2End = cx + (outerRadius + 35) * Math.cos(-midAngle)
-                        const y2End = cy + (outerRadius + 35) * Math.sin(-midAngle)
-                        const x3End = x2End > cx ? x2End + 15 : x2End - 15
-                        return (
-                          <path key={`line-${props.name}-${percent}`} d={`M${x1},${y1}L${x2End},${y2End}L${x3End},${y2End}`} stroke="#9ca3af" fill="none" strokeWidth={1} />
-                        )
-                      }}
+                      labelLine={false}
                       label={(props: Record<string, unknown>) => {
                         const cx = (props.cx as number) || 0
                         const cy = (props.cy as number) || 0
                         const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
                         const percent = (props.percent as number) || 0
-                        const outerRadius = (props.outerRadius as number) || 130
+                        const outerRadius = (props.outerRadius as number) || 105
                         const nameVal = (props.name as string) || ''
                         const valueVal = (props.value as number) || 0
-                        if (percent < 0.04) return null
-                        const radius = outerRadius + 35
+                        if (percent < 0.05) return null
+                        const radius = outerRadius + 20
                         const x = cx + radius * Math.cos(-midAngle)
                         const y = cy + radius * Math.sin(-midAngle)
                         const textAnchor = x > cx ? 'start' : 'end'
-                        const displayName = nameVal.length > 18 ? nameVal.substring(0, 18) + '…' : nameVal
+                        const displayName = nameVal.length > 14 ? nameVal.substring(0, 14) + '…' : nameVal
                         return (
-                          <g key={`label-${nameVal}-${percent}`}>
-                            <text
-                              x={x}
-                              y={y - 7}
-                              fill="#1f2937"
-                              textAnchor={textAnchor}
-                              dominantBaseline="central"
-                              fontSize={11}
-                              fontWeight={700}
-                            >
-                              {displayName}
-                            </text>
-                            <text
-                              x={x}
-                              y={y + 8}
-                              fill="#6b7280"
-                              textAnchor={textAnchor}
-                              dominantBaseline="central"
-                              fontSize={10}
-                              fontWeight={500}
-                            >
-                              {`${valueVal} M DH (${Math.round(percent * 100)}%)`}
-                            </text>
+                          <g key={`label-ce-${nameVal}-${percent}`}>
+                            <text x={x} y={y - 5} fill="#1f2937" textAnchor={textAnchor} dominantBaseline="central" fontSize={9} fontWeight={700}>{displayName}</text>
+                            <text x={x} y={y + 7} fill="#6b7280" textAnchor={textAnchor} dominantBaseline="central" fontSize={8} fontWeight={500}>{`${valueVal} M DH (${Math.round(percent * 100)}%)`}</text>
                           </g>
                         )
                       }}
@@ -2885,41 +2779,40 @@ export default function Dashboard() {
                         <Cell key={`cell-ce-${index}`} fill={PROGRAMME_PIE_COLORS[index % PROGRAMME_PIE_COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip
-                      formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]}
-                      contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                    />
+                    <Tooltip formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]} contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }} />
                   </PieChart>
                 </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-[440px] text-gray-400 text-sm">Aucune donnée CE disponible</div>
+                  <div className="flex items-center justify-center h-[340px] text-gray-400 text-sm">Aucune donnée CE</div>
                 )}
               </div>
-              {/* Legend + Key Figures - takes 2 columns */}
-              <div className="lg:col-span-2 flex flex-col justify-center p-5">
-                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
-                  {programmeCEPieData.filter(d => d.value > 0).map((item, idx) => {
-                    const pctCE = progTotalCE > 0 ? (item.ce / progTotalCE) * 100 : 0
-                    return (
-                      <div key={item.name} className="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50/30 transition-colors">
-                        <div className="w-3.5 h-3.5 rounded-sm flex-shrink-0" style={{ backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-gray-800 truncate">{item.name}</p>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[10px] text-gray-500">{formatMillions(item.ce)} M DH</span>
-                            <span className="text-[10px] font-bold text-emerald-600">{Math.round(pctCE)}%</span>
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                              <div className="h-full rounded-full" style={{ width: `${Math.min(pctCE, 100)}%`, backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
-                            </div>
-                          </div>
+            </div>
+            {/* ─── Combined Legend: CP + CE ─── */}
+            <div className="border-t border-gray-100 px-5 py-4 bg-gray-50/40">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[280px] overflow-y-auto pr-1">
+                {programmePieData.map((item, idx) => {
+                  const pctCP = progTotalBudget > 0 ? (item.cp / progTotalBudget) * 100 : 0
+                  const ceItem = programmeCEPieData.find(c => c.name === item.name)
+                  const pctCE = progTotalCE > 0 && ceItem ? (ceItem.ce / progTotalCE) * 100 : 0
+                  return (
+                    <div key={item.name} className="flex items-start gap-2.5 bg-white rounded-lg px-3 py-2 border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/20 transition-colors">
+                      <div className="w-3 h-3 rounded-sm flex-shrink-0 mt-0.5" style={{ backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-semibold text-gray-800 truncate">{item.name}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] text-indigo-600 font-bold">CP: {formatMillions(item.cp)} M DH ({Math.round(pctCP)}%)</span>
                         </div>
-                        <div className="text-right flex-shrink-0">
-                          <span className={`text-[10px] font-bold ${tauxColor(item.tauxEngagementCE)}`}>Eng. {Math.round(item.tauxEngagementCE)}%</span>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] text-emerald-600 font-bold">CE: {ceItem ? `${formatMillions(ceItem.ce)} M DH (${Math.round(pctCE)}%)` : '0 M DH'}</span>
                         </div>
                       </div>
-                    )
-                  })}
-                </div>
+                      <div className="text-right flex-shrink-0 flex flex-col items-end gap-0.5">
+                        <span className={`text-[9px] font-bold ${tauxColor(item.tauxEngagement)}`}>Eng.CP {Math.round(item.tauxEngagement)}%</span>
+                        {ceItem && ceItem.ce > 0 && <span className={`text-[9px] font-bold ${tauxColor(ceItem.tauxEngagementCE)}`}>Eng.CE {Math.round(ceItem.tauxEngagementCE)}%</span>}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </CardContent>
@@ -3137,85 +3030,54 @@ export default function Dashboard() {
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par programme</h3>
         </div>
 
-        {/* ═══════════ CAMEMBERT : RÉPARTITION PAR PROGRAMME ═══════════ */}
+        {/* ═══════════ CAMEMBERTS CP & CE : RÉPARTITION PAR PROGRAMME ═══════════ */}
         <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
           <CardContent className="p-0">
+            {/* Header */}
             <div className="flex items-center gap-2 px-6 pt-5 pb-3">
               <PieChartIcon className="w-5 h-5 text-indigo-500" />
-              <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition du budget CP par programme</h4>
+              <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition CP et CE par programme</h4>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-              {/* Pie Chart - 3 columns */}
-              <div className="lg:col-span-3 flex items-center justify-center bg-gradient-to-br from-gray-50/50 to-white p-6 border-r border-gray-100">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+              {/* ─── CP Pie Chart ─── */}
+              <div className="flex flex-col items-center bg-gradient-to-br from-indigo-50/20 to-white p-4 border-r border-gray-100">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+                  <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">Budget CP</span>
+                </div>
                 {projectPieData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={440}>
+                <ResponsiveContainer width="100%" height={340}>
                   <PieChart>
                     <Pie
                       data={projectPieData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={65}
-                      outerRadius={130}
-                      paddingAngle={3}
+                      innerRadius={50}
+                      outerRadius={105}
+                      paddingAngle={2}
                       dataKey="value"
                       nameKey="name"
                       strokeWidth={2}
                       stroke="#ffffff"
-                      labelLine={(props: Record<string, unknown>) => {
-                        const cx = (props.cx as number) || 0
-                        const cy = (props.cy as number) || 0
-                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
-                        const percent = (props.percent as number) || 0
-                        const outerRadius = (props.outerRadius as number) || 140
-                        if (percent < 0.04) return <g key="empty-line" />
-                        const radius = outerRadius + 6
-                        const x1 = cx + radius * Math.cos(-midAngle)
-                        const y1 = cy + radius * Math.sin(-midAngle)
-                        const x2End = cx + (outerRadius + 35) * Math.cos(-midAngle)
-                        const y2End = cy + (outerRadius + 35) * Math.sin(-midAngle)
-                        const x3End = x2End > cx ? x2End + 15 : x2End - 15
-                        return (
-                          <path key={`line-${props.name}-${percent}`} d={`M${x1},${y1}L${x2End},${y2End}L${x3End},${y2End}`} stroke="#9ca3af" fill="none" strokeWidth={1} />
-                        )
-                      }}
+                      labelLine={false}
                       label={(props: Record<string, unknown>) => {
                         const cx = (props.cx as number) || 0
                         const cy = (props.cy as number) || 0
                         const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
                         const percent = (props.percent as number) || 0
-                        const outerRadius = (props.outerRadius as number) || 140
+                        const outerRadius = (props.outerRadius as number) || 105
                         const nameVal = (props.name as string) || ''
                         const valueVal = (props.value as number) || 0
-                        if (percent < 0.04) return null
-                        const radius = outerRadius + 35
+                        if (percent < 0.05) return null
+                        const radius = outerRadius + 20
                         const x = cx + radius * Math.cos(-midAngle)
                         const y = cy + radius * Math.sin(-midAngle)
                         const textAnchor = x > cx ? 'start' : 'end'
-                        const displayName = nameVal.length > 18 ? nameVal.substring(0, 18) + '…' : nameVal
+                        const displayName = nameVal.length > 14 ? nameVal.substring(0, 14) + '…' : nameVal
                         return (
                           <g key={`label-${nameVal}-${percent}`}>
-                            <text
-                              x={x}
-                              y={y - 7}
-                              fill="#1f2937"
-                              textAnchor={textAnchor}
-                              dominantBaseline="central"
-                              fontSize={11}
-                              fontWeight={700}
-                            >
-                              {displayName}
-                            </text>
-                            <text
-                              x={x}
-                              y={y + 8}
-                              fill="#6b7280"
-                              textAnchor={textAnchor}
-                              dominantBaseline="central"
-                              fontSize={10}
-                              fontWeight={500}
-                            >
-                              {`${valueVal} M DH (${Math.round(percent * 100)}%)`}
-                            </text>
+                            <text x={x} y={y - 5} fill="#1f2937" textAnchor={textAnchor} dominantBaseline="central" fontSize={9} fontWeight={700}>{displayName}</text>
+                            <text x={x} y={y + 7} fill="#6b7280" textAnchor={textAnchor} dominantBaseline="central" fontSize={8} fontWeight={500}>{`${valueVal} M DH (${Math.round(percent * 100)}%)`}</text>
                           </g>
                         )
                       }}
@@ -3224,126 +3086,52 @@ export default function Dashboard() {
                         <Cell key={`cell-${index}`} fill={PROJECT_PIE_COLORS[index % PROJECT_PIE_COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip
-                      formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]}
-                      contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                    />
+                    <Tooltip formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]} contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }} />
                   </PieChart>
                 </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-[440px] text-gray-400 text-sm">Aucune donnée disponible</div>
+                  <div className="flex items-center justify-center h-[340px] text-gray-400 text-sm">Aucune donnée CP</div>
                 )}
               </div>
-              {/* Legend - 2 columns */}
-              <div className="lg:col-span-2 flex flex-col justify-center p-5">
-                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
-                  {projectPieData.map((item, idx) => {
-                    const pctBudget = progTotalBudget > 0 ? (item.cp / progTotalBudget) * 100 : 0
-                    return (
-                      <div key={item.name} className="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-colors">
-                        <div className="w-3.5 h-3.5 rounded-sm flex-shrink-0" style={{ backgroundColor: PROJECT_PIE_COLORS[idx % PROJECT_PIE_COLORS.length] }} />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-gray-800 truncate">{item.name}</p>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[10px] text-gray-500">{formatMillions(item.cp)} M DH</span>
-                            <span className="text-[10px] font-bold text-indigo-600">{Math.round(pctBudget)}%</span>
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                              <div className="h-full rounded-full" style={{ width: `${Math.min(pctBudget, 100)}%`, backgroundColor: PROJECT_PIE_COLORS[idx % PROJECT_PIE_COLORS.length] }} />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-right flex-shrink-0">
-                          <span className={`text-[10px] font-bold ${tauxColor(item.tauxEngagement)}`}>Eng. {Math.round(item.tauxEngagement)}%</span>
-                        </div>
-                      </div>
-                    )
-                  })}
+              {/* ─── CE Pie Chart ─── */}
+              <div className="flex flex-col items-center bg-gradient-to-br from-emerald-50/20 to-white p-4">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">Budget CE</span>
                 </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* ═══════════ CAMEMBERT : RÉPARTITION CE PAR PROGRAMME ═══════════ */}
-        <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
-          <CardContent className="p-0">
-            {/* Header */}
-            <div className="flex items-center gap-2 px-6 pt-5 pb-3">
-              <PieChartIcon className="w-5 h-5 text-emerald-500" />
-              <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition du budget CE par programme</h4>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-              {/* Pie Chart - takes 3 columns */}
-              <div className="lg:col-span-3 flex items-center justify-center bg-gradient-to-br from-emerald-50/30 to-white p-6 border-r border-gray-100">
                 {projectCEPieData.filter(d => d.value > 0).length > 0 ? (
-                <ResponsiveContainer width="100%" height={440}>
+                <ResponsiveContainer width="100%" height={340}>
                   <PieChart>
                     <Pie
                       data={projectCEPieData.filter(d => d.value > 0)}
                       cx="50%"
                       cy="50%"
-                      innerRadius={65}
-                      outerRadius={130}
-                      paddingAngle={3}
+                      innerRadius={50}
+                      outerRadius={105}
+                      paddingAngle={2}
                       dataKey="value"
                       nameKey="name"
                       strokeWidth={2}
                       stroke="#ffffff"
-                      labelLine={(props: Record<string, unknown>) => {
-                        const cx = (props.cx as number) || 0
-                        const cy = (props.cy as number) || 0
-                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
-                        const percent = (props.percent as number) || 0
-                        const outerRadius = (props.outerRadius as number) || 130
-                        if (percent < 0.04) return <g key="empty-line" />
-                        const radius = outerRadius + 6
-                        const x1 = cx + radius * Math.cos(-midAngle)
-                        const y1 = cy + radius * Math.sin(-midAngle)
-                        const x2End = cx + (outerRadius + 35) * Math.cos(-midAngle)
-                        const y2End = cy + (outerRadius + 35) * Math.sin(-midAngle)
-                        const x3End = x2End > cx ? x2End + 15 : x2End - 15
-                        return (
-                          <path key={`line-${props.name}-${percent}`} d={`M${x1},${y1}L${x2End},${y2End}L${x3End},${y2End}`} stroke="#9ca3af" fill="none" strokeWidth={1} />
-                        )
-                      }}
+                      labelLine={false}
                       label={(props: Record<string, unknown>) => {
                         const cx = (props.cx as number) || 0
                         const cy = (props.cy as number) || 0
                         const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
                         const percent = (props.percent as number) || 0
-                        const outerRadius = (props.outerRadius as number) || 130
+                        const outerRadius = (props.outerRadius as number) || 105
                         const nameVal = (props.name as string) || ''
                         const valueVal = (props.value as number) || 0
-                        if (percent < 0.04) return null
-                        const radius = outerRadius + 35
+                        if (percent < 0.05) return null
+                        const radius = outerRadius + 20
                         const x = cx + radius * Math.cos(-midAngle)
                         const y = cy + radius * Math.sin(-midAngle)
                         const textAnchor = x > cx ? 'start' : 'end'
-                        const displayName = nameVal.length > 18 ? nameVal.substring(0, 18) + '…' : nameVal
+                        const displayName = nameVal.length > 14 ? nameVal.substring(0, 14) + '…' : nameVal
                         return (
-                          <g key={`label-${nameVal}-${percent}`}>
-                            <text
-                              x={x}
-                              y={y - 7}
-                              fill="#1f2937"
-                              textAnchor={textAnchor}
-                              dominantBaseline="central"
-                              fontSize={11}
-                              fontWeight={700}
-                            >
-                              {displayName}
-                            </text>
-                            <text
-                              x={x}
-                              y={y + 8}
-                              fill="#6b7280"
-                              textAnchor={textAnchor}
-                              dominantBaseline="central"
-                              fontSize={10}
-                              fontWeight={500}
-                            >
-                              {`${valueVal} M DH (${Math.round(percent * 100)}%)`}
-                            </text>
+                          <g key={`label-ce-${nameVal}-${percent}`}>
+                            <text x={x} y={y - 5} fill="#1f2937" textAnchor={textAnchor} dominantBaseline="central" fontSize={9} fontWeight={700}>{displayName}</text>
+                            <text x={x} y={y + 7} fill="#6b7280" textAnchor={textAnchor} dominantBaseline="central" fontSize={8} fontWeight={500}>{`${valueVal} M DH (${Math.round(percent * 100)}%)`}</text>
                           </g>
                         )
                       }}
@@ -3352,41 +3140,40 @@ export default function Dashboard() {
                         <Cell key={`cell-ce-${index}`} fill={PROJECT_PIE_COLORS[index % PROJECT_PIE_COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip
-                      formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]}
-                      contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                    />
+                    <Tooltip formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]} contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }} />
                   </PieChart>
                 </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-[440px] text-gray-400 text-sm">Aucune donnée CE disponible</div>
+                  <div className="flex items-center justify-center h-[340px] text-gray-400 text-sm">Aucune donnée CE</div>
                 )}
               </div>
-              {/* Legend + Key Figures - takes 2 columns */}
-              <div className="lg:col-span-2 flex flex-col justify-center p-5">
-                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
-                  {projectCEPieData.filter(d => d.value > 0).map((item, idx) => {
-                    const pctCE = progTotalCE > 0 ? (item.ce / progTotalCE) * 100 : 0
-                    return (
-                      <div key={item.name} className="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50/30 transition-colors">
-                        <div className="w-3.5 h-3.5 rounded-sm flex-shrink-0" style={{ backgroundColor: PROJECT_PIE_COLORS[idx % PROJECT_PIE_COLORS.length] }} />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-gray-800 truncate">{item.name}</p>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[10px] text-gray-500">{formatMillions(item.ce)} M DH</span>
-                            <span className="text-[10px] font-bold text-emerald-600">{Math.round(pctCE)}%</span>
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                              <div className="h-full rounded-full" style={{ width: `${Math.min(pctCE, 100)}%`, backgroundColor: PROJECT_PIE_COLORS[idx % PROJECT_PIE_COLORS.length] }} />
-                            </div>
-                          </div>
+            </div>
+            {/* ─── Combined Legend: CP + CE ─── */}
+            <div className="border-t border-gray-100 px-5 py-4 bg-gray-50/40">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[280px] overflow-y-auto pr-1">
+                {projectPieData.map((item, idx) => {
+                  const pctCP = progTotalBudget > 0 ? (item.cp / progTotalBudget) * 100 : 0
+                  const ceItem = projectCEPieData.find(c => c.name === item.name)
+                  const pctCE = progTotalCE > 0 && ceItem ? (ceItem.ce / progTotalCE) * 100 : 0
+                  return (
+                    <div key={item.name} className="flex items-start gap-2.5 bg-white rounded-lg px-3 py-2 border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/20 transition-colors">
+                      <div className="w-3 h-3 rounded-sm flex-shrink-0 mt-0.5" style={{ backgroundColor: PROJECT_PIE_COLORS[idx % PROJECT_PIE_COLORS.length] }} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-semibold text-gray-800 truncate">{item.name}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] text-indigo-600 font-bold">CP: {formatMillions(item.cp)} M DH ({Math.round(pctCP)}%)</span>
                         </div>
-                        <div className="text-right flex-shrink-0">
-                          <span className={`text-[10px] font-bold ${tauxColor(item.tauxEngagementCE)}`}>Eng. {Math.round(item.tauxEngagementCE)}%</span>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] text-emerald-600 font-bold">CE: {ceItem ? `${formatMillions(ceItem.ce)} M DH (${Math.round(pctCE)}%)` : '0 M DH'}</span>
                         </div>
                       </div>
-                    )
-                  })}
-                </div>
+                      <div className="text-right flex-shrink-0 flex flex-col items-end gap-0.5">
+                        <span className={`text-[9px] font-bold ${tauxColor(item.tauxEngagement)}`}>Eng.CP {Math.round(item.tauxEngagement)}%</span>
+                        {ceItem && ceItem.ce > 0 && <span className={`text-[9px] font-bold ${tauxColor(ceItem.tauxEngagementCE)}`}>Eng.CE {Math.round(ceItem.tauxEngagementCE)}%</span>}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </CardContent>
