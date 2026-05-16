@@ -4217,12 +4217,6 @@ export default function Dashboard() {
   }
 
   const renderReportsView = () => {
-    const totalReports = filteredData.reduce((s, r) => s + (r.REPORTS || 0), 0)
-    const totalEngReports = filteredData.reduce((s, r) => s + (r['ENG REPORT'] || 0), 0)
-    const totalOrdReports = filteredData.reduce((s, r) => s + (r['ORD REPORTS'] || 0), 0)
-    const tauxEngReports = totalReports > 0 ? (totalEngReports / totalReports) * 100 : 0
-    const tauxOrdReports = totalEngReports > 0 ? (totalOrdReports / totalEngReports) * 100 : 0
-
     // Compact data for charts
     const CHART_COLORS = ['#1e3a5f', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899', '#84cc16', '#f97316']
 
@@ -4326,10 +4320,10 @@ export default function Dashboard() {
               <p className="text-sm font-black text-gray-900">{formatMillions(kpis.totalEngCE)}</p>
               <p className="text-[8px] text-gray-400">M DH</p>
             </div>
-            <div className="bg-gray-50 rounded p-1.5 text-center">
-              <p className="text-[8px] font-bold text-gray-500 uppercase">Disponible</p>
-              <p className="text-sm font-black text-gray-900">{formatMillions(kpis.disponible)}</p>
-              <p className="text-[8px] text-gray-400">M DH</p>
+            <div className="bg-amber-50 rounded p-1.5 text-center">
+              <p className="text-[8px] font-bold text-amber-600 uppercase">Subvention dem.</p>
+              <p className="text-sm font-black text-gray-900">{formatMillions(kpis.totalSubvention)}</p>
+              <p className="text-[8px] text-gray-400"><span className="font-bold text-amber-600">{kpis.totalCP > 0 ? Math.round((kpis.totalSubvention / kpis.totalCP) * 100) : 0}%</span></p>
             </div>
             <div className="bg-gray-50 rounded p-1.5 text-center">
               <p className="text-[8px] font-bold text-gray-500 uppercase">Trésorerie</p>
@@ -4521,70 +4515,22 @@ export default function Dashboard() {
               <div className="bg-blue-50 rounded p-1.5 text-center">
                 <p className="text-[8px] font-bold text-blue-600 uppercase">Cum. Juin</p>
                 <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevJuin)}</p>
-                <p className="text-[8px] text-gray-400">M DH</p>
+                <p className="text-[8px] text-gray-400"><span className="font-bold text-blue-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevJuin / kpis.totalCP) * 100) : 0}%</span></p>
               </div>
               <div className="bg-teal-50 rounded p-1.5 text-center">
                 <p className="text-[8px] font-bold text-teal-600 uppercase">Cum. Sept.</p>
                 <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevSeptembre)}</p>
-                <p className="text-[8px] text-gray-400">M DH</p>
+                <p className="text-[8px] text-gray-400"><span className="font-bold text-teal-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevSeptembre / kpis.totalCP) * 100) : 0}%</span></p>
               </div>
               <div className="bg-orange-50 rounded p-1.5 text-center">
                 <p className="text-[8px] font-bold text-orange-600 uppercase">Cum. Nov.</p>
                 <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevNovembre)}</p>
-                <p className="text-[8px] text-gray-400">M DH</p>
+                <p className="text-[8px] text-gray-400"><span className="font-bold text-orange-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevNovembre / kpis.totalCP) * 100) : 0}%</span></p>
               </div>
               <div className="bg-indigo-50 rounded p-1.5 text-center">
                 <p className="text-[8px] font-bold text-indigo-600 uppercase">Cum. Déc.</p>
                 <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevDecembre)}</p>
-                <p className="text-[8px] text-gray-400">M DH</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════ 5. ASSAINISSEMENT DES REPORTS ═══════════ */}
-        <div className="mb-1">
-          <h2 className="text-[11px] font-black text-blue-900 uppercase border-b border-blue-300 pb-0.5 mb-1.5">
-            <span className="inline-block w-4">5.</span>Assainissement des reports
-          </h2>
-          <div className="grid grid-cols-3 gap-2">
-            {/* KPI cards */}
-            <div className="grid grid-cols-3 gap-1.5">
-              <div className="bg-blue-50 rounded p-1.5 text-center">
-                <p className="text-[8px] font-bold text-blue-600 uppercase">Crédits reportés</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(totalReports)}</p>
-                <p className="text-[8px] text-gray-400">M DH</p>
-              </div>
-              <div className="bg-emerald-50 rounded p-1.5 text-center">
-                <p className="text-[8px] font-bold text-emerald-600 uppercase">Eng. Reports</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(totalEngReports)}</p>
-                <p className="text-[8px] text-gray-400"><span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></p>
-              </div>
-              <div className="bg-violet-50 rounded p-1.5 text-center">
-                <p className="text-[8px] font-bold text-violet-600 uppercase">Ord. Reports</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(totalOrdReports)}</p>
-                <p className="text-[8px] text-gray-400"><span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></p>
-              </div>
-            </div>
-            {/* Progress bars by entity */}
-            <div className="border border-gray-200 rounded p-1.5 col-span-2">
-              <p className="text-[8px] font-bold text-gray-500 uppercase mb-0.5">Crédits de reports par entité (M DH)</p>
-              <div className="grid grid-cols-2 gap-x-3">
-                {[...analysisByEntity].sort((a, b) => b.cpReports - a.cpReports).filter(e => e.cpReports > 0).map(e => {
-                  const maxR = analysisByEntity.length > 0 ? Math.max(...analysisByEntity.map(x => x.cpReports)) : 0
-                  const bw = maxR > 0 ? (e.cpReports / maxR) * 100 : 0
-                  return (
-                    <div key={e.name} className="flex items-center gap-1 mb-0.5">
-                      <span className="text-[7px] font-semibold text-gray-700 w-20 truncate flex-shrink-0">{e.name}</span>
-                      <div className="flex-1 h-2 bg-gray-50 rounded overflow-hidden">
-                        <div className="h-full rounded bg-indigo-600 flex items-center justify-end pr-0.5" style={{ width: `${bw}%`, minWidth: '2px' }}>
-                          {bw > 20 && <span className="text-[6px] font-bold text-white">{formatMillions(e.cpReports)}</span>}
-                        </div>
-                      </div>
-                      {bw <= 20 && <span className="text-[7px] font-bold text-gray-600">{formatMillions(e.cpReports)}</span>}
-                    </div>
-                  )
-                })}
+                <p className="text-[8px] text-gray-400"><span className="font-bold text-indigo-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevDecembre / kpis.totalCP) * 100) : 0}%</span></p>
               </div>
             </div>
           </div>
