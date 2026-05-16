@@ -4217,8 +4217,7 @@ export default function Dashboard() {
   }
 
   const renderReportsView = () => {
-    // Color palette
-    const C = ['#0f172a', '#1e40af', '#047857', '#b45309', '#7c3aed', '#dc2626', '#0891b2', '#db2777', '#65a30d', '#ea580c']
+    const CHART_COLORS = ['#1e3a5f', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899', '#84cc16', '#f97316']
 
     const sourcePieData = sourceFinancementData.map(s => ({
       name: s.name,
@@ -4252,11 +4251,11 @@ export default function Dashboard() {
 
     return (
       <div className="print-report">
-        {/* ═══ PRINT BUTTON (hidden when printing) ═══ */}
+        {/* ═══ PRINT BUTTON ═══ */}
         <div className="print:hidden flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Printer className="w-5 h-5 text-blue-800" />
-            <h2 className="text-lg font-bold text-blue-900">Rapport imprimable</h2>
+            <h2 className="text-lg font-bold text-blue-900">Rapport imprimable — 2 pages</h2>
           </div>
           <div className="flex gap-2">
             <Button onClick={() => window.print()} className="gap-2 bg-blue-800 hover:bg-blue-900">
@@ -4270,175 +4269,174 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ╔══════════════════════════════════════════╗
-            ║           PAGE 1 — VUE D'ENSEMBLE          ║
-            ╚══════════════════════════════════════════╝ */}
+        {/* ════════════════ PAGE 1 ════════════════ */}
         <div className="print-page-1">
-
-          {/* ── HEADER BANNER ── */}
-          <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 rounded-xl p-4 mb-4 text-white relative overflow-hidden">
-            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.05) 20px, rgba(255,255,255,0.05) 40px)' }} />
-            <div className="relative flex items-center justify-between">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-800 to-blue-900 rounded-lg p-3 mb-3 text-white">
+            <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-xl font-black tracking-tight">TABLEAU DE BORD DES ENGAGEMENTS</h1>
-                <p className="text-blue-200 text-xs mt-0.5">Budget d&apos;investissement — Suivi des engagements, ordonnancements et paiements</p>
+                <h1 className="text-lg font-black tracking-tight">TABLEAU DE BORD DES ENGAGEMENTS</h1>
+                <p className="text-blue-200 text-[11px]">Budget d&apos;investissement — Suivi des engagements, ordonnancements et paiements</p>
               </div>
               <div className="text-right">
-                <p className="text-[10px] text-blue-300 uppercase">Date d&apos;édition</p>
-                <p className="text-sm font-bold">{new Date().toLocaleDateString('fr-FR', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                <p className="text-[9px] text-blue-300 uppercase">Date d&apos;édition</p>
+                <p className="text-xs font-bold">{new Date().toLocaleDateString('fr-FR', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</p>
               </div>
             </div>
           </div>
 
-          {/* ═══════════ 1. INDICATEURS CLÉS ═══════════ */}
-          <div className="mb-4">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="bg-blue-900 text-white text-[10px] font-black w-5 h-5 rounded flex items-center justify-center">1</span>
-              <h2 className="text-xs font-black text-slate-900 uppercase tracking-wide">Indicateurs clés</h2>
+          {/* ═══ 1. INDICATEURS CLÉS ═══ */}
+          <div className="mb-3">
+            <h2 className="text-[11px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-0.5 mb-2">
+              1. Indicateurs clés
+            </h2>
+            <div className="grid grid-cols-8 gap-2">
+              <div className="bg-blue-50 rounded-lg p-2 text-center border border-blue-100">
+                <p className="text-[8px] font-bold text-blue-600 uppercase">Crédits CP</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.totalCP)}</p>
+                <p className="text-[8px] text-gray-400">M DH</p>
+              </div>
+              <div className="bg-emerald-50 rounded-lg p-2 text-center border border-emerald-100">
+                <p className="text-[8px] font-bold text-emerald-600 uppercase">Engagements</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.totalEngCP)}</p>
+                <p className="text-[8px]"><span className={`font-bold ${tauxColor(kpis.tauxEngagement)}`}>{formatPercent(kpis.tauxEngagement)}</span></p>
+              </div>
+              <div className="bg-violet-50 rounded-lg p-2 text-center border border-violet-100">
+                <p className="text-[8px] font-bold text-violet-600 uppercase">Ordonn.</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.totalOrd)}</p>
+                <p className="text-[8px]"><span className={`font-bold ${tauxColor(kpis.tauxOrdonnement)}`}>{formatPercent(kpis.tauxOrdonnement)}</span></p>
+              </div>
+              <div className="bg-amber-50 rounded-lg p-2 text-center border border-amber-100">
+                <p className="text-[8px] font-bold text-amber-600 uppercase">Paiements</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.totalPaiements)}</p>
+                <p className="text-[8px]"><span className={`font-bold ${tauxColor(kpis.tauxPaiement)}`}>{formatPercent(kpis.tauxPaiement)}</span></p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-2 text-center border border-gray-200">
+                <p className="text-[8px] font-bold text-gray-500 uppercase">Crédits CE</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.totalCE)}</p>
+                <p className="text-[8px] text-gray-400">M DH</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-2 text-center border border-gray-200">
+                <p className="text-[8px] font-bold text-gray-500 uppercase">Eng. CE</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.totalEngCE)}</p>
+                <p className="text-[8px] text-gray-400">M DH</p>
+              </div>
+              <div className="bg-amber-50 rounded-lg p-2 text-center border border-amber-200">
+                <p className="text-[8px] font-bold text-amber-600 uppercase">Subvention dem.</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.totalSubvention)}</p>
+                <p className="text-[8px]"><span className="font-bold text-amber-600">{kpis.totalCP > 0 ? Math.round((kpis.totalSubvention / kpis.totalCP) * 100) : 0}%</span></p>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-2 text-center border border-gray-200">
+                <p className="text-[8px] font-bold text-gray-500 uppercase">Trésorerie</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.totalTresorerie)}</p>
+                <p className="text-[8px] text-gray-400">M DH</p>
+              </div>
             </div>
-            <div className="grid grid-cols-4 gap-3">
-              {/* Row 1: Main KPIs */}
-              <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-3 text-white shadow-lg relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full -translate-y-4 translate-x-4" />
-                <p className="text-[9px] font-bold uppercase tracking-wider text-blue-200">Crédits CP</p>
-                <p className="text-2xl font-black mt-0.5">{formatMillions(kpis.totalCP)}</p>
-                <p className="text-[10px] text-blue-200">M DH</p>
+            {/* Progress bars */}
+            <div className="grid grid-cols-3 gap-2 mt-2">
+              <div className="flex items-center gap-2 bg-emerald-50 rounded px-2 py-1 border border-emerald-100">
+                <span className="text-[9px] font-bold text-emerald-700 w-10">Eng.</span>
+                <div className="flex-1 h-2 bg-emerald-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(kpis.tauxEngagement, 100)}%` }} /></div>
+                <span className={`text-[9px] font-bold ${tauxColor(kpis.tauxEngagement)}`}>{formatPercent(kpis.tauxEngagement)}</span>
               </div>
-              <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl p-3 text-white shadow-lg relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full -translate-y-4 translate-x-4" />
-                <p className="text-[9px] font-bold uppercase tracking-wider text-emerald-200">Engagements</p>
-                <p className="text-2xl font-black mt-0.5">{formatMillions(kpis.totalEngCP)}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="flex-1 h-1.5 bg-white/20 rounded-full"><div className="h-full bg-white rounded-full" style={{ width: `${Math.min(kpis.tauxEngagement, 100)}%` }} /></div>
-                  <span className="text-[10px] font-bold">{formatPercent(kpis.tauxEngagement)}</span>
-                </div>
+              <div className="flex items-center gap-2 bg-violet-50 rounded px-2 py-1 border border-violet-100">
+                <span className="text-[9px] font-bold text-violet-700 w-10">Ord.</span>
+                <div className="flex-1 h-2 bg-violet-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(kpis.tauxOrdonnement, 100)}%` }} /></div>
+                <span className={`text-[9px] font-bold ${tauxColor(kpis.tauxOrdonnement)}`}>{formatPercent(kpis.tauxOrdonnement)}</span>
               </div>
-              <div className="bg-gradient-to-br from-violet-600 to-violet-800 rounded-xl p-3 text-white shadow-lg relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full -translate-y-4 translate-x-4" />
-                <p className="text-[9px] font-bold uppercase tracking-wider text-violet-200">Ordonnancements</p>
-                <p className="text-2xl font-black mt-0.5">{formatMillions(kpis.totalOrd)}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="flex-1 h-1.5 bg-white/20 rounded-full"><div className="h-full bg-white rounded-full" style={{ width: `${Math.min(kpis.tauxOrdonnement, 100)}%` }} /></div>
-                  <span className="text-[10px] font-bold">{formatPercent(kpis.tauxOrdonnement)}</span>
-                </div>
-              </div>
-              <div className="bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl p-3 text-white shadow-lg relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full -translate-y-4 translate-x-4" />
-                <p className="text-[9px] font-bold uppercase tracking-wider text-amber-200">Paiements</p>
-                <p className="text-2xl font-black mt-0.5">{formatMillions(kpis.totalPaiements)}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="flex-1 h-1.5 bg-white/20 rounded-full"><div className="h-full bg-white rounded-full" style={{ width: `${Math.min(kpis.tauxPaiement, 100)}%` }} /></div>
-                  <span className="text-[10px] font-bold">{formatPercent(kpis.tauxPaiement)}</span>
-                </div>
-              </div>
-            </div>
-            {/* Row 2: Secondary KPIs */}
-            <div className="grid grid-cols-4 gap-3 mt-2">
-              <div className="bg-white border-2 border-slate-200 rounded-xl p-2.5 shadow-sm">
-                <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Crédits CE</p>
-                <p className="text-lg font-black text-slate-900 mt-0.5">{formatMillions(kpis.totalCE)} <span className="text-xs font-medium text-slate-400">M DH</span></p>
-              </div>
-              <div className="bg-white border-2 border-slate-200 rounded-xl p-2.5 shadow-sm">
-                <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Eng. CE</p>
-                <p className="text-lg font-black text-slate-900 mt-0.5">{formatMillions(kpis.totalEngCE)} <span className="text-xs font-medium text-slate-400">M DH</span></p>
-              </div>
-              <div className="bg-white border-2 border-amber-300 rounded-xl p-2.5 shadow-sm">
-                <p className="text-[9px] font-bold uppercase tracking-wider text-amber-600">Subvention demandée</p>
-                <p className="text-lg font-black text-slate-900 mt-0.5">{formatMillions(kpis.totalSubvention)} <span className="text-xs font-medium text-amber-500">{kpis.totalCP > 0 ? Math.round((kpis.totalSubvention / kpis.totalCP) * 100) : 0}%</span></p>
-              </div>
-              <div className="bg-white border-2 border-slate-200 rounded-xl p-2.5 shadow-sm">
-                <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Trésorerie</p>
-                <p className="text-lg font-black text-slate-900 mt-0.5">{formatMillions(kpis.totalTresorerie)} <span className="text-xs font-medium text-slate-400">M DH</span></p>
+              <div className="flex items-center gap-2 bg-amber-50 rounded px-2 py-1 border border-amber-100">
+                <span className="text-[9px] font-bold text-amber-700 w-10">Pai.</span>
+                <div className="flex-1 h-2 bg-amber-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(kpis.tauxPaiement, 100)}%` }} /></div>
+                <span className={`text-[9px] font-bold ${tauxColor(kpis.tauxPaiement)}`}>{formatPercent(kpis.tauxPaiement)}</span>
               </div>
             </div>
           </div>
 
-          {/* ═══════════ 2. RÉPARTITION DES CRÉDITS ═══════════ */}
+          {/* ═══ 2. RÉPARTITION DES CRÉDITS ═══ */}
           <div className="mb-2">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="bg-blue-900 text-white text-[10px] font-black w-5 h-5 rounded flex items-center justify-center">2</span>
-              <h2 className="text-xs font-black text-slate-900 uppercase tracking-wide">Répartition des crédits par source de financement, programme, projet et entité</h2>
-            </div>
-            <div className="grid grid-cols-4 gap-3">
-              {/* 2.1 Source de financement */}
-              <div className="border border-blue-200 rounded-xl overflow-hidden shadow-md">
-                <div className="bg-gradient-to-r from-blue-700 to-blue-900 px-3 py-1.5">
-                  <p className="text-[10px] font-bold text-white uppercase tracking-wider">2.1 Source de financement</p>
+            <h2 className="text-[11px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-0.5 mb-2">
+              2. Répartition des crédits par source de financement, programme, projet et entité
+            </h2>
+            {/* Row 1: Source (1 col) + Programme (3 cols) */}
+            <div className="grid grid-cols-4 gap-2 mb-2">
+              <div className="bg-gradient-to-b from-blue-50/80 to-white border border-blue-200 rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-blue-800 px-2 py-1">
+                  <p className="text-[9px] font-bold text-white uppercase tracking-wider">2.1 Source de financement</p>
                 </div>
-                <div className="p-2 bg-white">
-                  <ResponsiveContainer width="100%" height={140}>
+                <div className="p-1.5">
+                  <ResponsiveContainer width="100%" height={120}>
                     <PieChart>
-                      <Pie data={sourcePieData} cx="50%" cy="50%" innerRadius={28} outerRadius={55} dataKey="value" nameKey="name" paddingAngle={3}
+                      <Pie data={sourcePieData} cx="50%" cy="50%" innerRadius={20} outerRadius={45} dataKey="value" nameKey="name" paddingAngle={2}
                         label={({ name, percent }: { name: string; percent: number }) => `${name.length > 10 ? name.slice(0, 9) + '.' : name} ${(percent * 100).toFixed(0)}%`}
                       >
-                        {sourcePieData.map((_e, i) => <Cell key={i} fill={C[i % C.length]} />)}
+                        {sourcePieData.map((_e, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                       </Pie>
                       <Tooltip formatter={(v: number) => `${v} M DH`} />
                     </PieChart>
                   </ResponsiveContainer>
-                  <div className="mt-1 space-y-0.5">
-                    {sourcePieData.slice(0, 6).map((s, i) => (
+                  <div className="mt-0.5 space-y-px">
+                    {sourcePieData.slice(0, 5).map((s, i) => (
                       <div key={s.name} className="flex items-center justify-between">
-                        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ backgroundColor: C[i % C.length] }} /><span className="text-[8px] text-slate-600 truncate" style={{ maxWidth: '80px' }}>{s.name}</span></span>
-                        <span className="text-[8px] font-bold text-slate-800">{s.value} M</span>
+                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} /><span className="text-[7px] text-gray-600 truncate" style={{ maxWidth: '65px' }}>{s.name}</span></span>
+                        <span className="text-[7px] font-bold text-gray-800">{s.value} M</span>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-              {/* 2.2 Par programme */}
-              <div className="border border-indigo-200 rounded-xl overflow-hidden shadow-md">
-                <div className="bg-gradient-to-r from-indigo-700 to-indigo-900 px-3 py-1.5">
-                  <p className="text-[10px] font-bold text-white uppercase tracking-wider">2.2 Par programme</p>
+              <div className="col-span-3 bg-gradient-to-b from-indigo-50/80 to-white border border-indigo-200 rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-indigo-800 px-2 py-1">
+                  <p className="text-[9px] font-bold text-white uppercase tracking-wider">2.2 Par programme</p>
                 </div>
-                <div className="p-2 bg-white">
-                  <ResponsiveContainer width="100%" height={170}>
-                    <BarChart data={programmeBarData} layout="vertical" margin={{ left: 60, right: 10, top: 5, bottom: 5 }}>
+                <div className="p-1.5">
+                  <ResponsiveContainer width="100%" height={160}>
+                    <BarChart data={programmeBarData} layout="vertical" margin={{ left: 70, right: 10, top: 5, bottom: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
                       <XAxis type="number" tick={{ fontSize: 8 }} />
-                      <YAxis dataKey="name" type="category" tick={{ fontSize: 7 }} width={55} />
+                      <YAxis dataKey="name" type="category" tick={{ fontSize: 8 }} width={65} />
                       <Tooltip formatter={(v: number) => `${v} M DH`} />
-                      <Legend iconType="circle" iconSize={6} wrapperStyle={{ fontSize: '8px' }} />
-                      <Bar dataKey="Budget CP" fill="#312e81" radius={[0, 3, 3, 0]} barSize={8} />
-                      <Bar dataKey="Engagements" fill="#818cf8" radius={[0, 3, 3, 0]} barSize={8} />
+                      <Legend iconType="circle" iconSize={7} wrapperStyle={{ fontSize: '9px' }} />
+                      <Bar dataKey="Budget CP" fill="#1e3a5f" radius={[0, 3, 3, 0]} barSize={10} />
+                      <Bar dataKey="Engagements" fill="#3b82f6" radius={[0, 3, 3, 0]} barSize={10} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </div>
-              {/* 2.3 Par projet */}
-              <div className="border border-emerald-200 rounded-xl overflow-hidden shadow-md">
-                <div className="bg-gradient-to-r from-emerald-700 to-emerald-900 px-3 py-1.5">
-                  <p className="text-[10px] font-bold text-white uppercase tracking-wider">2.3 Par projet (Top 10)</p>
+            </div>
+            {/* Row 2: Projet (2 cols) + Entité (2 cols) */}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-gradient-to-b from-emerald-50/80 to-white border border-emerald-200 rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-emerald-800 px-2 py-1">
+                  <p className="text-[9px] font-bold text-white uppercase tracking-wider">2.3 Par projet (Top 10)</p>
                 </div>
-                <div className="p-2 bg-white">
-                  <ResponsiveContainer width="100%" height={170}>
-                    <BarChart data={projetBarData} layout="vertical" margin={{ left: 60, right: 10, top: 5, bottom: 5 }}>
+                <div className="p-1.5">
+                  <ResponsiveContainer width="100%" height={150}>
+                    <BarChart data={projetBarData} layout="vertical" margin={{ left: 70, right: 10, top: 5, bottom: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#d1fae5" />
                       <XAxis type="number" tick={{ fontSize: 8 }} />
-                      <YAxis dataKey="name" type="category" tick={{ fontSize: 7 }} width={55} />
+                      <YAxis dataKey="name" type="category" tick={{ fontSize: 8 }} width={65} />
                       <Tooltip formatter={(v: number) => `${v} M DH`} />
-                      <Legend iconType="circle" iconSize={6} wrapperStyle={{ fontSize: '8px' }} />
-                      <Bar dataKey="Budget CP" fill="#065f46" radius={[0, 3, 3, 0]} barSize={8} />
-                      <Bar dataKey="Engagements" fill="#34d399" radius={[0, 3, 3, 0]} barSize={8} />
+                      <Legend iconType="circle" iconSize={7} wrapperStyle={{ fontSize: '9px' }} />
+                      <Bar dataKey="Budget CP" fill="#1e3a5f" radius={[0, 3, 3, 0]} barSize={10} />
+                      <Bar dataKey="Engagements" fill="#10b981" radius={[0, 3, 3, 0]} barSize={10} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </div>
-              {/* 2.4 Par entité */}
-              <div className="border border-violet-200 rounded-xl overflow-hidden shadow-md">
-                <div className="bg-gradient-to-r from-violet-700 to-violet-900 px-3 py-1.5">
-                  <p className="text-[10px] font-bold text-white uppercase tracking-wider">2.4 Par entité</p>
+              <div className="bg-gradient-to-b from-violet-50/80 to-white border border-violet-200 rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-violet-800 px-2 py-1">
+                  <p className="text-[9px] font-bold text-white uppercase tracking-wider">2.4 Par entité</p>
                 </div>
-                <div className="p-2 bg-white">
-                  <ResponsiveContainer width="100%" height={170}>
-                    <BarChart data={entityBarData} layout="vertical" margin={{ left: 50, right: 10, top: 5, bottom: 5 }}>
+                <div className="p-1.5">
+                  <ResponsiveContainer width="100%" height={150}>
+                    <BarChart data={entityBarData} layout="vertical" margin={{ left: 55, right: 10, top: 5, bottom: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#ede9fe" />
                       <XAxis type="number" tick={{ fontSize: 8 }} />
-                      <YAxis dataKey="name" type="category" tick={{ fontSize: 7 }} width={45} />
+                      <YAxis dataKey="name" type="category" tick={{ fontSize: 8 }} width={50} />
                       <Tooltip formatter={(v: number) => `${v} M DH`} />
-                      <Legend iconType="circle" iconSize={6} wrapperStyle={{ fontSize: '8px' }} />
-                      <Bar dataKey="Budget CP" fill="#5b21b6" radius={[0, 3, 3, 0]} barSize={8} />
-                      <Bar dataKey="Engagements" fill="#a78bfa" radius={[0, 3, 3, 0]} barSize={8} />
+                      <Legend iconType="circle" iconSize={7} wrapperStyle={{ fontSize: '9px' }} />
+                      <Bar dataKey="Budget CP" fill="#1e3a5f" radius={[0, 3, 3, 0]} barSize={10} />
+                      <Bar dataKey="Engagements" fill="#8b5cf6" radius={[0, 3, 3, 0]} barSize={10} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -4447,61 +4445,57 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ╔══════════════════════════════════════════╗
-            ║      PAGE 2 — PERFORMANCE & PRÉVISIONS     ║
-            ╚══════════════════════════════════════════╝ */}
+        {/* ════════════════ PAGE 2 ════════════════ */}
         <div className="print-page-break" />
-
         <div className="print-page-2">
           {/* Page 2 Header */}
-          <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 rounded-xl px-4 py-2 mb-4 text-white flex items-center justify-between">
-            <h2 className="text-sm font-bold">TABLEAU DE BORD DES ENGAGEMENTS — Page 2</h2>
+          <div className="bg-gradient-to-r from-blue-800 to-blue-900 rounded-lg px-3 py-1.5 mb-3 text-white flex items-center justify-between">
+            <h2 className="text-sm font-bold">TABLEAU DE BORD DES ENGAGEMENTS — Suite</h2>
             <p className="text-[10px] text-blue-200">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
           </div>
 
-          {/* ═══════════ 3. PERFORMANCE ═══════════ */}
-          <div className="mb-4">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="bg-blue-900 text-white text-[10px] font-black w-5 h-5 rounded flex items-center justify-center">3</span>
-              <h2 className="text-xs font-black text-slate-900 uppercase tracking-wide">Performance par programme, projet et entité</h2>
-              <div className="flex gap-3 ml-auto">
-                <span className="flex items-center gap-1"><span className="w-3 h-2 bg-emerald-500 rounded-sm" /><span className="text-[9px] text-slate-500 font-medium">Engagement</span></span>
-                <span className="flex items-center gap-1"><span className="w-3 h-2 bg-violet-500 rounded-sm" /><span className="text-[9px] text-slate-500 font-medium">Ordonnancement</span></span>
-                <span className="flex items-center gap-1"><span className="w-3 h-2 bg-amber-500 rounded-sm" /><span className="text-[9px] text-slate-500 font-medium">Paiement</span></span>
-              </div>
+          {/* ═══ 3. PERFORMANCE ═══ */}
+          <div className="mb-3">
+            <h2 className="text-[11px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-0.5 mb-2">
+              3. Performance par programme, projet et entité
+            </h2>
+            <div className="flex gap-3 mb-2">
+              <span className="flex items-center gap-1"><span className="w-3 h-2 bg-emerald-500 rounded-sm" /><span className="text-[8px] text-gray-500 font-medium">Engagement</span></span>
+              <span className="flex items-center gap-1"><span className="w-3 h-2 bg-violet-500 rounded-sm" /><span className="text-[8px] text-gray-500 font-medium">Ordonnancement</span></span>
+              <span className="flex items-center gap-1"><span className="w-3 h-2 bg-amber-500 rounded-sm" /><span className="text-[8px] text-gray-500 font-medium">Paiement</span></span>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2">
               {/* 3.1 Par programme */}
-              <div className="border border-violet-200 rounded-xl overflow-hidden shadow-md">
-                <div className="bg-gradient-to-r from-violet-700 to-violet-900 px-3 py-1.5">
-                  <p className="text-[10px] font-bold text-white uppercase tracking-wider">3.1 Par programme</p>
+              <div className="bg-gradient-to-b from-violet-50/80 to-white border border-violet-200 rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-violet-800 px-2 py-1">
+                  <p className="text-[9px] font-bold text-white uppercase tracking-wider">3.1 Par programme</p>
                 </div>
-                <div className="p-2 space-y-1.5 bg-slate-50/50">
+                <div className="p-1.5 space-y-1">
                   {[...analysisByProgramme].sort((a, b) => b.cp - a.cp).map(p => {
                     const tE = p.cp > 0 ? (p.engCP / p.cp) * 100 : 0
                     const tO = p.cp > 0 ? (p.ord / p.cp) * 100 : 0
                     const tP = p.cp > 0 ? (p.paiements / p.cp) * 100 : 0
                     return (
-                      <div key={p.name} className="bg-white rounded-lg border border-slate-100 px-2.5 py-1.5 shadow-sm">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[9px] font-bold text-slate-800 truncate" style={{ maxWidth: '65%' }} title={p.name}>{p.name.length > 22 ? p.name.slice(0, 20) + '…' : p.name}</span>
-                          <span className="text-[8px] text-slate-400 font-semibold">{formatMillions(p.cp)} M</span>
+                      <div key={p.name} className="bg-white rounded border border-gray-100 px-2 py-1">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <span className="text-[8px] font-bold text-gray-800 truncate" style={{ maxWidth: '65%' }} title={p.name}>{p.name.length > 20 ? p.name.slice(0, 18) + '…' : p.name}</span>
+                          <span className="text-[7px] text-gray-400 font-semibold">{formatMillions(p.cp)} M</span>
                         </div>
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[7px] font-bold text-emerald-600 w-7">Eng</span>
-                            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
-                            <span className={`text-[8px] font-bold w-9 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
+                        <div className="space-y-px">
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-emerald-600 w-6">Eng</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
                           </div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[7px] font-bold text-violet-600 w-7">Ord</span>
-                            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-violet-400 to-violet-600" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
-                            <span className={`text-[8px] font-bold w-9 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-violet-600 w-6">Ord</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
                           </div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[7px] font-bold text-amber-600 w-7">Pai</span>
-                            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-amber-400 to-amber-600" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
-                            <span className={`text-[8px] font-bold w-9 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-amber-600 w-6">Pai</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
                           </div>
                         </div>
                       </div>
@@ -4510,36 +4504,36 @@ export default function Dashboard() {
                 </div>
               </div>
               {/* 3.2 Par projet */}
-              <div className="border border-emerald-200 rounded-xl overflow-hidden shadow-md">
-                <div className="bg-gradient-to-r from-emerald-700 to-emerald-900 px-3 py-1.5">
-                  <p className="text-[10px] font-bold text-white uppercase tracking-wider">3.2 Par projet (Top 10)</p>
+              <div className="bg-gradient-to-b from-emerald-50/80 to-white border border-emerald-200 rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-emerald-800 px-2 py-1">
+                  <p className="text-[9px] font-bold text-white uppercase tracking-wider">3.2 Par projet (Top 10)</p>
                 </div>
-                <div className="p-2 space-y-1.5 bg-slate-50/50">
+                <div className="p-1.5 space-y-1">
                   {[...analysisByGroup].sort((a, b) => b.cp - a.cp).slice(0, 10).map(g => {
                     const tE = g.cp > 0 ? (g.engCP / g.cp) * 100 : 0
                     const tO = g.cp > 0 ? (g.ord / g.cp) * 100 : 0
                     const tP = g.cp > 0 ? (g.paiements / g.cp) * 100 : 0
                     return (
-                      <div key={g.name} className="bg-white rounded-lg border border-slate-100 px-2.5 py-1.5 shadow-sm">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[9px] font-bold text-slate-800 truncate" style={{ maxWidth: '65%' }} title={g.name}>{g.name.length > 22 ? g.name.slice(0, 20) + '…' : g.name}</span>
-                          <span className="text-[8px] text-slate-400 font-semibold">{formatMillions(g.cp)} M</span>
+                      <div key={g.name} className="bg-white rounded border border-gray-100 px-2 py-1">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <span className="text-[8px] font-bold text-gray-800 truncate" style={{ maxWidth: '65%' }} title={g.name}>{g.name.length > 20 ? g.name.slice(0, 18) + '…' : g.name}</span>
+                          <span className="text-[7px] text-gray-400 font-semibold">{formatMillions(g.cp)} M</span>
                         </div>
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[7px] font-bold text-emerald-600 w-7">Eng</span>
-                            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
-                            <span className={`text-[8px] font-bold w-9 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
+                        <div className="space-y-px">
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-emerald-600 w-6">Eng</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
                           </div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[7px] font-bold text-violet-600 w-7">Ord</span>
-                            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-violet-400 to-violet-600" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
-                            <span className={`text-[8px] font-bold w-9 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-violet-600 w-6">Ord</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
                           </div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[7px] font-bold text-amber-600 w-7">Pai</span>
-                            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-amber-400 to-amber-600" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
-                            <span className={`text-[8px] font-bold w-9 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-amber-600 w-6">Pai</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
                           </div>
                         </div>
                       </div>
@@ -4548,32 +4542,32 @@ export default function Dashboard() {
                 </div>
               </div>
               {/* 3.3 Par entité */}
-              <div className="border border-blue-200 rounded-xl overflow-hidden shadow-md">
-                <div className="bg-gradient-to-r from-blue-700 to-blue-900 px-3 py-1.5">
-                  <p className="text-[10px] font-bold text-white uppercase tracking-wider">3.3 Par entité</p>
+              <div className="bg-gradient-to-b from-blue-50/80 to-white border border-blue-200 rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-blue-800 px-2 py-1">
+                  <p className="text-[9px] font-bold text-white uppercase tracking-wider">3.3 Par entité</p>
                 </div>
-                <div className="p-2 space-y-1.5 bg-slate-50/50">
+                <div className="p-1.5 space-y-1">
                   {[...analysisByEntity].sort((a, b) => b.cp - a.cp).map(e => (
-                    <div key={e.name} className="bg-white rounded-lg border border-slate-100 px-2.5 py-1.5 shadow-sm">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-[9px] font-bold text-slate-800 truncate" style={{ maxWidth: '65%' }} title={e.name}>{e.name.length > 22 ? e.name.slice(0, 20) + '…' : e.name}</span>
-                        <span className="text-[8px] text-slate-400 font-semibold">{formatMillions(e.cp)} M</span>
+                    <div key={e.name} className="bg-white rounded border border-gray-100 px-2 py-1">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <span className="text-[8px] font-bold text-gray-800 truncate" style={{ maxWidth: '65%' }} title={e.name}>{e.name.length > 20 ? e.name.slice(0, 18) + '…' : e.name}</span>
+                        <span className="text-[7px] text-gray-400 font-semibold">{formatMillions(e.cp)} M</span>
                       </div>
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[7px] font-bold text-emerald-600 w-7">Eng</span>
-                          <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600" style={{ width: `${Math.min(e.tauxEngagement, 100)}%` }} /></div>
-                          <span className={`text-[8px] font-bold w-9 text-right ${tauxColor(e.tauxEngagement)}`}>{formatPercent(e.tauxEngagement)}</span>
+                      <div className="space-y-px">
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-emerald-600 w-6">Eng</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(e.tauxEngagement, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(e.tauxEngagement)}`}>{formatPercent(e.tauxEngagement)}</span>
                         </div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[7px] font-bold text-violet-600 w-7">Ord</span>
-                          <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-violet-400 to-violet-600" style={{ width: `${Math.min(e.tauxOrdonnement, 100)}%` }} /></div>
-                          <span className={`text-[8px] font-bold w-9 text-right ${tauxColor(e.tauxOrdonnement)}`}>{formatPercent(e.tauxOrdonnement)}</span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-violet-600 w-6">Ord</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(e.tauxOrdonnement, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(e.tauxOrdonnement)}`}>{formatPercent(e.tauxOrdonnement)}</span>
                         </div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[7px] font-bold text-amber-600 w-7">Pai</span>
-                          <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-amber-400 to-amber-600" style={{ width: `${Math.min(e.tauxPaiement, 100)}%` }} /></div>
-                          <span className={`text-[8px] font-bold w-9 text-right ${tauxColor(e.tauxPaiement)}`}>{formatPercent(e.tauxPaiement)}</span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-amber-600 w-6">Pai</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(e.tauxPaiement, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(e.tauxPaiement)}`}>{formatPercent(e.tauxPaiement)}</span>
                         </div>
                       </div>
                     </div>
@@ -4583,39 +4577,51 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* ═══════════ 4. PRÉVISIONS ORDONNANCEMENT ═══════════ */}
+          {/* ═══ 4. PRÉVISIONS ORDONNANCEMENT ═══ */}
           <div className="mb-2">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="bg-blue-900 text-white text-[10px] font-black w-5 h-5 rounded flex items-center justify-center">4</span>
-              <h2 className="text-xs font-black text-slate-900 uppercase tracking-wide">Prévisions ordonnancement</h2>
-            </div>
-            <div className="grid grid-cols-4 gap-3">
-              {previsionChartData.map((p, i) => {
-                const gradients = [
-                  'from-blue-600 to-blue-800',
-                  'from-teal-600 to-teal-800',
-                  'from-orange-500 to-orange-700',
-                  'from-indigo-600 to-indigo-800',
-                ]
-                return (
-                  <div key={p.name} className={`bg-gradient-to-br ${gradients[i]} rounded-xl p-3 text-white shadow-lg relative overflow-hidden`}>
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -translate-y-6 translate-x-6" />
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-white/70">Cum. {p.name}</p>
-                    <p className="text-xl font-black mt-0.5">{p.value} <span className="text-xs font-medium text-white/70">M DH</span></p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <div className="flex-1 h-1.5 bg-white/20 rounded-full"><div className="h-full bg-white rounded-full" style={{ width: `${Math.min(p.pct, 100)}%` }} /></div>
-                      <span className="text-[10px] font-bold">{p.pct}%</span>
-                    </div>
-                  </div>
-                )
-              })}
+            <h2 className="text-[11px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-0.5 mb-2">
+              4. Prévisions ordonnancement
+            </h2>
+            <div className="grid grid-cols-4 gap-2">
+              <div className="bg-blue-50 rounded-lg p-2.5 text-center border border-blue-200">
+                <p className="text-[8px] font-bold text-blue-600 uppercase">Cum. Juin</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevJuin)}</p>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <div className="flex-1 h-1.5 bg-blue-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-blue-600" style={{ width: `${previsionChartData[0].pct}%` }} /></div>
+                  <span className="text-[8px] font-bold text-blue-700">{previsionChartData[0].pct}%</span>
+                </div>
+              </div>
+              <div className="bg-teal-50 rounded-lg p-2.5 text-center border border-teal-200">
+                <p className="text-[8px] font-bold text-teal-600 uppercase">Cum. Sept.</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevSeptembre)}</p>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <div className="flex-1 h-1.5 bg-teal-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-teal-600" style={{ width: `${previsionChartData[1].pct}%` }} /></div>
+                  <span className="text-[8px] font-bold text-teal-700">{previsionChartData[1].pct}%</span>
+                </div>
+              </div>
+              <div className="bg-orange-50 rounded-lg p-2.5 text-center border border-orange-200">
+                <p className="text-[8px] font-bold text-orange-600 uppercase">Cum. Nov.</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevNovembre)}</p>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <div className="flex-1 h-1.5 bg-orange-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-orange-500" style={{ width: `${previsionChartData[2].pct}%` }} /></div>
+                  <span className="text-[8px] font-bold text-orange-700">{previsionChartData[2].pct}%</span>
+                </div>
+              </div>
+              <div className="bg-indigo-50 rounded-lg p-2.5 text-center border border-indigo-200">
+                <p className="text-[8px] font-bold text-indigo-600 uppercase">Cum. Déc.</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevDecembre)}</p>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <div className="flex-1 h-1.5 bg-indigo-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-indigo-600" style={{ width: `${previsionChartData[3].pct}%` }} /></div>
+                  <span className="text-[8px] font-bold text-indigo-700">{previsionChartData[3].pct}%</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* ═══ FOOTER ═══ */}
-          <div className="mt-2 pt-2 border-t-2 border-slate-200 flex items-center justify-between">
-            <p className="text-[9px] text-slate-400">Rapport auto-généré — {filteredData.length} lignes de données</p>
-            <p className="text-[9px] text-slate-400">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          {/* Footer */}
+          <div className="mt-2 pt-1.5 border-t-2 border-blue-800 flex items-center justify-between">
+            <p className="text-[8px] text-gray-400">Rapport auto-généré — {filteredData.length} lignes de données</p>
+            <p className="text-[8px] text-gray-400">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
         </div>
       </div>
