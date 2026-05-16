@@ -1344,33 +1344,65 @@ export default function Dashboard() {
 
       {/* ═══════════ SECTION : TRÉSORERIE ET SUBVENTION ═══════════ */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Card className="border border-amber-100 shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
-                <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <Card className="border-0 shadow-md overflow-hidden">
+          <div className="bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 p-5 text-white relative">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-8 translate-x-8" />
+            <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-6 -translate-x-6" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-9 h-9 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <Wallet className="w-5 h-5 text-white" />
+                </div>
+                <p className="text-[11px] font-bold text-white/80 uppercase tracking-widest">Trésorerie</p>
               </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Trésorerie</p>
-                <p className="text-xl font-black text-amber-700">{formatMillions(kpis.totalTresorerie)}</p>
-                <p className="text-[9px] text-gray-400">M DH</p>
-              </div>
+              <p className="text-3xl font-black tracking-tight">{formatMillions(kpis.totalTresorerie)}</p>
+              <p className="text-xs text-white/70 mt-1 font-medium">Millions DH</p>
+              {kpis.totalCP > 0 && (
+                <div className="mt-3">
+                  <div className="flex items-center justify-between text-[10px] text-white/70 mb-1">
+                    <span>% du Total CP</span>
+                    <span className="font-bold text-white">{((kpis.totalTresorerie / kpis.totalCP) * 100).toFixed(1)}%</span>
+                  </div>
+                  <div className="w-full bg-white/20 rounded-full h-1.5">
+                    <div
+                      className="bg-white/90 h-1.5 rounded-full transition-all duration-500"
+                      style={{ width: `${Math.min(100, (kpis.totalTresorerie / kpis.totalCP) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-          </CardContent>
+          </div>
         </Card>
-        <Card className="border border-orange-100 shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center">
-                <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+        <Card className="border-0 shadow-md overflow-hidden">
+          <div className="bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 p-5 text-white relative">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-8 translate-x-8" />
+            <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-6 -translate-x-6" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-9 h-9 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <Landmark className="w-5 h-5 text-white" />
+                </div>
+                <p className="text-[11px] font-bold text-white/80 uppercase tracking-widest">Subvention demandée</p>
               </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Subvention demandée</p>
-                <p className="text-xl font-black text-orange-700">{formatMillions(kpis.totalSubvention)}</p>
-                <p className="text-[9px] text-gray-400">M DH</p>
-              </div>
+              <p className="text-3xl font-black tracking-tight">{formatMillions(kpis.totalSubvention)}</p>
+              <p className="text-xs text-white/70 mt-1 font-medium">Millions DH</p>
+              {kpis.totalCP > 0 && (
+                <div className="mt-3">
+                  <div className="flex items-center justify-between text-[10px] text-white/70 mb-1">
+                    <span>% du Total CP</span>
+                    <span className="font-bold text-white">{((kpis.totalSubvention / kpis.totalCP) * 100).toFixed(1)}%</span>
+                  </div>
+                  <div className="w-full bg-white/20 rounded-full h-1.5">
+                    <div
+                      className="bg-white/90 h-1.5 rounded-full transition-all duration-500"
+                      style={{ width: `${Math.min(100, (kpis.totalSubvention / kpis.totalCP) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-          </CardContent>
+          </div>
         </Card>
       </div>
 
