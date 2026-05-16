@@ -4223,6 +4223,61 @@ export default function Dashboard() {
     const tauxEngReports = totalReports > 0 ? (totalEngReports / totalReports) * 100 : 0
     const tauxOrdReports = totalEngReports > 0 ? (totalOrdReports / totalEngReports) * 100 : 0
 
+    // Data for charts
+    const entityBarData = [...analysisByEntity].sort((a, b) => b.cp - a.cp).map(e => ({
+      name: e.name.length > 18 ? e.name.slice(0, 16) + '…' : e.name,
+      fullName: e.name,
+      'Budget CP': Math.round(e.cp / 1e6 * 10) / 10,
+      'Engagements': Math.round(e.engCP / 1e6 * 10) / 10,
+      'Ordonnancements': Math.round(e.ord / 1e6 * 10) / 10,
+      'Paiements': Math.round(e.paiements / 1e6 * 10) / 10,
+    }))
+
+    const projetBarData = [...analysisByGroup].sort((a, b) => b.cp - a.cp).slice(0, 15).map(g => ({
+      name: g.name.length > 22 ? g.name.slice(0, 20) + '…' : g.name,
+      fullName: g.name,
+      'Budget CP': Math.round(g.cp / 1e6 * 10) / 10,
+      'Engagements': Math.round(g.engCP / 1e6 * 10) / 10,
+      'Ordonnancements': Math.round(g.ord / 1e6 * 10) / 10,
+    }))
+
+    const programmeBarData = [...analysisByProgramme].sort((a, b) => b.cp - a.cp).map(p => ({
+      name: p.name.length > 22 ? p.name.slice(0, 20) + '…' : p.name,
+      fullName: p.name,
+      'Budget CP': Math.round(p.cp / 1e6 * 10) / 10,
+      'Engagements': Math.round(p.engCP / 1e6 * 10) / 10,
+      'Ordonnancements': Math.round(p.ord / 1e6 * 10) / 10,
+    }))
+
+    const sourcePieData = sourceFinancementData.map(s => ({
+      name: s.name,
+      value: Math.round(s.cp / 1e6 * 10) / 10,
+      tauxEng: s.tauxEngagement,
+    }))
+
+    const structurePieData = budgetStructureData.map(d => ({
+      name: d.name,
+      value: d.value,
+    }))
+
+    const previsionChartData = [
+      { name: 'Juin', value: Math.round(kpis.cumulPrevJuin / 1e6 * 10) / 10 },
+      { name: 'Septembre', value: Math.round(kpis.cumulPrevSeptembre / 1e6 * 10) / 10 },
+      { name: 'Octobre', value: Math.round(kpis.cumulPrevOctobre / 1e6 * 10) / 10 },
+      { name: 'Novembre', value: Math.round(kpis.cumulPrevNovembre / 1e6 * 10) / 10 },
+      { name: 'Décembre', value: Math.round(kpis.cumulPrevDecembre / 1e6 * 10) / 10 },
+    ]
+
+    const CHART_COLORS = ['#1e3a5f', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899', '#84cc16', '#f97316']
+
+    // Donut center label component
+    const DonutCenterLabel = ({ cx, cy, total, label }: { cx: number; cy: number; total: string; label: string }) => (
+      <>
+        <text x={cx} y={cy - 8} textAnchor="middle" dominantBaseline="central" className="fill-gray-900 text-lg font-black">{total}</text>
+        <text x={cx} y={cy + 12} textAnchor="middle" dominantBaseline="central" className="fill-gray-400 text-[10px] font-bold uppercase">{label}</text>
+      </>
+    )
+
     return (
       <div className="print-report">
         {/* ═══ PRINT BUTTON (hidden when printing) ═══ */}
@@ -4265,299 +4320,510 @@ export default function Dashboard() {
         </div>
 
         {/* ═══════════ SECTION 1 : INDICATEURS CLÉS ═══════════ */}
-        <div className="mb-5">
+        <div className="mb-6">
           <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
             <span className="inline-block w-5">1.</span>Indicateurs clés
           </h2>
           <div className="grid grid-cols-4 gap-3">
-            <div className="border border-blue-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Crédits CP</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.totalCP)}</p>
-              <p className="text-[10px] text-gray-400">M DH</p>
+            <div className="border-2 border-blue-200 rounded-lg p-3">
+              <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-1">Crédits CP</p>
+              <p className="text-xl font-black text-gray-900">{formatMillions(kpis.totalCP)}</p>
+              <p className="text-[10px] text-gray-400 mb-2">M DH</p>
+              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full rounded-full bg-blue-800" style={{ width: '100%' }} />
+              </div>
             </div>
-            <div className="border border-emerald-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Engagements</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.totalEngCP)}</p>
-              <p className="text-[10px] text-gray-400">Taux : {formatPercent(kpis.tauxEngagement)}</p>
+            <div className="border-2 border-emerald-200 rounded-lg p-3">
+              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-1">Engagements</p>
+              <p className="text-xl font-black text-gray-900">{formatMillions(kpis.totalEngCP)}</p>
+              <p className="text-[10px] text-gray-400 mb-2">Taux : <span className={tauxColor(kpis.tauxEngagement)}>{formatPercent(kpis.tauxEngagement)}</span></p>
+              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(kpis.tauxEngagement, 100)}%` }} />
+              </div>
             </div>
-            <div className="border border-violet-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-violet-600 uppercase tracking-wider">Ordonnancements</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.totalOrd)}</p>
-              <p className="text-[10px] text-gray-400">Taux : {formatPercent(kpis.tauxOrdonnement)}</p>
+            <div className="border-2 border-violet-200 rounded-lg p-3">
+              <p className="text-[10px] font-bold text-violet-600 uppercase tracking-wider mb-1">Ordonnancements</p>
+              <p className="text-xl font-black text-gray-900">{formatMillions(kpis.totalOrd)}</p>
+              <p className="text-[10px] text-gray-400 mb-2">Taux : <span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span></p>
+              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(kpis.tauxOrdonnement, 100)}%` }} />
+              </div>
             </div>
-            <div className="border border-amber-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Paiements</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.totalPaiements)}</p>
-              <p className="text-[10px] text-gray-400">Taux : {formatPercent(kpis.tauxPaiement)}</p>
+            <div className="border-2 border-amber-200 rounded-lg p-3">
+              <p className="text-[10px] font-bold text-amber-600 uppercase tracking-wider mb-1">Paiements</p>
+              <p className="text-xl font-black text-gray-900">{formatMillions(kpis.totalPaiements)}</p>
+              <p className="text-[10px] text-gray-400 mb-2">Taux : <span className={tauxColor(kpis.tauxPaiement)}>{formatPercent(kpis.tauxPaiement)}</span></p>
+              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(kpis.tauxPaiement, 100)}%` }} />
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-4 gap-3 mt-2">
-            <div className="border border-gray-200 rounded-lg p-3 text-center">
+            <div className="border border-gray-200 rounded-lg p-2 text-center">
               <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Crédits CE</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.totalCE)}</p>
-              <p className="text-[10px] text-gray-400">M DH</p>
+              <p className="text-sm font-black text-gray-900">{formatMillions(kpis.totalCE)} <span className="text-[10px] font-normal text-gray-400">M DH</span></p>
             </div>
-            <div className="border border-gray-200 rounded-lg p-3 text-center">
+            <div className="border border-gray-200 rounded-lg p-2 text-center">
               <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Eng. CE</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.totalEngCE)}</p>
-              <p className="text-[10px] text-gray-400">M DH</p>
+              <p className="text-sm font-black text-gray-900">{formatMillions(kpis.totalEngCE)} <span className="text-[10px] font-normal text-gray-400">M DH</span></p>
             </div>
-            <div className="border border-gray-200 rounded-lg p-3 text-center">
+            <div className="border border-gray-200 rounded-lg p-2 text-center">
               <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Disponible</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.disponible)}</p>
-              <p className="text-[10px] text-gray-400">M DH</p>
+              <p className="text-sm font-black text-gray-900">{formatMillions(kpis.disponible)} <span className="text-[10px] font-normal text-gray-400">M DH</span></p>
             </div>
-            <div className="border border-gray-200 rounded-lg p-3 text-center">
+            <div className="border border-gray-200 rounded-lg p-2 text-center">
               <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Trésorerie</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.totalTresorerie)}</p>
-              <p className="text-[10px] text-gray-400">M DH</p>
+              <p className="text-sm font-black text-gray-900">{formatMillions(kpis.totalTresorerie)} <span className="text-[10px] font-normal text-gray-400">M DH</span></p>
             </div>
           </div>
         </div>
 
         {/* ═══════════ SECTION 2 : RÉPARTITION PAR ENTITÉ ═══════════ */}
-        <div className="mb-5">
+        <div className="mb-6">
           <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
             <span className="inline-block w-5">2.</span>Répartition par entité
           </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-blue-50">
-                  <th className="border border-gray-300 px-2 py-1.5 text-left font-bold text-gray-700">Entité</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Budget CP</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Engagements</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux Eng.</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Ordonnancements</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux Ord.</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Paiements</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux Pai.</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...analysisByEntity].sort((a, b) => b.cp - a.cp).map(e => (
-                  <tr key={e.name}>
-                    <td className="border border-gray-300 px-2 py-1 font-medium text-gray-900">{e.name}</td>
-                    <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(e.cp)}</td>
-                    <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(e.engCP)}</td>
-                    <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(e.tauxEngagement)}>{formatPercent(e.tauxEngagement)}</span></td>
-                    <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(e.ord)}</td>
-                    <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(e.tauxOrdonnement)}>{formatPercent(e.tauxOrdonnement)}</span></td>
-                    <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(e.paiements)}</td>
-                    <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(e.tauxPaiement)}>{formatPercent(e.tauxPaiement)}</span></td>
+          <div className="grid grid-cols-2 gap-4">
+            {/* Bar Chart */}
+            <div className="border border-gray-200 rounded-lg p-3">
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Budget par entité (M DH)</p>
+              <ResponsiveContainer width="100%" height={entityBarData.length * 36 + 20}>
+                <BarChart data={entityBarData} layout="vertical" margin={{ left: 80, right: 20, top: 5, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis type="number" tick={{ fontSize: 9 }} />
+                  <YAxis dataKey="name" type="category" tick={{ fontSize: 9 }} width={75} />
+                  <Tooltip formatter={(v: number) => `${v} M DH`} />
+                  <Bar dataKey="Budget CP" fill="#1e3a5f" radius={[0, 3, 3, 0]} barSize={10} />
+                  <Bar dataKey="Engagements" fill="#3b82f6" radius={[0, 3, 3, 0]} barSize={10} />
+                  <Bar dataKey="Ordonnancements" fill="#10b981" radius={[0, 3, 3, 0]} barSize={10} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            {/* Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-blue-50">
+                    <th className="border border-gray-300 px-2 py-1.5 text-left font-bold text-gray-700">Entité</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Budget</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Eng.</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux</th>
                   </tr>
-                ))}
-                <tr className="bg-blue-50 font-bold">
-                  <td className="border border-gray-300 px-2 py-1 text-gray-900">TOTAL</td>
-                  <td className="border border-gray-300 px-2 py-1 text-center text-gray-900">{formatMillions(kpis.totalCP)}</td>
-                  <td className="border border-gray-300 px-2 py-1 text-center text-gray-900">{formatMillions(kpis.totalEngCP)}</td>
-                  <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(kpis.tauxEngagement)}>{formatPercent(kpis.tauxEngagement)}</span></td>
-                  <td className="border border-gray-300 px-2 py-1 text-center text-gray-900">{formatMillions(kpis.totalOrd)}</td>
-                  <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span></td>
-                  <td className="border border-gray-300 px-2 py-1 text-center text-gray-900">{formatMillions(kpis.totalPaiements)}</td>
-                  <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(kpis.tauxPaiement)}>{formatPercent(kpis.tauxPaiement)}</span></td>
-                </tr>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {[...analysisByEntity].sort((a, b) => b.cp - a.cp).map(e => (
+                    <tr key={e.name}>
+                      <td className="border border-gray-300 px-2 py-1 font-medium text-gray-900">{e.name}</td>
+                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(e.cp)}</td>
+                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(e.engCP)}</td>
+                      <td className="border border-gray-300 px-2 py-1 text-center">
+                        <div className="flex items-center gap-1">
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full rounded-full bg-blue-600" style={{ width: `${Math.min(e.tauxEngagement, 100)}%` }} />
+                          </div>
+                          <span className={`text-[10px] font-bold ${tauxColor(e.tauxEngagement)}`}>{formatPercent(e.tauxEngagement)}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="bg-blue-50 font-bold">
+                    <td className="border border-gray-300 px-2 py-1 text-gray-900">TOTAL</td>
+                    <td className="border border-gray-300 px-2 py-1 text-center text-gray-900">{formatMillions(kpis.totalCP)}</td>
+                    <td className="border border-gray-300 px-2 py-1 text-center text-gray-900">{formatMillions(kpis.totalEngCP)}</td>
+                    <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(kpis.tauxEngagement)}>{formatPercent(kpis.tauxEngagement)}</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
         {/* ═══════════ SECTION 3 : RÉPARTITION PAR PROJET ═══════════ */}
-        <div className="mb-5 print-page-break">
+        <div className="mb-6 print-page-break">
           <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
             <span className="inline-block w-5">3.</span>Répartition par projet
           </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-emerald-50">
-                  <th className="border border-gray-300 px-2 py-1.5 text-left font-bold text-gray-700">Projet</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Budget CP</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Engagements</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux Eng.</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Ordonnancements</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux Ord.</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Paiements</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...analysisByGroup].sort((a, b) => b.cp - a.cp).map(g => {
-                  const tauxEng = g.cp > 0 ? (g.engCP / g.cp) * 100 : 0
-                  const tauxOrd = g.engCP > 0 ? (g.ord / g.engCP) * 100 : 0
-                  return (
-                    <tr key={g.name}>
-                      <td className="border border-gray-300 px-2 py-1 font-medium text-gray-900">{g.name}</td>
-                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(g.cp)}</td>
-                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(g.engCP)}</td>
-                      <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(tauxEng)}>{formatPercent(tauxEng)}</span></td>
-                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(g.ord)}</td>
-                      <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(tauxOrd)}>{formatPercent(tauxOrd)}</span></td>
-                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(g.paiements)}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-2 gap-4">
+            {/* Bar Chart */}
+            <div className="border border-gray-200 rounded-lg p-3">
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Budget par projet (M DH)</p>
+              <ResponsiveContainer width="100%" height={projetBarData.length * 32 + 20}>
+                <BarChart data={projetBarData} layout="vertical" margin={{ left: 100, right: 20, top: 5, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis type="number" tick={{ fontSize: 9 }} />
+                  <YAxis dataKey="name" type="category" tick={{ fontSize: 8 }} width={95} />
+                  <Tooltip formatter={(v: number) => `${v} M DH`} />
+                  <Bar dataKey="Budget CP" fill="#1e3a5f" radius={[0, 3, 3, 0]} barSize={8} />
+                  <Bar dataKey="Engagements" fill="#3b82f6" radius={[0, 3, 3, 0]} barSize={8} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            {/* Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-emerald-50">
+                    <th className="border border-gray-300 px-2 py-1.5 text-left font-bold text-gray-700">Projet</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Budget</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Eng.</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...analysisByGroup].sort((a, b) => b.cp - a.cp).slice(0, 15).map(g => {
+                    const tauxEng = g.cp > 0 ? (g.engCP / g.cp) * 100 : 0
+                    return (
+                      <tr key={g.name}>
+                        <td className="border border-gray-300 px-2 py-1 font-medium text-gray-900">{g.name.length > 25 ? g.name.slice(0, 23) + '…' : g.name}</td>
+                        <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(g.cp)}</td>
+                        <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(g.engCP)}</td>
+                        <td className="border border-gray-300 px-2 py-1 text-center">
+                          <div className="flex items-center gap-1">
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                              <div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tauxEng, 100)}%` }} />
+                            </div>
+                            <span className={`text-[10px] font-bold ${tauxColor(tauxEng)}`}>{formatPercent(tauxEng)}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
         {/* ═══════════ SECTION 4 : RÉPARTITION PAR PROGRAMME ═══════════ */}
-        <div className="mb-5">
+        <div className="mb-6">
           <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
             <span className="inline-block w-5">4.</span>Répartition par programme
           </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-violet-50">
-                  <th className="border border-gray-300 px-2 py-1.5 text-left font-bold text-gray-700">Programme</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Budget CP</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Engagements</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux Eng.</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Ordonnancements</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux Ord.</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Paiements</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...analysisByProgramme].sort((a, b) => b.cp - a.cp).map(p => {
-                  const tauxEng = p.cp > 0 ? (p.engCP / p.cp) * 100 : 0
-                  const tauxOrd = p.engCP > 0 ? (p.ord / p.engCP) * 100 : 0
-                  return (
-                    <tr key={p.name}>
-                      <td className="border border-gray-300 px-2 py-1 font-medium text-gray-900">{p.name}</td>
-                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(p.cp)}</td>
-                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(p.engCP)}</td>
-                      <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(tauxEng)}>{formatPercent(tauxEng)}</span></td>
-                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(p.ord)}</td>
-                      <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(tauxOrd)}>{formatPercent(tauxOrd)}</span></td>
-                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(p.paiements)}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-2 gap-4">
+            {/* Bar Chart */}
+            <div className="border border-gray-200 rounded-lg p-3">
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Budget par programme (M DH)</p>
+              <ResponsiveContainer width="100%" height={programmeBarData.length * 34 + 20}>
+                <BarChart data={programmeBarData} layout="vertical" margin={{ left: 100, right: 20, top: 5, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis type="number" tick={{ fontSize: 9 }} />
+                  <YAxis dataKey="name" type="category" tick={{ fontSize: 8 }} width={95} />
+                  <Tooltip formatter={(v: number) => `${v} M DH`} />
+                  <Bar dataKey="Budget CP" fill="#1e3a5f" radius={[0, 3, 3, 0]} barSize={8} />
+                  <Bar dataKey="Engagements" fill="#8b5cf6" radius={[0, 3, 3, 0]} barSize={8} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            {/* Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-violet-50">
+                    <th className="border border-gray-300 px-2 py-1.5 text-left font-bold text-gray-700">Programme</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Budget</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Eng.</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...analysisByProgramme].sort((a, b) => b.cp - a.cp).map(p => {
+                    const tauxEng = p.cp > 0 ? (p.engCP / p.cp) * 100 : 0
+                    return (
+                      <tr key={p.name}>
+                        <td className="border border-gray-300 px-2 py-1 font-medium text-gray-900">{p.name.length > 25 ? p.name.slice(0, 23) + '…' : p.name}</td>
+                        <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(p.cp)}</td>
+                        <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(p.engCP)}</td>
+                        <td className="border border-gray-300 px-2 py-1 text-center">
+                          <div className="flex items-center gap-1">
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                              <div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tauxEng, 100)}%` }} />
+                            </div>
+                            <span className={`text-[10px] font-bold ${tauxColor(tauxEng)}`}>{formatPercent(tauxEng)}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        {/* ═══════════ SECTION 5 : SOURCE DE FINANCEMENT ═══════════ */}
-        <div className="mb-5">
+        {/* ═══════════ SECTION 5 : SOURCE DE FINANCEMENT (CAMEMBERT) ═══════════ */}
+        <div className="mb-6 print-page-break">
           <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
             <span className="inline-block w-5">5.</span>Source de financement
           </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-50">
-                  <th className="border border-gray-300 px-2 py-1.5 text-left font-bold text-gray-700">Source</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Budget (LFI)</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Engagements</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux Eng.</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Ordonnancements</th>
-                  <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux Ord.</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sourceFinancementData.map(s => (
-                  <tr key={s.name}>
-                    <td className="border border-gray-300 px-2 py-1 font-medium text-gray-900">{s.name}</td>
-                    <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(s.cp)}</td>
-                    <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(s.engCP)}</td>
-                    <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(s.tauxEngagement)}>{formatPercent(s.tauxEngagement)}</span></td>
-                    <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(s.ord)}</td>
-                    <td className="border border-gray-300 px-2 py-1 text-center"><span className={tauxColor(s.tauxOrdonnement)}>{formatPercent(s.tauxOrdonnement)}</span></td>
+          <div className="grid grid-cols-2 gap-4">
+            {/* Donut Chart */}
+            <div className="border border-gray-200 rounded-lg p-3">
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Répartition par source</p>
+              <ResponsiveContainer width="100%" height={260}>
+                <PieChart>
+                  <Pie
+                    data={sourcePieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={55}
+                    outerRadius={90}
+                    dataKey="value"
+                    nameKey="name"
+                    paddingAngle={2}
+                    label={({ name, percent }: { name: string; percent: number }) => `${name.length > 12 ? name.slice(0, 10) + '…' : name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {sourcePieData.map((_entry, idx) => (
+                      <Cell key={idx} fill={CHART_COLORS[idx % CHART_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(v: number) => `${v} M DH`} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            {/* Table with progress bars */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border border-gray-300 px-2 py-1.5 text-left font-bold text-gray-700">Source</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Budget</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Eng.</th>
+                    <th className="border border-gray-300 px-2 py-1.5 text-center font-bold text-gray-700">Taux</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {sourceFinancementData.map((s, idx) => (
+                    <tr key={s.name}>
+                      <td className="border border-gray-300 px-2 py-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: CHART_COLORS[idx % CHART_COLORS.length] }} />
+                          <span className="font-medium text-gray-900">{s.name}</span>
+                        </div>
+                      </td>
+                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(s.cp)}</td>
+                      <td className="border border-gray-300 px-2 py-1 text-center text-gray-700">{formatMillions(s.engCP)}</td>
+                      <td className="border border-gray-300 px-2 py-1 text-center">
+                        <div className="flex items-center gap-1">
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full rounded-full" style={{ width: `${Math.min(s.tauxEngagement, 100)}%`, backgroundColor: CHART_COLORS[idx % CHART_COLORS.length] }} />
+                          </div>
+                          <span className={`text-[10px] font-bold ${tauxColor(s.tauxEngagement)}`}>{formatPercent(s.tauxEngagement)}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
         {/* ═══════════ SECTION 6 : ASSAINISSEMENT DES REPORTS ═══════════ */}
-        <div className="mb-5 print-page-break">
+        <div className="mb-6">
           <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
             <span className="inline-block w-5">6.</span>Assainissement des reports
           </h2>
-          <div className="grid grid-cols-3 gap-3 mb-3">
-            <div className="border border-blue-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Crédits reportés</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(totalReports)}</p>
-              <p className="text-[10px] text-gray-400">M DH</p>
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="border-2 border-blue-200 rounded-lg p-4">
+              <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-1">Crédits reportés</p>
+              <p className="text-xl font-black text-gray-900">{formatMillions(totalReports)}</p>
+              <p className="text-[10px] text-gray-400 mb-2">M DH</p>
+              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full rounded-full bg-blue-800" style={{ width: '100%' }} />
+              </div>
             </div>
-            <div className="border border-emerald-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Eng. Reports</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(totalEngReports)}</p>
-              <p className="text-[10px] text-gray-400">Taux : {formatPercent(tauxEngReports)}</p>
+            <div className="border-2 border-emerald-200 rounded-lg p-4">
+              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-1">Eng. Reports</p>
+              <p className="text-xl font-black text-gray-900">{formatMillions(totalEngReports)}</p>
+              <p className="text-[10px] text-gray-400 mb-2">Taux : <span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></p>
+              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tauxEngReports, 100)}%` }} />
+              </div>
             </div>
-            <div className="border border-violet-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-violet-600 uppercase tracking-wider">Ord. Reports</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(totalOrdReports)}</p>
-              <p className="text-[10px] text-gray-400">Taux : {formatPercent(tauxOrdReports)}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════ SECTION 7 : PRÉVISIONS D'ORDONNANCEMENT ═══════════ */}
-        <div className="mb-5">
-          <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
-            <span className="inline-block w-5">7.</span>Prévisions d&apos;ordonnancement cumulées
-          </h2>
-          <div className="grid grid-cols-4 gap-3">
-            <div className="border border-blue-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Cum. Juin</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevJuin)}</p>
-              <p className="text-[10px] text-gray-400">M DH</p>
-            </div>
-            <div className="border border-teal-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-teal-600 uppercase tracking-wider">Cum. Septembre</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevSeptembre)}</p>
-              <p className="text-[10px] text-gray-400">M DH</p>
-            </div>
-            <div className="border border-orange-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-orange-600 uppercase tracking-wider">Cum. Novembre</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevNovembre)}</p>
-              <p className="text-[10px] text-gray-400">M DH</p>
-            </div>
-            <div className="border border-indigo-200 rounded-lg p-3 text-center">
-              <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">Cum. Décembre</p>
-              <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevDecembre)}</p>
-              <p className="text-[10px] text-gray-400">M DH</p>
+            <div className="border-2 border-violet-200 rounded-lg p-4">
+              <p className="text-[10px] font-bold text-violet-600 uppercase tracking-wider mb-1">Ord. Reports</p>
+              <p className="text-xl font-black text-gray-900">{formatMillions(totalOrdReports)}</p>
+              <p className="text-[10px] text-gray-400 mb-2">Taux : <span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></p>
+              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tauxOrdReports, 100)}%` }} />
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* ═══════════ SECTION 8 : STRUCTURE BUDGÉTAIRE ═══════════ */}
-        <div className="mb-5">
-          <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
-            <span className="inline-block w-5">8.</span>Structure budgétaire
-          </h2>
-          <div className="space-y-2">
+          {/* Mini bar chart by entity for reports */}
+          <div className="border border-gray-200 rounded-lg p-3">
+            <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Crédits de reports par entité (M DH)</p>
             {(() => {
-              const totalBudget = budgetStructureData.reduce((s, d) => s + d.value, 0)
-              const maxBudget = budgetStructureData.length > 0 ? Math.max(...budgetStructureData.map(d => d.value)) : 0
-              const sorted = [...budgetStructureData].sort((a, b) => b.value - a.value)
-              return sorted.map((item, idx) => {
-                const pct = totalBudget > 0 ? (item.value / totalBudget) * 100 : 0
-                const barWidth = maxBudget > 0 ? (item.value / maxBudget) * 100 : 0
+              const entityReportData = [...analysisByEntity].sort((a, b) => b.cpReports - a.cpReports)
+              const maxReport = entityReportData.length > 0 ? Math.max(...entityReportData.map(e => e.cpReports)) : 0
+              return entityReportData.filter(e => e.cpReports > 0).map(e => {
+                const barWidth = maxReport > 0 ? (e.cpReports / maxReport) * 100 : 0
                 return (
-                  <div key={item.name}>
-                    <div className="flex items-center justify-between mb-0.5">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black text-gray-400 w-4 text-right">{idx + 1}</span>
-                        <span className="text-xs font-semibold text-gray-800">{item.name}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-gray-900">{formatMillions(item.value)} M DH</span>
-                        <span className="text-[10px] font-bold text-gray-500">{Math.round(pct)}%</span>
+                  <div key={e.name} className="flex items-center gap-2 mb-1.5">
+                    <span className="text-[10px] font-semibold text-gray-700 w-28 truncate flex-shrink-0">{e.name}</span>
+                    <div className="flex-1 h-3 bg-gray-50 rounded overflow-hidden">
+                      <div className="h-full rounded bg-indigo-600 flex items-center justify-end pr-1" style={{ width: `${barWidth}%`, minWidth: '2px' }}>
+                        {barWidth > 15 && <span className="text-[8px] font-bold text-white">{formatMillions(e.cpReports)}</span>}
                       </div>
                     </div>
-                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full bg-blue-800" style={{ width: `${barWidth}%` }} />
-                    </div>
+                    {barWidth <= 15 && <span className="text-[9px] font-bold text-gray-600">{formatMillions(e.cpReports)}</span>}
                   </div>
                 )
               })
             })()}
+          </div>
+        </div>
+
+        {/* ═══════════ SECTION 7 : PRÉVISIONS D'ORDONNANCEMENT ═══════════ */}
+        <div className="mb-6 print-page-break">
+          <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
+            <span className="inline-block w-5">7.</span>Prévisions d&apos;ordonnancement cumulées
+          </h2>
+          <div className="grid grid-cols-2 gap-4">
+            {/* Area-style bar chart */}
+            <div className="border border-gray-200 rounded-lg p-3">
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Évolution des prévisions cumulées (M DH)</p>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={previsionChartData} margin={{ left: 10, right: 10, top: 10, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 9 }} />
+                  <Tooltip formatter={(v: number) => `${v} M DH`} />
+                  <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={40}>
+                    {previsionChartData.map((_entry, idx) => (
+                      <Cell key={idx} fill={CHART_COLORS[idx % CHART_COLORS.length]} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            {/* KPI Cards */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="border border-blue-200 rounded-lg p-3 text-center">
+                <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Cum. Juin</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevJuin)}</p>
+                <p className="text-[10px] text-gray-400">M DH</p>
+              </div>
+              <div className="border border-teal-200 rounded-lg p-3 text-center">
+                <p className="text-[10px] font-bold text-teal-600 uppercase tracking-wider">Cum. Septembre</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevSeptembre)}</p>
+                <p className="text-[10px] text-gray-400">M DH</p>
+              </div>
+              <div className="border border-orange-200 rounded-lg p-3 text-center">
+                <p className="text-[10px] font-bold text-orange-600 uppercase tracking-wider">Cum. Novembre</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevNovembre)}</p>
+                <p className="text-[10px] text-gray-400">M DH</p>
+              </div>
+              <div className="border border-indigo-200 rounded-lg p-3 text-center">
+                <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">Cum. Décembre</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevDecembre)}</p>
+                <p className="text-[10px] text-gray-400">M DH</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ═══════════ SECTION 8 : STRUCTURE BUDGÉTAIRE (CAMEMBERT) ═══════════ */}
+        <div className="mb-6">
+          <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
+            <span className="inline-block w-5">8.</span>Structure budgétaire
+          </h2>
+          <div className="grid grid-cols-2 gap-4">
+            {/* Donut Chart */}
+            <div className="border border-gray-200 rounded-lg p-3">
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Répartition Reports / Consolidés / Nouveaux</p>
+              <ResponsiveContainer width="100%" height={240}>
+                <PieChart>
+                  <Pie
+                    data={structurePieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={85}
+                    dataKey="value"
+                    nameKey="name"
+                    paddingAngle={3}
+                    label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    <Cell fill="#1e3a5f" />
+                    <Cell fill="#3b82f6" />
+                    <Cell fill="#10b981" />
+                  </Pie>
+                  <Tooltip formatter={(v: number) => `${v} M DH`} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            {/* Horizontal bars with amounts */}
+            <div className="space-y-4">
+              {(() => {
+                const totalBudget = budgetStructureData.reduce((s, d) => s + d.value, 0)
+                const maxBudget = budgetStructureData.length > 0 ? Math.max(...budgetStructureData.map(d => d.value)) : 0
+                const sorted = [...budgetStructureData].sort((a, b) => b.value - a.value)
+                const structColors = ['#1e3a5f', '#3b82f6', '#10b981']
+                return sorted.map((item, idx) => {
+                  const pct = totalBudget > 0 ? (item.value / totalBudget) * 100 : 0
+                  const barWidth = maxBudget > 0 ? (item.value / maxBudget) * 100 : 0
+                  return (
+                    <div key={item.name} className="border border-gray-200 rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: structColors[idx] }} />
+                          <span className="text-sm font-bold text-gray-800">{item.name}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-sm font-black text-gray-900">{formatMillions(item.value)}</span>
+                          <span className="text-[10px] text-gray-500 ml-1">M DH</span>
+                          <span className="ml-2 text-xs font-bold text-gray-600">{Math.round(pct)}%</span>
+                        </div>
+                      </div>
+                      <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-full rounded-full" style={{ width: `${barWidth}%`, backgroundColor: structColors[idx] }} />
+                      </div>
+                    </div>
+                  )
+                })
+              })()}
+            </div>
+          </div>
+        </div>
+
+        {/* ═══════════ SECTION 9 : PERFORMANCE PAR ENTITÉ (RADAR-STYLE) ═══════════ */}
+        <div className="mb-6">
+          <h2 className="text-sm font-bold text-blue-900 tracking-wide uppercase border-b border-blue-200 pb-1 mb-3">
+            <span className="inline-block w-5">9.</span>Performance par entité
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            {[...analysisByEntity].sort((a, b) => b.cp - a.cp).map(e => {
+              const maxTaux = Math.max(e.tauxEngagement, e.tauxOrdonnement, e.tauxPaiement, 1)
+              return (
+                <div key={e.name} className="border border-gray-200 rounded-lg p-3">
+                  <p className="text-xs font-bold text-gray-900 mb-2">{e.name}</p>
+                  {/* Engagement */}
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-[9px] font-bold text-emerald-600 w-16 flex-shrink-0">Engagement</span>
+                    <div className="flex-1 h-2.5 bg-gray-50 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(e.tauxEngagement / maxTaux * 80, 100)}%` }} />
+                    </div>
+                    <span className={`text-[10px] font-bold w-10 text-right ${tauxColor(e.tauxEngagement)}`}>{formatPercent(e.tauxEngagement)}</span>
+                  </div>
+                  {/* Ordonnancement */}
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-[9px] font-bold text-violet-600 w-16 flex-shrink-0">Ord.</span>
+                    <div className="flex-1 h-2.5 bg-gray-50 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(e.tauxOrdonnement / maxTaux * 80, 100)}%` }} />
+                    </div>
+                    <span className={`text-[10px] font-bold w-10 text-right ${tauxColor(e.tauxOrdonnement)}`}>{formatPercent(e.tauxOrdonnement)}</span>
+                  </div>
+                  {/* Paiements */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] font-bold text-amber-600 w-16 flex-shrink-0">Paiements</span>
+                    <div className="flex-1 h-2.5 bg-gray-50 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(e.tauxPaiement / maxTaux * 80, 100)}%` }} />
+                    </div>
+                    <span className={`text-[10px] font-bold w-10 text-right ${tauxColor(e.tauxPaiement)}`}>{formatPercent(e.tauxPaiement)}</span>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
 
