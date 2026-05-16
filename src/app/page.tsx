@@ -1142,7 +1142,7 @@ export default function Dashboard() {
     <>
       {/* ═══════════ SECTION : CRÉDITS ═══════════ */}
       <div className="space-y-3">
-        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">3.</span>Crédits</h3>
+        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">1.1.</span>Crédits</h3>
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Crédits Reportés */}
           <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
@@ -1230,7 +1230,7 @@ export default function Dashboard() {
 
       {/* ═══════════ SECTION : ENGAGEMENTS ═══════════ */}
       <div className="space-y-3">
-        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">4.</span>Engagements</h3>
+        <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">1.2.</span>Engagements</h3>
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Engagement sur Report */}
           <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
@@ -3471,12 +3471,15 @@ export default function Dashboard() {
   const renderEngagementsView = () => {
     return (
       <>
+        {/* ═══════════ TITRE : ENGAGEMENTS GLOBAUX ═══════════ */}
+        <h2 className="text-base font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-7">1.</span>Engagements globaux</h2>
+
         {renderKPISections(kpis)}
 
         {/* ═══════════ Engagement par Programme ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">1.</span>Engagements par Programme</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Engagements par Programme</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3583,7 +3586,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Projet ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Engagements par Projet</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Engagements par Projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3690,7 +3693,7 @@ export default function Dashboard() {
         {/* ═══════════ Engagement par Entité ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Engagements par Entité</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">4.</span>Engagements par Entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -3797,7 +3800,7 @@ export default function Dashboard() {
         {/* Engagement Lines Table */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">4.</span>Détail des engagements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">5.</span>Détail des engagements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
