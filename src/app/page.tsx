@@ -2656,43 +2656,75 @@ export default function Dashboard() {
               {/* Pie Chart - takes 3 columns */}
               <div className="lg:col-span-3 flex items-center justify-center bg-gradient-to-br from-gray-50/50 to-white p-6 border-r border-gray-100">
                 {programmePieData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={380}>
+                <ResponsiveContainer width="100%" height={440}>
                   <PieChart>
                     <Pie
                       data={programmePieData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={70}
-                      outerRadius={140}
+                      innerRadius={65}
+                      outerRadius={130}
                       paddingAngle={3}
                       dataKey="value"
                       nameKey="name"
                       strokeWidth={2}
                       stroke="#ffffff"
-                      labelLine={false}
+                      labelLine={(props: Record<string, unknown>) => {
+                        const cx = (props.cx as number) || 0
+                        const cy = (props.cy as number) || 0
+                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
+                        const percent = (props.percent as number) || 0
+                        const outerRadius = (props.outerRadius as number) || 140
+                        if (percent < 0.04) return <g key="empty-line" />
+                        const radius = outerRadius + 6
+                        const x1 = cx + radius * Math.cos(-midAngle)
+                        const y1 = cy + radius * Math.sin(-midAngle)
+                        const x2End = cx + (outerRadius + 35) * Math.cos(-midAngle)
+                        const y2End = cy + (outerRadius + 35) * Math.sin(-midAngle)
+                        const x3End = x2End > cx ? x2End + 15 : x2End - 15
+                        return (
+                          <path key={`line-${props.name}-${percent}`} d={`M${x1},${y1}L${x2End},${y2End}L${x3End},${y2End}`} stroke="#9ca3af" fill="none" strokeWidth={1} />
+                        )
+                      }}
                       label={(props: Record<string, unknown>) => {
                         const cx = (props.cx as number) || 0
                         const cy = (props.cy as number) || 0
                         const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
                         const percent = (props.percent as number) || 0
                         const outerRadius = (props.outerRadius as number) || 140
+                        const nameVal = (props.name as string) || ''
+                        const valueVal = (props.value as number) || 0
                         if (percent < 0.04) return null
-                        const RADIAN = Math.PI / 180
-                        const radius = outerRadius + 30
+                        const radius = outerRadius + 35
                         const x = cx + radius * Math.cos(-midAngle)
                         const y = cy + radius * Math.sin(-midAngle)
+                        const textAnchor = x > cx ? 'start' : 'end'
+                        const displayName = nameVal.length > 18 ? nameVal.substring(0, 18) + '…' : nameVal
                         return (
-                          <text
-                            x={x}
-                            y={y}
-                            fill="#374151"
-                            textAnchor={x > cx ? 'start' : 'end'}
-                            dominantBaseline="central"
-                            fontSize={11}
-                            fontWeight={600}
-                          >
-                            {`${Math.round(percent * 100)}%`}
-                          </text>
+                          <g key={`label-${nameVal}-${percent}`}>
+                            <text
+                              x={x}
+                              y={y - 7}
+                              fill="#1f2937"
+                              textAnchor={textAnchor}
+                              dominantBaseline="central"
+                              fontSize={11}
+                              fontWeight={700}
+                            >
+                              {displayName}
+                            </text>
+                            <text
+                              x={x}
+                              y={y + 8}
+                              fill="#6b7280"
+                              textAnchor={textAnchor}
+                              dominantBaseline="central"
+                              fontSize={10}
+                              fontWeight={500}
+                            >
+                              {`${valueVal} M DH (${Math.round(percent * 100)}%)`}
+                            </text>
+                          </g>
                         )
                       }}
                     >
@@ -2707,12 +2739,12 @@ export default function Dashboard() {
                   </PieChart>
                 </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-[380px] text-gray-400 text-sm">Aucune donnée disponible</div>
+                  <div className="flex items-center justify-center h-[440px] text-gray-400 text-sm">Aucune donnée disponible</div>
                 )}
               </div>
               {/* Legend + Key Figures - takes 2 columns */}
               <div className="lg:col-span-2 flex flex-col justify-center p-5">
-                <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
                   {programmePieData.map((item, idx) => {
                     const pctBudget = progTotalBudget > 0 ? (item.cp / progTotalBudget) * 100 : 0
                     return (
@@ -2962,42 +2994,75 @@ export default function Dashboard() {
               {/* Pie Chart - 3 columns */}
               <div className="lg:col-span-3 flex items-center justify-center bg-gradient-to-br from-gray-50/50 to-white p-6 border-r border-gray-100">
                 {projectPieData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={380}>
+                <ResponsiveContainer width="100%" height={440}>
                   <PieChart>
                     <Pie
                       data={projectPieData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={70}
-                      outerRadius={140}
+                      innerRadius={65}
+                      outerRadius={130}
                       paddingAngle={3}
                       dataKey="value"
                       nameKey="name"
                       strokeWidth={2}
                       stroke="#ffffff"
-                      labelLine={false}
+                      labelLine={(props: Record<string, unknown>) => {
+                        const cx = (props.cx as number) || 0
+                        const cy = (props.cy as number) || 0
+                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
+                        const percent = (props.percent as number) || 0
+                        const outerRadius = (props.outerRadius as number) || 140
+                        if (percent < 0.04) return <g key="empty-line" />
+                        const radius = outerRadius + 6
+                        const x1 = cx + radius * Math.cos(-midAngle)
+                        const y1 = cy + radius * Math.sin(-midAngle)
+                        const x2End = cx + (outerRadius + 35) * Math.cos(-midAngle)
+                        const y2End = cy + (outerRadius + 35) * Math.sin(-midAngle)
+                        const x3End = x2End > cx ? x2End + 15 : x2End - 15
+                        return (
+                          <path key={`line-${props.name}-${percent}`} d={`M${x1},${y1}L${x2End},${y2End}L${x3End},${y2End}`} stroke="#9ca3af" fill="none" strokeWidth={1} />
+                        )
+                      }}
                       label={(props: Record<string, unknown>) => {
                         const cx = (props.cx as number) || 0
                         const cy = (props.cy as number) || 0
                         const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
                         const percent = (props.percent as number) || 0
                         const outerRadius = (props.outerRadius as number) || 140
+                        const nameVal = (props.name as string) || ''
+                        const valueVal = (props.value as number) || 0
                         if (percent < 0.04) return null
-                        const radius = outerRadius + 30
+                        const radius = outerRadius + 35
                         const x = cx + radius * Math.cos(-midAngle)
                         const y = cy + radius * Math.sin(-midAngle)
+                        const textAnchor = x > cx ? 'start' : 'end'
+                        const displayName = nameVal.length > 18 ? nameVal.substring(0, 18) + '…' : nameVal
                         return (
-                          <text
-                            x={x}
-                            y={y}
-                            fill="#374151"
-                            textAnchor={x > cx ? 'start' : 'end'}
-                            dominantBaseline="central"
-                            fontSize={11}
-                            fontWeight={600}
-                          >
-                            {`${Math.round(percent * 100)}%`}
-                          </text>
+                          <g key={`label-${nameVal}-${percent}`}>
+                            <text
+                              x={x}
+                              y={y - 7}
+                              fill="#1f2937"
+                              textAnchor={textAnchor}
+                              dominantBaseline="central"
+                              fontSize={11}
+                              fontWeight={700}
+                            >
+                              {displayName}
+                            </text>
+                            <text
+                              x={x}
+                              y={y + 8}
+                              fill="#6b7280"
+                              textAnchor={textAnchor}
+                              dominantBaseline="central"
+                              fontSize={10}
+                              fontWeight={500}
+                            >
+                              {`${valueVal} M DH (${Math.round(percent * 100)}%)`}
+                            </text>
+                          </g>
                         )
                       }}
                     >
@@ -3012,12 +3077,12 @@ export default function Dashboard() {
                   </PieChart>
                 </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-[380px] text-gray-400 text-sm">Aucune donnée disponible</div>
+                  <div className="flex items-center justify-center h-[440px] text-gray-400 text-sm">Aucune donnée disponible</div>
                 )}
               </div>
               {/* Legend - 2 columns */}
               <div className="lg:col-span-2 flex flex-col justify-center p-5">
-                <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
                   {projectPieData.map((item, idx) => {
                     const pctBudget = progTotalBudget > 0 ? (item.cp / progTotalBudget) * 100 : 0
                     return (
