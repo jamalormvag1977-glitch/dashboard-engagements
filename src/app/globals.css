@@ -181,3 +181,110 @@ table tbody tr:hover {
 nav button {
   transition: all 0.2s ease;
 }
+
+/* ═══════════ PRINT STYLES ═══════════ */
+@media print {
+  /* Hide everything except the report */
+  body > *:not(#__next) {
+    display: none !important;
+  }
+
+  /* Hide sidebar, navigation, filters, and non-print elements */
+  .print\:hidden,
+  nav,
+  aside,
+  [data-sidebar],
+  header,
+  .fixed,
+  .sticky {
+    display: none !important;
+  }
+
+  /* Reset layout for print */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    font-size: 11px !important;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Make the main content area full-width */
+  main,
+  .print-report {
+    margin: 0 !important;
+    padding: 15mm !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Ensure the report content takes full page width */
+  .print-report {
+    background: white !important;
+  }
+
+  /* Page breaks */
+  .print-page-break {
+    page-break-before: always;
+  }
+
+  /* Avoid breaking inside tables and KPI blocks */
+  table,
+  .grid {
+    page-break-inside: avoid;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
+
+  /* Ensure tables have proper borders */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  th, td {
+    border: 1px solid #999 !important;
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+  }
+
+  /* Print-friendly colors for backgrounds */
+  .bg-blue-50, .bg-blue-50\/50, .bg-blue-50\/60, .bg-blue-50\/40,
+  .bg-emerald-50, .bg-violet-50, .bg-gray-50,
+  [class*="bg-blue-50"], [class*="bg-emerald-50"], [class*="bg-violet-50"] {
+    background-color: #f0f4ff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* KPI cards print-friendly */
+  .kpi-card-premium,
+  [class*="rounded-xl border"] {
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  /* Progress bars - keep colors */
+  .bg-indigo-600, .bg-emerald-600, .bg-blue-800 {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide shadows and rounded corners for cleaner print */
+  .shadow-sm, .shadow-md, .shadow-lg, .shadow-2xl,
+  [class*="shadow-"] {
+    box-shadow: none !important;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 10mm;
+    size: A4 landscape;
+  }
+}
