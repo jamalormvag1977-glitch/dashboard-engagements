@@ -5054,9 +5054,90 @@ export default function Dashboard() {
 
     return (
       <>
-        {/* ═══════════ SECTION 1 : REPORTS ═══════════ */}
+        {/* ═══════════ SECTION 1 : RÉPARTITION DES CRÉDITS DE REPORTS ═══════════ */}
+        <Card className="bg-white border-2 border-blue-800 shadow-md overflow-hidden">
+          <CardContent className="p-0">
+            <div className="flex items-center gap-2 px-6 pt-3 pb-2 border-b border-blue-200 bg-blue-50/50">
+              <h4 className="text-sm font-bold text-blue-900 uppercase tracking-wide"><span className="text-blue-900 mr-2 inline-block w-6">1.</span>Répartition des crédits de reports par entités et projets</h4>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
+              {/* ══ Par Entité ══ */}
+              <div className="p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h5 className="text-xs font-black text-indigo-700 uppercase tracking-wider">Par Entité</h5>
+                  <span className="text-sm font-black text-indigo-700">{formatMillions(totalReports)} M DH</span>
+                </div>
+                <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
+                  {(() => {
+                    const sorted = [...reportsByEntity].sort((a, b) => b.reports - a.reports)
+                    const maxVal = sorted.length > 0 ? sorted[0].reports : 0
+                    const totalVal = sorted.reduce((s, d) => s + d.reports, 0)
+                    return sorted.map((item, idx) => {
+                      const pct = totalVal > 0 ? (item.reports / totalVal) * 100 : 0
+                      const barWidth = maxVal > 0 ? (item.reports / maxVal) * 100 : 0
+                      return (
+                        <div key={item.name}>
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center gap-2 min-w-0 flex-1">
+                              <span className="text-[10px] font-black text-gray-400 w-4 text-right">{idx + 1}</span>
+                              <span className="text-xs font-bold text-gray-800 truncate">{item.name}</span>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                              <span className="text-xs font-black text-gray-900">{formatMillions(item.reports)} M DH</span>
+                              <span className="text-[10px] font-bold text-gray-500">{Math.round(pct)}%</span>
+                            </div>
+                          </div>
+                          <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full rounded-full bg-indigo-600 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                          </div>
+                        </div>
+                      )
+                    })
+                  })()}
+                </div>
+              </div>
+              {/* ══ Par Projet ══ */}
+              <div className="p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h5 className="text-xs font-black text-emerald-700 uppercase tracking-wider">Par Projet</h5>
+                  <span className="text-sm font-black text-emerald-700">{formatMillions(totalReports)} M DH</span>
+                </div>
+                <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
+                  {(() => {
+                    const sorted = [...reportsByProjet].sort((a, b) => b.reports - a.reports)
+                    const maxVal = sorted.length > 0 ? sorted[0].reports : 0
+                    const totalVal = sorted.reduce((s, d) => s + d.reports, 0)
+                    return sorted.map((item, idx) => {
+                      const pct = totalVal > 0 ? (item.reports / totalVal) * 100 : 0
+                      const barWidth = maxVal > 0 ? (item.reports / maxVal) * 100 : 0
+                      return (
+                        <div key={item.name}>
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center gap-2 min-w-0 flex-1">
+                              <span className="text-[10px] font-black text-gray-400 w-4 text-right">{idx + 1}</span>
+                              <span className="text-xs font-bold text-gray-800 truncate">{item.name}</span>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                              <span className="text-xs font-black text-gray-900">{formatMillions(item.reports)} M DH</span>
+                              <span className="text-[10px] font-bold text-gray-500">{Math.round(pct)}%</span>
+                            </div>
+                          </div>
+                          <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full rounded-full bg-emerald-600 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                          </div>
+                        </div>
+                      )
+                    })
+                  })()}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* ═══════════ SECTION 2 : REPORTS ═══════════ */}
         <div className="space-y-3">
-          <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">1.</span>Reports</h3>
+          <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Reports</h3>
             
           <div className="grid grid-cols-3 gap-4">
             {/* Crédits reportés */}
@@ -5108,9 +5189,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ═══════════ SECTION 2 : TAUX D'ASSAINISSEMENT ═══════════ */}
+        {/* ═══════════ SECTION 3 : TAUX D'ASSAINISSEMENT ═══════════ */}
         <div className="space-y-3">
-          <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Taux d&apos;assainissement</h3>
+          <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Taux d&apos;assainissement</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Taux Engagement Reports */}
             <div className="kpi-card-premium rounded-xl border border-emerald-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)' }}>
@@ -5185,7 +5266,7 @@ export default function Dashboard() {
         {/* Table by Entity */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Assainissement par entité</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">4.</span>Assainissement par entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5276,7 +5357,7 @@ export default function Dashboard() {
         {/* Table by Projet */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">4.</span>Assainissement par projet</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">5.</span>Assainissement par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5367,7 +5448,7 @@ export default function Dashboard() {
         {/* ═══════════ Analyse assainissement par programme ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">5.</span>Assainissement par programme</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">6.</span>Assainissement par programme</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5494,7 +5575,7 @@ export default function Dashboard() {
         {/* ═══════════ Détail des assainissement par prestation ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">6.</span>Détail des assainissement par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">7.</span>Détail des assainissement par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
