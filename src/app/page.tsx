@@ -1336,6 +1336,12 @@ export default function Dashboard() {
 
   const renderOverview = () => (
     <>
+      {/* ═══════════ TITRE : TRÉSORERIE ET SUBVENTION ═══════════ */}
+      <div className="flex items-center gap-2">
+        <div className="w-1 h-5 rounded-full bg-gradient-to-b from-amber-500 to-orange-600" />
+        <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Trésorerie et subvention</h3>
+      </div>
+
       {/* ═══════════ SECTION : TRÉSORERIE ET SUBVENTION ═══════════ */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Card className="border border-amber-100 shadow-sm">
