@@ -4440,70 +4440,112 @@ export default function Dashboard() {
           </h2>
           <div className="grid grid-cols-3 gap-2">
             {/* 3.1 Par programme */}
-            <div className="border border-gray-200 rounded p-1.5">
-              <p className="text-[8px] font-bold text-violet-600 uppercase mb-1">3.1 Par programme</p>
-              <div className="space-y-0.5">
+            <div className="bg-gradient-to-b from-violet-50/80 to-white border border-violet-200 rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-violet-800 px-2 py-0.5">
+                <p className="text-[8px] font-bold text-white uppercase tracking-wider">3.1 Par programme</p>
+              </div>
+              <div className="p-1.5 space-y-1">
                 {[...analysisByProgramme].sort((a, b) => b.cp - a.cp).map(p => {
                   const tE = p.cp > 0 ? (p.engCP / p.cp) * 100 : 0
                   const tO = p.cp > 0 ? (p.ord / p.cp) * 100 : 0
                   const tP = p.cp > 0 ? (p.paiements / p.cp) * 100 : 0
                   return (
-                    <div key={p.name} className="flex items-center gap-1">
-                      <span className="text-[7px] font-semibold text-gray-700 w-20 truncate" title={p.name}>{p.name.length > 16 ? p.name.slice(0, 14) + '…' : p.name}</span>
-                      <div className="flex-1 flex gap-px h-2">
-                        <div className="bg-emerald-400 rounded-l" style={{ width: `${Math.min(tE, 100)}%` }} title={`Eng: ${formatPercent(tE)}`} />
-                        <div className="bg-violet-400" style={{ width: `${Math.min(tO, 100)}%` }} title={`Ord: ${formatPercent(tO)}`} />
-                        <div className="bg-amber-400 rounded-r" style={{ width: `${Math.min(tP, 100)}%` }} title={`Pai: ${formatPercent(tP)}`} />
+                    <div key={p.name} className="bg-white rounded border border-gray-100 px-1.5 py-1">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <span className="text-[7px] font-bold text-gray-800 truncate" style={{ maxWidth: '65%' }} title={p.name}>{p.name.length > 20 ? p.name.slice(0, 18) + '…' : p.name}</span>
+                        <span className="text-[7px] text-gray-400 font-medium">{formatMillions(p.cp)} M</span>
                       </div>
-                      <span className={`text-[7px] font-bold w-8 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
+                      <div className="space-y-px">
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-emerald-600 w-6">Eng</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-violet-600 w-6">Ord</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-amber-600 w-6">Pai</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
+                        </div>
+                      </div>
                     </div>
                   )
                 })}
               </div>
             </div>
             {/* 3.2 Par projet */}
-            <div className="border border-gray-200 rounded p-1.5">
-              <p className="text-[8px] font-bold text-emerald-600 uppercase mb-1">3.2 Par projet (Top 10)</p>
-              <div className="space-y-0.5">
+            <div className="bg-gradient-to-b from-emerald-50/80 to-white border border-emerald-200 rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-emerald-800 px-2 py-0.5">
+                <p className="text-[8px] font-bold text-white uppercase tracking-wider">3.2 Par projet (Top 10)</p>
+              </div>
+              <div className="p-1.5 space-y-1">
                 {[...analysisByGroup].sort((a, b) => b.cp - a.cp).slice(0, 10).map(g => {
                   const tE = g.cp > 0 ? (g.engCP / g.cp) * 100 : 0
                   const tO = g.cp > 0 ? (g.ord / g.cp) * 100 : 0
                   const tP = g.cp > 0 ? (g.paiements / g.cp) * 100 : 0
                   return (
-                    <div key={g.name} className="flex items-center gap-1">
-                      <span className="text-[7px] font-semibold text-gray-700 w-20 truncate" title={g.name}>{g.name.length > 16 ? g.name.slice(0, 14) + '…' : g.name}</span>
-                      <div className="flex-1 flex gap-px h-2">
-                        <div className="bg-emerald-400 rounded-l" style={{ width: `${Math.min(tE, 100)}%` }} title={`Eng: ${formatPercent(tE)}`} />
-                        <div className="bg-violet-400" style={{ width: `${Math.min(tO, 100)}%` }} title={`Ord: ${formatPercent(tO)}`} />
-                        <div className="bg-amber-400 rounded-r" style={{ width: `${Math.min(tP, 100)}%` }} title={`Pai: ${formatPercent(tP)}`} />
+                    <div key={g.name} className="bg-white rounded border border-gray-100 px-1.5 py-1">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <span className="text-[7px] font-bold text-gray-800 truncate" style={{ maxWidth: '65%' }} title={g.name}>{g.name.length > 20 ? g.name.slice(0, 18) + '…' : g.name}</span>
+                        <span className="text-[7px] text-gray-400 font-medium">{formatMillions(g.cp)} M</span>
                       </div>
-                      <span className={`text-[7px] font-bold w-8 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
+                      <div className="space-y-px">
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-emerald-600 w-6">Eng</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-violet-600 w-6">Ord</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-amber-600 w-6">Pai</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
+                        </div>
+                      </div>
                     </div>
                   )
                 })}
               </div>
             </div>
             {/* 3.3 Par entité */}
-            <div className="border border-gray-200 rounded p-1.5">
-              <p className="text-[8px] font-bold text-blue-600 uppercase mb-1">3.3 Par entité</p>
-              <div className="space-y-0.5">
+            <div className="bg-gradient-to-b from-blue-50/80 to-white border border-blue-200 rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-blue-800 px-2 py-0.5">
+                <p className="text-[8px] font-bold text-white uppercase tracking-wider">3.3 Par entité</p>
+              </div>
+              <div className="p-1.5 space-y-1">
                 {[...analysisByEntity].sort((a, b) => b.cp - a.cp).map(e => (
-                  <div key={e.name} className="flex items-center gap-1">
-                    <span className="text-[7px] font-semibold text-gray-700 w-20 truncate" title={e.name}>{e.name.length > 16 ? e.name.slice(0, 14) + '…' : e.name}</span>
-                    <div className="flex-1 flex gap-px h-2">
-                      <div className="bg-emerald-400 rounded-l" style={{ width: `${Math.min(e.tauxEngagement, 100)}%` }} title={`Eng: ${formatPercent(e.tauxEngagement)}`} />
-                      <div className="bg-violet-400" style={{ width: `${Math.min(e.tauxOrdonnement, 100)}%` }} title={`Ord: ${formatPercent(e.tauxOrdonnement)}`} />
-                      <div className="bg-amber-400 rounded-r" style={{ width: `${Math.min(e.tauxPaiement, 100)}%` }} title={`Pai: ${formatPercent(e.tauxPaiement)}`} />
+                  <div key={e.name} className="bg-white rounded border border-gray-100 px-1.5 py-1">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <span className="text-[7px] font-bold text-gray-800 truncate" style={{ maxWidth: '65%' }} title={e.name}>{e.name.length > 20 ? e.name.slice(0, 18) + '…' : e.name}</span>
+                      <span className="text-[7px] text-gray-400 font-medium">{formatMillions(e.cp)} M</span>
                     </div>
-                    <span className={`text-[7px] font-bold w-8 text-right ${tauxColor(e.tauxEngagement)}`}>{formatPercent(e.tauxEngagement)}</span>
+                    <div className="space-y-px">
+                      <div className="flex items-center gap-1">
+                        <span className="text-[6px] font-bold text-emerald-600 w-6">Eng</span>
+                        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(e.tauxEngagement, 100)}%` }} /></div>
+                        <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(e.tauxEngagement)}`}>{formatPercent(e.tauxEngagement)}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[6px] font-bold text-violet-600 w-6">Ord</span>
+                        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(e.tauxOrdonnement, 100)}%` }} /></div>
+                        <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(e.tauxOrdonnement)}`}>{formatPercent(e.tauxOrdonnement)}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[6px] font-bold text-amber-600 w-6">Pai</span>
+                        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(e.tauxPaiement, 100)}%` }} /></div>
+                        <span className={`text-[6px] font-bold w-7 text-right ${tauxColor(e.tauxPaiement)}`}>{formatPercent(e.tauxPaiement)}</span>
+                      </div>
+                    </div>
                   </div>
                 ))}
-              </div>
-              {/* Legend */}
-              <div className="flex gap-3 mt-1 pt-0.5 border-t border-gray-100">
-                <span className="flex items-center gap-0.5"><span className="w-2 h-1.5 bg-emerald-400 rounded" /><span className="text-[7px] text-gray-500">Engagement</span></span>
-                <span className="flex items-center gap-0.5"><span className="w-2 h-1.5 bg-violet-400 rounded" /><span className="text-[7px] text-gray-500">Ordonn.</span></span>
-                <span className="flex items-center gap-0.5"><span className="w-2 h-1.5 bg-amber-400 rounded" /><span className="text-[7px] text-gray-500">Paiements</span></span>
               </div>
             </div>
           </div>
