@@ -4290,8 +4290,8 @@ export default function Dashboard() {
           <div className="bg-gradient-to-r from-blue-800 to-blue-900 rounded-lg p-2.5 mb-2 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-sm font-black tracking-tight">TABLEAU DE BORD DES ENGAGEMENTS</h1>
-                <p className="text-blue-200 text-[9px]">Budget d&apos;investissement — Suivi des engagements, ordonnancements et paiements</p>
+                <h1 className="text-sm font-black tracking-tight">TABLEAU DE BORD DE SUIVI DE L&apos;EXÉCUTION DU BUDGET D&apos;INVESTISSEMENT AU 17-05-2026</h1>
+                <p className="text-blue-200 text-[9px]">Suivi des engagements, ordonnancements et paiements</p>
               </div>
               <div className="text-right">
                 <p className="text-[7px] text-blue-300 uppercase">Date d&apos;édition</p>
@@ -4587,26 +4587,26 @@ export default function Dashboard() {
         <div className="print-page-break" />
         <div className="print-page-2">
           {/* Page 2 Header */}
-          <div className="bg-gradient-to-r from-blue-800 to-blue-900 rounded-lg px-3 py-0.5 mb-1.5 text-white flex items-center justify-between">
-            <h2 className="text-[10px] font-bold">TABLEAU DE BORD DES ENGAGEMENTS — Suite</h2>
+          <div className="bg-gradient-to-r from-blue-800 to-blue-900 rounded-lg px-3 py-1.5 mb-2 text-white flex items-center justify-between">
+            <h2 className="text-[11px] font-bold">TABLEAU DE BORD DE SUIVI DE L&apos;EXÉCUTION DU BUDGET D&apos;INVESTISSEMENT — Suite</h2>
             <p className="text-[8px] text-blue-200">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
           </div>
 
           {/* ═══ 5. RÉPARTITION PAR ENTITÉ — CP / CE ═══ */}
-          <div className="mb-1.5">
+          <div className="mb-2.5">
             <div className="bg-white border border-violet-200 rounded-lg overflow-hidden">
-              <div className="bg-violet-800 px-2 py-0.5 flex items-center justify-between">
-                <p className="text-[8px] font-bold text-white uppercase tracking-wider">5. Répartition par entité — CP / CE</p>
-                <p className="text-[6px] text-violet-200">{entitySorted.length} entités</p>
+              <div className="bg-violet-800 px-2 py-1 flex items-center justify-between">
+                <p className="text-[9px] font-bold text-white uppercase tracking-wider">5. Répartition par entité — CP / CE</p>
+                <p className="text-[7px] text-violet-200">{entitySorted.length} entités</p>
               </div>
               <div className="grid grid-cols-2 divide-x divide-gray-100">
                 {/* CP Section */}
-                <div className="p-1.5">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[7px] font-black text-indigo-700 uppercase">Budget CP</span>
-                    <span className="text-[7px] font-black text-indigo-700">{formatMillions(entityTotalCP)} M</span>
+                <div className="p-2">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[8px] font-black text-indigo-700 uppercase">Budget CP</span>
+                    <span className="text-[8px] font-black text-indigo-700">{formatMillions(entityTotalCP)} M</span>
                   </div>
-                  <div className="space-y-0.5">
+                  <div className="space-y-1">
                     {entitySorted.map((e, idx) => {
                       const pct = entityTotalCP > 0 ? (e.cp / entityTotalCP) * 100 : 0
                       const barWidth = entityMaxCP > 0 ? (e.cp / entityMaxCP) * 100 : 0
@@ -4614,15 +4614,15 @@ export default function Dashboard() {
                         <div key={e.name}>
                           <div className="flex items-center justify-between mb-px">
                             <div className="flex items-center gap-1 min-w-0 flex-1">
-                              <span className="text-[6px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
-                              <span className="text-[6px] font-bold text-gray-800" title={e.name}>{e.name}</span>
+                              <span className="text-[7px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
+                              <span className="text-[7px] font-bold text-gray-800" title={e.name}>{e.name}</span>
                             </div>
                             <div className="flex items-center gap-1 flex-shrink-0 ml-1">
-                              <span className="text-[6px] font-black text-gray-900">{formatMillions(e.cp)}</span>
-                              <span className="text-[5px] font-bold text-gray-500">{Math.round(pct)}%</span>
+                              <span className="text-[7px] font-black text-gray-900">{formatMillions(e.cp)}</span>
+                              <span className="text-[6px] font-bold text-gray-500">{Math.round(pct)}%</span>
                             </div>
                           </div>
-                          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full bg-indigo-600" style={{ width: `${barWidth}%` }} />
                           </div>
                         </div>
@@ -4631,12 +4631,12 @@ export default function Dashboard() {
                   </div>
                 </div>
                 {/* CE Section */}
-                <div className="p-1.5">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[7px] font-black text-emerald-700 uppercase">Budget CE</span>
-                    <span className="text-[7px] font-black text-emerald-700">{formatMillions(entityTotalCE)} M</span>
+                <div className="p-2">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[8px] font-black text-emerald-700 uppercase">Budget CE</span>
+                    <span className="text-[8px] font-black text-emerald-700">{formatMillions(entityTotalCE)} M</span>
                   </div>
-                  <div className="space-y-0.5">
+                  <div className="space-y-1">
                     {entityCEData.map((e, idx) => {
                       const pct = entityCETotal > 0 ? (e.ce / entityCETotal) * 100 : 0
                       const barWidth = entityMaxCE > 0 ? (e.ce / entityMaxCE) * 100 : 0
@@ -4644,15 +4644,15 @@ export default function Dashboard() {
                         <div key={e.name + '-ce'}>
                           <div className="flex items-center justify-between mb-px">
                             <div className="flex items-center gap-1 min-w-0 flex-1">
-                              <span className="text-[6px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
-                              <span className="text-[6px] font-bold text-gray-800" title={e.name}>{e.name}</span>
+                              <span className="text-[7px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
+                              <span className="text-[7px] font-bold text-gray-800" title={e.name}>{e.name}</span>
                             </div>
                             <div className="flex items-center gap-1 flex-shrink-0 ml-1">
-                              <span className="text-[6px] font-black text-gray-900">{formatMillions(e.ce)}</span>
-                              <span className="text-[5px] font-bold text-gray-500">{Math.round(pct)}%</span>
+                              <span className="text-[7px] font-black text-gray-900">{formatMillions(e.ce)}</span>
+                              <span className="text-[6px] font-bold text-gray-500">{Math.round(pct)}%</span>
                             </div>
                           </div>
-                          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full bg-emerald-600" style={{ width: `${barWidth}%` }} />
                           </div>
                         </div>
@@ -4665,47 +4665,47 @@ export default function Dashboard() {
           </div>
 
           {/* ═══ 6. PERFORMANCE ═══ */}
-          <div className="mb-1.5">
-            <h2 className="text-[9px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-0.5 mb-1">
+          <div className="mb-2.5">
+            <h2 className="text-[10px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-1 mb-1.5">
               6. Performance — Taux d&apos;exécution
             </h2>
-            <div className="flex gap-3 mb-1">
-              <span className="flex items-center gap-1"><span className="w-3 h-1.5 bg-emerald-500 rounded-sm" /><span className="text-[6px] text-gray-500 font-medium">Engagement</span></span>
-              <span className="flex items-center gap-1"><span className="w-3 h-1.5 bg-violet-500 rounded-sm" /><span className="text-[6px] text-gray-500 font-medium">Ordonnancement</span></span>
-              <span className="flex items-center gap-1"><span className="w-3 h-1.5 bg-amber-500 rounded-sm" /><span className="text-[6px] text-gray-500 font-medium">Paiement</span></span>
+            <div className="flex gap-3 mb-1.5">
+              <span className="flex items-center gap-1"><span className="w-3 h-2 bg-emerald-500 rounded-sm" /><span className="text-[7px] text-gray-500 font-medium">Engagement</span></span>
+              <span className="flex items-center gap-1"><span className="w-3 h-2 bg-violet-500 rounded-sm" /><span className="text-[7px] text-gray-500 font-medium">Ordonnancement</span></span>
+              <span className="flex items-center gap-1"><span className="w-3 h-2 bg-amber-500 rounded-sm" /><span className="text-[7px] text-gray-500 font-medium">Paiement</span></span>
             </div>
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-3 gap-2">
               {/* 6.1 Par programme */}
               <div className="border border-indigo-200 rounded-lg overflow-hidden">
-                <div className="bg-indigo-800 px-1.5 py-0.5">
-                  <p className="text-[7px] font-bold text-white uppercase tracking-wider">Par programme</p>
+                <div className="bg-indigo-800 px-2 py-1">
+                  <p className="text-[8px] font-bold text-white uppercase tracking-wider">Par programme</p>
                 </div>
-                <div className="p-1 space-y-0.5">
+                <div className="p-1.5 space-y-1">
                   {progSorted.map(p => {
                     const tE = p.cp > 0 ? (p.engCP / p.cp) * 100 : 0
                     const tO = p.cp > 0 ? (p.ord / p.cp) * 100 : 0
                     const tP = p.cp > 0 ? (p.paiements / p.cp) * 100 : 0
                     return (
-                      <div key={p.name} className="bg-white rounded border border-gray-100 px-1 py-0.5">
-                        <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-[6px] font-bold text-gray-800" title={p.name}>{p.name}</span>
-                          <span className="text-[5px] text-gray-400 font-semibold">{formatMillions(p.cp)} M</span>
+                      <div key={p.name} className="bg-white rounded border border-gray-100 px-1.5 py-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[7px] font-bold text-gray-800" title={p.name}>{p.name}</span>
+                          <span className="text-[6px] text-gray-400 font-semibold">{formatMillions(p.cp)} M</span>
                         </div>
-                        <div className="space-y-px">
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-[5px] font-bold text-emerald-600 w-4">E</span>
-                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
-                            <span className={`text-[5px] font-bold w-5 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-emerald-600 w-4">E</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
                           </div>
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-[5px] font-bold text-violet-600 w-4">O</span>
-                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
-                            <span className={`text-[5px] font-bold w-5 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-violet-600 w-4">O</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
                           </div>
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-[5px] font-bold text-amber-600 w-4">P</span>
-                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
-                            <span className={`text-[5px] font-bold w-5 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-amber-600 w-4">P</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
                           </div>
                         </div>
                       </div>
@@ -4715,35 +4715,35 @@ export default function Dashboard() {
               </div>
               {/* 6.2 Par projet */}
               <div className="border border-emerald-200 rounded-lg overflow-hidden">
-                <div className="bg-emerald-800 px-1.5 py-0.5">
-                  <p className="text-[7px] font-bold text-white uppercase tracking-wider">Par projet</p>
+                <div className="bg-emerald-800 px-2 py-1">
+                  <p className="text-[8px] font-bold text-white uppercase tracking-wider">Par projet</p>
                 </div>
-                <div className="p-1 space-y-0.5">
+                <div className="p-1.5 space-y-1">
                   {projSorted.map(g => {
                     const tE = g.cp > 0 ? (g.engCP / g.cp) * 100 : 0
                     const tO = g.cp > 0 ? (g.ord / g.cp) * 100 : 0
                     const tP = g.cp > 0 ? (g.paiements / g.cp) * 100 : 0
                     return (
-                      <div key={g.name} className="bg-white rounded border border-gray-100 px-1 py-0.5">
-                        <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-[6px] font-bold text-gray-800" title={g.name}>{g.name}</span>
-                          <span className="text-[5px] text-gray-400 font-semibold">{formatMillions(g.cp)} M</span>
+                      <div key={g.name} className="bg-white rounded border border-gray-100 px-1.5 py-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[7px] font-bold text-gray-800" title={g.name}>{g.name}</span>
+                          <span className="text-[6px] text-gray-400 font-semibold">{formatMillions(g.cp)} M</span>
                         </div>
-                        <div className="space-y-px">
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-[5px] font-bold text-emerald-600 w-4">E</span>
-                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
-                            <span className={`text-[5px] font-bold w-5 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-emerald-600 w-4">E</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
                           </div>
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-[5px] font-bold text-violet-600 w-4">O</span>
-                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
-                            <span className={`text-[5px] font-bold w-5 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-violet-600 w-4">O</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
                           </div>
-                          <div className="flex items-center gap-0.5">
-                            <span className="text-[5px] font-bold text-amber-600 w-4">P</span>
-                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
-                            <span className={`text-[5px] font-bold w-5 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[6px] font-bold text-amber-600 w-4">P</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
+                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
                           </div>
                         </div>
                       </div>
@@ -4753,31 +4753,31 @@ export default function Dashboard() {
               </div>
               {/* 6.3 Par entité */}
               <div className="border border-violet-200 rounded-lg overflow-hidden">
-                <div className="bg-violet-800 px-1.5 py-0.5">
-                  <p className="text-[7px] font-bold text-white uppercase tracking-wider">Par entité</p>
+                <div className="bg-violet-800 px-2 py-1">
+                  <p className="text-[8px] font-bold text-white uppercase tracking-wider">Par entité</p>
                 </div>
-                <div className="p-1 space-y-0.5">
+                <div className="p-1.5 space-y-1">
                   {entitySorted.map(e => (
-                    <div key={e.name} className="bg-white rounded border border-gray-100 px-1 py-0.5">
-                      <div className="flex items-center justify-between mb-0.5">
-                        <span className="text-[6px] font-bold text-gray-800" title={e.name}>{e.name}</span>
-                        <span className="text-[5px] text-gray-400 font-semibold">{formatMillions(e.cp)} M</span>
+                    <div key={e.name} className="bg-white rounded border border-gray-100 px-1.5 py-1">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[7px] font-bold text-gray-800" title={e.name}>{e.name}</span>
+                        <span className="text-[6px] text-gray-400 font-semibold">{formatMillions(e.cp)} M</span>
                       </div>
-                      <div className="space-y-px">
-                        <div className="flex items-center gap-0.5">
-                          <span className="text-[5px] font-bold text-emerald-600 w-4">E</span>
-                          <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(e.tauxEngagement, 100)}%` }} /></div>
-                          <span className={`text-[5px] font-bold w-5 text-right ${tauxColor(e.tauxEngagement)}`}>{formatPercent(e.tauxEngagement)}</span>
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-emerald-600 w-4">E</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(e.tauxEngagement, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(e.tauxEngagement)}`}>{formatPercent(e.tauxEngagement)}</span>
                         </div>
-                        <div className="flex items-center gap-0.5">
-                          <span className="text-[5px] font-bold text-violet-600 w-4">O</span>
-                          <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(e.tauxOrdonnement, 100)}%` }} /></div>
-                          <span className={`text-[5px] font-bold w-5 text-right ${tauxColor(e.tauxOrdonnement)}`}>{formatPercent(e.tauxOrdonnement)}</span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-violet-600 w-4">O</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(e.tauxOrdonnement, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(e.tauxOrdonnement)}`}>{formatPercent(e.tauxOrdonnement)}</span>
                         </div>
-                        <div className="flex items-center gap-0.5">
-                          <span className="text-[5px] font-bold text-amber-600 w-4">P</span>
-                          <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(e.tauxPaiement, 100)}%` }} /></div>
-                          <span className={`text-[5px] font-bold w-5 text-right ${tauxColor(e.tauxPaiement)}`}>{formatPercent(e.tauxPaiement)}</span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[6px] font-bold text-amber-600 w-4">P</span>
+                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(e.tauxPaiement, 100)}%` }} /></div>
+                          <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(e.tauxPaiement)}`}>{formatPercent(e.tauxPaiement)}</span>
                         </div>
                       </div>
                     </div>
@@ -4788,50 +4788,50 @@ export default function Dashboard() {
           </div>
 
           {/* ═══ 7. PRÉVISIONS ORDONNANCEMENT ═══ */}
-          <div className="mb-1">
-            <h2 className="text-[9px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-0.5 mb-1">
+          <div className="mb-2">
+            <h2 className="text-[10px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-1 mb-1.5">
               7. Prévisions ordonnancement
             </h2>
-            <div className="grid grid-cols-4 gap-1">
-              <div className="bg-blue-50 rounded p-1.5 text-center border border-blue-200">
-                <p className="text-[6px] font-bold text-blue-600 uppercase">Cum. Juin</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevJuin)}</p>
-                <div className="flex items-center gap-0.5 mt-0.5">
-                  <div className="flex-1 h-1.5 bg-blue-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-blue-600" style={{ width: `${previsionChartData[0].pct}%` }} /></div>
-                  <span className="text-[6px] font-bold text-blue-700">{previsionChartData[0].pct}%</span>
+            <div className="grid grid-cols-4 gap-2">
+              <div className="bg-blue-50 rounded p-2 text-center border border-blue-200">
+                <p className="text-[7px] font-bold text-blue-600 uppercase">Cum. Juin</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.cumulPrevJuin)}</p>
+                <div className="flex items-center gap-1 mt-1">
+                  <div className="flex-1 h-2 bg-blue-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-blue-600" style={{ width: `${previsionChartData[0].pct}%` }} /></div>
+                  <span className="text-[7px] font-bold text-blue-700">{previsionChartData[0].pct}%</span>
                 </div>
               </div>
-              <div className="bg-teal-50 rounded p-1.5 text-center border border-teal-200">
-                <p className="text-[6px] font-bold text-teal-600 uppercase">Cum. Sept.</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevSeptembre)}</p>
-                <div className="flex items-center gap-0.5 mt-0.5">
-                  <div className="flex-1 h-1.5 bg-teal-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-teal-600" style={{ width: `${previsionChartData[1].pct}%` }} /></div>
-                  <span className="text-[6px] font-bold text-teal-700">{previsionChartData[1].pct}%</span>
+              <div className="bg-teal-50 rounded p-2 text-center border border-teal-200">
+                <p className="text-[7px] font-bold text-teal-600 uppercase">Cum. Sept.</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.cumulPrevSeptembre)}</p>
+                <div className="flex items-center gap-1 mt-1">
+                  <div className="flex-1 h-2 bg-teal-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-teal-600" style={{ width: `${previsionChartData[1].pct}%` }} /></div>
+                  <span className="text-[7px] font-bold text-teal-700">{previsionChartData[1].pct}%</span>
                 </div>
               </div>
-              <div className="bg-orange-50 rounded p-1.5 text-center border border-orange-200">
-                <p className="text-[6px] font-bold text-orange-600 uppercase">Cum. Nov.</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevNovembre)}</p>
-                <div className="flex items-center gap-0.5 mt-0.5">
-                  <div className="flex-1 h-1.5 bg-orange-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-orange-500" style={{ width: `${previsionChartData[2].pct}%` }} /></div>
-                  <span className="text-[6px] font-bold text-orange-700">{previsionChartData[2].pct}%</span>
+              <div className="bg-orange-50 rounded p-2 text-center border border-orange-200">
+                <p className="text-[7px] font-bold text-orange-600 uppercase">Cum. Nov.</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.cumulPrevNovembre)}</p>
+                <div className="flex items-center gap-1 mt-1">
+                  <div className="flex-1 h-2 bg-orange-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-orange-500" style={{ width: `${previsionChartData[2].pct}%` }} /></div>
+                  <span className="text-[7px] font-bold text-orange-700">{previsionChartData[2].pct}%</span>
                 </div>
               </div>
-              <div className="bg-indigo-50 rounded p-1.5 text-center border border-indigo-200">
-                <p className="text-[6px] font-bold text-indigo-600 uppercase">Cum. Déc.</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevDecembre)}</p>
-                <div className="flex items-center gap-0.5 mt-0.5">
-                  <div className="flex-1 h-1.5 bg-indigo-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-indigo-600" style={{ width: `${previsionChartData[3].pct}%` }} /></div>
-                  <span className="text-[6px] font-bold text-indigo-700">{previsionChartData[3].pct}%</span>
+              <div className="bg-indigo-50 rounded p-2 text-center border border-indigo-200">
+                <p className="text-[7px] font-bold text-indigo-600 uppercase">Cum. Déc.</p>
+                <p className="text-base font-black text-gray-900">{formatMillions(kpis.cumulPrevDecembre)}</p>
+                <div className="flex items-center gap-1 mt-1">
+                  <div className="flex-1 h-2 bg-indigo-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-indigo-600" style={{ width: `${previsionChartData[3].pct}%` }} /></div>
+                  <span className="text-[7px] font-bold text-indigo-700">{previsionChartData[3].pct}%</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="mt-0.5 pt-0.5 border-t-2 border-blue-800 flex items-center justify-between">
-            <p className="text-[6px] text-gray-400">Rapport auto-généré — {filteredData.length} lignes de données</p>
-            <p className="text-[6px] text-gray-400">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <div className="mt-1 pt-1 border-t-2 border-blue-800 flex items-center justify-between">
+            <p className="text-[7px] text-gray-400">Rapport auto-généré — {filteredData.length} lignes de données</p>
+            <p className="text-[7px] text-gray-400">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
         </div>
       </div>
@@ -4988,7 +4988,7 @@ export default function Dashboard() {
                 <Badge variant="secondary" className="text-xs">1.0.0</Badge>
               </div>
               <p className="text-xs text-gray-500">
-                Tableau de bord de situation d&apos;exécution du budget d&apos;investissement.
+                Tableau de bord de suivi de l&apos;exécution du budget d&apos;investissement au 17-05-2026.
                 Application dédiée au suivi et à l&apos;analyse des engagements, ordonnancements
                 et paiements relatifs au budget d&apos;investissement.
               </p>
@@ -6209,7 +6209,7 @@ export default function Dashboard() {
                 </Button>
                 <div>
                   <h2 className="text-base sm:text-lg font-bold text-blue-900 tracking-wide uppercase">
-                    Situation d'exécution du budget d'investissement
+                    Tableau de bord de suivi de l&apos;exécution du budget d&apos;investissement au 17-05-2026
                   </h2>
                   <p className="text-xs text-gray-500 hidden sm:block">
                     Vue consolidée par entité, projet et programme

@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tableau de Bord - Situation d'exécution des Engagements",
-  description: "Tableau de bord de situation d'exécution des engagements budgétaires",
+  title: "Tableau de Bord - Suivi de l'exécution du budget d'investissement au 17-05-2026",
+  description: "Tableau de bord de suivi de l'exécution du budget d'investissement au 17-05-2026",
   keywords: ["dashboard", "engagements", "budget", "situation", "exécution"],
   authors: [{ name: "Z.ai Team" }],
   icons: {
