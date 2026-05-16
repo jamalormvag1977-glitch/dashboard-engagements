@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import * as XLSX from 'xlsx'
-import { kv } from '@vercel/kv'
+import { head, put } from '@vercel/blob'
 
-// Resolve the correct data file path for both standalone and dev modes
+// Resolve the correct data file path
 function getDataFilePath(): string {
   const standalonePath = path.join(process.cwd(), '..', '..', 'data', 'dashboard-data.json')
   const directPath = path.join(process.cwd(), 'data', 'dashboard-data.json')
@@ -13,12 +13,12 @@ function getDataFilePath(): string {
   return directPath
 }
 
-// Check if Vercel KV is available
-function isVercelKVAvailable(): boolean {
-  return !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN)
+// Check if Vercel Blob is available
+function isVercelBlobAvailable(): boolean {
+  return !!process.env.BLOB_READ_WRITE_TOKEN
 }
 
-// Column name mapping: Excel header (uppercase) → normalized field name
+// Column name mapping
 const KNOWN_COLUMNS: Record<string, string> = {
   'PROGRAMME': 'Programme',
   'PROJET': 'Projet',
@@ -53,13 +53,11 @@ const KNOWN_COLUMNS: Record<string, string> = {
   'TRESORERIE': 'TRESORERIE',
 }
 
-// Position-based columns that may not have proper headers
 const POSITION_COLUMNS: Record<number, { name: string; header: string }> = {
   65: { name: 'SUBVENTION DEMANDEE', header: 'BN' },
   66: { name: 'TRESORERIE', header: 'BO' },
 }
 
-// Month prefixes for prévisions columns
 const MONTHS = ['JANVIER', 'FEVRIER', 'MARS', 'AVRIL', 'MAI', 'JUIN', 'JUILLET', 'AOUT', 'SEPTEMBRE', 'OCTOBRE', 'NOVEMBRE', 'DECEMBRE']
 
 function parseNumber(val: unknown): number | null {
@@ -128,7 +126,6 @@ export async function POST(request: Request) {
       }
     })
 
-    // Position-based columns
     for (const [idxStr, colDef] of Object.entries(POSITION_COLUMNS)) {
       const idx = parseInt(idxStr)
       if (idx < headerRow.length && !columnMap[idx]) {
@@ -162,9 +159,7 @@ export async function POST(request: Request) {
       for (const [colIdx, colName] of Object.entries(columnMap)) {
         const idx = parseInt(colIdx)
         const rawValue = idx < rawRow.length ? rawRow[idx] : ''
-
         if (skipFields.has(colName)) continue
-
         if (stringFields.has(colName)) {
           row[colName] = parseString(rawValue)
         } else {
@@ -175,7 +170,6 @@ export async function POST(request: Request) {
       if (!row['Programme'] || row['Programme'] === '') {
         row['Programme'] = row['ENTITE'] || 'Non classé'
       }
-
       if (!row['Projet'] || row['Projet'] === '') {
         row['Projet'] = row['ENTITE'] || 'Non classé'
       }
@@ -210,16 +204,34 @@ export async function POST(request: Request) {
       lastUpdated: new Date().toISOString(),
     }
 
-    // Save to Vercel KV (production)
-    if (isVercelKVAvailable()) {
-      // Auto-backup before overwriting
-      const existingData = await kv.get('dashboard-data')
-      if (existingData) {
-        await kv.set('dashboard-data-backup', existingData)
-        console.log('Auto-backup created in Vercel KV')
+    // Save to Vercel Blob (production)
+    if (isVercelBlobAvailable()) {
+      try {
+        // Auto-backup before overwriting
+        try {
+          const existingBlob = await head('dashboard-data.json')
+          if (existingBlob) {
+            const existingData = await fetch(existingBlob.url).then(r => r.text())
+            await put('dashboard-data-backup.json', existingData, {
+              access: 'public',
+              contentType: 'application/json',
+              allowOverwrite: true,
+            })
+            console.log('Auto-backup created in Vercel Blob')
+          }
+        } catch {
+          // No existing data to backup, that's fine
+        }
+
+        await put('dashboard-data.json', JSON.stringify(payload), {
+          access: 'public',
+          contentType: 'application/json',
+          allowOverwrite: true,
+        })
+        console.log(`Data saved to Vercel Blob: ${dataRows.length} rows`)
+      } catch (blobError) {
+        console.error('Blob save failed:', blobError)
       }
-      await kv.set('dashboard-data', payload)
-      console.log(`Data saved to Vercel KV: ${dataRows.length} rows`)
     }
 
     // Also try saving to local file (development / backup)
@@ -235,7 +247,6 @@ export async function POST(request: Request) {
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19)
         const backupFile = path.join(backupDir, `dashboard-data-pre-upload-${timestamp}.json`)
         fs.copyFileSync(dataFile, backupFile)
-        console.log(`Auto-backup created: ${backupFile}`)
 
         const backups = fs.readdirSync(backupDir)
           .filter(f => f.startsWith('dashboard-data-pre-upload-'))
@@ -252,7 +263,6 @@ export async function POST(request: Request) {
       }
       fs.writeFileSync(dataFile, JSON.stringify(payload), 'utf-8')
     } catch (fsError) {
-      // File system write may fail on Vercel (read-only), that's OK
       console.log('Local file save skipped (expected on Vercel)')
     }
 

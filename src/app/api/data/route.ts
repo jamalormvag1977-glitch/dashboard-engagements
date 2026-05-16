@@ -1,22 +1,20 @@
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { kv } from '@vercel/kv'
+import { head, put } from '@vercel/blob'
 
 // Resolve the correct data file path for both standalone and dev modes
 function getDataFilePath(): string {
   const standalonePath = path.join(process.cwd(), '..', '..', 'data', 'dashboard-data.json')
   const directPath = path.join(process.cwd(), 'data', 'dashboard-data.json')
-
   if (fs.existsSync(standalonePath)) return standalonePath
   if (fs.existsSync(directPath)) return directPath
-
   return directPath
 }
 
-// Check if Vercel KV is available
-function isVercelKVAvailable(): boolean {
-  return !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN)
+// Check if Vercel Blob is available
+function isVercelBlobAvailable(): boolean {
+  return !!process.env.BLOB_READ_WRITE_TOKEN
 }
 
 // Normalize a single row's column names and ensure required fields exist
@@ -26,7 +24,6 @@ function normalizeRow(row: Record<string, unknown>): Record<string, unknown> {
   if (!normalized['Programme'] || normalized['Programme'] === '') {
     normalized['Programme'] = normalized['ENTITE'] || 'Non classé'
   }
-
   if (!normalized['Projet'] || normalized['Projet'] === '') {
     normalized['Projet'] = normalized['ENTITE'] || 'Non classé'
   }
@@ -76,12 +73,18 @@ function normalizeData(rawData: { data?: unknown[]; filters?: Record<string, unk
 
 export async function GET() {
   try {
-    // Try Vercel KV first (production)
-    if (isVercelKVAvailable()) {
-      const kvData = await kv.get<Record<string, unknown>>('dashboard-data')
-      if (kvData) {
-        const normalized = normalizeData(kvData as { data?: unknown[]; filters?: Record<string, unknown>; lastUpdated?: string; totalCount?: number })
-        return NextResponse.json(normalized)
+    // Try Vercel Blob first (production)
+    if (isVercelBlobAvailable()) {
+      try {
+        const blobInfo = await head('dashboard-data.json')
+        if (blobInfo) {
+          const response = await fetch(blobInfo.url)
+          const data = await response.json()
+          const normalized = normalizeData(data)
+          return NextResponse.json(normalized)
+        }
+      } catch (blobError) {
+        console.log('Blob read failed, falling back to local file')
       }
     }
 
@@ -121,10 +124,18 @@ export async function POST(request: Request) {
       lastUpdated: new Date().toISOString(),
     }
 
-    // Save to Vercel KV (production)
-    if (isVercelKVAvailable()) {
-      await kv.set('dashboard-data', payload)
-      console.log('Data saved to Vercel KV')
+    // Save to Vercel Blob (production)
+    if (isVercelBlobAvailable()) {
+      try {
+        await put('dashboard-data.json', JSON.stringify(payload), {
+          access: 'public',
+          contentType: 'application/json',
+          allowOverwrite: true,
+        })
+        console.log('Data saved to Vercel Blob')
+      } catch (blobError) {
+        console.error('Blob save failed:', blobError)
+      }
     }
 
     // Also save to local file (development / backup)
@@ -136,7 +147,6 @@ export async function POST(request: Request) {
       }
       fs.writeFileSync(dataFile, JSON.stringify(payload), 'utf-8')
     } catch (fsError) {
-      // File system write may fail on Vercel (read-only), that's OK
       console.log('Local file save skipped (expected on Vercel)')
     }
 
