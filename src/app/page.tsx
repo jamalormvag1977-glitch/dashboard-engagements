@@ -3070,12 +3070,6 @@ export default function Dashboard() {
 
     return (
       <>
-        {/* ═══════════ TITRE : INDICATEURS PAR PROGRAMME ═══════════ */}
-        <div className="flex items-center gap-2">
-          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500" />
-          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par programme</h3>
-        </div>
-
         {/* ═══════════ RÉPARTITION CP & CE PAR PROGRAMME — BAR CHART ═══════════ */}
         <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
           <CardContent className="p-0">
