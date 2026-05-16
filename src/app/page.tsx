@@ -3067,7 +3067,7 @@ export default function Dashboard() {
         <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
           <CardContent className="p-0">
             <div className="flex items-center gap-2 px-6 pt-5 pb-3 border-b border-gray-100">
-              <h4 className="text-sm font-bold text-blue-900 uppercase tracking-wide"><span className="text-blue-700 mr-2">1.</span>Répartition des crédits par programme</h4>
+              <h4 className="text-sm font-bold text-blue-900 uppercase tracking-wide"><span className="text-blue-900 mr-2 inline-block w-5">1.</span>Répartition des crédits par programme</h4>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
               {/* ══ CP Section ══ */}
@@ -3165,7 +3165,7 @@ export default function Dashboard() {
           return (
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-700 mr-2">2.</span>État d'avancement par programme</h3>
+                <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">2.</span>État d'avancement par programme</h3>
                 <span className="text-[11px] text-gray-400 font-medium">({analysisByProgramme.length} programmes)</span>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -3392,7 +3392,7 @@ export default function Dashboard() {
         {/* ═══════════ TABLEAU D'ANALYSE PAR PROGRAMME ═══════════ */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-700 mr-2">3.</span>Tableau d&apos;analyse par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">3.</span>Tableau d&apos;analyse par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
