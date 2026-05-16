@@ -2628,7 +2628,7 @@ export default function Dashboard() {
         {/* ═══════════ TITRE : INDICATEURS CLÉS PAR PROGRAMME ═══════════ */}
         <div className="flex items-center gap-2">
           <div className="w-1 h-5 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500" />
-          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs clés par programme</h3>
+          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par projet</h3>
         </div>
 
         {/* ═══════════ CAMEMBERT : RÉPARTITION PAR PROJET ═══════════ */}
