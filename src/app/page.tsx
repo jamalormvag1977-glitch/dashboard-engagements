@@ -2863,6 +2863,28 @@ export default function Dashboard() {
                       </TableCell>
                     </TableRow>
                   ))}
+                  {/* ─── Ligne Total ─── */}
+                  <TableRow className="bg-gray-100 border-t-2 border-gray-300">
+                    <TableCell className="text-xs font-black text-gray-900 uppercase tracking-wide">Total</TableCell>
+                    <TableCell className="text-xs font-black text-gray-900 text-center">{formatMillions(kpis.totalCP)}</TableCell>
+                    <TableCell className="text-xs font-black text-gray-900 text-center">{formatMillions(kpis.totalEngCP)}</TableCell>
+                    <TableCell className="text-xs text-center font-black">
+                      <span className={tauxColor(kpis.tauxEngagement)}>{formatPercent(kpis.tauxEngagement)}</span>
+                    </TableCell>
+                    <TableCell className="text-xs font-black text-gray-900 text-center">{formatMillions(kpis.totalCE)}</TableCell>
+                    <TableCell className="text-xs font-black text-gray-900 text-center">{formatMillions(kpis.totalEngCE)}</TableCell>
+                    <TableCell className="text-xs text-center font-black">
+                      <span className={tauxColor(kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0)}>{kpis.totalCE > 0 ? formatPercent((kpis.totalEngCE / kpis.totalCE) * 100) : '0,0%'}</span>
+                    </TableCell>
+                    <TableCell className="text-xs font-black text-gray-900 text-center">{formatMillions(kpis.totalOrd)}</TableCell>
+                    <TableCell className="text-xs text-center font-black">
+                      <span className={tauxColor(kpis.tauxOrdonnement)}>{formatPercent(kpis.tauxOrdonnement)}</span>
+                    </TableCell>
+                    <TableCell className="text-xs font-black text-gray-900 text-center">{formatMillions(kpis.totalPaiements)}</TableCell>
+                    <TableCell className="text-xs text-center font-black">
+                      <span className={tauxColor(kpis.tauxPaiement)}>{formatPercent(kpis.tauxPaiement)}</span>
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </div>
