@@ -2637,6 +2637,7 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Pie Chart */}
               <div className="flex items-center justify-center">
+                {programmePieData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={320}>
                   <PieChart>
                     <Pie
@@ -2648,7 +2649,9 @@ export default function Dashboard() {
                       paddingAngle={2}
                       dataKey="value"
                       nameKey="name"
-                      label={({ name, percent }: { name: string; percent: number }) => {
+                      label={(props: Record<string, unknown>) => {
+                        const name = (props.name as string) || ''
+                        const percent = (props.percent as number) || 0
                         const displayName = name.length > 18 ? name.substring(0, 18) + '…' : name
                         return `${displayName} ${(percent * 100).toFixed(1)}%`
                       }}
@@ -2659,11 +2662,14 @@ export default function Dashboard() {
                       ))}
                     </Pie>
                     <Tooltip
-                      formatter={(value: number, name: string) => [`${value} M DH`, name]}
+                      formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]}
                       contentStyle={{ borderRadius: '8px', fontSize: '12px', border: '1px solid #e5e7eb' }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
+                ) : (
+                  <div className="flex items-center justify-center h-[320px] text-gray-400 text-sm">Aucune donnée disponible</div>
+                )}
               </div>
               {/* Legend + Key Figures */}
               <div className="flex flex-col justify-center space-y-3">
