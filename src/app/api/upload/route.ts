@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import * as XLSX from 'xlsx'
+import { kv } from '@vercel/kv'
 
 // Resolve the correct data file path for both standalone and dev modes
 function getDataFilePath(): string {
@@ -12,8 +13,12 @@ function getDataFilePath(): string {
   return directPath
 }
 
+// Check if Vercel KV is available
+function isVercelKVAvailable(): boolean {
+  return !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN)
+}
+
 // Column name mapping: Excel header (uppercase) → normalized field name
-// PROGRAMME = Programme, PROJET = Projet — gardés tels quels
 const KNOWN_COLUMNS: Record<string, string> = {
   'PROGRAMME': 'Programme',
   'PROJET': 'Projet',
@@ -49,16 +54,14 @@ const KNOWN_COLUMNS: Record<string, string> = {
 }
 
 // Position-based columns that may not have proper headers
-// These are extracted by column index (0-based)
 const POSITION_COLUMNS: Record<number, { name: string; header: string }> = {
-  65: { name: 'SUBVENTION DEMANDEE', header: 'BN' },  // Column BN = index 65 → Subvention demandée
-  66: { name: 'TRESORERIE', header: 'BO' },            // Column BO = index 66 → Trésorerie
+  65: { name: 'SUBVENTION DEMANDEE', header: 'BN' },
+  66: { name: 'TRESORERIE', header: 'BO' },
 }
 
 // Month prefixes for prévisions columns
 const MONTHS = ['JANVIER', 'FEVRIER', 'MARS', 'AVRIL', 'MAI', 'JUIN', 'JUILLET', 'AOUT', 'SEPTEMBRE', 'OCTOBRE', 'NOVEMBRE', 'DECEMBRE']
 
-// Parse a numeric value from Excel cell
 function parseNumber(val: unknown): number | null {
   if (val === null || val === undefined || val === '') return null
   if (typeof val === 'number') return isNaN(val) ? null : val
@@ -67,7 +70,6 @@ function parseNumber(val: unknown): number | null {
   return isNaN(num) ? null : num
 }
 
-// Parse a string value from Excel cell
 function parseString(val: unknown): string {
   if (val === null || val === undefined) return ''
   return String(val).trim()
@@ -84,18 +86,16 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(await file.arrayBuffer())
     const workbook = XLSX.read(buffer, { type: 'buffer' })
 
-    // Use first sheet
     const sheetName = workbook.SheetNames[0]
     const worksheet = workbook.Sheets[sheetName]
 
-    // Convert to 2D array for position-based access
     const rawData: unknown[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' })
 
     if (rawData.length < 2) {
       return NextResponse.json({ error: 'Le fichier est vide ou ne contient pas assez de données' }, { status: 400 })
     }
 
-    // Auto-detect the header row (look for a row containing key columns)
+    // Auto-detect the header row
     let headerRowIndex = 0
     for (let i = 0; i < Math.min(rawData.length, 10); i++) {
       const row = rawData[i].map(v => String(v || '').trim().toUpperCase())
@@ -105,19 +105,16 @@ export async function POST(request: Request) {
       }
     }
 
-    // Build header mapping from detected header row
+    // Build header mapping
     const headerRow = rawData[headerRowIndex].map(v => String(v || '').trim().toUpperCase())
     const columnMap: Record<number, string> = {}
 
-    // Map known column headers directly (PROGRAMME→Programme, PROJET→Projet, etc.)
     headerRow.forEach((header, index) => {
       if (!header) return
-      // Direct match
       if (KNOWN_COLUMNS[header]) {
         columnMap[index] = KNOWN_COLUMNS[header]
         return
       }
-      // Partial match for month columns
       for (const month of MONTHS) {
         if (header.includes(month)) {
           let prefix = 'Previsions '
@@ -131,13 +128,12 @@ export async function POST(request: Request) {
       }
     })
 
-    // Second pass: add position-based columns (BN=index 65, BO=index 66)
+    // Position-based columns
     for (const [idxStr, colDef] of Object.entries(POSITION_COLUMNS)) {
       const idx = parseInt(idxStr)
       if (idx < headerRow.length && !columnMap[idx]) {
         columnMap[idx] = colDef.name
       } else if (idx >= headerRow.length) {
-        // Column index beyond headers - still add for data rows that might have it
         columnMap[idx] = colDef.name
       }
     }
@@ -150,8 +146,6 @@ export async function POST(request: Request) {
       const rawRow = rawData[i]
       if (!rawRow || rawRow.length === 0) continue
 
-      // Skip empty rows (no programme/project name and no entity)
-      // Find the first column that maps to Programme or Projet
       const programmeColIdx = Object.entries(columnMap).find(([_, v]) => v === 'Programme')?.[0]
       const projetColIdx = Object.entries(columnMap).find(([_, v]) => v === 'Projet')?.[0]
       const entiteColIdx = Object.entries(columnMap).find(([_, v]) => v === 'ENTITE')?.[0]
@@ -162,9 +156,8 @@ export async function POST(request: Request) {
 
       const row: Record<string, string | number | null> = {}
 
-      // String fields
       const stringFields = new Set(['Programme', 'Projet', 'SOURCE FINANCEMENT', 'NOMENCLATURE', 'N° ENGAGEMENT', 'ENTITE', 'DETAIL DESIGNATION'])
-      const skipFields = new Set(['CP']) // Skip intermediate CP column
+      const skipFields = new Set(['CP'])
 
       for (const [colIdx, colName] of Object.entries(columnMap)) {
         const idx = parseInt(colIdx)
@@ -179,17 +172,14 @@ export async function POST(request: Request) {
         }
       }
 
-      // Ensure Programme field: use ENTITE as fallback if missing
       if (!row['Programme'] || row['Programme'] === '') {
         row['Programme'] = row['ENTITE'] || 'Non classé'
       }
 
-      // Ensure Projet field: use ENTITE as fallback if missing
       if (!row['Projet'] || row['Projet'] === '') {
         row['Projet'] = row['ENTITE'] || 'Non classé'
       }
 
-      // Ensure all required numeric fields have default 0
       const requiredNumericFields = [
         'REPORTS', 'CONSOLIDES', 'NOUVEAUX', 'TOTAL CP',
         'CE CONSOLIDES', 'CE NOUVEAUX', 'TOTAL CE',
@@ -207,7 +197,7 @@ export async function POST(request: Request) {
       dataRows.push(row)
     }
 
-    // Build filters from normalized data
+    // Build filters
     const programmes = [...new Set(dataRows.map(r => r['Programme'] as string).filter(Boolean))].sort()
     const projets = [...new Set(dataRows.map(r => r['Projet'] as string).filter(Boolean))].sort()
     const entites = [...new Set(dataRows.map(r => r['ENTITE'] as string).filter(Boolean))].sort()
@@ -220,45 +210,50 @@ export async function POST(request: Request) {
       lastUpdated: new Date().toISOString(),
     }
 
-    // Save to data file(s)
-    const dataFile = getDataFilePath()
-    const dataDir = path.dirname(dataFile)
-
-    // Auto-backup before overwriting
-    if (fs.existsSync(dataFile)) {
-      const backupDir = path.join(dataDir, 'backups')
-      if (!fs.existsSync(backupDir)) {
-        fs.mkdirSync(backupDir, { recursive: true })
+    // Save to Vercel KV (production)
+    if (isVercelKVAvailable()) {
+      // Auto-backup before overwriting
+      const existingData = await kv.get('dashboard-data')
+      if (existingData) {
+        await kv.set('dashboard-data-backup', existingData)
+        console.log('Auto-backup created in Vercel KV')
       }
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19)
-      const backupFile = path.join(backupDir, `dashboard-data-pre-upload-${timestamp}.json`)
-      fs.copyFileSync(dataFile, backupFile)
-      console.log(`Auto-backup created: ${backupFile}`)
-
-      // Keep only last 5 pre-upload backups
-      const backups = fs.readdirSync(backupDir)
-        .filter(f => f.startsWith('dashboard-data-pre-upload-'))
-        .sort()
-      if (backups.length > 5) {
-        backups.slice(0, backups.length - 5).forEach(f => {
-          fs.unlinkSync(path.join(backupDir, f))
-        })
-      }
+      await kv.set('dashboard-data', payload)
+      console.log(`Data saved to Vercel KV: ${dataRows.length} rows`)
     }
 
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true })
-    }
-    fs.writeFileSync(dataFile, JSON.stringify(payload), 'utf-8')
+    // Also try saving to local file (development / backup)
+    try {
+      const dataFile = getDataFilePath()
+      const dataDir = path.dirname(dataFile)
 
-    // Also write to standalone location if different
-    const standalonePath = path.join(process.cwd(), '..', '..', 'data', 'dashboard-data.json')
-    if (standalonePath !== dataFile) {
-      const standaloneDir = path.dirname(standalonePath)
-      if (!fs.existsSync(standaloneDir)) {
-        fs.mkdirSync(standaloneDir, { recursive: true })
+      if (fs.existsSync(dataFile)) {
+        const backupDir = path.join(dataDir, 'backups')
+        if (!fs.existsSync(backupDir)) {
+          fs.mkdirSync(backupDir, { recursive: true })
+        }
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19)
+        const backupFile = path.join(backupDir, `dashboard-data-pre-upload-${timestamp}.json`)
+        fs.copyFileSync(dataFile, backupFile)
+        console.log(`Auto-backup created: ${backupFile}`)
+
+        const backups = fs.readdirSync(backupDir)
+          .filter(f => f.startsWith('dashboard-data-pre-upload-'))
+          .sort()
+        if (backups.length > 5) {
+          backups.slice(0, backups.length - 5).forEach(f => {
+            fs.unlinkSync(path.join(backupDir, f))
+          })
+        }
       }
-      fs.writeFileSync(standalonePath, JSON.stringify(payload), 'utf-8')
+
+      if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true })
+      }
+      fs.writeFileSync(dataFile, JSON.stringify(payload), 'utf-8')
+    } catch (fsError) {
+      // File system write may fail on Vercel (read-only), that's OK
+      console.log('Local file save skipped (expected on Vercel)')
     }
 
     console.log(`Upload complete: ${dataRows.length} rows, ${Object.keys(columnMap).length} columns mapped`)
