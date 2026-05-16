@@ -4243,13 +4243,6 @@ export default function Dashboard() {
       'Engagements': Math.round(e.engCP / 1e6 * 10) / 10,
     }))
 
-    const previsionChartData = [
-      { name: 'Juin', value: Math.round(kpis.cumulPrevJuin / 1e6 * 10) / 10 },
-      { name: 'Sept.', value: Math.round(kpis.cumulPrevSeptembre / 1e6 * 10) / 10 },
-      { name: 'Nov.', value: Math.round(kpis.cumulPrevNovembre / 1e6 * 10) / 10 },
-      { name: 'Déc.', value: Math.round(kpis.cumulPrevDecembre / 1e6 * 10) / 10 },
-    ]
-
     return (
       <div className="print-report">
         {/* ═══ PRINT BUTTON (hidden when printing) ═══ */}
@@ -4354,64 +4347,88 @@ export default function Dashboard() {
         {/* ═══════════ 2. RÉPARTITION DES CRÉDITS ═══════════ */}
         <div className="mb-2">
           <h2 className="text-[11px] font-black text-blue-900 uppercase border-b border-blue-300 pb-0.5 mb-1.5">
-            <span className="inline-block w-4">2.</span>Répartition des crédits
+            <span className="inline-block w-4">2.</span>Répartition des crédits par source de financement, programme, projet et entité
           </h2>
           <div className="grid grid-cols-4 gap-2">
             {/* 2.1 Source de financement - Donut */}
-            <div className="border border-gray-200 rounded p-1.5">
-              <p className="text-[8px] font-bold text-gray-500 uppercase mb-0.5">2.1 Source de financement</p>
-              <ResponsiveContainer width="100%" height={130}>
-                <PieChart>
-                  <Pie data={sourcePieData} cx="50%" cy="50%" innerRadius={25} outerRadius={48} dataKey="value" nameKey="name" paddingAngle={2}
-                    label={({ name, percent }: { name: string; percent: number }) => `${name.length > 8 ? name.slice(0, 7) + '.' : name} ${(percent * 100).toFixed(0)}%`}
-                  >
-                    {sourcePieData.map((_e, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
-                  </Pie>
-                  <Tooltip formatter={(v: number) => `${v} M DH`} />
-                </PieChart>
-              </ResponsiveContainer>
+            <div className="bg-gradient-to-b from-blue-50/80 to-white border border-blue-200 rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-blue-800 px-2 py-0.5">
+                <p className="text-[8px] font-bold text-white uppercase tracking-wider">2.1 Source de financement</p>
+              </div>
+              <div className="p-1">
+                <ResponsiveContainer width="100%" height={110}>
+                  <PieChart>
+                    <Pie data={sourcePieData} cx="50%" cy="50%" innerRadius={22} outerRadius={44} dataKey="value" nameKey="name" paddingAngle={2}
+                      label={({ name, percent }: { name: string; percent: number }) => `${name.length > 10 ? name.slice(0, 9) + '.' : name} ${(percent * 100).toFixed(0)}%`}
+                    >
+                      {sourcePieData.map((_e, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                    </Pie>
+                    <Tooltip formatter={(v: number) => `${v} M DH`} />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="mt-0.5 space-y-px">
+                  {sourcePieData.slice(0, 5).map((s, i) => (
+                    <div key={s.name} className="flex items-center justify-between">
+                      <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} /><span className="text-[7px] text-gray-600 truncate" style={{ maxWidth: '70px' }}>{s.name}</span></span>
+                      <span className="text-[7px] font-bold text-gray-800">{s.value} M</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
             {/* 2.2 Par programme - Bar */}
-            <div className="border border-gray-200 rounded p-1.5">
-              <p className="text-[8px] font-bold text-gray-500 uppercase mb-0.5">2.2 Par programme</p>
-              <ResponsiveContainer width="100%" height={130}>
-                <BarChart data={programmeBarData} layout="vertical" margin={{ left: 50, right: 5, top: 2, bottom: 2 }}>
-                  <CartesianGrid strokeDasharray="2 2" stroke="#e5e7eb" />
-                  <XAxis type="number" tick={{ fontSize: 7 }} />
-                  <YAxis dataKey="name" type="category" tick={{ fontSize: 7 }} width={45} />
-                  <Tooltip formatter={(v: number) => `${v} M DH`} />
-                  <Bar dataKey="Budget CP" fill="#1e3a5f" radius={[0, 2, 2, 0]} barSize={6} />
-                  <Bar dataKey="Engagements" fill="#3b82f6" radius={[0, 2, 2, 0]} barSize={6} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="bg-gradient-to-b from-indigo-50/80 to-white border border-indigo-200 rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-indigo-800 px-2 py-0.5">
+                <p className="text-[8px] font-bold text-white uppercase tracking-wider">2.2 Par programme</p>
+              </div>
+              <div className="p-1">
+                <ResponsiveContainer width="100%" height={125}>
+                  <BarChart data={programmeBarData} layout="vertical" margin={{ left: 50, right: 8, top: 2, bottom: 2 }}>
+                    <CartesianGrid strokeDasharray="2 2" stroke="#e0e7ff" />
+                    <XAxis type="number" tick={{ fontSize: 7 }} />
+                    <YAxis dataKey="name" type="category" tick={{ fontSize: 7 }} width={45} />
+                    <Tooltip formatter={(v: number) => `${v} M DH`} />
+                    <Bar dataKey="Budget CP" fill="#312e81" radius={[0, 2, 2, 0]} barSize={6} />
+                    <Bar dataKey="Engagements" fill="#818cf8" radius={[0, 2, 2, 0]} barSize={6} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
             {/* 2.3 Par projet - Bar */}
-            <div className="border border-gray-200 rounded p-1.5">
-              <p className="text-[8px] font-bold text-gray-500 uppercase mb-0.5">2.3 Par projet (Top 10)</p>
-              <ResponsiveContainer width="100%" height={130}>
-                <BarChart data={projetBarData} layout="vertical" margin={{ left: 50, right: 5, top: 2, bottom: 2 }}>
-                  <CartesianGrid strokeDasharray="2 2" stroke="#e5e7eb" />
-                  <XAxis type="number" tick={{ fontSize: 7 }} />
-                  <YAxis dataKey="name" type="category" tick={{ fontSize: 7 }} width={45} />
-                  <Tooltip formatter={(v: number) => `${v} M DH`} />
-                  <Bar dataKey="Budget CP" fill="#1e3a5f" radius={[0, 2, 2, 0]} barSize={6} />
-                  <Bar dataKey="Engagements" fill="#10b981" radius={[0, 2, 2, 0]} barSize={6} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="bg-gradient-to-b from-emerald-50/80 to-white border border-emerald-200 rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-emerald-800 px-2 py-0.5">
+                <p className="text-[8px] font-bold text-white uppercase tracking-wider">2.3 Par projet (Top 10)</p>
+              </div>
+              <div className="p-1">
+                <ResponsiveContainer width="100%" height={125}>
+                  <BarChart data={projetBarData} layout="vertical" margin={{ left: 50, right: 8, top: 2, bottom: 2 }}>
+                    <CartesianGrid strokeDasharray="2 2" stroke="#d1fae5" />
+                    <XAxis type="number" tick={{ fontSize: 7 }} />
+                    <YAxis dataKey="name" type="category" tick={{ fontSize: 7 }} width={45} />
+                    <Tooltip formatter={(v: number) => `${v} M DH`} />
+                    <Bar dataKey="Budget CP" fill="#065f46" radius={[0, 2, 2, 0]} barSize={6} />
+                    <Bar dataKey="Engagements" fill="#34d399" radius={[0, 2, 2, 0]} barSize={6} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
             {/* 2.4 Par entité - Bar */}
-            <div className="border border-gray-200 rounded p-1.5">
-              <p className="text-[8px] font-bold text-gray-500 uppercase mb-0.5">2.4 Par entité</p>
-              <ResponsiveContainer width="100%" height={130}>
-                <BarChart data={entityBarData} layout="vertical" margin={{ left: 45, right: 5, top: 2, bottom: 2 }}>
-                  <CartesianGrid strokeDasharray="2 2" stroke="#e5e7eb" />
-                  <XAxis type="number" tick={{ fontSize: 7 }} />
-                  <YAxis dataKey="name" type="category" tick={{ fontSize: 7 }} width={40} />
-                  <Tooltip formatter={(v: number) => `${v} M DH`} />
-                  <Bar dataKey="Budget CP" fill="#1e3a5f" radius={[0, 2, 2, 0]} barSize={6} />
-                  <Bar dataKey="Engagements" fill="#8b5cf6" radius={[0, 2, 2, 0]} barSize={6} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="bg-gradient-to-b from-violet-50/80 to-white border border-violet-200 rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-violet-800 px-2 py-0.5">
+                <p className="text-[8px] font-bold text-white uppercase tracking-wider">2.4 Par entité</p>
+              </div>
+              <div className="p-1">
+                <ResponsiveContainer width="100%" height={125}>
+                  <BarChart data={entityBarData} layout="vertical" margin={{ left: 45, right: 8, top: 2, bottom: 2 }}>
+                    <CartesianGrid strokeDasharray="2 2" stroke="#ede9fe" />
+                    <XAxis type="number" tick={{ fontSize: 7 }} />
+                    <YAxis dataKey="name" type="category" tick={{ fontSize: 7 }} width={40} />
+                    <Tooltip formatter={(v: number) => `${v} M DH`} />
+                    <Bar dataKey="Budget CP" fill="#5b21b6" radius={[0, 2, 2, 0]} barSize={6} />
+                    <Bar dataKey="Engagements" fill="#a78bfa" radius={[0, 2, 2, 0]} barSize={6} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
         </div>
@@ -4487,50 +4504,6 @@ export default function Dashboard() {
                 <span className="flex items-center gap-0.5"><span className="w-2 h-1.5 bg-emerald-400 rounded" /><span className="text-[7px] text-gray-500">Engagement</span></span>
                 <span className="flex items-center gap-0.5"><span className="w-2 h-1.5 bg-violet-400 rounded" /><span className="text-[7px] text-gray-500">Ordonn.</span></span>
                 <span className="flex items-center gap-0.5"><span className="w-2 h-1.5 bg-amber-400 rounded" /><span className="text-[7px] text-gray-500">Paiements</span></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ═══════════ 4. PRÉVISIONS ORDONNANCEMENT ═══════════ */}
-        <div className="mb-2">
-          <h2 className="text-[11px] font-black text-blue-900 uppercase border-b border-blue-300 pb-0.5 mb-1.5">
-            <span className="inline-block w-4">4.</span>Prévisions ordonnancement
-          </h2>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="border border-gray-200 rounded p-1.5">
-              <ResponsiveContainer width="100%" height={100}>
-                <BarChart data={previsionChartData} margin={{ left: 5, right: 5, top: 5, bottom: 2 }}>
-                  <CartesianGrid strokeDasharray="2 2" stroke="#e5e7eb" />
-                  <XAxis dataKey="name" tick={{ fontSize: 8 }} />
-                  <YAxis tick={{ fontSize: 7 }} />
-                  <Tooltip formatter={(v: number) => `${v} M DH`} />
-                  <Bar dataKey="value" radius={[3, 3, 0, 0]} barSize={30}>
-                    {previsionChartData.map((_e, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="grid grid-cols-2 gap-1">
-              <div className="bg-blue-50 rounded p-1.5 text-center">
-                <p className="text-[8px] font-bold text-blue-600 uppercase">Cum. Juin</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevJuin)}</p>
-                <p className="text-[8px] text-gray-400"><span className="font-bold text-blue-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevJuin / kpis.totalCP) * 100) : 0}%</span></p>
-              </div>
-              <div className="bg-teal-50 rounded p-1.5 text-center">
-                <p className="text-[8px] font-bold text-teal-600 uppercase">Cum. Sept.</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevSeptembre)}</p>
-                <p className="text-[8px] text-gray-400"><span className="font-bold text-teal-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevSeptembre / kpis.totalCP) * 100) : 0}%</span></p>
-              </div>
-              <div className="bg-orange-50 rounded p-1.5 text-center">
-                <p className="text-[8px] font-bold text-orange-600 uppercase">Cum. Nov.</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevNovembre)}</p>
-                <p className="text-[8px] text-gray-400"><span className="font-bold text-orange-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevNovembre / kpis.totalCP) * 100) : 0}%</span></p>
-              </div>
-              <div className="bg-indigo-50 rounded p-1.5 text-center">
-                <p className="text-[8px] font-bold text-indigo-600 uppercase">Cum. Déc.</p>
-                <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevDecembre)}</p>
-                <p className="text-[8px] text-gray-400"><span className="font-bold text-indigo-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevDecembre / kpis.totalCP) * 100) : 0}%</span></p>
               </div>
             </div>
           </div>
