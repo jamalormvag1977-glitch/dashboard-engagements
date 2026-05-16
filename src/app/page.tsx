@@ -2773,12 +2773,6 @@ export default function Dashboard() {
 
     return (
       <>
-        {/* ═══════════ TITRE : INDICATEURS CLÉS PAR PROGRAMME ═══════════ */}
-        <div className="flex items-center gap-2">
-          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500" />
-          <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par projet</h3>
-        </div>
-
         {/* ═══════════ RÉPARTITION CP & CE PAR PROJET — BAR CHART ═══════════ */}
         <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
           <CardContent className="p-0">
@@ -2889,7 +2883,6 @@ export default function Dashboard() {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <div className="w-1 h-5 rounded-full bg-gradient-to-b from-teal-500 to-emerald-600" />
-                <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par projet</h3>
                 <span className="text-[11px] text-gray-400 font-medium">({analysisByGroup.length} projets)</span>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
