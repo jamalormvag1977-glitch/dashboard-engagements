@@ -5441,6 +5441,17 @@ export default function Dashboard() {
 
             {/* Filter Bar */}
             <div className="flex flex-wrap items-center gap-2 mt-3">
+              {['overview', 'engagements', 'ordonnancements', 'previsions', 'assainissement'].includes(activeNav) && (
+              <Select value={selectedSource} onValueChange={setSelectedSource}>
+                <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
+                  <SelectValue placeholder="Source fin." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes sources</SelectItem>
+                  {sources.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              )}
               {activeNav !== 'program' && activeNav !== 'entity' && (
               <Select value={selectedProgramme} onValueChange={(v) => { setSelectedProgramme(v); setSelectedProjet('all'); setSelectedEntite('all'); }}>
                 <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
@@ -5482,17 +5493,6 @@ export default function Dashboard() {
                 <SelectContent>
                   <SelectItem value="all">Toutes nomenclatures</SelectItem>
                   {nomenclatures.map(n => <SelectItem key={n} value={n}>{n}</SelectItem>)}
-                </SelectContent>
-              </Select>
-              )}
-              {['overview', 'engagements', 'ordonnancements', 'previsions', 'assainissement'].includes(activeNav) && (
-              <Select value={selectedSource} onValueChange={setSelectedSource}>
-                <SelectTrigger className="bg-white h-8 text-xs w-[140px]">
-                  <SelectValue placeholder="Source fin." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Toutes sources</SelectItem>
-                  {sources.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                 </SelectContent>
               </Select>
               )}
