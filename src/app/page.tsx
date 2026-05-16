@@ -5135,63 +5135,66 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* ═══════════ SECTION 2 : REPORTS ═══════════ */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Reports</h3>
-            
-          <div className="grid grid-cols-3 gap-4">
-            {/* Crédits reportés */}
-            <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-              <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
-                    <RotateCcw className="w-5 h-5 text-blue-600" />
+        {/* ═══════════ SECTION 2 : ÉTAT D'AVANCEMENT ASSAINISSEMENT DES REPORTS ═══════════ */}
+        <Card className="border-2 border-blue-800 shadow-sm">
+          <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>État d&apos;avancement assainissement des reports</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 space-y-5">
+            {/* 2.1 Reports */}
+            <div>
+              <h4 className="text-sm font-bold text-blue-900 mb-3"><span className="inline-block w-8">2.1</span>Reports</h4>
+              <div className="grid grid-cols-3 gap-4">
+                {/* Crédits reportés */}
+                <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+                  <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
+                        <RotateCcw className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-bold rounded-full px-2.5">Reports</Badge>
+                    </div>
+                    <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalReports)}</p>
+                    <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits reportés</p>
                   </div>
-                  <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-bold rounded-full px-2.5">Reports</Badge>
                 </div>
-                <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalReports)}</p>
-                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits reportés</p>
+
+                {/* Engagements sur reports */}
+                <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+                  <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600" />
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
+                        <TrendingUp className="w-5 h-5 text-emerald-600" />
+                      </div>
+                      <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-bold rounded-full px-2.5">Eng.</Badge>
+                    </div>
+                    <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalEngReports)}</p>
+                    <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Taux : <span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></p>
+                  </div>
+                </div>
+
+                {/* Ordonnancements sur reports */}
+                <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
+                  <div className="h-1.5 bg-gradient-to-r from-violet-400 to-violet-600" />
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
+                        <Wallet className="w-5 h-5 text-violet-600" />
+                      </div>
+                      <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-bold rounded-full px-2.5">Ord.</Badge>
+                    </div>
+                    <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalOrdReports)}</p>
+                    <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Taux : <span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Engagements sur reports */}
-            <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-              <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600" />
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
-                    <TrendingUp className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-bold rounded-full px-2.5">Eng.</Badge>
-                </div>
-                <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalEngReports)}</p>
-                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Taux : <span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></p>
-              </div>
-            </div>
-
-            {/* Ordonnancements sur reports */}
-            <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-              <div className="h-1.5 bg-gradient-to-r from-violet-400 to-violet-600" />
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
-                    <Wallet className="w-5 h-5 text-violet-600" />
-                  </div>
-                  <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-bold rounded-full px-2.5">Ord.</Badge>
-                </div>
-                <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalOrdReports)}</p>
-                <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Taux : <span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></p>
-              </div>
-            </div>
-
-
-          </div>
-        </div>
-
-        {/* ═══════════ SECTION 3 : TAUX D'ASSAINISSEMENT ═══════════ */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Taux d&apos;assainissement</h3>
+            {/* 2.2 Taux assainissement */}
+            <div>
+              <h4 className="text-sm font-bold text-blue-900 mb-3"><span className="inline-block w-8">2.2</span>Taux assainissement</h4>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Taux Engagement Reports */}
             <div className="kpi-card-premium rounded-xl border border-emerald-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)' }}>
@@ -5261,12 +5264,14 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Table by Entity */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">4.</span>Assainissement par entité</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Assainissement par entité</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5357,7 +5362,7 @@ export default function Dashboard() {
         {/* Table by Projet */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">5.</span>Assainissement par projet</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">4.</span>Assainissement par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5448,7 +5453,7 @@ export default function Dashboard() {
         {/* ═══════════ Analyse assainissement par programme ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">6.</span>Assainissement par programme</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">5.</span>Assainissement par programme</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5575,7 +5580,7 @@ export default function Dashboard() {
         {/* ═══════════ Détail des assainissement par prestation ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">7.</span>Détail des assainissement par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">6.</span>Détail des assainissement par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
