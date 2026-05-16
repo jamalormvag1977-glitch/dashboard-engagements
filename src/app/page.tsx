@@ -728,13 +728,15 @@ export default function Dashboard() {
 
   // Source financement data
   const sourceFinancementData = useMemo(() => {
-    const sources: Record<string, { cp: number; engCP: number; ord: number; count: number }> = {}
+    const sources: Record<string, { cp: number; engCP: number; ord: number; ce: number; engCE: number; count: number }> = {}
     filteredData.forEach(row => {
       const s = row['SOURCE FINANCEMENT'] || 'Non spécifié'
-      if (!sources[s]) sources[s] = { cp: 0, engCP: 0, ord: 0, count: 0 }
+      if (!sources[s]) sources[s] = { cp: 0, engCP: 0, ord: 0, ce: 0, engCE: 0, count: 0 }
       sources[s].cp += row['TOTAL CP'] || 0
       sources[s].engCP += row['ENG CP TOTAL'] || 0
       sources[s].ord += row['ORD TOTAL'] || 0
+      sources[s].ce += row['TOTAL CE'] || 0
+      sources[s].engCE += row['ENG CE ULT'] || 0
       sources[s].count += 1
     })
     return Object.entries(sources).map(([name, v]) => ({
@@ -4219,10 +4221,14 @@ export default function Dashboard() {
   const renderReportsView = () => {
     const CHART_COLORS = ['#1e3a5f', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899', '#84cc16', '#f97316']
 
-    const sourcePieData = sourceFinancementData.map(s => ({
-      name: s.name,
-      value: Math.round(s.cp / 1e6 * 10) / 10,
-    }))
+    // Source de financement data for horizontal bars
+    const sourceSorted = [...sourceFinancementData].sort((a, b) => b.cp - a.cp)
+    const sourceMaxCP = sourceSorted.length > 0 ? sourceSorted[0].cp : 0
+    const sourceTotalCP = sourceSorted.reduce((s, src) => s + src.cp, 0)
+    const sourceTotalCE = sourceSorted.reduce((s, src) => s + src.ce, 0)
+    const sourceCEData = sourceSorted.filter(src => src.ce > 0)
+    const sourceMaxCE = sourceCEData.length > 0 ? Math.max(...sourceCEData.map(src => src.ce)) : 0
+    const sourceCETotal = sourceCEData.reduce((s, src) => s + src.ce, 0)
 
     // Programme data for horizontal bars (sidebar style)
     const progSorted = [...analysisByProgramme].sort((a, b) => b.cp - a.cp)
@@ -4234,7 +4240,7 @@ export default function Dashboard() {
     const progCETotal = progCEData.reduce((s, p) => s + p.ce, 0)
 
     // Projet data for horizontal bars
-    const projSorted = [...analysisByGroup].sort((a, b) => b.cp - a.cp).slice(0, 10)
+    const projSorted = [...analysisByGroup].sort((a, b) => b.cp - a.cp)
     const projMaxCP = projSorted.length > 0 ? projSorted[0].cp : 0
     const projTotalCP = projSorted.reduce((s, g) => s + g.cp, 0)
     const projTotalCE = projSorted.reduce((s, g) => s + g.ce, 0)
@@ -4360,31 +4366,73 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* ═══ 2. RÉPARTITION PAR SOURCE DE FINANCEMENT ═══ */}
+          {/* ═══ 2. RÉPARTITION PAR SOURCE DE FINANCEMENT — CP / CE ═══ */}
           <div className="mb-1.5">
-            <div className="bg-gradient-to-b from-blue-50/80 to-white border border-blue-200 rounded-lg overflow-hidden">
+            <div className="bg-white border border-blue-200 rounded-lg overflow-hidden">
               <div className="bg-blue-800 px-2 py-0.5 flex items-center justify-between">
                 <p className="text-[8px] font-bold text-white uppercase tracking-wider">2. Répartition par source de financement</p>
+                <p className="text-[6px] text-blue-200">{sourceSorted.length} sources</p>
               </div>
-              <div className="p-1.5">
-                <ResponsiveContainer width="100%" height={80}>
-                  <PieChart>
-                    <Pie data={sourcePieData} cx="50%" cy="50%" innerRadius={15} outerRadius={35} dataKey="value" nameKey="name" paddingAngle={2}
-                      label={({ name, percent }: { name: string; percent: number }) => `${name.length > 8 ? name.slice(0, 7) + '.' : name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {sourcePieData.map((_e, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
-                    </Pie>
-                    <Tooltip formatter={(v: number) => `${v} M DH`} />
-                  </PieChart>
-                </ResponsiveContainer>
-                <div className="flex flex-wrap gap-x-3 gap-y-px mt-0.5">
-                  {sourcePieData.slice(0, 6).map((s, i) => (
-                    <span key={s.name} className="flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-sm flex-shrink-0" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
-                      <span className="text-[6px] text-gray-600">{s.name.length > 12 ? s.name.slice(0, 11) + '.' : s.name}</span>
-                      <span className="text-[6px] font-bold text-gray-800">{s.value} M</span>
-                    </span>
-                  ))}
+              <div className="grid grid-cols-2 divide-x divide-gray-100">
+                {/* CP Section */}
+                <div className="p-1.5">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[7px] font-black text-blue-700 uppercase">Budget CP</span>
+                    <span className="text-[7px] font-black text-blue-700">{formatMillions(sourceTotalCP)} M</span>
+                  </div>
+                  <div className="space-y-0.5">
+                    {sourceSorted.map((src, idx) => {
+                      const pct = sourceTotalCP > 0 ? (src.cp / sourceTotalCP) * 100 : 0
+                      const barWidth = sourceMaxCP > 0 ? (src.cp / sourceMaxCP) * 100 : 0
+                      return (
+                        <div key={src.name}>
+                          <div className="flex items-center justify-between mb-px">
+                            <div className="flex items-center gap-1 min-w-0 flex-1">
+                              <span className="text-[6px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
+                              <span className="text-[6px] font-bold text-gray-800 truncate" style={{ maxWidth: '120px' }} title={src.name}>{src.name}</span>
+                            </div>
+                            <div className="flex items-center gap-1 flex-shrink-0 ml-1">
+                              <span className="text-[6px] font-black text-gray-900">{formatMillions(src.cp)}</span>
+                              <span className="text-[5px] font-bold text-gray-500">{Math.round(pct)}%</span>
+                            </div>
+                          </div>
+                          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full rounded-full bg-blue-600" style={{ width: `${barWidth}%` }} />
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+                {/* CE Section */}
+                <div className="p-1.5">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[7px] font-black text-emerald-700 uppercase">Budget CE</span>
+                    <span className="text-[7px] font-black text-emerald-700">{formatMillions(sourceTotalCE)} M</span>
+                  </div>
+                  <div className="space-y-0.5">
+                    {sourceCEData.map((src, idx) => {
+                      const pct = sourceCETotal > 0 ? (src.ce / sourceCETotal) * 100 : 0
+                      const barWidth = sourceMaxCE > 0 ? (src.ce / sourceMaxCE) * 100 : 0
+                      return (
+                        <div key={src.name + '-ce'}>
+                          <div className="flex items-center justify-between mb-px">
+                            <div className="flex items-center gap-1 min-w-0 flex-1">
+                              <span className="text-[6px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
+                              <span className="text-[6px] font-bold text-gray-800 truncate" style={{ maxWidth: '120px' }} title={src.name}>{src.name}</span>
+                            </div>
+                            <div className="flex items-center gap-1 flex-shrink-0 ml-1">
+                              <span className="text-[6px] font-black text-gray-900">{formatMillions(src.ce)}</span>
+                              <span className="text-[5px] font-bold text-gray-500">{Math.round(pct)}%</span>
+                            </div>
+                          </div>
+                          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full rounded-full bg-emerald-600" style={{ width: `${barWidth}%` }} />
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
@@ -4413,11 +4461,11 @@ export default function Dashboard() {
                           <div className="flex items-center justify-between mb-px">
                             <div className="flex items-center gap-1 min-w-0 flex-1">
                               <span className="text-[6px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
-                              <span className="text-[7px] font-bold text-gray-800 truncate" style={{ maxWidth: '100px' }}>{p.name}</span>
+                              <span className="text-[6px] font-bold text-gray-800" title={p.name}>{p.name}</span>
                             </div>
                             <div className="flex items-center gap-1 flex-shrink-0 ml-1">
                               <span className="text-[6px] font-black text-gray-900">{formatMillions(p.cp)}</span>
-                              <span className="text-[6px] font-bold text-gray-500">{Math.round(pct)}%</span>
+                              <span className="text-[5px] font-bold text-gray-500">{Math.round(pct)}%</span>
                             </div>
                           </div>
                           <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -4443,11 +4491,11 @@ export default function Dashboard() {
                           <div className="flex items-center justify-between mb-px">
                             <div className="flex items-center gap-1 min-w-0 flex-1">
                               <span className="text-[6px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
-                              <span className="text-[7px] font-bold text-gray-800 truncate" style={{ maxWidth: '100px' }}>{p.name}</span>
+                              <span className="text-[6px] font-bold text-gray-800" title={p.name}>{p.name}</span>
                             </div>
                             <div className="flex items-center gap-1 flex-shrink-0 ml-1">
                               <span className="text-[6px] font-black text-gray-900">{formatMillions(p.ce)}</span>
-                              <span className="text-[6px] font-bold text-gray-500">{Math.round(pct)}%</span>
+                              <span className="text-[5px] font-bold text-gray-500">{Math.round(pct)}%</span>
                             </div>
                           </div>
                           <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -4466,7 +4514,8 @@ export default function Dashboard() {
           <div className="mb-1.5">
             <div className="bg-white border border-emerald-200 rounded-lg overflow-hidden">
               <div className="bg-emerald-800 px-2 py-0.5 flex items-center justify-between">
-                <p className="text-[8px] font-bold text-white uppercase tracking-wider">4. Répartition par projet (Top 10) — CP / CE</p>
+                <p className="text-[8px] font-bold text-white uppercase tracking-wider">4. Répartition par projet — CP / CE</p>
+                <p className="text-[6px] text-emerald-200">{projSorted.length} projets</p>
               </div>
               <div className="grid grid-cols-2 divide-x divide-gray-100">
                 {/* CP Section */}
@@ -4484,7 +4533,7 @@ export default function Dashboard() {
                           <div className="flex items-center justify-between mb-px">
                             <div className="flex items-center gap-1 min-w-0 flex-1">
                               <span className="text-[6px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
-                              <span className="text-[6px] font-bold text-gray-800 truncate" style={{ maxWidth: '85px' }}>{g.name}</span>
+                              <span className="text-[6px] font-bold text-gray-800" title={g.name}>{g.name}</span>
                             </div>
                             <div className="flex items-center gap-1 flex-shrink-0 ml-1">
                               <span className="text-[6px] font-black text-gray-900">{formatMillions(g.cp)}</span>
@@ -4514,7 +4563,7 @@ export default function Dashboard() {
                           <div className="flex items-center justify-between mb-px">
                             <div className="flex items-center gap-1 min-w-0 flex-1">
                               <span className="text-[6px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
-                              <span className="text-[6px] font-bold text-gray-800 truncate" style={{ maxWidth: '85px' }}>{g.name}</span>
+                              <span className="text-[6px] font-bold text-gray-800" title={g.name}>{g.name}</span>
                             </div>
                             <div className="flex items-center gap-1 flex-shrink-0 ml-1">
                               <span className="text-[6px] font-black text-gray-900">{formatMillions(g.ce)}</span>
@@ -4566,7 +4615,7 @@ export default function Dashboard() {
                           <div className="flex items-center justify-between mb-px">
                             <div className="flex items-center gap-1 min-w-0 flex-1">
                               <span className="text-[6px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
-                              <span className="text-[7px] font-bold text-gray-800 truncate" style={{ maxWidth: '90px' }}>{e.name}</span>
+                              <span className="text-[6px] font-bold text-gray-800" title={e.name}>{e.name}</span>
                             </div>
                             <div className="flex items-center gap-1 flex-shrink-0 ml-1">
                               <span className="text-[6px] font-black text-gray-900">{formatMillions(e.cp)}</span>
@@ -4596,7 +4645,7 @@ export default function Dashboard() {
                           <div className="flex items-center justify-between mb-px">
                             <div className="flex items-center gap-1 min-w-0 flex-1">
                               <span className="text-[6px] font-black text-gray-400 w-3 text-right">{idx + 1}</span>
-                              <span className="text-[7px] font-bold text-gray-800 truncate" style={{ maxWidth: '90px' }}>{e.name}</span>
+                              <span className="text-[6px] font-bold text-gray-800" title={e.name}>{e.name}</span>
                             </div>
                             <div className="flex items-center gap-1 flex-shrink-0 ml-1">
                               <span className="text-[6px] font-black text-gray-900">{formatMillions(e.ce)}</span>
@@ -4639,7 +4688,7 @@ export default function Dashboard() {
                     return (
                       <div key={p.name} className="bg-white rounded border border-gray-100 px-1 py-0.5">
                         <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-[6px] font-bold text-gray-800 truncate" style={{ maxWidth: '70%' }} title={p.name}>{p.name.length > 16 ? p.name.slice(0, 14) + '…' : p.name}</span>
+                          <span className="text-[6px] font-bold text-gray-800" title={p.name}>{p.name}</span>
                           <span className="text-[5px] text-gray-400 font-semibold">{formatMillions(p.cp)} M</span>
                         </div>
                         <div className="space-y-px">
@@ -4667,7 +4716,7 @@ export default function Dashboard() {
               {/* 6.2 Par projet */}
               <div className="border border-emerald-200 rounded-lg overflow-hidden">
                 <div className="bg-emerald-800 px-1.5 py-0.5">
-                  <p className="text-[7px] font-bold text-white uppercase tracking-wider">Par projet (Top 10)</p>
+                  <p className="text-[7px] font-bold text-white uppercase tracking-wider">Par projet</p>
                 </div>
                 <div className="p-1 space-y-0.5">
                   {projSorted.map(g => {
@@ -4677,7 +4726,7 @@ export default function Dashboard() {
                     return (
                       <div key={g.name} className="bg-white rounded border border-gray-100 px-1 py-0.5">
                         <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-[6px] font-bold text-gray-800 truncate" style={{ maxWidth: '70%' }} title={g.name}>{g.name.length > 16 ? g.name.slice(0, 14) + '…' : g.name}</span>
+                          <span className="text-[6px] font-bold text-gray-800" title={g.name}>{g.name}</span>
                           <span className="text-[5px] text-gray-400 font-semibold">{formatMillions(g.cp)} M</span>
                         </div>
                         <div className="space-y-px">
@@ -4711,7 +4760,7 @@ export default function Dashboard() {
                   {entitySorted.map(e => (
                     <div key={e.name} className="bg-white rounded border border-gray-100 px-1 py-0.5">
                       <div className="flex items-center justify-between mb-0.5">
-                        <span className="text-[6px] font-bold text-gray-800 truncate" style={{ maxWidth: '70%' }} title={e.name}>{e.name.length > 16 ? e.name.slice(0, 14) + '…' : e.name}</span>
+                        <span className="text-[6px] font-bold text-gray-800" title={e.name}>{e.name}</span>
                         <span className="text-[5px] text-gray-400 font-semibold">{formatMillions(e.cp)} M</span>
                       </div>
                       <div className="space-y-px">

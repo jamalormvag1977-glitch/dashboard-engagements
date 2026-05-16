@@ -241,7 +241,7 @@ nav button {
   /* Reset the content padding for print */
   .print-report {
     margin: 0 !important;
-    padding: 2mm 4mm !important;
+    padding: 2mm 4mm 0 4mm !important;
     max-width: 100% !important;
     width: 100% !important;
     background: white !important;
@@ -310,7 +310,7 @@ nav button {
 
   /* Page margins */
   @page {
-    margin: 3mm 5mm;
+    margin: 2mm 5mm;
     size: A4 landscape;
   }
 }
