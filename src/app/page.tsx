@@ -3064,9 +3064,9 @@ export default function Dashboard() {
     return (
       <>
         {/* ═══════════ RÉPARTITION CP & CE PAR PROGRAMME — BAR CHART ═══════════ */}
-        <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
+        <Card className="bg-white border-2 border-blue-800 shadow-md overflow-hidden">
           <CardContent className="p-0">
-            <div className="flex items-center gap-2 px-6 pt-5 pb-3 border-b border-gray-100">
+            <div className="flex items-center gap-2 px-6 pt-3 pb-2 border-b border-blue-200 bg-blue-50/50">
               <h4 className="text-sm font-bold text-blue-900 uppercase tracking-wide"><span className="text-blue-900 mr-2 inline-block w-5">1.</span>Répartition des crédits par programme</h4>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
@@ -5868,7 +5868,7 @@ export default function Dashboard() {
           </div>
         </header>
 
-        <div className="p-4 sm:p-6 space-y-6">
+        <div className="p-4 sm:p-6 pt-2 sm:pt-3 space-y-6">
           {renderActiveView()}
         </div>
       </main>
