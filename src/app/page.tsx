@@ -2099,7 +2099,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-1 h-5 rounded-full bg-gradient-to-b from-indigo-500 to-violet-600" />
-              <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Analyse par programme</h3>
+              <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">État d'avancement par programme</h3>
             </div>
             <button onClick={() => handleNavChange('project')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
@@ -2165,7 +2165,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-1 h-5 rounded-full bg-gradient-to-b from-emerald-500 to-teal-600" />
-              <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Analyse par projet</h3>
+              <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">État d'avancement par projet</h3>
             </div>
             <button onClick={() => handleNavChange('program')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
@@ -2231,7 +2231,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-1 h-5 rounded-full bg-gradient-to-b from-slate-500 to-gray-600" />
-              <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Analyse par entité</h3>
+              <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">État d'avancement par entité</h3>
             </div>
             <button onClick={() => handleNavChange('entity')} className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
               Détails <ChevronRight className="w-3 h-3" />
@@ -3174,7 +3174,7 @@ export default function Dashboard() {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <div className="w-1 h-5 rounded-full bg-gradient-to-b from-indigo-500 to-purple-600" />
-                <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Analyse par programme</h3>
+                <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">État d'avancement par programme</h3>
                 <span className="text-[11px] text-gray-400 font-medium">({analysisByProgramme.length} programmes)</span>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
