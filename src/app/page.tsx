@@ -2543,15 +2543,6 @@ export default function Dashboard() {
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
-                          {cpItem && cpItem.cp > 0 && (
-                            <div className="flex items-center gap-1.5 mt-1 ml-6">
-                              <span className="text-[9px] font-bold text-gray-400">Eng</span>
-                              <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
-                                <div className={`h-full rounded-full ${tauxBgColor(cpItem.tauxEngagement)}`} style={{ width: `${Math.min(cpItem.tauxEngagement, 100)}%` }} />
-                              </div>
-                              <span className={`text-[9px] font-black ${tauxColor(cpItem.tauxEngagement)}`}>{Math.round(cpItem.tauxEngagement)}%</span>
-                            </div>
-                          )}
                         </div>
                       )
                     })
@@ -2589,15 +2580,6 @@ export default function Dashboard() {
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
-                          {ceItem && ceItem.ce > 0 && (
-                            <div className="flex items-center gap-1.5 mt-1 ml-6">
-                              <span className="text-[9px] font-bold text-gray-400">Eng</span>
-                              <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
-                                <div className={`h-full rounded-full ${tauxBgColor(ceItem.tauxEngagementCE)}`} style={{ width: `${Math.min(ceItem.tauxEngagementCE, 100)}%` }} />
-                              </div>
-                              <span className={`text-[9px] font-black ${tauxColor(ceItem.tauxEngagementCE)}`}>{Math.round(ceItem.tauxEngagementCE)}%</span>
-                            </div>
-                          )}
                         </div>
                       )
                     })
@@ -2835,15 +2817,6 @@ export default function Dashboard() {
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
-                          {cpItem && cpItem.cp > 0 && (
-                            <div className="flex items-center gap-1.5 mt-1 ml-6">
-                              <span className="text-[9px] font-bold text-gray-400">Eng</span>
-                              <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
-                                <div className={`h-full rounded-full ${tauxBgColor(cpItem.tauxEngagement)}`} style={{ width: `${Math.min(cpItem.tauxEngagement, 100)}%` }} />
-                              </div>
-                              <span className={`text-[9px] font-black ${tauxColor(cpItem.tauxEngagement)}`}>{Math.round(cpItem.tauxEngagement)}%</span>
-                            </div>
-                          )}
                         </div>
                       )
                     })
@@ -2881,15 +2854,6 @@ export default function Dashboard() {
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
-                          {ceItem && ceItem.ce > 0 && (
-                            <div className="flex items-center gap-1.5 mt-1 ml-6">
-                              <span className="text-[9px] font-bold text-gray-400">Eng</span>
-                              <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
-                                <div className={`h-full rounded-full ${tauxBgColor(ceItem.tauxEngagementCE)}`} style={{ width: `${Math.min(ceItem.tauxEngagementCE, 100)}%` }} />
-                              </div>
-                              <span className={`text-[9px] font-black ${tauxColor(ceItem.tauxEngagementCE)}`}>{Math.round(ceItem.tauxEngagementCE)}%</span>
-                            </div>
-                          )}
                         </div>
                       )
                     })
@@ -3150,15 +3114,6 @@ export default function Dashboard() {
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
-                          {cpItem && cpItem.cp > 0 && (
-                            <div className="flex items-center gap-1.5 mt-1 ml-6">
-                              <span className="text-[9px] font-bold text-gray-400">Eng</span>
-                              <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
-                                <div className={`h-full rounded-full ${tauxBgColor(cpItem.tauxEngagement)}`} style={{ width: `${Math.min(cpItem.tauxEngagement, 100)}%` }} />
-                              </div>
-                              <span className={`text-[9px] font-black ${tauxColor(cpItem.tauxEngagement)}`}>{Math.round(cpItem.tauxEngagement)}%</span>
-                            </div>
-                          )}
                         </div>
                       )
                     })
@@ -3196,15 +3151,6 @@ export default function Dashboard() {
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
-                          {ceItem && ceItem.ce > 0 && (
-                            <div className="flex items-center gap-1.5 mt-1 ml-6">
-                              <span className="text-[9px] font-bold text-gray-400">Eng</span>
-                              <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
-                                <div className={`h-full rounded-full ${tauxBgColor(ceItem.tauxEngagementCE)}`} style={{ width: `${Math.min(ceItem.tauxEngagementCE, 100)}%` }} />
-                              </div>
-                              <span className={`text-[9px] font-black ${tauxColor(ceItem.tauxEngagementCE)}`}>{Math.round(ceItem.tauxEngagementCE)}%</span>
-                            </div>
-                          )}
                         </div>
                       )
                     })
