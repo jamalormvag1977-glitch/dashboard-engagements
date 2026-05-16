@@ -194,22 +194,25 @@ const BarLabel = (props: { x: number; y: number; width: number; height: number; 
 }
 
 // ═══════════ AUTH: Password protection wrapper ═══════════
+const ADMIN_PASSWORD = 'admin2026'      // ← Mot de passe admin (accès complet + import Excel)
+const USER_PASSWORD = 'budget2025'      // ← Mot de passe utilisateur (consultation seule, sans import)
+
 function AuthGuard({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [authRole, setAuthRole] = useState<'admin' | 'user' | null>(null)
   const [authChecked, setAuthChecked] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
   const [passwordError, setPasswordError] = useState(false)
-  const DASHBOARD_PASSWORD = 'budget2025'  // ← Changez le mot de passe ici
 
   useEffect(() => {
     const stored = localStorage.getItem('dashboard-auth')
-    if (stored === 'true') setIsAuthenticated(true)
+    if (stored === 'admin') setAuthRole('admin')
+    else if (stored === 'user') setAuthRole('user')
     setAuthChecked(true)
   }, [])
 
   if (!authChecked) return null
 
-  if (!isAuthenticated) {
+  if (!authRole) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] via-[#2a4a6f] to-[#1a3050]">
         <div className="w-full max-w-md px-4">
@@ -230,7 +233,13 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
                     placeholder="Entrez le mot de passe"
                     value={passwordInput}
                     onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false) }}
-                    onKeyDown={(e) => { if (e.key === 'Enter' && passwordInput === DASHBOARD_PASSWORD) { setIsAuthenticated(true); localStorage.setItem('dashboard-auth', 'true'); setPasswordError(false); } else if (e.key === 'Enter') { setPasswordError(true); } }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        if (passwordInput === ADMIN_PASSWORD) { setAuthRole('admin'); localStorage.setItem('dashboard-auth', 'admin'); setPasswordError(false); }
+                        else if (passwordInput === USER_PASSWORD) { setAuthRole('user'); localStorage.setItem('dashboard-auth', 'user'); setPasswordError(false); }
+                        else { setPasswordError(true); }
+                      }
+                    }}
                     className={`h-12 text-base ${passwordError ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
                   />
                   {passwordError && (
@@ -239,13 +248,9 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
                 </div>
                 <Button
                   onClick={() => {
-                    if (passwordInput === DASHBOARD_PASSWORD) {
-                      setIsAuthenticated(true)
-                      localStorage.setItem('dashboard-auth', 'true')
-                      setPasswordError(false)
-                    } else {
-                      setPasswordError(true)
-                    }
+                    if (passwordInput === ADMIN_PASSWORD) { setAuthRole('admin'); localStorage.setItem('dashboard-auth', 'admin'); setPasswordError(false); }
+                    else if (passwordInput === USER_PASSWORD) { setAuthRole('user'); localStorage.setItem('dashboard-auth', 'user'); setPasswordError(false); }
+                    else { setPasswordError(true); }
                   }}
                   className="w-full h-12 text-base font-bold bg-[#1e3a5f] hover:bg-[#2a4a6f] text-white"
                 >
@@ -267,6 +272,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 // ═══════════ END AUTH ═══════════
 
 export default function Dashboard() {
+  const [isAdmin, setIsAdmin] = useState(false)
   const [data, setData] = useState<DataRow[]>([])
   const [filters, setFilters] = useState<FilterData>({ programmes: [], projets: [], entites: [], nomenclatures: [], sources: [] })
   const [loading, setLoading] = useState(true)
@@ -293,6 +299,11 @@ export default function Dashboard() {
   const [refreshInterval, setRefreshInterval] = useState(30)
   const [numberFormat, setNumberFormat] = useState<'millions' | 'full'>('millions')
   const [defaultPage, setDefaultPage] = useState('overview')
+
+  // Check admin role on mount
+  useEffect(() => {
+    setIsAdmin(localStorage.getItem('dashboard-auth') === 'admin')
+  }, [])
 
   const fetchData = useCallback(async (silent = false) => {
     try {
@@ -4177,6 +4188,7 @@ export default function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            {isAdmin ? (
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-900">Importer un fichier Excel</p>
@@ -4199,6 +4211,14 @@ export default function Dashboard() {
                 disabled={uploading}
               />
             </div>
+            ) : (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-900">Importation réservée à l'administrateur</p>
+                <p className="text-xs text-gray-500">Seul l'administrateur peut importer des fichiers Excel</p>
+              </div>
+            </div>
+            )}
             <div className="grid grid-cols-2 gap-4 p-3 bg-gray-50 rounded-lg">
               <div>
                 <p className="text-xs text-gray-500">Dernière mise à jour</p>
@@ -5379,26 +5399,30 @@ export default function Dashboard() {
               </div>
 
               <div className="flex items-center gap-2">
-                <label htmlFor="excel-upload">
-                  <Button
-                    className="bg-emerald-600 hover:bg-emerald-700 gap-1 cursor-pointer h-8 text-xs"
-                    disabled={uploading}
-                    asChild
-                  >
-                    <span>
-                      <Upload className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline">{uploading ? 'Import...' : 'Excel'}</span>
-                    </span>
-                  </Button>
-                </label>
-                <input
-                  id="excel-upload"
-                  type="file"
-                  accept=".xlsx,.xls"
-                  className="hidden"
-                  onChange={handleFileUpload}
-                  disabled={uploading}
-                />
+                {isAdmin && (
+                  <>
+                    <label htmlFor="excel-upload">
+                      <Button
+                        className="bg-emerald-600 hover:bg-emerald-700 gap-1 cursor-pointer h-8 text-xs"
+                        disabled={uploading}
+                        asChild
+                      >
+                        <span>
+                          <Upload className="w-3.5 h-3.5" />
+                          <span className="hidden sm:inline">{uploading ? 'Import...' : 'Excel'}</span>
+                        </span>
+                      </Button>
+                    </label>
+                    <input
+                      id="excel-upload"
+                      type="file"
+                      accept=".xlsx,.xls"
+                      className="hidden"
+                      onChange={handleFileUpload}
+                      disabled={uploading}
+                    />
+                  </>
+                )}
                 <Button variant="outline" size="sm" onClick={handleExport} className="gap-1 h-8 text-xs">
                   <Download className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Exporter</span>
