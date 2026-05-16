@@ -195,7 +195,7 @@ const BarLabel = (props: { x: number; y: number; width: number; height: number; 
 
 // ═══════════ AUTH: Password protection wrapper ═══════════
 const ADMIN_PASSWORD = 'admin2026'      // ← Mot de passe admin (accès complet + import Excel)
-const USER_PASSWORD = 'budget2025'      // ← Mot de passe utilisateur (consultation seule, sans import)
+const USER_PASSWORD = 'budget2026'      // ← Mot de passe utilisateur (consultation seule, sans import)
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const [authRole, setAuthRole] = useState<'admin' | 'user' | null>(null)
