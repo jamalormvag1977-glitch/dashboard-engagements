@@ -4509,6 +4509,35 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* ═══════════ 4. PRÉVISIONS ORDONNANCEMENT ═══════════ */}
+        <div className="mb-2">
+          <h2 className="text-[11px] font-black text-blue-900 uppercase border-b border-blue-300 pb-0.5 mb-1.5">
+            <span className="inline-block w-4">4.</span>Prévisions ordonnancement
+          </h2>
+          <div className="grid grid-cols-4 gap-2">
+            <div className="bg-gradient-to-b from-blue-50/80 to-white border border-blue-200 rounded-lg shadow-sm p-2 text-center">
+              <p className="text-[8px] font-bold text-blue-600 uppercase">Cum. Juin</p>
+              <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevJuin)}</p>
+              <p className="text-[8px] text-gray-400"><span className="font-bold text-blue-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevJuin / kpis.totalCP) * 100) : 0}%</span></p>
+            </div>
+            <div className="bg-gradient-to-b from-teal-50/80 to-white border border-teal-200 rounded-lg shadow-sm p-2 text-center">
+              <p className="text-[8px] font-bold text-teal-600 uppercase">Cum. Sept.</p>
+              <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevSeptembre)}</p>
+              <p className="text-[8px] text-gray-400"><span className="font-bold text-teal-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevSeptembre / kpis.totalCP) * 100) : 0}%</span></p>
+            </div>
+            <div className="bg-gradient-to-b from-orange-50/80 to-white border border-orange-200 rounded-lg shadow-sm p-2 text-center">
+              <p className="text-[8px] font-bold text-orange-600 uppercase">Cum. Nov.</p>
+              <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevNovembre)}</p>
+              <p className="text-[8px] text-gray-400"><span className="font-bold text-orange-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevNovembre / kpis.totalCP) * 100) : 0}%</span></p>
+            </div>
+            <div className="bg-gradient-to-b from-indigo-50/80 to-white border border-indigo-200 rounded-lg shadow-sm p-2 text-center">
+              <p className="text-[8px] font-bold text-indigo-600 uppercase">Cum. Déc.</p>
+              <p className="text-sm font-black text-gray-900">{formatMillions(kpis.cumulPrevDecembre)}</p>
+              <p className="text-[8px] text-gray-400"><span className="font-bold text-indigo-600">{kpis.totalCP > 0 ? Math.round((kpis.cumulPrevDecembre / kpis.totalCP) * 100) : 0}%</span></p>
+            </div>
+          </div>
+        </div>
+
         {/* ═══ FOOTER ═══ */}
         <div className="mt-1 pt-1 border-t border-gray-200 text-center">
           <p className="text-[8px] text-gray-400">Rapport auto-généré — {filteredData.length} lignes — {new Date().toLocaleDateString('fr-FR')}</p>
