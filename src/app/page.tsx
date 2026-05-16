@@ -2819,6 +2819,13 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
+        {/* ═══════════ TITRE : ÉTAT D'AVANCEMENT PAR PROJET ═══════════ */}
+        <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
+          <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>État d'avancement par projet</CardTitle>
+          </CardHeader>
+        </Card>
+
         {/* ═══════════ SECTION 3 : INDICATEURS PAR PROJET ═══════════ */}
         {(() => {
           const projectColors = [
@@ -2943,7 +2950,7 @@ export default function Dashboard() {
         {/* Programme Detail Table */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Détail par projet</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Détail par projet</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
