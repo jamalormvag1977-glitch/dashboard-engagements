@@ -1316,106 +1316,84 @@ export default function Dashboard() {
       {/* ═══════════ SECTION : TRÉSORERIE ET SUBVENTION ═══════════ */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {/* ─── Trésorerie ─── */}
-        <Card className="border-0 shadow-lg shadow-sky-100/80 overflow-hidden rounded-2xl">
-          <div className="relative">
-            {/* Background layers */}
-            <div className="absolute inset-0 bg-gradient-to-br from-sky-400 via-blue-400 to-indigo-400" />
-            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-white/25 to-transparent rounded-bl-full" />
-            <div className="absolute bottom-0 left-0 w-28 h-28 bg-gradient-to-tr from-white/5 to-transparent rounded-tr-full" />
-            {/* Decorative dots */}
-            <div className="absolute top-4 right-4 grid grid-cols-3 gap-1.5 opacity-25">
-              {[...Array(9)].map((_, i) => <div key={i} className="w-1.5 h-1.5 rounded-full bg-white" />)}
-            </div>
-            {/* Content */}
-            <div className="relative z-10 p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-white/30 backdrop-blur-md flex items-center justify-center border border-white/20">
-                    <Wallet className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-semibold text-white/90 uppercase tracking-[0.2em]">Trésorerie</p>
-                    <p className="text-[9px] text-white/60 mt-0.5">Disponibilités financières</p>
-                  </div>
+        <Card className="bg-white border border-gray-100 shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden rounded-2xl">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center">
+                  <Wallet className="w-6 h-6 text-sky-600" />
                 </div>
-                <div className="w-10 h-10 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-white/80" />
+                <div>
+                  <p className="text-xs font-bold text-gray-800 uppercase tracking-wide">Trésorerie</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5">Disponibilités financières</p>
                 </div>
               </div>
-              <div className="mb-4">
-                <p className="text-2xl font-black tracking-tight text-white">{formatMillions(kpis.totalTresorerie)} <span className="text-xs font-medium text-white/70">M DH</span></p>
+              <div className="w-9 h-9 rounded-full bg-sky-50 flex items-center justify-center">
+                <TrendingUp className="w-4 h-4 text-sky-500" />
               </div>
-              {kpis.totalCP > 0 && (
-                <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 border border-white/10">
-                  <div className="flex items-center justify-between text-[11px] mb-2">
-                    <span className="text-white/80 font-medium">Part du budget CP</span>
-                    <span className="font-bold text-white text-sm">{((kpis.totalTresorerie / kpis.totalCP) * 100).toFixed(1)}%</span>
-                  </div>
-                  <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
-                    <div
-                      className="h-2 rounded-full bg-gradient-to-r from-white/70 to-sky-100 transition-all duration-700 ease-out"
-                      style={{ width: `${Math.min(100, (kpis.totalTresorerie / kpis.totalCP) * 100)}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between mt-1.5 text-[9px] text-white/50">
-                    <span>0%</span>
-                    <span>100%</span>
-                  </div>
-                </div>
-              )}
             </div>
+            <div className="mb-5">
+              <p className="text-3xl font-extrabold tracking-tight text-gray-900">{formatMillions(kpis.totalTresorerie)} <span className="text-sm font-semibold text-gray-400">M DH</span></p>
+            </div>
+            {kpis.totalCP > 0 && (
+              <div className="bg-gray-50 rounded-xl p-3">
+                <div className="flex items-center justify-between text-xs mb-2">
+                  <span className="text-gray-500 font-medium">Part du budget CP</span>
+                  <span className="font-bold text-sky-600">{((kpis.totalTresorerie / kpis.totalCP) * 100).toFixed(1)}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="h-2 rounded-full bg-sky-500 transition-all duration-700 ease-out"
+                    style={{ width: `${Math.min(100, (kpis.totalTresorerie / kpis.totalCP) * 100)}%` }}
+                  />
+                </div>
+                <div className="flex justify-between mt-1.5 text-[10px] text-gray-300">
+                  <span>0%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+            )}
           </div>
         </Card>
 
         {/* ─── Subvention demandée ─── */}
-        <Card className="border-0 shadow-lg shadow-rose-100/80 overflow-hidden rounded-2xl">
-          <div className="relative">
-            {/* Background layers */}
-            <div className="absolute inset-0 bg-gradient-to-br from-rose-400 via-pink-400 to-orange-300" />
-            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-white/25 to-transparent rounded-bl-full" />
-            <div className="absolute bottom-0 left-0 w-28 h-28 bg-gradient-to-tr from-white/5 to-transparent rounded-tr-full" />
-            {/* Decorative dots */}
-            <div className="absolute top-4 right-4 grid grid-cols-3 gap-1.5 opacity-25">
-              {[...Array(9)].map((_, i) => <div key={i} className="w-1.5 h-1.5 rounded-full bg-white" />)}
-            </div>
-            {/* Content */}
-            <div className="relative z-10 p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-white/30 backdrop-blur-md flex items-center justify-center border border-white/20">
-                    <Landmark className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-semibold text-white/90 uppercase tracking-[0.2em]">Subvention</p>
-                    <p className="text-[9px] text-white/60 mt-0.5">Subvention demandée</p>
-                  </div>
+        <Card className="bg-white border border-gray-100 shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden rounded-2xl">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center">
+                  <Landmark className="w-6 h-6 text-amber-600" />
                 </div>
-                <div className="w-10 h-10 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center">
-                  <Scale className="w-5 h-5 text-white/80" />
+                <div>
+                  <p className="text-xs font-bold text-gray-800 uppercase tracking-wide">Subvention</p>
+                  <p className="text-[11px] text-gray-400 mt-0.5">Subvention demandée</p>
                 </div>
               </div>
-              <div className="mb-4">
-                <p className="text-2xl font-black tracking-tight text-white">{formatMillions(kpis.totalSubvention)} <span className="text-xs font-medium text-white/70">M DH</span></p>
+              <div className="w-9 h-9 rounded-full bg-amber-50 flex items-center justify-center">
+                <Scale className="w-4 h-4 text-amber-500" />
               </div>
-              {kpis.totalCP > 0 && (
-                <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 border border-white/10">
-                  <div className="flex items-center justify-between text-[11px] mb-2">
-                    <span className="text-white/80 font-medium">Part du budget CP</span>
-                    <span className="font-bold text-white text-sm">{((kpis.totalSubvention / kpis.totalCP) * 100).toFixed(1)}%</span>
-                  </div>
-                  <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
-                    <div
-                      className="h-2 rounded-full bg-gradient-to-r from-white/70 to-rose-100 transition-all duration-700 ease-out"
-                      style={{ width: `${Math.min(100, (kpis.totalSubvention / kpis.totalCP) * 100)}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between mt-1.5 text-[9px] text-white/50">
-                    <span>0%</span>
-                    <span>100%</span>
-                  </div>
-                </div>
-              )}
             </div>
+            <div className="mb-5">
+              <p className="text-3xl font-extrabold tracking-tight text-gray-900">{formatMillions(kpis.totalSubvention)} <span className="text-sm font-semibold text-gray-400">M DH</span></p>
+            </div>
+            {kpis.totalCP > 0 && (
+              <div className="bg-gray-50 rounded-xl p-3">
+                <div className="flex items-center justify-between text-xs mb-2">
+                  <span className="text-gray-500 font-medium">Part du budget CP</span>
+                  <span className="font-bold text-amber-600">{((kpis.totalSubvention / kpis.totalCP) * 100).toFixed(1)}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="h-2 rounded-full bg-amber-500 transition-all duration-700 ease-out"
+                    style={{ width: `${Math.min(100, (kpis.totalSubvention / kpis.totalCP) * 100)}%` }}
+                  />
+                </div>
+                <div className="flex justify-between mt-1.5 text-[10px] text-gray-300">
+                  <span>0%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+            )}
           </div>
         </Card>
       </div>
