@@ -2516,8 +2516,8 @@ export default function Dashboard() {
               {/* ══ CP Section ══ */}
               <div className="p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h5 className="text-xs font-black text-gray-900 uppercase tracking-wider">Budget CP</h5>
-                  <span className="text-sm font-black text-gray-900">{formatMillions(entityTotalBudget)} M DH</span>
+                  <h5 className="text-xs font-black text-indigo-700 uppercase tracking-wider">Budget CP</h5>
+                  <span className="text-sm font-black text-indigo-700">{formatMillions(entityTotalBudget)} M DH</span>
                 </div>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
                   {(() => {
@@ -2541,7 +2541,7 @@ export default function Dashboard() {
                             </div>
                           </div>
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                            <div className="h-full rounded-full bg-indigo-600 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
                         </div>
                       )
@@ -2552,8 +2552,8 @@ export default function Dashboard() {
               {/* ══ CE Section ══ */}
               <div className="p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h5 className="text-xs font-black text-gray-900 uppercase tracking-wider">Budget CE</h5>
-                  <span className="text-sm font-black text-gray-900">{formatMillions(analysisByEntity.reduce((s, e) => s + e.ce, 0))} M DH</span>
+                  <h5 className="text-xs font-black text-emerald-700 uppercase tracking-wider">Budget CE</h5>
+                  <span className="text-sm font-black text-emerald-700">{formatMillions(analysisByEntity.reduce((s, e) => s + e.ce, 0))} M DH</span>
                 </div>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
                   {(() => {
@@ -2578,7 +2578,7 @@ export default function Dashboard() {
                             </div>
                           </div>
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                            <div className="h-full rounded-full bg-emerald-600 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
                         </div>
                       )
@@ -2790,8 +2790,8 @@ export default function Dashboard() {
               {/* ══ CP Section ══ */}
               <div className="p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h5 className="text-xs font-black text-gray-900 uppercase tracking-wider">Budget CP</h5>
-                  <span className="text-sm font-black text-gray-900">{formatMillions(progTotalBudget)} M DH</span>
+                  <h5 className="text-xs font-black text-indigo-700 uppercase tracking-wider">Budget CP</h5>
+                  <span className="text-sm font-black text-indigo-700">{formatMillions(progTotalBudget)} M DH</span>
                 </div>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
                   {(() => {
@@ -2815,7 +2815,7 @@ export default function Dashboard() {
                             </div>
                           </div>
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                            <div className="h-full rounded-full bg-indigo-600 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
                         </div>
                       )
@@ -2826,8 +2826,8 @@ export default function Dashboard() {
               {/* ══ CE Section ══ */}
               <div className="p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h5 className="text-xs font-black text-gray-900 uppercase tracking-wider">Budget CE</h5>
-                  <span className="text-sm font-black text-gray-900">{formatMillions(progTotalCE)} M DH</span>
+                  <h5 className="text-xs font-black text-emerald-700 uppercase tracking-wider">Budget CE</h5>
+                  <span className="text-sm font-black text-emerald-700">{formatMillions(progTotalCE)} M DH</span>
                 </div>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
                   {(() => {
@@ -2852,7 +2852,7 @@ export default function Dashboard() {
                             </div>
                           </div>
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                            <div className="h-full rounded-full bg-emerald-600 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
                         </div>
                       )
@@ -3087,8 +3087,8 @@ export default function Dashboard() {
               {/* ══ CP Section ══ */}
               <div className="p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h5 className="text-xs font-black text-gray-900 uppercase tracking-wider">Budget CP</h5>
-                  <span className="text-sm font-black text-gray-900">{formatMillions(progTotalBudget)} M DH</span>
+                  <h5 className="text-xs font-black text-indigo-700 uppercase tracking-wider">Budget CP</h5>
+                  <span className="text-sm font-black text-indigo-700">{formatMillions(progTotalBudget)} M DH</span>
                 </div>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
                   {(() => {
@@ -3112,7 +3112,7 @@ export default function Dashboard() {
                             </div>
                           </div>
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                            <div className="h-full rounded-full bg-indigo-600 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
                         </div>
                       )
@@ -3123,8 +3123,8 @@ export default function Dashboard() {
               {/* ══ CE Section ══ */}
               <div className="p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h5 className="text-xs font-black text-gray-900 uppercase tracking-wider">Budget CE</h5>
-                  <span className="text-sm font-black text-gray-900">{formatMillions(progTotalCE)} M DH</span>
+                  <h5 className="text-xs font-black text-emerald-700 uppercase tracking-wider">Budget CE</h5>
+                  <span className="text-sm font-black text-emerald-700">{formatMillions(progTotalCE)} M DH</span>
                 </div>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
                   {(() => {
@@ -3149,7 +3149,7 @@ export default function Dashboard() {
                             </div>
                           </div>
                           <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full bg-gray-900 transition-all duration-500" style={{ width: `${barWidth}%` }} />
+                            <div className="h-full rounded-full bg-emerald-600 transition-all duration-500" style={{ width: `${barWidth}%` }} />
                           </div>
                         </div>
                       )
