@@ -952,6 +952,31 @@ export default function Dashboard() {
     }))
   }, [analysisByProgramme])
 
+  // Pie chart data for "Analyse par entité" view - CP distribution (must be before any early return)
+  const ENTITY_PIE_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#f97316', '#14b8a6', '#3b82f6', '#84cc16', '#e11d48']
+  const entityPieData = useMemo(() => {
+    return analysisByEntity.map(e => ({
+      name: e.name,
+      value: Math.round(e.cp / 1e6 * 10) / 10,
+      cp: e.cp,
+      engCP: e.engCP,
+      tauxEngagement: e.tauxEngagement,
+      tauxOrdonnement: e.tauxOrdonnement,
+    }))
+  }, [analysisByEntity])
+
+  // Pie chart data for CE distribution by entity (must be before any early return)
+  const entityCEPieData = useMemo(() => {
+    return analysisByEntity.map(e => ({
+      name: e.name,
+      value: Math.round(e.ce / 1e6 * 10) / 10,
+      ce: e.ce,
+      engCE: e.engCE,
+      tauxEngagementCE: e.tauxEngagementCE,
+      tauxOrdonnement: e.tauxOrdonnement,
+    }))
+  }, [analysisByEntity])
+
   const handleExport = () => {
     const headers = ['Programme', 'Projet', 'SOURCE FINANCEMENT', 'NOMENCLATURE', 'N° ENGAGEMENT', 'ENTITE', 'DETAIL DESIGNATION', 'TOTAL CP', 'TOTAL CE', 'PAIEMENTS TOTAL', 'TOTAL PREV']
     const csvRows = [headers.join(';')]
@@ -2578,6 +2603,186 @@ export default function Dashboard() {
             })}
           </div>
         </div>
+
+        {/* ═══════════ CAMEMBERTS CP & CE : RÉPARTITION PAR ENTITÉ ═══════════ */}
+        <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
+          <CardContent className="p-0">
+            {/* Header */}
+            <div className="flex items-center gap-2 px-6 pt-5 pb-3">
+              <PieChartIcon className="w-5 h-5 text-indigo-500" />
+              <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition CP et CE par entité</h4>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+              {/* ─── CP Pie Chart ─── */}
+              <div className="flex flex-col items-center bg-gradient-to-br from-indigo-50/20 to-white p-4 border-r border-gray-100">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+                  <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">Budget CP</span>
+                </div>
+                {entityPieData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={420}>
+                  <PieChart>
+                    <Pie
+                      data={entityPieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={55}
+                      outerRadius={115}
+                      paddingAngle={2}
+                      dataKey="value"
+                      nameKey="name"
+                      strokeWidth={2}
+                      stroke="#ffffff"
+                      labelLine={(props: Record<string, unknown>) => {
+                        const cx = (props.cx as number) || 0
+                        const cy = (props.cy as number) || 0
+                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
+                        const percent = (props.percent as number) || 0
+                        const outerRadius = (props.outerRadius as number) || 115
+                        if (percent < 0.05) return <g key="empty-line" />
+                        const x1 = cx + (outerRadius + 4) * Math.cos(-midAngle)
+                        const y1 = cy + (outerRadius + 4) * Math.sin(-midAngle)
+                        const x2 = cx + (outerRadius + 25) * Math.cos(-midAngle)
+                        const y2 = cy + (outerRadius + 25) * Math.sin(-midAngle)
+                        const x3 = x2 > cx ? x2 + 18 : x2 - 18
+                        return (
+                          <path key={`line-${props.name}-${percent}`} d={`M${x1},${y1}L${x2},${y2}L${x3},${y2}`} stroke="#9ca3af" fill="none" strokeWidth={1} />
+                        )
+                      }}
+                      label={(props: Record<string, unknown>) => {
+                        const cx = (props.cx as number) || 0
+                        const cy = (props.cy as number) || 0
+                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
+                        const percent = (props.percent as number) || 0
+                        const outerRadius = (props.outerRadius as number) || 115
+                        const nameVal = (props.name as string) || ''
+                        const valueVal = (props.value as number) || 0
+                        if (percent < 0.05) return null
+                        const radius = outerRadius + 25
+                        const x = cx + radius * Math.cos(-midAngle)
+                        const y = cy + radius * Math.sin(-midAngle)
+                        const textAnchor = x > cx ? 'start' : 'end'
+                        const displayName = nameVal.length > 20 ? nameVal.substring(0, 20) + '…' : nameVal
+                        return (
+                          <g key={`label-${nameVal}-${percent}`}>
+                            <text x={x} y={y - 6} fill="#1f2937" textAnchor={textAnchor} dominantBaseline="central" fontSize={11} fontWeight={700}>{displayName}</text>
+                            <text x={x} y={y + 9} fill="#6b7280" textAnchor={textAnchor} dominantBaseline="central" fontSize={10} fontWeight={500}>{`${valueVal} M DH (${Math.round(percent * 100)}%)`}</text>
+                          </g>
+                        )
+                      }}
+                    >
+                      {entityPieData.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={ENTITY_PIE_COLORS[index % ENTITY_PIE_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]} contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+                ) : (
+                  <div className="flex items-center justify-center h-[420px] text-gray-400 text-sm">Aucune donnée CP</div>
+                )}
+              </div>
+              {/* ─── CE Pie Chart ─── */}
+              <div className="flex flex-col items-center bg-gradient-to-br from-emerald-50/20 to-white p-4">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">Budget CE</span>
+                </div>
+                {entityCEPieData.filter(d => d.value > 0).length > 0 ? (
+                <ResponsiveContainer width="100%" height={420}>
+                  <PieChart>
+                    <Pie
+                      data={entityCEPieData.filter(d => d.value > 0)}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={55}
+                      outerRadius={115}
+                      paddingAngle={2}
+                      dataKey="value"
+                      nameKey="name"
+                      strokeWidth={2}
+                      stroke="#ffffff"
+                      labelLine={(props: Record<string, unknown>) => {
+                        const cx = (props.cx as number) || 0
+                        const cy = (props.cy as number) || 0
+                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
+                        const percent = (props.percent as number) || 0
+                        const outerRadius = (props.outerRadius as number) || 115
+                        if (percent < 0.05) return <g key="empty-line" />
+                        const x1 = cx + (outerRadius + 4) * Math.cos(-midAngle)
+                        const y1 = cy + (outerRadius + 4) * Math.sin(-midAngle)
+                        const x2 = cx + (outerRadius + 25) * Math.cos(-midAngle)
+                        const y2 = cy + (outerRadius + 25) * Math.sin(-midAngle)
+                        const x3 = x2 > cx ? x2 + 18 : x2 - 18
+                        return (
+                          <path key={`line-${props.name}-${percent}`} d={`M${x1},${y1}L${x2},${y2}L${x3},${y2}`} stroke="#9ca3af" fill="none" strokeWidth={1} />
+                        )
+                      }}
+                      label={(props: Record<string, unknown>) => {
+                        const cx = (props.cx as number) || 0
+                        const cy = (props.cy as number) || 0
+                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
+                        const percent = (props.percent as number) || 0
+                        const outerRadius = (props.outerRadius as number) || 115
+                        const nameVal = (props.name as string) || ''
+                        const valueVal = (props.value as number) || 0
+                        if (percent < 0.05) return null
+                        const radius = outerRadius + 25
+                        const x = cx + radius * Math.cos(-midAngle)
+                        const y = cy + radius * Math.sin(-midAngle)
+                        const textAnchor = x > cx ? 'start' : 'end'
+                        const displayName = nameVal.length > 20 ? nameVal.substring(0, 20) + '…' : nameVal
+                        return (
+                          <g key={`label-ce-${nameVal}-${percent}`}>
+                            <text x={x} y={y - 6} fill="#1f2937" textAnchor={textAnchor} dominantBaseline="central" fontSize={11} fontWeight={700}>{displayName}</text>
+                            <text x={x} y={y + 9} fill="#6b7280" textAnchor={textAnchor} dominantBaseline="central" fontSize={10} fontWeight={500}>{`${valueVal} M DH (${Math.round(percent * 100)}%)`}</text>
+                          </g>
+                        )
+                      }}
+                    >
+                      {entityCEPieData.filter(d => d.value > 0).map((_, index) => (
+                        <Cell key={`cell-ce-${index}`} fill={ENTITY_PIE_COLORS[index % ENTITY_PIE_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]} contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+                ) : (
+                  <div className="flex items-center justify-center h-[420px] text-gray-400 text-sm">Aucune donnée CE</div>
+                )}
+              </div>
+            </div>
+            {/* ─── Combined Legend: CP + CE ─── */}
+            <div className="border-t border-gray-100 px-5 py-4 bg-gray-50/40">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[280px] overflow-y-auto pr-1">
+                {entityPieData.map((item, idx) => {
+                  const pctCP = entityTotalBudget > 0 ? (item.cp / entityTotalBudget) * 100 : 0
+                  const ceItem = entityCEPieData.find(c => c.name === item.name)
+                  const totCE = analysisByEntity.reduce((s, e) => s + e.ce, 0)
+                  const pctCE = totCE > 0 && ceItem ? (ceItem.ce / totCE) * 100 : 0
+                  return (
+                    <div key={item.name} className="flex items-start gap-2.5 bg-white rounded-lg px-3 py-2 border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/20 transition-colors">
+                      <div className="w-3 h-3 rounded-sm flex-shrink-0 mt-0.5" style={{ backgroundColor: ENTITY_PIE_COLORS[idx % ENTITY_PIE_COLORS.length] }} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-semibold text-gray-800 truncate">{item.name}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] text-indigo-600 font-bold">CP: {formatMillions(item.cp)} M DH ({Math.round(pctCP)}%)</span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] text-emerald-600 font-bold">CE: {ceItem ? `${formatMillions(ceItem.ce)} M DH (${Math.round(pctCE)}%)` : '0 M DH'}</span>
+                        </div>
+                      </div>
+                      <div className="text-right flex-shrink-0 flex flex-col items-end gap-0.5">
+                        <span className={`text-[9px] font-bold ${tauxColor(item.tauxEngagement)}`}>Eng.CP {Math.round(item.tauxEngagement)}%</span>
+                        {ceItem && ceItem.ce > 0 && <span className={`text-[9px] font-bold ${tauxColor(ceItem.tauxEngagementCE)}`}>Eng.CE {Math.round(ceItem.tauxEngagementCE)}%</span>}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Entity Detail Table */}
         <Card className="border border-gray-100 shadow-sm">
