@@ -68,7 +68,6 @@ import {
   TrendingUp,
   RotateCcw,
   Database,
-  PieChartIcon,
   FileSpreadsheet,
   Zap,
 } from 'lucide-react'
@@ -2506,13 +2505,13 @@ export default function Dashboard() {
 
     return (
       <>
-        {/* ═══════════ RÉPARTITION CP & CE PAR ENTITÉ ═══════════ */}
+        {/* ═══════════ RÉPARTITION CP & CE PAR ENTITÉ — BAR CHART ═══════════ */}
         <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
           <CardContent className="p-0">
             {/* Header with CP/CE toggle */}
             <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <PieChartIcon className="w-5 h-5 text-indigo-500" />
+                <BarChart3 className="w-5 h-5 text-indigo-500" />
                 <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition par entité</h4>
               </div>
               <div className="flex bg-gray-100 rounded-lg p-0.5">
@@ -2530,84 +2529,79 @@ export default function Dashboard() {
                 </button>
               </div>
             </div>
-            {/* Chart + Legend layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-              {/* Donut Chart - 3 cols */}
-              <div className="lg:col-span-3 flex flex-col items-center justify-center p-6">
-                {(() => {
-                  const currentData = pieView === 'cp' ? entityPieData : entityCEPieData.filter(d => d.value > 0)
-                  const totalValue = currentData.reduce((s, d) => s + d.value, 0)
-                  const totalRaw = pieView === 'cp' ? entityTotalBudget : analysisByEntity.reduce((s, e) => s + e.ce, 0)
-                  const accentColor = pieView === 'cp' ? '#6366f1' : '#10b981'
-                  return currentData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={350}>
-                      <PieChart>
-                        <Pie
-                          data={currentData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={85}
-                          outerRadius={135}
-                          paddingAngle={2}
-                          dataKey="value"
-                          nameKey="name"
-                          strokeWidth={2}
-                          stroke="#ffffff"
-                        >
-                          {currentData.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={ENTITY_PIE_COLORS[index % ENTITY_PIE_COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip
-                          formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]}
-                          contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <div className="flex items-center justify-center h-[350px] text-gray-400 text-sm">Aucune donnée {pieView === 'cp' ? 'CP' : 'CE'}</div>
-                  )
-                })()}
-                {/* Center total label overlaid */}
-                <div className="text-center -mt-[200px] mb-[120px] pointer-events-none">
-                  <p className="text-2xl font-black text-gray-800">{formatMillions(pieView === 'cp' ? entityTotalBudget : analysisByEntity.reduce((s, e) => s + e.ce, 0))}</p>
-                  <p className="text-[11px] font-bold text-gray-400 uppercase">M DH Total {pieView === 'cp' ? 'CP' : 'CE'}</p>
-                </div>
+            {/* Total banner */}
+            <div className="px-6 pt-4 pb-2">
+              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${pieView === 'cp' ? 'bg-indigo-50' : 'bg-emerald-50'}`}>
+                <span className="text-xs font-bold text-gray-500 uppercase">Total {pieView === 'cp' ? 'CP' : 'CE'}</span>
+                <span className={`text-lg font-black ${pieView === 'cp' ? 'text-indigo-700' : 'text-emerald-700'}`}>
+                  {formatMillions(pieView === 'cp' ? entityTotalBudget : analysisByEntity.reduce((s, e) => s + e.ce, 0))} M DH
+                </span>
               </div>
-              {/* Legend sidebar - 2 cols */}
-              <div className="lg:col-span-2 border-l border-gray-100 bg-gray-50/30 max-h-[430px] overflow-y-auto">
-                <div className="p-4 space-y-2">
-                  {(() => {
-                    const currentData = pieView === 'cp' ? entityPieData : entityCEPieData.filter(d => d.value > 0)
-                    const totalVal = currentData.reduce((s, d) => s + d.value, 0)
-                    return currentData.map((item, idx) => {
-                      const pct = totalVal > 0 ? (item.value / totalVal) * 100 : 0
-                      const ceItem = entityCEPieData.find(c => c.name === item.name)
-                      const cpItem = entityPieData.find(c => c.name === item.name)
-                      return (
-                        <div key={item.name} className="bg-white rounded-lg p-3 border border-gray-100 hover:shadow-sm transition-shadow">
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <div className="w-3 h-3 rounded-sm flex-shrink-0" style={{ backgroundColor: ENTITY_PIE_COLORS[idx % ENTITY_PIE_COLORS.length] }} />
-                            <span className="text-xs font-semibold text-gray-800 truncate flex-1">{item.name}</span>
-                            <span className="text-xs font-black text-gray-600">{Math.round(pct)}%</span>
-                          </div>
-                          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden mb-1.5">
-                            <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: ENTITY_PIE_COLORS[idx % ENTITY_PIE_COLORS.length] }} />
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] text-indigo-600 font-bold">CP: {formatMillions(cpItem?.cp || 0)}</span>
-                            <span className="text-[10px] text-emerald-600 font-bold">CE: {ceItem ? formatMillions(ceItem.ce) : '0'}</span>
-                          </div>
-                          <div className="flex items-center justify-between mt-0.5">
-                            <span className={`text-[9px] font-bold ${tauxColor(cpItem?.tauxEngagement || 0)}`}>Eng.CP {Math.round(cpItem?.tauxEngagement || 0)}%</span>
-                            {ceItem && ceItem.ce > 0 && <span className={`text-[9px] font-bold ${tauxColor(ceItem.tauxEngagementCE)}`}>Eng.CE {Math.round(ceItem.tauxEngagementCE)}%</span>}
-                          </div>
+            </div>
+            {/* Progress bars list */}
+            <div className="px-6 pb-6 space-y-3 max-h-[500px] overflow-y-auto">
+              {(() => {
+                const currentData = pieView === 'cp' ? entityPieData : entityCEPieData.filter(d => d.value > 0)
+                const totalVal = currentData.reduce((s, d) => s + d.value, 0)
+                const maxVal = currentData.length > 0 ? Math.max(...currentData.map(d => d.value)) : 0
+                return currentData.map((item, idx) => {
+                  const pct = totalVal > 0 ? (item.value / totalVal) * 100 : 0
+                  const barWidth = maxVal > 0 ? (item.value / maxVal) * 100 : 0
+                  const ceItem = entityCEPieData.find(c => c.name === item.name)
+                  const cpItem = entityPieData.find(c => c.name === item.name)
+                  const color = ENTITY_PIE_COLORS[idx % ENTITY_PIE_COLORS.length]
+                  return (
+                    <div key={item.name} className="group bg-white rounded-xl p-4 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+                          <span className="text-sm font-bold text-gray-800 truncate">{item.name}</span>
                         </div>
-                      )
-                    })
-                  })()}
-                </div>
-              </div>
+                        <div className="flex items-center gap-3 flex-shrink-0 ml-3">
+                          <span className={`text-xs font-black ${pieView === 'cp' ? 'text-indigo-700' : 'text-emerald-700'}`}>
+                            {formatMillions(pieView === 'cp' ? (cpItem?.cp || 0) : (ceItem?.ce || 0))} M DH
+                          </span>
+                          <span className="text-xs font-bold text-gray-400 bg-gray-50 px-2 py-0.5 rounded-md">
+                            {Math.round(pct)}%
+                          </span>
+                        </div>
+                      </div>
+                      {/* Main progress bar */}
+                      <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-500 ease-out"
+                          style={{ width: `${barWidth}%`, background: `linear-gradient(90deg, ${color}, ${color}dd)` }}
+                        />
+                      </div>
+                      {/* CP / CE / Engagement sub-info */}
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="text-[11px] text-indigo-600 font-bold">CP: {formatMillions(cpItem?.cp || 0)}</span>
+                        <span className="text-[11px] text-emerald-600 font-bold">CE: {ceItem ? formatMillions(ceItem.ce) : '0'}</span>
+                      </div>
+                      <div className="flex items-center gap-3 mt-1">
+                        {cpItem && cpItem.cp > 0 && (
+                          <div className="flex items-center gap-1.5 flex-1">
+                            <span className="text-[10px] font-bold text-gray-400">Eng.CP</span>
+                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full ${tauxBgColor(cpItem.tauxEngagement)}`} style={{ width: `${Math.min(cpItem.tauxEngagement, 100)}%` }} />
+                            </div>
+                            <span className={`text-[10px] font-black ${tauxColor(cpItem.tauxEngagement)}`}>{Math.round(cpItem.tauxEngagement)}%</span>
+                          </div>
+                        )}
+                        {ceItem && ceItem.ce > 0 && (
+                          <div className="flex items-center gap-1.5 flex-1">
+                            <span className="text-[10px] font-bold text-gray-400">Eng.CE</span>
+                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full ${tauxBgColor(ceItem.tauxEngagementCE)}`} style={{ width: `${Math.min(ceItem.tauxEngagementCE, 100)}%` }} />
+                            </div>
+                            <span className={`text-[10px] font-black ${tauxColor(ceItem.tauxEngagementCE)}`}>{Math.round(ceItem.tauxEngagementCE)}%</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })
+              })()}
             </div>
           </CardContent>
         </Card>
@@ -2801,13 +2795,13 @@ export default function Dashboard() {
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par projet</h3>
         </div>
 
-        {/* ═══════════ RÉPARTITION CP & CE PAR PROJET ═══════════ */}
+        {/* ═══════════ RÉPARTITION CP & CE PAR PROJET — BAR CHART ═══════════ */}
         <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
           <CardContent className="p-0">
             {/* Header with CP/CE toggle */}
             <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <PieChartIcon className="w-5 h-5 text-indigo-500" />
+                <BarChart3 className="w-5 h-5 text-indigo-500" />
                 <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition par projet</h4>
               </div>
               <div className="flex bg-gray-100 rounded-lg p-0.5">
@@ -2825,81 +2819,79 @@ export default function Dashboard() {
                 </button>
               </div>
             </div>
-            {/* Chart + Legend layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-              {/* Donut Chart - 3 cols */}
-              <div className="lg:col-span-3 flex flex-col items-center justify-center p-6">
-                {(() => {
-                  const currentData = pieView === 'cp' ? programmePieData : programmeCEPieData.filter(d => d.value > 0)
-                  return currentData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={350}>
-                      <PieChart>
-                        <Pie
-                          data={currentData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={85}
-                          outerRadius={135}
-                          paddingAngle={2}
-                          dataKey="value"
-                          nameKey="name"
-                          strokeWidth={2}
-                          stroke="#ffffff"
-                        >
-                          {currentData.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={PROGRAMME_PIE_COLORS[index % PROGRAMME_PIE_COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip
-                          formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]}
-                          contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <div className="flex items-center justify-center h-[350px] text-gray-400 text-sm">Aucune donnée {pieView === 'cp' ? 'CP' : 'CE'}</div>
-                  )
-                })()}
-                {/* Center total label overlaid */}
-                <div className="text-center -mt-[200px] mb-[120px] pointer-events-none">
-                  <p className="text-2xl font-black text-gray-800">{formatMillions(pieView === 'cp' ? progTotalBudget : progTotalCE)}</p>
-                  <p className="text-[11px] font-bold text-gray-400 uppercase">M DH Total {pieView === 'cp' ? 'CP' : 'CE'}</p>
-                </div>
+            {/* Total banner */}
+            <div className="px-6 pt-4 pb-2">
+              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${pieView === 'cp' ? 'bg-indigo-50' : 'bg-emerald-50'}`}>
+                <span className="text-xs font-bold text-gray-500 uppercase">Total {pieView === 'cp' ? 'CP' : 'CE'}</span>
+                <span className={`text-lg font-black ${pieView === 'cp' ? 'text-indigo-700' : 'text-emerald-700'}`}>
+                  {formatMillions(pieView === 'cp' ? progTotalBudget : progTotalCE)} M DH
+                </span>
               </div>
-              {/* Legend sidebar - 2 cols */}
-              <div className="lg:col-span-2 border-l border-gray-100 bg-gray-50/30 max-h-[430px] overflow-y-auto">
-                <div className="p-4 space-y-2">
-                  {(() => {
-                    const currentData = pieView === 'cp' ? programmePieData : programmeCEPieData.filter(d => d.value > 0)
-                    const totalVal = currentData.reduce((s, d) => s + d.value, 0)
-                    return currentData.map((item, idx) => {
-                      const pct = totalVal > 0 ? (item.value / totalVal) * 100 : 0
-                      const ceItem = programmeCEPieData.find(c => c.name === item.name)
-                      const cpItem = programmePieData.find(c => c.name === item.name)
-                      return (
-                        <div key={item.name} className="bg-white rounded-lg p-3 border border-gray-100 hover:shadow-sm transition-shadow">
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <div className="w-3 h-3 rounded-sm flex-shrink-0" style={{ backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
-                            <span className="text-xs font-semibold text-gray-800 truncate flex-1">{item.name}</span>
-                            <span className="text-xs font-black text-gray-600">{Math.round(pct)}%</span>
-                          </div>
-                          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden mb-1.5">
-                            <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] text-indigo-600 font-bold">CP: {formatMillions(cpItem?.cp || 0)}</span>
-                            <span className="text-[10px] text-emerald-600 font-bold">CE: {ceItem ? formatMillions(ceItem.ce) : '0'}</span>
-                          </div>
-                          <div className="flex items-center justify-between mt-0.5">
-                            <span className={`text-[9px] font-bold ${tauxColor(cpItem?.tauxEngagement || 0)}`}>Eng.CP {Math.round(cpItem?.tauxEngagement || 0)}%</span>
-                            {ceItem && ceItem.ce > 0 && <span className={`text-[9px] font-bold ${tauxColor(ceItem.tauxEngagementCE)}`}>Eng.CE {Math.round(ceItem.tauxEngagementCE)}%</span>}
-                          </div>
+            </div>
+            {/* Progress bars list */}
+            <div className="px-6 pb-6 space-y-3 max-h-[500px] overflow-y-auto">
+              {(() => {
+                const currentData = pieView === 'cp' ? programmePieData : programmeCEPieData.filter(d => d.value > 0)
+                const totalVal = currentData.reduce((s, d) => s + d.value, 0)
+                const maxVal = currentData.length > 0 ? Math.max(...currentData.map(d => d.value)) : 0
+                return currentData.map((item, idx) => {
+                  const pct = totalVal > 0 ? (item.value / totalVal) * 100 : 0
+                  const barWidth = maxVal > 0 ? (item.value / maxVal) * 100 : 0
+                  const ceItem = programmeCEPieData.find(c => c.name === item.name)
+                  const cpItem = programmePieData.find(c => c.name === item.name)
+                  const color = PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length]
+                  return (
+                    <div key={item.name} className="group bg-white rounded-xl p-4 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+                          <span className="text-sm font-bold text-gray-800 truncate">{item.name}</span>
                         </div>
-                      )
-                    })
-                  })()}
-                </div>
-              </div>
+                        <div className="flex items-center gap-3 flex-shrink-0 ml-3">
+                          <span className={`text-xs font-black ${pieView === 'cp' ? 'text-indigo-700' : 'text-emerald-700'}`}>
+                            {formatMillions(pieView === 'cp' ? (cpItem?.cp || 0) : (ceItem?.ce || 0))} M DH
+                          </span>
+                          <span className="text-xs font-bold text-gray-400 bg-gray-50 px-2 py-0.5 rounded-md">
+                            {Math.round(pct)}%
+                          </span>
+                        </div>
+                      </div>
+                      {/* Main progress bar */}
+                      <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-500 ease-out"
+                          style={{ width: `${barWidth}%`, background: `linear-gradient(90deg, ${color}, ${color}dd)` }}
+                        />
+                      </div>
+                      {/* CP / CE / Engagement sub-info */}
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="text-[11px] text-indigo-600 font-bold">CP: {formatMillions(cpItem?.cp || 0)}</span>
+                        <span className="text-[11px] text-emerald-600 font-bold">CE: {ceItem ? formatMillions(ceItem.ce) : '0'}</span>
+                      </div>
+                      <div className="flex items-center gap-3 mt-1">
+                        {cpItem && cpItem.cp > 0 && (
+                          <div className="flex items-center gap-1.5 flex-1">
+                            <span className="text-[10px] font-bold text-gray-400">Eng.CP</span>
+                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full ${tauxBgColor(cpItem.tauxEngagement)}`} style={{ width: `${Math.min(cpItem.tauxEngagement, 100)}%` }} />
+                            </div>
+                            <span className={`text-[10px] font-black ${tauxColor(cpItem.tauxEngagement)}`}>{Math.round(cpItem.tauxEngagement)}%</span>
+                          </div>
+                        )}
+                        {ceItem && ceItem.ce > 0 && (
+                          <div className="flex items-center gap-1.5 flex-1">
+                            <span className="text-[10px] font-bold text-gray-400">Eng.CE</span>
+                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full ${tauxBgColor(ceItem.tauxEngagementCE)}`} style={{ width: `${Math.min(ceItem.tauxEngagementCE, 100)}%` }} />
+                            </div>
+                            <span className={`text-[10px] font-black ${tauxColor(ceItem.tauxEngagementCE)}`}>{Math.round(ceItem.tauxEngagementCE)}%</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })
+              })()}
             </div>
           </CardContent>
         </Card>
@@ -3116,13 +3108,13 @@ export default function Dashboard() {
           <h3 className="text-sm font-bold text-gray-800 tracking-wide uppercase">Indicateurs par programme</h3>
         </div>
 
-        {/* ═══════════ RÉPARTITION CP & CE PAR PROGRAMME ═══════════ */}
+        {/* ═══════════ RÉPARTITION CP & CE PAR PROGRAMME — BAR CHART ═══════════ */}
         <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
           <CardContent className="p-0">
             {/* Header with CP/CE toggle */}
             <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <PieChartIcon className="w-5 h-5 text-indigo-500" />
+                <BarChart3 className="w-5 h-5 text-indigo-500" />
                 <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition par programme</h4>
               </div>
               <div className="flex bg-gray-100 rounded-lg p-0.5">
@@ -3140,81 +3132,79 @@ export default function Dashboard() {
                 </button>
               </div>
             </div>
-            {/* Chart + Legend layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-              {/* Donut Chart - 3 cols */}
-              <div className="lg:col-span-3 flex flex-col items-center justify-center p-6">
-                {(() => {
-                  const currentData = pieView === 'cp' ? projectPieData : projectCEPieData.filter(d => d.value > 0)
-                  return currentData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={350}>
-                      <PieChart>
-                        <Pie
-                          data={currentData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={85}
-                          outerRadius={135}
-                          paddingAngle={2}
-                          dataKey="value"
-                          nameKey="name"
-                          strokeWidth={2}
-                          stroke="#ffffff"
-                        >
-                          {currentData.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={PROJECT_PIE_COLORS[index % PROJECT_PIE_COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip
-                          formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]}
-                          contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <div className="flex items-center justify-center h-[350px] text-gray-400 text-sm">Aucune donnée {pieView === 'cp' ? 'CP' : 'CE'}</div>
-                  )
-                })()}
-                {/* Center total label overlaid */}
-                <div className="text-center -mt-[200px] mb-[120px] pointer-events-none">
-                  <p className="text-2xl font-black text-gray-800">{formatMillions(pieView === 'cp' ? progTotalBudget : progTotalCE)}</p>
-                  <p className="text-[11px] font-bold text-gray-400 uppercase">M DH Total {pieView === 'cp' ? 'CP' : 'CE'}</p>
-                </div>
+            {/* Total banner */}
+            <div className="px-6 pt-4 pb-2">
+              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${pieView === 'cp' ? 'bg-indigo-50' : 'bg-emerald-50'}`}>
+                <span className="text-xs font-bold text-gray-500 uppercase">Total {pieView === 'cp' ? 'CP' : 'CE'}</span>
+                <span className={`text-lg font-black ${pieView === 'cp' ? 'text-indigo-700' : 'text-emerald-700'}`}>
+                  {formatMillions(pieView === 'cp' ? progTotalBudget : progTotalCE)} M DH
+                </span>
               </div>
-              {/* Legend sidebar - 2 cols */}
-              <div className="lg:col-span-2 border-l border-gray-100 bg-gray-50/30 max-h-[430px] overflow-y-auto">
-                <div className="p-4 space-y-2">
-                  {(() => {
-                    const currentData = pieView === 'cp' ? projectPieData : projectCEPieData.filter(d => d.value > 0)
-                    const totalVal = currentData.reduce((s, d) => s + d.value, 0)
-                    return currentData.map((item, idx) => {
-                      const pct = totalVal > 0 ? (item.value / totalVal) * 100 : 0
-                      const ceItem = projectCEPieData.find(c => c.name === item.name)
-                      const cpItem = projectPieData.find(c => c.name === item.name)
-                      return (
-                        <div key={item.name} className="bg-white rounded-lg p-3 border border-gray-100 hover:shadow-sm transition-shadow">
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <div className="w-3 h-3 rounded-sm flex-shrink-0" style={{ backgroundColor: PROJECT_PIE_COLORS[idx % PROJECT_PIE_COLORS.length] }} />
-                            <span className="text-xs font-semibold text-gray-800 truncate flex-1">{item.name}</span>
-                            <span className="text-xs font-black text-gray-600">{Math.round(pct)}%</span>
-                          </div>
-                          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden mb-1.5">
-                            <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: PROJECT_PIE_COLORS[idx % PROJECT_PIE_COLORS.length] }} />
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] text-indigo-600 font-bold">CP: {formatMillions(cpItem?.cp || 0)}</span>
-                            <span className="text-[10px] text-emerald-600 font-bold">CE: {ceItem ? formatMillions(ceItem.ce) : '0'}</span>
-                          </div>
-                          <div className="flex items-center justify-between mt-0.5">
-                            <span className={`text-[9px] font-bold ${tauxColor(cpItem?.tauxEngagement || 0)}`}>Eng.CP {Math.round(cpItem?.tauxEngagement || 0)}%</span>
-                            {ceItem && ceItem.ce > 0 && <span className={`text-[9px] font-bold ${tauxColor(ceItem.tauxEngagementCE)}`}>Eng.CE {Math.round(ceItem.tauxEngagementCE)}%</span>}
-                          </div>
+            </div>
+            {/* Progress bars list */}
+            <div className="px-6 pb-6 space-y-3 max-h-[500px] overflow-y-auto">
+              {(() => {
+                const currentData = pieView === 'cp' ? projectPieData : projectCEPieData.filter(d => d.value > 0)
+                const totalVal = currentData.reduce((s, d) => s + d.value, 0)
+                const maxVal = currentData.length > 0 ? Math.max(...currentData.map(d => d.value)) : 0
+                return currentData.map((item, idx) => {
+                  const pct = totalVal > 0 ? (item.value / totalVal) * 100 : 0
+                  const barWidth = maxVal > 0 ? (item.value / maxVal) * 100 : 0
+                  const ceItem = projectCEPieData.find(c => c.name === item.name)
+                  const cpItem = projectPieData.find(c => c.name === item.name)
+                  const color = PROJECT_PIE_COLORS[idx % PROJECT_PIE_COLORS.length]
+                  return (
+                    <div key={item.name} className="group bg-white rounded-xl p-4 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+                          <span className="text-sm font-bold text-gray-800 truncate">{item.name}</span>
                         </div>
-                      )
-                    })
-                  })()}
-                </div>
-              </div>
+                        <div className="flex items-center gap-3 flex-shrink-0 ml-3">
+                          <span className={`text-xs font-black ${pieView === 'cp' ? 'text-indigo-700' : 'text-emerald-700'}`}>
+                            {formatMillions(pieView === 'cp' ? (cpItem?.cp || 0) : (ceItem?.ce || 0))} M DH
+                          </span>
+                          <span className="text-xs font-bold text-gray-400 bg-gray-50 px-2 py-0.5 rounded-md">
+                            {Math.round(pct)}%
+                          </span>
+                        </div>
+                      </div>
+                      {/* Main progress bar */}
+                      <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-500 ease-out"
+                          style={{ width: `${barWidth}%`, background: `linear-gradient(90deg, ${color}, ${color}dd)` }}
+                        />
+                      </div>
+                      {/* CP / CE / Engagement sub-info */}
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="text-[11px] text-indigo-600 font-bold">CP: {formatMillions(cpItem?.cp || 0)}</span>
+                        <span className="text-[11px] text-emerald-600 font-bold">CE: {ceItem ? formatMillions(ceItem.ce) : '0'}</span>
+                      </div>
+                      <div className="flex items-center gap-3 mt-1">
+                        {cpItem && cpItem.cp > 0 && (
+                          <div className="flex items-center gap-1.5 flex-1">
+                            <span className="text-[10px] font-bold text-gray-400">Eng.CP</span>
+                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full ${tauxBgColor(cpItem.tauxEngagement)}`} style={{ width: `${Math.min(cpItem.tauxEngagement, 100)}%` }} />
+                            </div>
+                            <span className={`text-[10px] font-black ${tauxColor(cpItem.tauxEngagement)}`}>{Math.round(cpItem.tauxEngagement)}%</span>
+                          </div>
+                        )}
+                        {ceItem && ceItem.ce > 0 && (
+                          <div className="flex items-center gap-1.5 flex-1">
+                            <span className="text-[10px] font-bold text-gray-400">Eng.CE</span>
+                            <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full ${tauxBgColor(ceItem.tauxEngagementCE)}`} style={{ width: `${Math.min(ceItem.tauxEngagementCE, 100)}%` }} />
+                            </div>
+                            <span className={`text-[10px] font-black ${tauxColor(ceItem.tauxEngagementCE)}`}>{Math.round(ceItem.tauxEngagementCE)}%</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })
+              })()}
             </div>
           </CardContent>
         </Card>
@@ -4425,46 +4415,45 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Budget Structure Pie Chart */}
+        {/* Budget Structure - Progress Bars */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-bold text-gray-800 tracking-wide uppercase flex items-center gap-2">
-              <PieChartIcon className="w-4 h-4" />
+              <BarChart3 className="w-4 h-4" />
               Structure budgétaire
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              <ResponsiveContainer width="100%" height={250}>
-                <PieChart>
-                  <Pie
-                    data={budgetStructureData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={3}
-                    dataKey="value"
-                    label={({ name, percent, value }: { name: string; percent: number; value: number }) => `${name} ${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} (${(percent * 100).toFixed(1)}%)`}
-                  >
-                    {budgetStructureData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(value: number) => `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })}`} />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="space-y-3">
-                {budgetStructureData.map((item, idx) => (
-                  <div key={item.name} className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }} />
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{item.name}</p>
-                      <p className="text-xs text-gray-500">{item.value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })}</p>
+            <div className="space-y-4">
+              {(() => {
+                const totalBudget = budgetStructureData.reduce((s, d) => s + d.value, 0)
+                const maxBudget = budgetStructureData.length > 0 ? Math.max(...budgetStructureData.map(d => d.value)) : 0
+                return budgetStructureData.map((item, idx) => {
+                  const pct = totalBudget > 0 ? (item.value / totalBudget) * 100 : 0
+                  const barWidth = maxBudget > 0 ? (item.value / maxBudget) * 100 : 0
+                  const color = PIE_COLORS[idx % PIE_COLORS.length]
+                  return (
+                    <div key={item.name}>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }} />
+                          <span className="text-sm font-semibold text-gray-800">{item.name}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-gray-700">{item.value.toLocaleString('fr-FR', { minimumFractionDigits: 1 })} M DH</span>
+                          <span className="text-xs font-bold text-gray-400 bg-gray-50 px-2 py-0.5 rounded-md">{Math.round(pct)}%</span>
+                        </div>
+                      </div>
+                      <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-500"
+                          style={{ width: `${barWidth}%`, background: `linear-gradient(90deg, ${color}, ${color}dd)` }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  )
+                })
+              })()}
             </div>
           </CardContent>
         </Card>
