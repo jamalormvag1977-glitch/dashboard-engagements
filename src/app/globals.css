@@ -184,17 +184,20 @@ nav button {
 
 /* ═══════════ PRINT STYLES ═══════════ */
 @media print {
-  /* Hide everything except the report */
-  body > *:not(#__next) {
+  /* Hide the sidebar */
+  aside {
     display: none !important;
   }
 
-  /* Hide sidebar, navigation, filters, and non-print elements */
+  /* Hide the dashboard header (filters, buttons) */
+  .print-hide-header {
+    display: none !important;
+  }
+
+  /* Hide buttons and interactive elements */
   .print\:hidden,
-  nav,
-  aside,
+  button:not(.print-keep),
   [data-sidebar],
-  header,
   .fixed,
   .sticky {
     display: none !important;
@@ -211,19 +214,36 @@ nav button {
     print-color-adjust: exact !important;
   }
 
-  /* Make the main content area full-width */
-  main,
-  .print-report {
-    margin: 0 !important;
-    padding: 15mm !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    box-shadow: none !important;
-    border: none !important;
+  /* Make the flex container stack vertically */
+  .min-h-screen.flex {
+    display: block !important;
   }
 
-  /* Ensure the report content takes full page width */
+  /* Make the main content area full-width */
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  /* Remove padding from content wrapper */
+  .print-content-wrap {
+    padding: 0 !important;
+  }
+
+  /* Only show print-report, hide other views */
+  .print-content-wrap > *:not(.print-report) {
+    display: none !important;
+  }
+
+  /* Reset the content padding for print */
   .print-report {
+    margin: 0 !important;
+    padding: 10mm !important;
+    max-width: 100% !important;
+    width: 100% !important;
     background: white !important;
   }
 
@@ -233,7 +253,6 @@ nav button {
   }
 
   /* Avoid breaking inside tables and KPI blocks */
-  table,
   .grid {
     page-break-inside: avoid;
   }
@@ -276,7 +295,7 @@ nav button {
     print-color-adjust: exact !important;
   }
 
-  /* Hide shadows and rounded corners for cleaner print */
+  /* Hide shadows for cleaner print */
   .shadow-sm, .shadow-md, .shadow-lg, .shadow-2xl,
   [class*="shadow-"] {
     box-shadow: none !important;
