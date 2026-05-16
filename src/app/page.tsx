@@ -1352,7 +1352,7 @@ export default function Dashboard() {
               <div className="bg-gray-50 rounded-xl p-3">
                 <div className="flex items-center justify-between text-xs mb-2">
                   <span className="text-gray-500 font-medium">Part du budget CP</span>
-                  <span className="font-bold text-sky-600">{((kpis.totalTresorerie / kpis.totalCP) * 100).toFixed(1)}%</span>
+                  <span className="font-bold text-sky-600">{Math.round((kpis.totalTresorerie / kpis.totalCP) * 100)}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                   <div
@@ -1393,7 +1393,7 @@ export default function Dashboard() {
               <div className="bg-gray-50 rounded-xl p-3">
                 <div className="flex items-center justify-between text-xs mb-2">
                   <span className="text-gray-500 font-medium">Part du budget CP</span>
-                  <span className="font-bold text-amber-600">{((kpis.totalSubvention / kpis.totalCP) * 100).toFixed(1)}%</span>
+                  <span className="font-bold text-amber-600">{Math.round((kpis.totalSubvention / kpis.totalCP) * 100)}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                   <div
@@ -2632,30 +2632,56 @@ export default function Dashboard() {
         </div>
 
         {/* ═══════════ CAMEMBERT : RÉPARTITION PAR PROJET ═══════════ */}
-        <Card className="bg-white border border-gray-100 shadow-sm">
-          <CardContent className="p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Pie Chart */}
-              <div className="flex items-center justify-center">
+        <Card className="bg-white border border-gray-100 shadow-md overflow-hidden">
+          <CardContent className="p-0">
+            {/* Header */}
+            <div className="flex items-center gap-2 px-6 pt-5 pb-3">
+              <PieChartIcon className="w-5 h-5 text-indigo-500" />
+              <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Répartition du budget CP par projet</h4>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
+              {/* Pie Chart - takes 3 columns */}
+              <div className="lg:col-span-3 flex items-center justify-center bg-gradient-to-br from-gray-50/50 to-white p-6 border-r border-gray-100">
                 {programmePieData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={320}>
+                <ResponsiveContainer width="100%" height={380}>
                   <PieChart>
                     <Pie
                       data={programmePieData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={60}
-                      outerRadius={120}
-                      paddingAngle={2}
+                      innerRadius={70}
+                      outerRadius={140}
+                      paddingAngle={3}
                       dataKey="value"
                       nameKey="name"
+                      strokeWidth={2}
+                      stroke="#ffffff"
+                      labelLine={false}
                       label={(props: Record<string, unknown>) => {
-                        const name = (props.name as string) || ''
+                        const cx = (props.cx as number) || 0
+                        const cy = (props.cy as number) || 0
+                        const midAngle = ((props.midAngle as number) || 0) * Math.PI / 180
                         const percent = (props.percent as number) || 0
-                        const displayName = name.length > 18 ? name.substring(0, 18) + '…' : name
-                        return `${displayName} ${(percent * 100).toFixed(1)}%`
+                        const outerRadius = (props.outerRadius as number) || 140
+                        if (percent < 0.04) return null
+                        const RADIAN = Math.PI / 180
+                        const radius = outerRadius + 30
+                        const x = cx + radius * Math.cos(-midAngle)
+                        const y = cy + radius * Math.sin(-midAngle)
+                        return (
+                          <text
+                            x={x}
+                            y={y}
+                            fill="#374151"
+                            textAnchor={x > cx ? 'start' : 'end'}
+                            dominantBaseline="central"
+                            fontSize={11}
+                            fontWeight={600}
+                          >
+                            {`${Math.round(percent * 100)}%`}
+                          </text>
+                        )
                       }}
-                      labelLine={{ stroke: '#9ca3af', strokeWidth: 1 }}
                     >
                       {programmePieData.map((_, index) => (
                         <Cell key={`cell-${index}`} fill={PROGRAMME_PIE_COLORS[index % PROGRAMME_PIE_COLORS.length]} />
@@ -2663,35 +2689,34 @@ export default function Dashboard() {
                     </Pie>
                     <Tooltip
                       formatter={(value: unknown, name: unknown) => [`${value} M DH`, `${name}`]}
-                      contentStyle={{ borderRadius: '8px', fontSize: '12px', border: '1px solid #e5e7eb' }}
+                      contentStyle={{ borderRadius: '12px', fontSize: '13px', border: '1px solid #e5e7eb', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-[320px] text-gray-400 text-sm">Aucune donnée disponible</div>
+                  <div className="flex items-center justify-center h-[380px] text-gray-400 text-sm">Aucune donnée disponible</div>
                 )}
               </div>
-              {/* Legend + Key Figures */}
-              <div className="flex flex-col justify-center space-y-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <PieChartIcon className="w-4 h-4 text-indigo-500" />
-                  <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wide">Répartition du budget CP par projet</h4>
-                </div>
-                <div className="space-y-2 max-h-[280px] overflow-y-auto pr-1">
+              {/* Legend + Key Figures - takes 2 columns */}
+              <div className="lg:col-span-2 flex flex-col justify-center p-5">
+                <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
                   {programmePieData.map((item, idx) => {
                     const pctBudget = progTotalBudget > 0 ? (item.cp / progTotalBudget) * 100 : 0
                     return (
-                      <div key={item.name} className="flex items-center gap-2.5 bg-gray-50 rounded-lg px-3 py-2">
-                        <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
+                      <div key={item.name} className="flex items-center gap-3 bg-white rounded-lg px-3 py-2.5 border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-colors">
+                        <div className="w-3.5 h-3.5 rounded-sm flex-shrink-0" style={{ backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-semibold text-gray-800 truncate">{item.name}</p>
-                          <div className="flex items-center gap-2 mt-0.5">
+                          <div className="flex items-center gap-3 mt-1">
                             <span className="text-[10px] text-gray-500">{formatMillions(item.cp)} M DH</span>
-                            <span className="text-[10px] font-bold text-indigo-600">{pctBudget.toFixed(1)}%</span>
+                            <span className="text-[10px] font-bold text-indigo-600">{Math.round(pctBudget)}%</span>
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                              <div className="h-full rounded-full" style={{ width: `${Math.min(pctBudget, 100)}%`, backgroundColor: PROGRAMME_PIE_COLORS[idx % PROGRAMME_PIE_COLORS.length] }} />
+                            </div>
                           </div>
                         </div>
                         <div className="text-right flex-shrink-0">
-                          <span className={`text-[10px] font-bold ${tauxColor(item.tauxEngagement)}`}>Eng. {formatPercent(item.tauxEngagement)}</span>
+                          <span className={`text-[10px] font-bold ${tauxColor(item.tauxEngagement)}`}>Eng. {Math.round(item.tauxEngagement)}%</span>
                         </div>
                       </div>
                     )
