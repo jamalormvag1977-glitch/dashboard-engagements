@@ -3372,7 +3372,7 @@ export default function Dashboard() {
                 <TableHeader>
                   <TableRow className="bg-gray-50">
                     <TableHead className="text-xs font-bold text-gray-600" rowSpan={2}>Programme</TableHead>
-                    <TableHead className="text-xs font-bold text-blue-700 text-center bg-blue-50/50" colSpan={3}>Crédits</TableHead>
+                    <TableHead className="text-xs font-bold text-blue-700 text-center bg-blue-50/50" colSpan={4}>Crédits</TableHead>
                     <TableHead className="text-xs font-bold text-emerald-700 text-center bg-emerald-50/50" colSpan={5}>Engagements</TableHead>
                     <TableHead className="text-xs font-bold text-indigo-700 text-center bg-indigo-50/50" colSpan={5}>Ordonnancement</TableHead>
                     <TableHead className="text-xs font-bold text-amber-700 text-center bg-amber-50/50" colSpan={2}>Paiement</TableHead>
@@ -3381,6 +3381,7 @@ export default function Dashboard() {
                     <TableHead className="text-[10px] font-bold text-blue-600 text-center">Reports</TableHead>
                     <TableHead className="text-[10px] font-bold text-blue-600 text-center">Consolidés</TableHead>
                     <TableHead className="text-[10px] font-bold text-blue-600 text-center">Nouveaux</TableHead>
+                    <TableHead className="text-[10px] font-bold text-blue-600 text-center">Total CP</TableHead>
                     <TableHead className="text-[10px] font-bold text-emerald-600 text-center">Eng. CP</TableHead>
                     <TableHead className="text-[10px] font-bold text-emerald-600 text-center">Taux eng. CP</TableHead>
                     <TableHead className="text-[10px] font-bold text-emerald-600 text-center">Sur Report</TableHead>
@@ -3409,6 +3410,7 @@ export default function Dashboard() {
                         <TableCell className="text-xs text-gray-700 text-center">{formatMillions(prog.cpReports)}</TableCell>
                         <TableCell className="text-xs text-gray-700 text-center">{formatMillions(prog.cpConsolides)}</TableCell>
                         <TableCell className="text-xs text-gray-700 text-center">{formatMillions(prog.cpNouveaux)}</TableCell>
+                        <TableCell className="text-xs font-bold text-gray-900 text-center">{formatMillions(prog.cp)}</TableCell>
                         <TableCell className="text-xs text-gray-700 text-center">{formatMillions(prog.engCP)}</TableCell>
                         <TableCell className="text-xs text-center"><span className={tauxColor(prog.tauxEngagement)}>{formatPercent(prog.tauxEngagement)}</span></TableCell>
                         <TableCell className="text-xs text-center"><span className={tauxColor(tauxEngReport)}>{formatPercent(tauxEngReport)}</span></TableCell>
@@ -3461,6 +3463,7 @@ export default function Dashboard() {
                           <TableCell className="text-xs font-bold text-gray-800 text-center">{formatMillions(tot.cpReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-800 text-center">{formatMillions(tot.cpConsolides)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-800 text-center">{formatMillions(tot.cpNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-800 text-center">{formatMillions(tot.cp)}</TableCell>
                           <TableCell className="text-xs font-bold text-gray-800 text-center">{formatMillions(tot.engCP)}</TableCell>
                           <TableCell className="text-xs text-center"><span className={tauxColor(tTauxEng)}>{formatPercent(tTauxEng)}</span></TableCell>
                           <TableCell className="text-xs text-center"><span className={tauxColor(tTauxEngReport)}>{formatPercent(tTauxEngReport)}</span></TableCell>
