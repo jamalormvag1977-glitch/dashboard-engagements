@@ -133,7 +133,7 @@ function formatKDH(value: number | null | undefined): string {
 // Format number in DH (dirhams)
 function formatDH(value: number | null | undefined): string {
   if (value === null || value === undefined) return '-'
-  return value.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+  return value.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
 // Format number for table cells with French thousands separators
