@@ -4234,36 +4234,36 @@ export default function Dashboard() {
     const sourceMaxCP = sourceSorted.length > 0 ? sourceSorted[0].cp : 0
     const sourceTotalCP = sourceSorted.reduce((s, src) => s + src.cp, 0)
     const sourceTotalCE = sourceSorted.reduce((s, src) => s + src.ce, 0)
-    const sourceCEData = sourceSorted.filter(src => src.ce > 0)
-    const sourceMaxCE = sourceCEData.length > 0 ? Math.max(...sourceCEData.map(src => src.ce)) : 0
-    const sourceCETotal = sourceCEData.reduce((s, src) => s + src.ce, 0)
+    const sourceCESorted = [...sourceFinancementData].filter(src => src.ce > 0).sort((a, b) => b.ce - a.ce)
+    const sourceMaxCE = sourceCESorted.length > 0 ? sourceCESorted[0].ce : 0
+    const sourceCETotal = sourceCESorted.reduce((s, src) => s + src.ce, 0)
 
     // Programme data for horizontal bars (sidebar style)
     const progSorted = [...analysisByProgramme].sort((a, b) => b.cp - a.cp)
     const progMaxCP = progSorted.length > 0 ? progSorted[0].cp : 0
     const progTotalCP = progSorted.reduce((s, p) => s + p.cp, 0)
     const progTotalCE = progSorted.reduce((s, p) => s + p.ce, 0)
-    const progCEData = progSorted.filter(p => p.ce > 0)
-    const progMaxCE = progCEData.length > 0 ? Math.max(...progCEData.map(p => p.ce)) : 0
-    const progCETotal = progCEData.reduce((s, p) => s + p.ce, 0)
+    const progCESorted = [...analysisByProgramme].filter(p => p.ce > 0).sort((a, b) => b.ce - a.ce)
+    const progMaxCE = progCESorted.length > 0 ? progCESorted[0].ce : 0
+    const progCETotal = progCESorted.reduce((s, p) => s + p.ce, 0)
 
     // Projet data for horizontal bars
     const projSorted = [...analysisByGroup].sort((a, b) => b.cp - a.cp)
     const projMaxCP = projSorted.length > 0 ? projSorted[0].cp : 0
     const projTotalCP = projSorted.reduce((s, g) => s + g.cp, 0)
     const projTotalCE = projSorted.reduce((s, g) => s + g.ce, 0)
-    const projCEData = projSorted.filter(g => g.ce > 0)
-    const projMaxCE = projCEData.length > 0 ? Math.max(...projCEData.map(g => g.ce)) : 0
-    const projCETotal = projCEData.reduce((s, g) => s + g.ce, 0)
+    const projCESorted = [...analysisByGroup].filter(g => g.ce > 0).sort((a, b) => b.ce - a.ce)
+    const projMaxCE = projCESorted.length > 0 ? projCESorted[0].ce : 0
+    const projCETotal = projCESorted.reduce((s, g) => s + g.ce, 0)
 
     // Entity data for horizontal bars
     const entitySorted = [...analysisByEntity].sort((a, b) => b.cp - a.cp)
     const entityMaxCP = entitySorted.length > 0 ? entitySorted[0].cp : 0
     const entityTotalCP = entitySorted.reduce((s, e) => s + e.cp, 0)
     const entityTotalCE = entitySorted.reduce((s, e) => s + e.ce, 0)
-    const entityCEData = entitySorted.filter(e => e.ce > 0)
-    const entityMaxCE = entityCEData.length > 0 ? Math.max(...entityCEData.map(e => e.ce)) : 0
-    const entityCETotal = entityCEData.reduce((s, e) => s + e.ce, 0)
+    const entityCESorted = [...analysisByEntity].filter(e => e.ce > 0).sort((a, b) => b.ce - a.ce)
+    const entityMaxCE = entityCESorted.length > 0 ? entityCESorted[0].ce : 0
+    const entityCETotal = entityCESorted.reduce((s, e) => s + e.ce, 0)
 
     const previsionChartData = [
       { name: 'Juin', value: Math.round(kpis.cumulPrevJuin / 1e6 * 10) / 10, pct: kpis.totalCP > 0 ? Math.round((kpis.cumulPrevJuin / kpis.totalCP) * 100) : 0 },
@@ -4419,7 +4419,7 @@ export default function Dashboard() {
                     <span className="text-[8px] font-black text-emerald-700">{formatMillions(sourceTotalCE)} M</span>
                   </div>
                   <div className="space-y-1">
-                    {sourceCEData.map((src, idx) => {
+                    {sourceCESorted.map((src, idx) => {
                       const pct = sourceCETotal > 0 ? (src.ce / sourceCETotal) * 100 : 0
                       const barWidth = sourceMaxCE > 0 ? (src.ce / sourceMaxCE) * 100 : 0
                       return (
@@ -4491,7 +4491,7 @@ export default function Dashboard() {
                     <span className="text-[8px] font-black text-emerald-700">{formatMillions(progTotalCE)} M</span>
                   </div>
                   <div className="space-y-1">
-                    {progCEData.map((p, idx) => {
+                    {progCESorted.map((p, idx) => {
                       const pct = progCETotal > 0 ? (p.ce / progCETotal) * 100 : 0
                       const barWidth = progMaxCE > 0 ? (p.ce / progMaxCE) * 100 : 0
                       return (
@@ -4563,7 +4563,7 @@ export default function Dashboard() {
                     <span className="text-[8px] font-black text-emerald-700">{formatMillions(projTotalCE)} M</span>
                   </div>
                   <div className="space-y-1">
-                    {projCEData.map((g, idx) => {
+                    {projCESorted.map((g, idx) => {
                       const pct = projCETotal > 0 ? (g.ce / projCETotal) * 100 : 0
                       const barWidth = projMaxCE > 0 ? (g.ce / projMaxCE) * 100 : 0
                       return (
@@ -4639,7 +4639,7 @@ export default function Dashboard() {
                     <span className="text-[7px] font-black text-emerald-700">{formatMillions(entityTotalCE)} M</span>
                   </div>
                   <div className="space-y-0.5">
-                    {entityCEData.map((e, idx) => {
+                    {entityCESorted.map((e, idx) => {
                       const pct = entityCETotal > 0 ? (e.ce / entityCETotal) * 100 : 0
                       const barWidth = entityMaxCE > 0 ? (e.ce / entityMaxCE) * 100 : 0
                       return (
