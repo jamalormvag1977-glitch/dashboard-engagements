@@ -4586,12 +4586,6 @@ export default function Dashboard() {
         {/* ════════════════ PAGE 2 ════════════════ */}
         <div className="print-page-break" />
         <div className="print-page-2">
-          {/* Page 2 Header */}
-          <div className="bg-gradient-to-r from-blue-800 to-blue-900 rounded-lg px-4 py-2 mb-2.5 text-white flex items-center justify-between">
-            <h2 className="text-xs font-bold">TABLEAU DE BORD DE SUIVI DE L&apos;EXÉCUTION DU BUDGET D&apos;INVESTISSEMENT — Suite</h2>
-            <p className="text-[9px] text-blue-200">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
-          </div>
-
           {/* ═══ 5. RÉPARTITION PAR ENTITÉ — CP / CE ═══ */}
           <div className="mb-2.5">
             <div className="bg-white border border-violet-200 rounded-lg overflow-hidden">

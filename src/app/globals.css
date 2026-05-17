@@ -252,9 +252,22 @@ nav button {
     page-break-before: always;
   }
 
-  /* Ensure each page fills properly */
+  /* Force each page to fill exactly one printed page */
   .print-page-1, .print-page-2 {
     break-inside: avoid;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* Page 1 fills from top */
+  .print-page-1 {
+    page-break-after: always;
+  }
+
+  /* Page 2 fills remaining */
+  .print-page-2 {
+    page-break-before: always;
   }
 
   /* Avoid breaking inside tables and KPI blocks */
@@ -308,9 +321,16 @@ nav button {
     box-shadow: none !important;
   }
 
-  /* Page margins */
+  /* Page margins — force exactly 2 pages */
   @page {
-    margin: 2mm 5mm;
+    margin: 2mm 4mm;
     size: A4 landscape;
+  }
+
+  /* Limit the entire report to exactly 2 pages */
+  .print-report {
+    height: 200vh !important;
+    max-height: 200vh !important;
+    overflow: hidden !important;
   }
 }
