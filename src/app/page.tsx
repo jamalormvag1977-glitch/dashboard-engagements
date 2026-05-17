@@ -4587,9 +4587,9 @@ export default function Dashboard() {
         <div className="print-page-break" />
         <div className="print-page-2">
           {/* Page 2 Header */}
-          <div className="bg-gradient-to-r from-blue-800 to-blue-900 rounded-lg px-3 py-1.5 mb-2 text-white flex items-center justify-between">
-            <h2 className="text-[11px] font-bold">TABLEAU DE BORD DE SUIVI DE L&apos;EXÉCUTION DU BUDGET D&apos;INVESTISSEMENT — Suite</h2>
-            <p className="text-[8px] text-blue-200">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+          <div className="bg-gradient-to-r from-blue-800 to-blue-900 rounded-lg px-4 py-2 mb-2.5 text-white flex items-center justify-between">
+            <h2 className="text-xs font-bold">TABLEAU DE BORD DE SUIVI DE L&apos;EXÉCUTION DU BUDGET D&apos;INVESTISSEMENT — Suite</h2>
+            <p className="text-[9px] text-blue-200">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
           </div>
 
           {/* ═══ 5. RÉPARTITION PAR ENTITÉ — CP / CE ═══ */}
@@ -4666,46 +4666,46 @@ export default function Dashboard() {
 
           {/* ═══ 6. PERFORMANCE ═══ */}
           <div className="mb-2.5">
-            <h2 className="text-[10px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-1 mb-1.5">
+            <h2 className="text-[10px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-1 mb-2">
               6. Performance — Taux d&apos;exécution
             </h2>
-            <div className="flex gap-3 mb-1.5">
-              <span className="flex items-center gap-1"><span className="w-3 h-2 bg-emerald-500 rounded-sm" /><span className="text-[7px] text-gray-500 font-medium">Engagement</span></span>
-              <span className="flex items-center gap-1"><span className="w-3 h-2 bg-violet-500 rounded-sm" /><span className="text-[7px] text-gray-500 font-medium">Ordonnancement</span></span>
-              <span className="flex items-center gap-1"><span className="w-3 h-2 bg-amber-500 rounded-sm" /><span className="text-[7px] text-gray-500 font-medium">Paiement</span></span>
+            <div className="flex gap-4 mb-2">
+              <span className="flex items-center gap-1"><span className="w-4 h-2.5 bg-emerald-500 rounded-sm" /><span className="text-[8px] text-gray-500 font-medium">Engagement</span></span>
+              <span className="flex items-center gap-1"><span className="w-4 h-2.5 bg-violet-500 rounded-sm" /><span className="text-[8px] text-gray-500 font-medium">Ordonnancement</span></span>
+              <span className="flex items-center gap-1"><span className="w-4 h-2.5 bg-amber-500 rounded-sm" /><span className="text-[8px] text-gray-500 font-medium">Paiement</span></span>
             </div>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-2.5">
               {/* 6.1 Par programme */}
               <div className="border border-indigo-200 rounded-lg overflow-hidden">
-                <div className="bg-indigo-800 px-2 py-1">
-                  <p className="text-[8px] font-bold text-white uppercase tracking-wider">Par programme</p>
+                <div className="bg-indigo-800 px-2 py-1.5">
+                  <p className="text-[9px] font-bold text-white uppercase tracking-wider">Par programme</p>
                 </div>
-                <div className="p-1.5 space-y-1">
+                <div className="p-2 space-y-1.5">
                   {progSorted.map(p => {
                     const tE = p.cp > 0 ? (p.engCP / p.cp) * 100 : 0
                     const tO = p.cp > 0 ? (p.ord / p.cp) * 100 : 0
                     const tP = p.cp > 0 ? (p.paiements / p.cp) * 100 : 0
                     return (
-                      <div key={p.name} className="bg-white rounded border border-gray-100 px-1.5 py-1">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[7px] font-bold text-gray-800" title={p.name}>{p.name}</span>
-                          <span className="text-[6px] text-gray-400 font-semibold">{formatMillions(p.cp)} M</span>
+                      <div key={p.name} className="bg-white rounded border border-gray-100 px-2 py-1.5">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-[8px] font-bold text-gray-800" title={p.name}>{p.name}</span>
+                          <span className="text-[7px] text-gray-400 font-semibold">{formatMillions(p.cp)} M</span>
                         </div>
-                        <div className="space-y-0.5">
+                        <div className="space-y-1">
                           <div className="flex items-center gap-1">
-                            <span className="text-[6px] font-bold text-emerald-600 w-4">E</span>
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
-                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
+                            <span className="text-[7px] font-bold text-emerald-600 w-5">E</span>
+                            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
+                            <span className={`text-[7px] font-bold w-7 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <span className="text-[6px] font-bold text-violet-600 w-4">O</span>
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
-                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
+                            <span className="text-[7px] font-bold text-violet-600 w-5">O</span>
+                            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
+                            <span className={`text-[7px] font-bold w-7 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <span className="text-[6px] font-bold text-amber-600 w-4">P</span>
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
-                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
+                            <span className="text-[7px] font-bold text-amber-600 w-5">P</span>
+                            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
+                            <span className={`text-[7px] font-bold w-7 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
                           </div>
                         </div>
                       </div>
@@ -4715,35 +4715,35 @@ export default function Dashboard() {
               </div>
               {/* 6.2 Par projet */}
               <div className="border border-emerald-200 rounded-lg overflow-hidden">
-                <div className="bg-emerald-800 px-2 py-1">
-                  <p className="text-[8px] font-bold text-white uppercase tracking-wider">Par projet</p>
+                <div className="bg-emerald-800 px-2 py-1.5">
+                  <p className="text-[9px] font-bold text-white uppercase tracking-wider">Par projet</p>
                 </div>
-                <div className="p-1.5 space-y-1">
+                <div className="p-2 space-y-1.5">
                   {projSorted.map(g => {
                     const tE = g.cp > 0 ? (g.engCP / g.cp) * 100 : 0
                     const tO = g.cp > 0 ? (g.ord / g.cp) * 100 : 0
                     const tP = g.cp > 0 ? (g.paiements / g.cp) * 100 : 0
                     return (
-                      <div key={g.name} className="bg-white rounded border border-gray-100 px-1.5 py-1">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[7px] font-bold text-gray-800" title={g.name}>{g.name}</span>
-                          <span className="text-[6px] text-gray-400 font-semibold">{formatMillions(g.cp)} M</span>
+                      <div key={g.name} className="bg-white rounded border border-gray-100 px-2 py-1.5">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-[8px] font-bold text-gray-800" title={g.name}>{g.name}</span>
+                          <span className="text-[7px] text-gray-400 font-semibold">{formatMillions(g.cp)} M</span>
                         </div>
-                        <div className="space-y-0.5">
+                        <div className="space-y-1">
                           <div className="flex items-center gap-1">
-                            <span className="text-[6px] font-bold text-emerald-600 w-4">E</span>
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
-                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
+                            <span className="text-[7px] font-bold text-emerald-600 w-5">E</span>
+                            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(tE, 100)}%` }} /></div>
+                            <span className={`text-[7px] font-bold w-7 text-right ${tauxColor(tE)}`}>{formatPercent(tE)}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <span className="text-[6px] font-bold text-violet-600 w-4">O</span>
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
-                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
+                            <span className="text-[7px] font-bold text-violet-600 w-5">O</span>
+                            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(tO, 100)}%` }} /></div>
+                            <span className={`text-[7px] font-bold w-7 text-right ${tauxColor(tO)}`}>{formatPercent(tO)}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <span className="text-[6px] font-bold text-amber-600 w-4">P</span>
-                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
-                            <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
+                            <span className="text-[7px] font-bold text-amber-600 w-5">P</span>
+                            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(tP, 100)}%` }} /></div>
+                            <span className={`text-[7px] font-bold w-7 text-right ${tauxColor(tP)}`}>{formatPercent(tP)}</span>
                           </div>
                         </div>
                       </div>
@@ -4753,31 +4753,31 @@ export default function Dashboard() {
               </div>
               {/* 6.3 Par entité */}
               <div className="border border-violet-200 rounded-lg overflow-hidden">
-                <div className="bg-violet-800 px-2 py-1">
-                  <p className="text-[8px] font-bold text-white uppercase tracking-wider">Par entité</p>
+                <div className="bg-violet-800 px-2 py-1.5">
+                  <p className="text-[9px] font-bold text-white uppercase tracking-wider">Par entité</p>
                 </div>
-                <div className="p-1.5 space-y-1">
+                <div className="p-2 space-y-1.5">
                   {entitySorted.map(e => (
-                    <div key={e.name} className="bg-white rounded border border-gray-100 px-1.5 py-1">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-[7px] font-bold text-gray-800" title={e.name}>{e.name}</span>
-                        <span className="text-[6px] text-gray-400 font-semibold">{formatMillions(e.cp)} M</span>
+                    <div key={e.name} className="bg-white rounded border border-gray-100 px-2 py-1.5">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[8px] font-bold text-gray-800" title={e.name}>{e.name}</span>
+                        <span className="text-[7px] text-gray-400 font-semibold">{formatMillions(e.cp)} M</span>
                       </div>
-                      <div className="space-y-0.5">
+                      <div className="space-y-1">
                         <div className="flex items-center gap-1">
-                          <span className="text-[6px] font-bold text-emerald-600 w-4">E</span>
-                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(e.tauxEngagement, 100)}%` }} /></div>
-                          <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(e.tauxEngagement)}`}>{formatPercent(e.tauxEngagement)}</span>
+                          <span className="text-[7px] font-bold text-emerald-600 w-5">E</span>
+                          <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(e.tauxEngagement, 100)}%` }} /></div>
+                          <span className={`text-[7px] font-bold w-7 text-right ${tauxColor(e.tauxEngagement)}`}>{formatPercent(e.tauxEngagement)}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <span className="text-[6px] font-bold text-violet-600 w-4">O</span>
-                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(e.tauxOrdonnement, 100)}%` }} /></div>
-                          <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(e.tauxOrdonnement)}`}>{formatPercent(e.tauxOrdonnement)}</span>
+                          <span className="text-[7px] font-bold text-violet-600 w-5">O</span>
+                          <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-violet-500" style={{ width: `${Math.min(e.tauxOrdonnement, 100)}%` }} /></div>
+                          <span className={`text-[7px] font-bold w-7 text-right ${tauxColor(e.tauxOrdonnement)}`}>{formatPercent(e.tauxOrdonnement)}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <span className="text-[6px] font-bold text-amber-600 w-4">P</span>
-                          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(e.tauxPaiement, 100)}%` }} /></div>
-                          <span className={`text-[6px] font-bold w-6 text-right ${tauxColor(e.tauxPaiement)}`}>{formatPercent(e.tauxPaiement)}</span>
+                          <span className="text-[7px] font-bold text-amber-600 w-5">P</span>
+                          <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.min(e.tauxPaiement, 100)}%` }} /></div>
+                          <span className={`text-[7px] font-bold w-7 text-right ${tauxColor(e.tauxPaiement)}`}>{formatPercent(e.tauxPaiement)}</span>
                         </div>
                       </div>
                     </div>
@@ -4788,50 +4788,50 @@ export default function Dashboard() {
           </div>
 
           {/* ═══ 7. PRÉVISIONS ORDONNANCEMENT ═══ */}
-          <div className="mb-2">
-            <h2 className="text-[10px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-1 mb-1.5">
+          <div className="mb-2.5">
+            <h2 className="text-[10px] font-black text-blue-900 uppercase border-b-2 border-blue-800 pb-1 mb-2">
               7. Prévisions ordonnancement
             </h2>
-            <div className="grid grid-cols-4 gap-2">
-              <div className="bg-blue-50 rounded p-2 text-center border border-blue-200">
-                <p className="text-[7px] font-bold text-blue-600 uppercase">Cum. Juin</p>
-                <p className="text-base font-black text-gray-900">{formatMillions(kpis.cumulPrevJuin)}</p>
-                <div className="flex items-center gap-1 mt-1">
-                  <div className="flex-1 h-2 bg-blue-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-blue-600" style={{ width: `${previsionChartData[0].pct}%` }} /></div>
-                  <span className="text-[7px] font-bold text-blue-700">{previsionChartData[0].pct}%</span>
+            <div className="grid grid-cols-4 gap-2.5">
+              <div className="bg-blue-50 rounded p-2.5 text-center border border-blue-200">
+                <p className="text-[8px] font-bold text-blue-600 uppercase">Cum. Juin</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevJuin)}</p>
+                <div className="flex items-center gap-1 mt-1.5">
+                  <div className="flex-1 h-2.5 bg-blue-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-blue-600" style={{ width: `${previsionChartData[0].pct}%` }} /></div>
+                  <span className="text-[8px] font-bold text-blue-700">{previsionChartData[0].pct}%</span>
                 </div>
               </div>
-              <div className="bg-teal-50 rounded p-2 text-center border border-teal-200">
-                <p className="text-[7px] font-bold text-teal-600 uppercase">Cum. Sept.</p>
-                <p className="text-base font-black text-gray-900">{formatMillions(kpis.cumulPrevSeptembre)}</p>
-                <div className="flex items-center gap-1 mt-1">
-                  <div className="flex-1 h-2 bg-teal-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-teal-600" style={{ width: `${previsionChartData[1].pct}%` }} /></div>
-                  <span className="text-[7px] font-bold text-teal-700">{previsionChartData[1].pct}%</span>
+              <div className="bg-teal-50 rounded p-2.5 text-center border border-teal-200">
+                <p className="text-[8px] font-bold text-teal-600 uppercase">Cum. Sept.</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevSeptembre)}</p>
+                <div className="flex items-center gap-1 mt-1.5">
+                  <div className="flex-1 h-2.5 bg-teal-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-teal-600" style={{ width: `${previsionChartData[1].pct}%` }} /></div>
+                  <span className="text-[8px] font-bold text-teal-700">{previsionChartData[1].pct}%</span>
                 </div>
               </div>
-              <div className="bg-orange-50 rounded p-2 text-center border border-orange-200">
-                <p className="text-[7px] font-bold text-orange-600 uppercase">Cum. Nov.</p>
-                <p className="text-base font-black text-gray-900">{formatMillions(kpis.cumulPrevNovembre)}</p>
-                <div className="flex items-center gap-1 mt-1">
-                  <div className="flex-1 h-2 bg-orange-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-orange-500" style={{ width: `${previsionChartData[2].pct}%` }} /></div>
-                  <span className="text-[7px] font-bold text-orange-700">{previsionChartData[2].pct}%</span>
+              <div className="bg-orange-50 rounded p-2.5 text-center border border-orange-200">
+                <p className="text-[8px] font-bold text-orange-600 uppercase">Cum. Nov.</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevNovembre)}</p>
+                <div className="flex items-center gap-1 mt-1.5">
+                  <div className="flex-1 h-2.5 bg-orange-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-orange-500" style={{ width: `${previsionChartData[2].pct}%` }} /></div>
+                  <span className="text-[8px] font-bold text-orange-700">{previsionChartData[2].pct}%</span>
                 </div>
               </div>
-              <div className="bg-indigo-50 rounded p-2 text-center border border-indigo-200">
-                <p className="text-[7px] font-bold text-indigo-600 uppercase">Cum. Déc.</p>
-                <p className="text-base font-black text-gray-900">{formatMillions(kpis.cumulPrevDecembre)}</p>
-                <div className="flex items-center gap-1 mt-1">
-                  <div className="flex-1 h-2 bg-indigo-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-indigo-600" style={{ width: `${previsionChartData[3].pct}%` }} /></div>
-                  <span className="text-[7px] font-bold text-indigo-700">{previsionChartData[3].pct}%</span>
+              <div className="bg-indigo-50 rounded p-2.5 text-center border border-indigo-200">
+                <p className="text-[8px] font-bold text-indigo-600 uppercase">Cum. Déc.</p>
+                <p className="text-lg font-black text-gray-900">{formatMillions(kpis.cumulPrevDecembre)}</p>
+                <div className="flex items-center gap-1 mt-1.5">
+                  <div className="flex-1 h-2.5 bg-indigo-100 rounded-full overflow-hidden"><div className="h-full rounded-full bg-indigo-600" style={{ width: `${previsionChartData[3].pct}%` }} /></div>
+                  <span className="text-[8px] font-bold text-indigo-700">{previsionChartData[3].pct}%</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="mt-1 pt-1 border-t-2 border-blue-800 flex items-center justify-between">
-            <p className="text-[7px] text-gray-400">Rapport auto-généré — {filteredData.length} lignes de données</p>
-            <p className="text-[7px] text-gray-400">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <div className="mt-2 pt-1.5 border-t-2 border-blue-800 flex items-center justify-between">
+            <p className="text-[8px] text-gray-500">Rapport auto-généré — {filteredData.length} lignes de données</p>
+            <p className="text-[8px] text-gray-500">{new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
         </div>
       </div>
