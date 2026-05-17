@@ -6850,19 +6850,17 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-bold text-rose-700">Écriture</TableHead>
                     <TableHead className="text-xs font-bold text-rose-700">Nomenclature</TableHead>
                     <TableHead className="text-xs font-bold text-rose-700">Désignation</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-600 text-center">Crédits Report</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-600 text-center">Eng. Report</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-600 text-center">Ord. Report</TableHead>
                     <TableHead className="text-xs font-bold text-rose-600 text-center">Reste à ord. Report</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-600 text-center">% Reste</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {(() => {
                     const resteOrdLines = filteredData.map(r => {
-                      const reports = r.REPORTS || 0
                       const engReports = r['ENG REPORT'] || 0
                       const ordReports = r['ORD REPORTS'] || 0
                       const resteOrdReport = Math.max(0, engReports - ordReports)
+                      const tauxReste = engReports > 0 ? (resteOrdReport / engReports) * 100 : 0
                       return {
                         programme: r.Programme || '',
                         projet: r.Projet || 'Non classé',
@@ -6870,17 +6868,15 @@ export default function Dashboard() {
                         ecriture: r['N° ENGAGEMENT'] || '-',
                         nomenclature: r.NOMENCLATURE || '',
                         designation: r['DETAIL DESIGNATION'] || '',
-                        reports,
                         engReports,
-                        ordReports,
-                        resteOrdReport
+                        resteOrdReport,
+                        tauxReste
                       }
                     }).filter(r => r.resteOrdReport > 0).sort((a, b) => b.resteOrdReport - a.resteOrdReport)
 
-                    const totReports = resteOrdLines.reduce((s, r) => s + r.reports, 0)
                     const totEngReports = resteOrdLines.reduce((s, r) => s + r.engReports, 0)
-                    const totOrdReports = resteOrdLines.reduce((s, r) => s + r.ordReports, 0)
                     const totResteOrdReport = resteOrdLines.reduce((s, r) => s + r.resteOrdReport, 0)
+                    const totTauxReste = totEngReports > 0 ? (totResteOrdReport / totEngReports) * 100 : 0
 
                     let currentProgramme = ''
                     return (
@@ -6896,19 +6892,15 @@ export default function Dashboard() {
                               <TableCell className="text-xs font-medium text-gray-900">{r.ecriture}</TableCell>
                               <TableCell className="text-xs text-blue-600 font-mono whitespace-nowrap">{r.nomenclature}</TableCell>
                               <TableCell className="text-xs text-gray-700" style={{minWidth:'250px',maxWidth:'400px',whiteSpace:'normal',lineHeight:'1.4'}}>{r.designation}</TableCell>
-                              <TableCell className="text-xs text-gray-700 text-center">{formatDH(r.reports)}</TableCell>
-                              <TableCell className="text-xs text-emerald-600 text-center">{formatDH(r.engReports)}</TableCell>
-                              <TableCell className="text-xs text-blue-600 text-center">{formatDH(r.ordReports)}</TableCell>
                               <TableCell className="text-xs font-bold text-rose-700 text-center">{formatDH(r.resteOrdReport)}</TableCell>
+                              <TableCell className="text-xs text-center"><span className={tauxColor(r.tauxReste)}>{formatPercent(r.tauxReste)}</span></TableCell>
                             </TableRow>
                           )
                         })}
                         <TableRow className="bg-rose-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900" colSpan={6}>Total ({resteOrdLines.length} prestations)</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-center">{formatDH(totReports)}</TableCell>
-                          <TableCell className="text-xs font-bold text-emerald-700 text-center">{formatDH(totEngReports)}</TableCell>
-                          <TableCell className="text-xs font-bold text-blue-700 text-center">{formatDH(totOrdReports)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-center">{formatDH(totResteOrdReport)}</TableCell>
+                          <TableCell className="text-xs font-bold text-center"><span className={tauxColor(totTauxReste)}>{formatPercent(totTauxReste)}</span></TableCell>
                         </TableRow>
                       </>
                     )
