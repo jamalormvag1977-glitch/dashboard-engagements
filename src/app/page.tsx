@@ -3507,21 +3507,21 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={(kpis.totalReports > 0 ? (kpis.totalEngReports / kpis.totalReports) * 100 : 0) >= 80 ? '#10b981' : (kpis.totalReports > 0 ? (kpis.totalEngReports / kpis.totalReports) * 100 : 0) >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#3b82f6" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                     {(() => { const tauxReport = kpis.totalReports > 0 ? (kpis.totalEngReports / kpis.totalReports) * 100 : 0; return <>
-                      <span className={`text-lg font-black tracking-tight ${tauxColor(tauxReport)}`}>{formatPercent(tauxReport)}</span>
+                      <span className="text-lg font-black tracking-tight text-blue-500">{formatPercent(tauxReport)}</span>
                       <span className="text-[9px] text-gray-400 font-medium">{tauxReport >= 80 ? 'Bon' : tauxReport >= 50 ? 'Moyen' : 'Faible'}</span>
                     </> })()}
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
                   {(() => { const tauxReport = kpis.totalReports > 0 ? (kpis.totalEngReports / kpis.totalReports) * 100 : 0; return <>
-                    <span className={`w-1.5 h-1.5 rounded-full ${tauxReport >= 80 ? 'bg-emerald-500' : tauxReport >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                   </> })()}
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.totalEngReports)} M DH</span>
                 </div>
@@ -3542,21 +3542,21 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={(kpis.totalConsolides > 0 ? (kpis.totalEngConsolides / kpis.totalConsolides) * 100 : 0) >= 80 ? '#10b981' : (kpis.totalConsolides > 0 ? (kpis.totalEngConsolides / kpis.totalConsolides) * 100 : 0) >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#10b981" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                     {(() => { const tauxConsolide = kpis.totalConsolides > 0 ? (kpis.totalEngConsolides / kpis.totalConsolides) * 100 : 0; return <>
-                      <span className={`text-lg font-black tracking-tight ${tauxColor(tauxConsolide)}`}>{formatPercent(tauxConsolide)}</span>
+                      <span className="text-lg font-black tracking-tight text-emerald-500">{formatPercent(tauxConsolide)}</span>
                       <span className="text-[9px] text-gray-400 font-medium">{tauxConsolide >= 80 ? 'Bon' : tauxConsolide >= 50 ? 'Moyen' : 'Faible'}</span>
                     </> })()}
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
                   {(() => { const tauxConsolide = kpis.totalConsolides > 0 ? (kpis.totalEngConsolides / kpis.totalConsolides) * 100 : 0; return <>
-                    <span className={`w-1.5 h-1.5 rounded-full ${tauxConsolide >= 80 ? 'bg-emerald-500' : tauxConsolide >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   </> })()}
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.totalEngConsolides)} M DH</span>
                 </div>
@@ -3577,21 +3577,21 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={(kpis.totalNouveaux > 0 ? (kpis.totalEngNouveaux / kpis.totalNouveaux) * 100 : 0) >= 80 ? '#10b981' : (kpis.totalNouveaux > 0 ? (kpis.totalEngNouveaux / kpis.totalNouveaux) * 100 : 0) >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f59e0b" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                     {(() => { const tauxNouveau = kpis.totalNouveaux > 0 ? (kpis.totalEngNouveaux / kpis.totalNouveaux) * 100 : 0; return <>
-                      <span className={`text-lg font-black tracking-tight ${tauxColor(tauxNouveau)}`}>{formatPercent(tauxNouveau)}</span>
+                      <span className="text-lg font-black tracking-tight text-amber-500">{formatPercent(tauxNouveau)}</span>
                       <span className="text-[9px] text-gray-400 font-medium">{tauxNouveau >= 80 ? 'Bon' : tauxNouveau >= 50 ? 'Moyen' : 'Faible'}</span>
                     </> })()}
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
                   {(() => { const tauxNouveau = kpis.totalNouveaux > 0 ? (kpis.totalEngNouveaux / kpis.totalNouveaux) * 100 : 0; return <>
-                    <span className={`w-1.5 h-1.5 rounded-full ${tauxNouveau >= 80 ? 'bg-emerald-500' : tauxNouveau >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                   </> })()}
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.totalEngNouveaux)} M DH</span>
                 </div>
@@ -3612,20 +3612,20 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={kpis.tauxEngagement >= 80 ? '#10b981' : kpis.tauxEngagement >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#8b5cf6" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-lg font-black tracking-tight ${tauxColor(kpis.tauxEngagement)}`}>{formatPercent(kpis.tauxEngagement)}</span>
+                    <span className="text-lg font-black tracking-tight text-purple-500">{formatPercent(kpis.tauxEngagement)}</span>
                     <span className="text-[9px] text-gray-400 font-medium">
                       {kpis.tauxEngagement >= 80 ? 'Bon' : kpis.tauxEngagement >= 50 ? 'Moyen' : 'Faible'}
                     </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-1.5 h-1.5 rounded-full ${kpis.tauxEngagement >= 80 ? 'bg-emerald-500' : kpis.tauxEngagement >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.totalEngCP)} M DH</span>
                 </div>
               </div>
@@ -3645,21 +3645,21 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={(kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0) >= 80 ? '#10b981' : (kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0) >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f43f5e" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                     {(() => { const tauxCE = kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0; return <>
-                      <span className={`text-lg font-black tracking-tight ${tauxColor(tauxCE)}`}>{formatPercent(tauxCE)}</span>
+                      <span className="text-lg font-black tracking-tight text-rose-500">{formatPercent(tauxCE)}</span>
                       <span className="text-[9px] text-gray-400 font-medium">{tauxCE >= 80 ? 'Bon' : tauxCE >= 50 ? 'Moyen' : 'Faible'}</span>
                     </> })()}
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
                   {(() => { const tauxCE = kpis.totalCE > 0 ? (kpis.totalEngCE / kpis.totalCE) * 100 : 0; return <>
-                    <span className={`w-1.5 h-1.5 rounded-full ${tauxCE >= 80 ? 'bg-emerald-500' : tauxCE >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
                   </> })()}
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.totalEngCE)} M DH</span>
                 </div>
@@ -4158,20 +4158,20 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxOrdReport >= 80 ? '#10b981' : tauxOrdReport >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#3b82f6" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxOrdReport)}`}>{formatPercent(tauxOrdReport)}</span>
+                    <span className="text-2xl font-black tracking-tight text-blue-500">{formatPercent(tauxOrdReport)}</span>
                     <span className="text-[10px] text-gray-400 font-medium">
                       {tauxOrdReport >= 80 ? 'Bon' : tauxOrdReport >= 50 ? 'Moyen' : 'Faible'}
                     </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-2 h-2 rounded-full ${tauxOrdReport >= 80 ? 'bg-emerald-500' : tauxOrdReport >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-2 h-2 rounded-full bg-blue-500" />
                   <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrdReports)} M DH</span>
                 </div>
               </CardContent>
@@ -4195,20 +4195,20 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxOrdConsolides >= 80 ? '#10b981' : tauxOrdConsolides >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#10b981" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxOrdConsolides)}`}>{formatPercent(tauxOrdConsolides)}</span>
+                    <span className="text-2xl font-black tracking-tight text-emerald-500">{formatPercent(tauxOrdConsolides)}</span>
                     <span className="text-[10px] text-gray-400 font-medium">
                       {tauxOrdConsolides >= 80 ? 'Bon' : tauxOrdConsolides >= 50 ? 'Moyen' : 'Faible'}
                     </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-2 h-2 rounded-full ${tauxOrdConsolides >= 80 ? 'bg-emerald-500' : tauxOrdConsolides >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
                   <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrdConsolides)} M DH</span>
                 </div>
               </CardContent>
@@ -4232,20 +4232,20 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxOrdNouveaux >= 80 ? '#10b981' : tauxOrdNouveaux >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f59e0b" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxOrdNouveaux)}`}>{formatPercent(tauxOrdNouveaux)}</span>
+                    <span className="text-2xl font-black tracking-tight text-amber-500">{formatPercent(tauxOrdNouveaux)}</span>
                     <span className="text-[10px] text-gray-400 font-medium">
                       {tauxOrdNouveaux >= 80 ? 'Bon' : tauxOrdNouveaux >= 50 ? 'Moyen' : 'Faible'}
                     </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-2 h-2 rounded-full ${tauxOrdNouveaux >= 80 ? 'bg-emerald-500' : tauxOrdNouveaux >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-2 h-2 rounded-full bg-amber-500" />
                   <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrdNouveaux)} M DH</span>
                 </div>
               </CardContent>
@@ -4269,20 +4269,20 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxOrdTotal >= 80 ? '#10b981' : tauxOrdTotal >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#8b5cf6" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxOrdTotal)}`}>{formatPercent(tauxOrdTotal)}</span>
+                    <span className="text-2xl font-black tracking-tight text-purple-500">{formatPercent(tauxOrdTotal)}</span>
                     <span className="text-[10px] text-gray-400 font-medium">
                       {tauxOrdTotal >= 80 ? 'Bon' : tauxOrdTotal >= 50 ? 'Moyen' : 'Faible'}
                     </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-2 h-2 rounded-full ${tauxOrdTotal >= 80 ? 'bg-emerald-500' : tauxOrdTotal >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-2 h-2 rounded-full bg-purple-500" />
                   <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrd)} M DH</span>
                 </div>
               </CardContent>
@@ -5356,18 +5356,18 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={kpis.tauxOrdonnement >= 80 ? '#10b981' : kpis.tauxOrdonnement >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#3b82f6" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(kpis.tauxOrdonnement)}`}>{formatPercent(kpis.tauxOrdonnement)}</span>
+                    <span className="text-base font-black tracking-tight text-blue-500">{formatPercent(kpis.tauxOrdonnement)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{kpis.tauxOrdonnement >= 80 ? 'Bon' : kpis.tauxOrdonnement >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-1.5 h-1.5 rounded-full ${kpis.tauxOrdonnement >= 80 ? 'bg-emerald-500' : kpis.tauxOrdonnement >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.totalOrd)} M DH</span>
                 </div>
               </div>
@@ -5387,18 +5387,18 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxPrevJuin >= 80 ? '#10b981' : tauxPrevJuin >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#10b981" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevJuin)}`}>{formatPercent(tauxPrevJuin)}</span>
+                    <span className="text-base font-black tracking-tight text-emerald-500">{formatPercent(tauxPrevJuin)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxPrevJuin >= 80 ? 'Bon' : tauxPrevJuin >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-1.5 h-1.5 rounded-full ${tauxPrevJuin >= 80 ? 'bg-emerald-500' : tauxPrevJuin >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.cumulPrevJuin)} M DH</span>
                 </div>
               </div>
@@ -5418,18 +5418,18 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxPrevSeptembre >= 80 ? '#10b981' : tauxPrevSeptembre >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f59e0b" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevSeptembre)}`}>{formatPercent(tauxPrevSeptembre)}</span>
+                    <span className="text-base font-black tracking-tight text-amber-500">{formatPercent(tauxPrevSeptembre)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxPrevSeptembre >= 80 ? 'Bon' : tauxPrevSeptembre >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-1.5 h-1.5 rounded-full ${tauxPrevSeptembre >= 80 ? 'bg-emerald-500' : tauxPrevSeptembre >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.cumulPrevSeptembre)} M DH</span>
                 </div>
               </div>
@@ -5449,18 +5449,18 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxPrevOctobre >= 80 ? '#10b981' : tauxPrevOctobre >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f97316" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevOctobre)}`}>{formatPercent(tauxPrevOctobre)}</span>
+                    <span className="text-base font-black tracking-tight text-orange-500">{formatPercent(tauxPrevOctobre)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxPrevOctobre >= 80 ? 'Bon' : tauxPrevOctobre >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-1.5 h-1.5 rounded-full ${tauxPrevOctobre >= 80 ? 'bg-emerald-500' : tauxPrevOctobre >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.cumulPrevOctobre)} M DH</span>
                 </div>
               </div>
@@ -5480,18 +5480,18 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxPrevNovembre >= 80 ? '#10b981' : tauxPrevNovembre >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#8b5cf6" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevNovembre)}`}>{formatPercent(tauxPrevNovembre)}</span>
+                    <span className="text-base font-black tracking-tight text-purple-500">{formatPercent(tauxPrevNovembre)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxPrevNovembre >= 80 ? 'Bon' : tauxPrevNovembre >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-1.5 h-1.5 rounded-full ${tauxPrevNovembre >= 80 ? 'bg-emerald-500' : tauxPrevNovembre >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.cumulPrevNovembre)} M DH</span>
                 </div>
               </div>
@@ -5511,18 +5511,18 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxPrevDecembre >= 80 ? '#10b981' : tauxPrevDecembre >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f43f5e" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevDecembre)}`}>{formatPercent(tauxPrevDecembre)}</span>
+                    <span className="text-base font-black tracking-tight text-rose-500">{formatPercent(tauxPrevDecembre)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxPrevDecembre >= 80 ? 'Bon' : tauxPrevDecembre >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-1.5 h-1.5 rounded-full ${tauxPrevDecembre >= 80 ? 'bg-emerald-500' : tauxPrevDecembre >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
                   <span className="text-[9px] text-gray-400">{formatMillions(kpis.cumulPrevDecembre)} M DH</span>
                 </div>
               </div>
@@ -6116,13 +6116,13 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxEngReports >= 80 ? '#10b981' : tauxEngReports >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#3b82f6" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxEngReports)}`}>{formatPercent(tauxEngReports)}</span>
+                    <span className="text-base font-black tracking-tight text-blue-500">{formatPercent(tauxEngReports)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxEngReports >= 80 ? 'Bon' : tauxEngReports >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
@@ -6143,13 +6143,13 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxOrdReports >= 80 ? '#10b981' : tauxOrdReports >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#10b981" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxOrdReports)}`}>{formatPercent(tauxOrdReports)}</span>
+                    <span className="text-base font-black tracking-tight text-emerald-500">{formatPercent(tauxOrdReports)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxOrdReports >= 80 ? 'Bon' : tauxOrdReports >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
@@ -6170,13 +6170,13 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxPrevRepJuin >= 80 ? '#10b981' : tauxPrevRepJuin >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f59e0b" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevRepJuin)}`}>{formatPercent(tauxPrevRepJuin)}</span>
+                    <span className="text-base font-black tracking-tight text-amber-500">{formatPercent(tauxPrevRepJuin)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxPrevRepJuin >= 80 ? 'Bon' : tauxPrevRepJuin >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
@@ -6197,13 +6197,13 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxPrevRepSept >= 80 ? '#10b981' : tauxPrevRepSept >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f97316" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevRepSept)}`}>{formatPercent(tauxPrevRepSept)}</span>
+                    <span className="text-base font-black tracking-tight text-orange-500">{formatPercent(tauxPrevRepSept)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxPrevRepSept >= 80 ? 'Bon' : tauxPrevRepSept >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
@@ -6224,13 +6224,13 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxPrevRepOct >= 80 ? '#10b981' : tauxPrevRepOct >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#8b5cf6" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevRepOct)}`}>{formatPercent(tauxPrevRepOct)}</span>
+                    <span className="text-base font-black tracking-tight text-purple-500">{formatPercent(tauxPrevRepOct)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxPrevRepOct >= 80 ? 'Bon' : tauxPrevRepOct >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
@@ -6251,13 +6251,13 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxPrevRepNov >= 80 ? '#10b981' : tauxPrevRepNov >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f43f5e" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevRepNov)}`}>{formatPercent(tauxPrevRepNov)}</span>
+                    <span className="text-base font-black tracking-tight text-rose-500">{formatPercent(tauxPrevRepNov)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxPrevRepNov >= 80 ? 'Bon' : tauxPrevRepNov >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
@@ -6278,13 +6278,13 @@ export default function Dashboard() {
                         startAngle={90} endAngle={-270}
                         stroke="none"
                       >
-                        <Cell fill={tauxPrevRepDec >= 80 ? '#10b981' : tauxPrevRepDec >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#06b6d4" />
                         <Cell fill="#f3f4f6" />
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevRepDec)}`}>{formatPercent(tauxPrevRepDec)}</span>
+                    <span className="text-base font-black tracking-tight text-cyan-500">{formatPercent(tauxPrevRepDec)}</span>
                     <span className="text-[8px] text-gray-400 font-medium">{tauxPrevRepDec >= 80 ? 'Bon' : tauxPrevRepDec >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
