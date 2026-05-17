@@ -6874,9 +6874,9 @@ export default function Dashboard() {
                       }
                     }).filter(r => r.resteOrdReport > 0).sort((a, b) => b.resteOrdReport - a.resteOrdReport)
 
-                    const totReports = resteOrdLines.reduce((s, r) => s + r.reports, 0)
+                    const allReports = filteredData.reduce((s, r) => s + (r.REPORTS || 0), 0)
                     const totResteOrdReport = resteOrdLines.reduce((s, r) => s + r.resteOrdReport, 0)
-                    const totTauxReste = totReports > 0 ? (totResteOrdReport / totReports) * 100 : 0
+                    const totTauxReste = allReports > 0 ? (totResteOrdReport / allReports) * 100 : 0
 
                     let currentProgramme = ''
                     return (
