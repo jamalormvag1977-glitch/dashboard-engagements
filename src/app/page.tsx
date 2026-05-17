@@ -4081,30 +4081,18 @@ export default function Dashboard() {
                     <TableHead className="text-xs font-bold text-rose-700">Écriture</TableHead>
                     <TableHead className="text-xs font-bold text-rose-700">Nomenclature</TableHead>
                     <TableHead className="text-xs font-bold text-rose-700">Désignation</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-600 text-center">Reste Rep.</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-600 text-center">Reste Cons.</TableHead>
                     <TableHead className="text-xs font-bold text-rose-600 text-center">Reste Nouv.</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-600 text-center">Reste CP</TableHead>
                     <TableHead className="text-xs font-bold text-rose-600 text-center">Reste CE</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {(() => {
                     const resteLines = filteredData.map(r => {
-                      const cp = r['TOTAL CP'] || 0
-                      const cpReports = r.REPORTS || 0
-                      const cpConsolides = r.CONSOLIDES || 0
                       const cpNouveaux = r.NOUVEAUX || 0
-                      const engReports = r['ENG REPORT'] || 0
-                      const engConsolides = r['ENG CONSOLIDES'] || 0
                       const engNouveaux = r['ENG NOUVEAUX'] || 0
-                      const engCPTotal = (r['ENG REPORT'] || 0) + (r['ENG CONSOLIDES'] || 0) + (r['ENG NOUVEAUX'] || 0)
                       const ce = r['TOTAL CE'] || 0
                       const engCE = r['ENG CE ULT'] || 0
-                      const resteReport = Math.max(0, cpReports - engReports)
-                      const resteConsolides = Math.max(0, cpConsolides - engConsolides)
                       const resteNouveaux = Math.max(0, cpNouveaux - engNouveaux)
-                      const resteCP = Math.max(0, cp - engCPTotal)
                       const resteCE = Math.max(0, ce - engCE)
                       return {
                         projet: r.Projet || 'Non classé',
@@ -4112,14 +4100,11 @@ export default function Dashboard() {
                         ecriture: r['N° ENGAGEMENT'] || '-',
                         nomenclature: r.NOMENCLATURE || '',
                         designation: r['DETAIL DESIGNATION'] || '',
-                        resteReport, resteConsolides, resteNouveaux, resteCP, resteCE
+                        resteNouveaux, resteCE
                       }
-                    }).filter(r => r.resteCP > 0 || r.resteCE > 0).sort((a, b) => b.resteCP - a.resteCP)
+                    }).filter(r => r.resteNouveaux > 0 || r.resteCE > 0).sort((a, b) => (b.resteNouveaux + b.resteCE) - (a.resteNouveaux + a.resteCE))
 
-                    const totResteReport = resteLines.reduce((s, r) => s + r.resteReport, 0)
-                    const totResteConsolides = resteLines.reduce((s, r) => s + r.resteConsolides, 0)
                     const totResteNouveaux = resteLines.reduce((s, r) => s + r.resteNouveaux, 0)
-                    const totResteCP = resteLines.reduce((s, r) => s + r.resteCP, 0)
                     const totResteCE = resteLines.reduce((s, r) => s + r.resteCE, 0)
 
                     let currentProjet = ''
@@ -4135,20 +4120,14 @@ export default function Dashboard() {
                               <TableCell className="text-xs font-medium text-gray-900">{r.ecriture}</TableCell>
                               <TableCell className="text-xs text-blue-600 font-mono whitespace-nowrap">{r.nomenclature}</TableCell>
                               <TableCell className="text-xs text-gray-700" style={{minWidth:'250px',maxWidth:'400px',whiteSpace:'normal',lineHeight:'1.4'}}>{r.designation}</TableCell>
-                              <TableCell className="text-xs text-rose-600 text-center">{formatMillions(r.resteReport)}</TableCell>
-                              <TableCell className="text-xs text-rose-600 text-center">{formatMillions(r.resteConsolides)}</TableCell>
                               <TableCell className="text-xs text-rose-600 text-center">{formatMillions(r.resteNouveaux)}</TableCell>
-                              <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(r.resteCP)}</TableCell>
                               <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(r.resteCE)}</TableCell>
                             </TableRow>
                           )
                         })}
                         <TableRow className="bg-rose-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({resteLines.length} prestations)</TableCell>
-                          <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(totResteReport)}</TableCell>
-                          <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(totResteConsolides)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(totResteNouveaux)}</TableCell>
-                          <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(totResteCP)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(totResteCE)}</TableCell>
                         </TableRow>
                       </>
