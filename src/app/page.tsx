@@ -5930,6 +5930,20 @@ export default function Dashboard() {
     const tauxEngReports = totalReports > 0 ? (totalEngReports / totalReports) * 100 : 0
     const tauxOrdReports = totalEngReports > 0 ? (totalOrdReports / totalEngReports) * 100 : 0
 
+    // Prévisions cumulées reports globales
+    const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
+    let cumulRepGlobal = 0
+    const cumulByMonthGlobal: Record<string,number> = {}
+    for (const m of prevMonths) {
+      cumulRepGlobal += filteredData.reduce((s, r) => s + (r[`Previsions REPORTS ${m}`] || 0), 0)
+      cumulByMonthGlobal[m] = cumulRepGlobal
+    }
+    const tauxPrevRepJuin = totalReports > 0 ? (cumulByMonthGlobal['JUIN'] / totalReports) * 100 : 0
+    const tauxPrevRepSept = totalReports > 0 ? (cumulByMonthGlobal['SEPTEMBRE'] / totalReports) * 100 : 0
+    const tauxPrevRepOct = totalReports > 0 ? (cumulByMonthGlobal['OCTOBRE'] / totalReports) * 100 : 0
+    const tauxPrevRepNov = totalReports > 0 ? (cumulByMonthGlobal['NOVEMBRE'] / totalReports) * 100 : 0
+    const tauxPrevRepDec = totalReports > 0 ? (cumulByMonthGlobal['DECEMBRE'] / totalReports) * 100 : 0
+
 
     // Group by entity for reports analysis (with prévisions)
     const reportsByEntity = analysisByEntity.map(e => {
@@ -6080,135 +6094,228 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* ═══════════ SECTION 2 : ÉTAT D'AVANCEMENT ASSAINISSEMENT DES REPORTS ═══════════ */}
-        <Card className="border-2 border-blue-800 shadow-sm">
+        {/* ═══════════ SECTION 2 : INDICATEURS CLÉS ═══════════ */}
+        <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>État d&apos;avancement assainissement des reports</CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Indicateurs clés</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 space-y-5">
-            {/* 2.1 Reports */}
-            <div>
-              <h4 className="text-sm font-bold text-blue-900 mb-3"><span className="inline-block w-8">2.1</span>Reports</h4>
-              <div className="grid grid-cols-3 gap-4">
-                {/* Crédits reportés */}
-                <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-                  <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600" />
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-transform">
-                        <RotateCcw className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] font-bold rounded-full px-2.5">Reports</Badge>
-                    </div>
-                    <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalReports)}</p>
-                    <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Crédits reportés</p>
+          <CardContent className="p-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+              {/* Camembert - Crédits de Reports */}
+              <div className="flex flex-col items-center">
+                <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Crédits de Reports</p>
+                <div className="h-[110px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Reports', value: Math.round(totalReports / 1e6 * 10) / 10 },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={28} outerRadius={42} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill="#3b82f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className="text-base font-black text-gray-900 tracking-tight">{formatMillions(totalReports)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">M DH</span>
                   </div>
                 </div>
+              </div>
 
-                {/* Engagements sur reports */}
-                <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-                  <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600" />
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center transition-transform">
-                        <TrendingUp className="w-5 h-5 text-emerald-600" />
-                      </div>
-                      <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-bold rounded-full px-2.5">Eng.</Badge>
-                    </div>
-                    <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalEngReports)}</p>
-                    <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Taux : <span className={tauxColor(tauxEngReports)}>{formatPercent(tauxEngReports)}</span></p>
+              {/* Camembert - Taux Engagement Report */}
+              <div className="flex flex-col items-center">
+                <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Eng. Report</p>
+                <div className="h-[110px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Engagé', value: tauxEngReports },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxEngReports) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={28} outerRadius={42} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxEngReports >= 80 ? '#10b981' : tauxEngReports >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxEngReports)}`}>{formatPercent(tauxEngReports)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxEngReports >= 80 ? 'Bon' : tauxEngReports >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
+              </div>
 
-                {/* Ordonnancements sur reports */}
-                <div className="kpi-card-premium bg-white rounded-xl border border-gray-100 overflow-hidden cursor-default">
-                  <div className="h-1.5 bg-gradient-to-r from-violet-400 to-violet-600" />
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="kpi-icon-wrap w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center transition-transform">
-                        <Wallet className="w-5 h-5 text-violet-600" />
-                      </div>
-                      <Badge className="bg-violet-50 text-violet-700 border-violet-200 text-[10px] font-bold rounded-full px-2.5">Ord.</Badge>
-                    </div>
-                    <p className="text-2xl font-black text-gray-900 tracking-tight">{formatMillions(totalOrdReports)}</p>
-                    <p className="text-[11px] text-gray-400 mt-1.5 font-medium">Taux : <span className={tauxColor(tauxOrdReports)}>{formatPercent(tauxOrdReports)}</span></p>
+              {/* Camembert - Taux Ordonnancement Report */}
+              <div className="flex flex-col items-center">
+                <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Ord. Report</p>
+                <div className="h-[110px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Ordonnancé', value: tauxOrdReports },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxOrdReports) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={28} outerRadius={42} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxOrdReports >= 80 ? '#10b981' : tauxOrdReports >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxOrdReports)}`}>{formatPercent(tauxOrdReports)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxOrdReports >= 80 ? 'Bon' : tauxOrdReports >= 50 ? 'Moyen' : 'Faible'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Camembert - Taux Prév. Juin */}
+              <div className="flex flex-col items-center">
+                <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Juin</p>
+                <div className="h-[110px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Prévu', value: tauxPrevRepJuin },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxPrevRepJuin) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={28} outerRadius={42} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxPrevRepJuin >= 80 ? '#10b981' : tauxPrevRepJuin >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevRepJuin)}`}>{formatPercent(tauxPrevRepJuin)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxPrevRepJuin >= 80 ? 'Bon' : tauxPrevRepJuin >= 50 ? 'Moyen' : 'Faible'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Camembert - Taux Prév. Septembre */}
+              <div className="flex flex-col items-center">
+                <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Sept.</p>
+                <div className="h-[110px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Prévu', value: tauxPrevRepSept },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxPrevRepSept) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={28} outerRadius={42} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxPrevRepSept >= 80 ? '#10b981' : tauxPrevRepSept >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevRepSept)}`}>{formatPercent(tauxPrevRepSept)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxPrevRepSept >= 80 ? 'Bon' : tauxPrevRepSept >= 50 ? 'Moyen' : 'Faible'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Camembert - Taux Prév. Octobre */}
+              <div className="flex flex-col items-center">
+                <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Oct.</p>
+                <div className="h-[110px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Prévu', value: tauxPrevRepOct },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxPrevRepOct) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={28} outerRadius={42} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxPrevRepOct >= 80 ? '#10b981' : tauxPrevRepOct >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevRepOct)}`}>{formatPercent(tauxPrevRepOct)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxPrevRepOct >= 80 ? 'Bon' : tauxPrevRepOct >= 50 ? 'Moyen' : 'Faible'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Camembert - Taux Prév. Novembre */}
+              <div className="flex flex-col items-center">
+                <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Nov.</p>
+                <div className="h-[110px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Prévu', value: tauxPrevRepNov },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxPrevRepNov) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={28} outerRadius={42} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxPrevRepNov >= 80 ? '#10b981' : tauxPrevRepNov >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevRepNov)}`}>{formatPercent(tauxPrevRepNov)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxPrevRepNov >= 80 ? 'Bon' : tauxPrevRepNov >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* 2.2 Taux assainissement */}
-            <div>
-              <h4 className="text-sm font-bold text-blue-900 mb-3"><span className="inline-block w-8">2.2</span>Taux assainissement</h4>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Taux Engagement Reports */}
-            <div className="kpi-card-premium rounded-xl border border-emerald-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)' }}>
-              <div className="h-1.5 bg-gradient-to-r from-emerald-400 to-teal-500" />
-              <div className="p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-emerald-100 flex items-center justify-center transition-transform">
-                        <TrendingUp className="w-5 h-5 text-emerald-700" />
-                      </div>
-                      <span className="text-sm font-bold text-gray-700">Taux eng. reports</span>
-                    </div>
-                    <p className="text-3xl font-black text-gray-900 tracking-tight">{formatPercent(tauxEngReports)}</p>
-                  </div>
-                  <div className="text-right">
-                    <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(tauxEngReports)}`}>
-                      {tauxEngReports >= 80 ? '✓' : tauxEngReports >= 50 ? '⚠' : '✗'}
-                      {tauxEngReports >= 80 ? 'Bon' : tauxEngReports >= 50 ? 'Moyen' : 'Faible'}
-                    </span>
-                    <p className="text-[11px] text-gray-400 mt-0.5">Eng. / Crédits reports</p>
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className={`kpi-progress-bar h-full rounded-full ${tauxEngReports >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxEngReports >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxEngReports, 100)}%` }} />
-                  </div>
-                  <div className="flex justify-between mt-1.5">
-                    <span className="text-[10px] text-gray-400">0%</span>
-                    <span className="text-[10px] text-gray-400">100%</span>
+            {/* Deuxième ligne avec Décembre */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mt-3">
+              <div className="flex flex-col items-center lg:col-start-7">
+                <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Déc.</p>
+                <div className="h-[110px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Prévu', value: tauxPrevRepDec },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxPrevRepDec) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={28} outerRadius={42} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxPrevRepDec >= 80 ? '#10b981' : tauxPrevRepDec >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevRepDec)}`}>{formatPercent(tauxPrevRepDec)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxPrevRepDec >= 80 ? 'Bon' : tauxPrevRepDec >= 50 ? 'Moyen' : 'Faible'}</span>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Taux Ordonnancement Reports */}
-            <div className="kpi-card-premium rounded-xl border border-blue-100 overflow-hidden cursor-default" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #eff6ff 100%)' }}>
-              <div className="h-1.5 bg-gradient-to-r from-blue-400 to-indigo-500" />
-              <div className="p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="kpi-icon-wrap w-11 h-11 rounded-full bg-blue-100 flex items-center justify-center transition-transform">
-                        <Wallet className="w-5 h-5 text-blue-700" />
-                      </div>
-                      <span className="text-sm font-bold text-gray-700">Taux ord. reports</span>
-                    </div>
-                    <p className="text-3xl font-black text-gray-900 tracking-tight">{formatPercent(tauxOrdReports)}</p>
-                  </div>
-                  <div className="text-right">
-                    <span className={`inline-flex items-center gap-1 text-sm font-bold ${tauxColor(tauxOrdReports)}`}>
-                      {tauxOrdReports >= 80 ? '✓' : tauxOrdReports >= 50 ? '⚠' : '✗'}
-                      {tauxOrdReports >= 80 ? 'Bon' : tauxOrdReports >= 50 ? 'Moyen' : 'Faible'}
-                    </span>
-                    <p className="text-[11px] text-gray-400 mt-0.5">Ord. / Eng. reports</p>
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className={`kpi-progress-bar h-full rounded-full ${tauxOrdReports >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' : tauxOrdReports >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-red-400 to-red-500'}`} style={{ width: `${Math.min(tauxOrdReports, 100)}%` }} />
-                  </div>
-                  <div className="flex justify-between mt-1.5">
-                    <span className="text-[10px] text-gray-400">0%</span>
-                    <span className="text-[10px] text-gray-400">100%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
             </div>
           </CardContent>
         </Card>
