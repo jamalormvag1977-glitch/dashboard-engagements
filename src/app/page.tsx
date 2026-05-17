@@ -1525,20 +1525,20 @@ export default function Dashboard() {
                       startAngle={90} endAngle={-270}
                       stroke="none"
                     >
-                      <Cell fill={kpis.tauxEngagement >= 80 ? '#10b981' : kpis.tauxEngagement >= 50 ? '#f59e0b' : '#ef4444'} />
+                      <Cell fill="#10b981" />
                       <Cell fill="#f3f4f6" />
                     </Pie>
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <span className={`text-2xl font-black tracking-tight ${tauxColor(kpis.tauxEngagement)}`}>{formatPercent(kpis.tauxEngagement)}</span>
+                  <span className="text-2xl font-black tracking-tight text-emerald-500">{formatPercent(kpis.tauxEngagement)}</span>
                   <span className="text-[10px] text-gray-400 font-medium">
                     {kpis.tauxEngagement >= 80 ? 'Bon' : kpis.tauxEngagement >= 50 ? 'Moyen' : 'Faible'}
                   </span>
                 </div>
               </div>
               <div className="flex items-center gap-1 mt-1">
-                <span className={`w-2 h-2 rounded-full ${kpis.tauxEngagement >= 80 ? 'bg-emerald-500' : kpis.tauxEngagement >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalEngCP)} M DH engagé</span>
               </div>
             </CardContent>
@@ -1562,20 +1562,20 @@ export default function Dashboard() {
                       startAngle={90} endAngle={-270}
                       stroke="none"
                     >
-                      <Cell fill={kpis.tauxOrdonnement >= 80 ? '#10b981' : kpis.tauxOrdonnement >= 50 ? '#f59e0b' : '#ef4444'} />
+                      <Cell fill="#f59e0b" />
                       <Cell fill="#f3f4f6" />
                     </Pie>
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <span className={`text-2xl font-black tracking-tight ${tauxColor(kpis.tauxOrdonnement)}`}>{formatPercent(kpis.tauxOrdonnement)}</span>
+                  <span className="text-2xl font-black tracking-tight text-amber-500">{formatPercent(kpis.tauxOrdonnement)}</span>
                   <span className="text-[10px] text-gray-400 font-medium">
                     {kpis.tauxOrdonnement >= 80 ? 'Bon' : kpis.tauxOrdonnement >= 50 ? 'Moyen' : 'Faible'}
                   </span>
                 </div>
               </div>
               <div className="flex items-center gap-1 mt-1">
-                <span className={`w-2 h-2 rounded-full ${kpis.tauxOrdonnement >= 80 ? 'bg-emerald-500' : kpis.tauxOrdonnement >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                <span className="w-2 h-2 rounded-full bg-amber-500" />
                 <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrd)} M DH ordonnancé</span>
               </div>
             </CardContent>
@@ -1599,20 +1599,20 @@ export default function Dashboard() {
                       startAngle={90} endAngle={-270}
                       stroke="none"
                     >
-                      <Cell fill={kpis.tauxPaiement >= 80 ? '#06b6d4' : kpis.tauxPaiement >= 50 ? '#f59e0b' : '#ef4444'} />
+                      <Cell fill="#06b6d4" />
                       <Cell fill="#f3f4f6" />
                     </Pie>
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <span className={`text-2xl font-black tracking-tight ${tauxColor(kpis.tauxPaiement)}`}>{formatPercent(kpis.tauxPaiement)}</span>
+                  <span className="text-2xl font-black tracking-tight text-cyan-500">{formatPercent(kpis.tauxPaiement)}</span>
                   <span className="text-[10px] text-gray-400 font-medium">
                     {kpis.tauxPaiement >= 80 ? 'Bon' : kpis.tauxPaiement >= 50 ? 'Moyen' : 'Faible'}
                   </span>
                 </div>
               </div>
               <div className="flex items-center gap-1 mt-1">
-                <span className={`w-2 h-2 rounded-full ${kpis.tauxPaiement >= 80 ? 'bg-cyan-500' : kpis.tauxPaiement >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                <span className="w-2 h-2 rounded-full bg-cyan-500" />
                 <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalPaiements)} M DH payé</span>
               </div>
             </CardContent>
