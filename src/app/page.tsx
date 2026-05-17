@@ -868,7 +868,6 @@ export default function Dashboard() {
   // Engagement lines for engagement view
   const engagementLines = useMemo(() => {
     return [...filteredData]
-      .filter(r => (r['ENG CP TOTAL'] || 0) > 0)
       .sort((a, b) => (b['ENG CP TOTAL'] || 0) - (a['ENG CP TOTAL'] || 0))
       .map(r => ({
         numEngagement: r['N° ENGAGEMENT'] || '-',
