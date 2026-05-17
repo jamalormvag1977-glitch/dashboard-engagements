@@ -2922,7 +2922,7 @@ export default function Dashboard() {
                           </div>
                         </div>
                         {/* Row 3: Key financial figures */}
-                        <div className="grid grid-cols-3 gap-2 pt-1 border-t border-gray-100">
+                        <div className="grid grid-cols-2 gap-2 pt-1 border-t border-gray-100">
                           <div className="text-center">
                             <p className="text-[10px] text-gray-400 font-medium">Eng. CP</p>
                             <p className="text-xs font-bold text-gray-800">{formatMillions(proj.engCP)}</p>
@@ -2930,10 +2930,6 @@ export default function Dashboard() {
                           <div className="text-center">
                             <p className="text-[10px] text-gray-400 font-medium">Ordonn.</p>
                             <p className="text-xs font-bold text-gray-800">{formatMillions(proj.ord)}</p>
-                          </div>
-                          <div className="text-center">
-                            <p className="text-[10px] text-gray-400 font-medium">Disponible</p>
-                            <p className={`text-xs font-bold ${proj.disponible >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>{formatMillions(proj.disponible)}</p>
                           </div>
                         </div>
                         {/* Row 4: Part du budget */}
