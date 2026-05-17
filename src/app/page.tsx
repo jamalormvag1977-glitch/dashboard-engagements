@@ -3488,7 +3488,7 @@ export default function Dashboard() {
         {/* ═══════════ TITRE : ENGAGEMENTS GLOBAUX ═══════════ */}
         <div className="space-y-3">
           <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">1.</span>Engagements globaux</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Camembert - Répartition Crédits CP */}
             <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
               <CardHeader className="pb-1 pt-3 px-4 bg-blue-50/50 border-b border-blue-200">
@@ -3608,40 +3608,135 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            {/* Camembert - Taux Ordonnancement */}
+            {/* Camembert - Taux Engagement Reports */}
             <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
               <CardHeader className="pb-1 pt-3 px-4 bg-blue-50/50 border-b border-blue-200">
-                <CardTitle className="text-xs font-bold text-blue-900 uppercase tracking-wider">Taux Ordonnancement</CardTitle>
+                <CardTitle className="text-xs font-bold text-blue-900 uppercase tracking-wider">Taux Engagement Reports</CardTitle>
               </CardHeader>
               <CardContent className="p-2 flex flex-col items-center">
-                <div className="h-[160px] w-full relative">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={[
-                          { name: 'Ordonnancé', value: kpis.tauxOrdonnement },
-                          { name: 'Reste', value: Math.max(0, 100 - kpis.tauxOrdonnement) },
-                        ]}
-                        cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
-                        startAngle={90} endAngle={-270}
-                        stroke="none"
-                      >
-                        <Cell fill={kpis.tauxOrdonnement >= 80 ? '#10b981' : kpis.tauxOrdonnement >= 50 ? '#f59e0b' : '#ef4444'} />
-                        <Cell fill="#f3f4f6" />
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className={`text-2xl font-black tracking-tight ${tauxColor(kpis.tauxOrdonnement)}`}>{formatPercent(kpis.tauxOrdonnement)}</span>
-                    <span className="text-[10px] text-gray-400 font-medium">
-                      {kpis.tauxOrdonnement >= 80 ? 'Bon' : kpis.tauxOrdonnement >= 50 ? 'Moyen' : 'Faible'}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 mt-1">
-                  <span className={`w-2 h-2 rounded-full ${kpis.tauxOrdonnement >= 80 ? 'bg-emerald-500' : kpis.tauxOrdonnement >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
-                  <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrd)} M DH ordonnancé</span>
-                </div>
+                {(() => {
+                  const tauxReport = kpis.totalReports > 0 ? (kpis.totalEngReports / kpis.totalReports) * 100 : 0
+                  return (
+                    <>
+                      <div className="h-[160px] w-full relative">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={[
+                                { name: 'Engagé', value: tauxReport },
+                                { name: 'Reste', value: Math.max(0, 100 - tauxReport) },
+                              ]}
+                              cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                              startAngle={90} endAngle={-270}
+                              stroke="none"
+                            >
+                              <Cell fill={tauxReport >= 80 ? '#10b981' : tauxReport >= 50 ? '#f59e0b' : '#ef4444'} />
+                              <Cell fill="#f3f4f6" />
+                            </Pie>
+                          </PieChart>
+                        </ResponsiveContainer>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                          <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxReport)}`}>{formatPercent(tauxReport)}</span>
+                          <span className="text-[10px] text-gray-400 font-medium">
+                            {tauxReport >= 80 ? 'Bon' : tauxReport >= 50 ? 'Moyen' : 'Faible'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 mt-1">
+                        <span className={`w-2 h-2 rounded-full ${tauxReport >= 80 ? 'bg-emerald-500' : tauxReport >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                        <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalEngReports)} M DH engagé</span>
+                      </div>
+                    </>
+                  )
+                })()}
+              </CardContent>
+            </Card>
+
+            {/* Camembert - Taux Engagement Consolidés */}
+            <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
+              <CardHeader className="pb-1 pt-3 px-4 bg-blue-50/50 border-b border-blue-200">
+                <CardTitle className="text-xs font-bold text-blue-900 uppercase tracking-wider">Taux Engagement Consolidés</CardTitle>
+              </CardHeader>
+              <CardContent className="p-2 flex flex-col items-center">
+                {(() => {
+                  const tauxConsolide = kpis.totalConsolides > 0 ? (kpis.totalEngConsolides / kpis.totalConsolides) * 100 : 0
+                  return (
+                    <>
+                      <div className="h-[160px] w-full relative">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={[
+                                { name: 'Engagé', value: tauxConsolide },
+                                { name: 'Reste', value: Math.max(0, 100 - tauxConsolide) },
+                              ]}
+                              cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                              startAngle={90} endAngle={-270}
+                              stroke="none"
+                            >
+                              <Cell fill={tauxConsolide >= 80 ? '#10b981' : tauxConsolide >= 50 ? '#f59e0b' : '#ef4444'} />
+                              <Cell fill="#f3f4f6" />
+                            </Pie>
+                          </PieChart>
+                        </ResponsiveContainer>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                          <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxConsolide)}`}>{formatPercent(tauxConsolide)}</span>
+                          <span className="text-[10px] text-gray-400 font-medium">
+                            {tauxConsolide >= 80 ? 'Bon' : tauxConsolide >= 50 ? 'Moyen' : 'Faible'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 mt-1">
+                        <span className={`w-2 h-2 rounded-full ${tauxConsolide >= 80 ? 'bg-emerald-500' : tauxConsolide >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                        <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalEngConsolides)} M DH engagé</span>
+                      </div>
+                    </>
+                  )
+                })()}
+              </CardContent>
+            </Card>
+
+            {/* Camembert - Taux Engagement Nouveaux */}
+            <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
+              <CardHeader className="pb-1 pt-3 px-4 bg-blue-50/50 border-b border-blue-200">
+                <CardTitle className="text-xs font-bold text-blue-900 uppercase tracking-wider">Taux Engagement Nouveaux</CardTitle>
+              </CardHeader>
+              <CardContent className="p-2 flex flex-col items-center">
+                {(() => {
+                  const tauxNouveau = kpis.totalNouveaux > 0 ? (kpis.totalEngNouveaux / kpis.totalNouveaux) * 100 : 0
+                  return (
+                    <>
+                      <div className="h-[160px] w-full relative">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={[
+                                { name: 'Engagé', value: tauxNouveau },
+                                { name: 'Reste', value: Math.max(0, 100 - tauxNouveau) },
+                              ]}
+                              cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                              startAngle={90} endAngle={-270}
+                              stroke="none"
+                            >
+                              <Cell fill={tauxNouveau >= 80 ? '#10b981' : tauxNouveau >= 50 ? '#f59e0b' : '#ef4444'} />
+                              <Cell fill="#f3f4f6" />
+                            </Pie>
+                          </PieChart>
+                        </ResponsiveContainer>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                          <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxNouveau)}`}>{formatPercent(tauxNouveau)}</span>
+                          <span className="text-[10px] text-gray-400 font-medium">
+                            {tauxNouveau >= 80 ? 'Bon' : tauxNouveau >= 50 ? 'Moyen' : 'Faible'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 mt-1">
+                        <span className={`w-2 h-2 rounded-full ${tauxNouveau >= 80 ? 'bg-emerald-500' : tauxNouveau >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                        <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalEngNouveaux)} M DH engagé</span>
+                      </div>
+                    </>
+                  )
+                })()}
               </CardContent>
             </Card>
           </div>
