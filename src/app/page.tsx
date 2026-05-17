@@ -6833,6 +6833,91 @@ export default function Dashboard() {
             </div>
           </CardContent>
         </Card>
+
+        {/* ═══════════ Reste à ordonnancer Report ═══════════ */}
+        <Card className="border-2 border-blue-800 shadow-sm">
+          <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">7.</span>Reste à ordonnancer Report <span className="text-gray-400 font-normal">(Dh)</span></CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-rose-50/60">
+                    <TableHead className="text-xs font-bold text-rose-700">Programme</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700">Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700">Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700">Écriture</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700">Nomenclature</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700">Désignation</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-600 text-center">Crédits Report</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-600 text-center">Eng. Report</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-600 text-center">Ord. Report</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-600 text-center">Reste à ord. Report</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(() => {
+                    const resteOrdLines = filteredData.map(r => {
+                      const reports = r.REPORTS || 0
+                      const engReports = r['ENG REPORT'] || 0
+                      const ordReports = r['ORD REPORTS'] || 0
+                      const resteOrdReport = Math.max(0, engReports - ordReports)
+                      return {
+                        programme: r.Programme || '',
+                        projet: r.Projet || 'Non classé',
+                        entite: r.ENTITE || '',
+                        ecriture: r['N° ENGAGEMENT'] || '-',
+                        nomenclature: r.NOMENCLATURE || '',
+                        designation: r['DETAIL DESIGNATION'] || '',
+                        reports,
+                        engReports,
+                        ordReports,
+                        resteOrdReport
+                      }
+                    }).filter(r => r.resteOrdReport > 0).sort((a, b) => b.resteOrdReport - a.resteOrdReport)
+
+                    const totReports = resteOrdLines.reduce((s, r) => s + r.reports, 0)
+                    const totEngReports = resteOrdLines.reduce((s, r) => s + r.engReports, 0)
+                    const totOrdReports = resteOrdLines.reduce((s, r) => s + r.ordReports, 0)
+                    const totResteOrdReport = resteOrdLines.reduce((s, r) => s + r.resteOrdReport, 0)
+
+                    let currentProgramme = ''
+                    return (
+                      <>
+                        {resteOrdLines.map((r, idx) => {
+                          const showProgrammeHeader = (r.programme || '') !== currentProgramme
+                          currentProgramme = r.programme || ''
+                          return (
+                            <TableRow key={`reste-ord-${idx}`} className={`hover:bg-gray-50 ${showProgrammeHeader && idx > 0 ? 'border-t-2 border-rose-200' : ''}`}>
+                              <TableCell className="text-xs font-medium text-gray-900 whitespace-nowrap">{r.programme}</TableCell>
+                              <TableCell className="text-xs text-gray-600 whitespace-nowrap">{r.projet}</TableCell>
+                              <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
+                              <TableCell className="text-xs font-medium text-gray-900">{r.ecriture}</TableCell>
+                              <TableCell className="text-xs text-blue-600 font-mono whitespace-nowrap">{r.nomenclature}</TableCell>
+                              <TableCell className="text-xs text-gray-700" style={{minWidth:'250px',maxWidth:'400px',whiteSpace:'normal',lineHeight:'1.4'}}>{r.designation}</TableCell>
+                              <TableCell className="text-xs text-gray-700 text-center">{formatDH(r.reports)}</TableCell>
+                              <TableCell className="text-xs text-emerald-600 text-center">{formatDH(r.engReports)}</TableCell>
+                              <TableCell className="text-xs text-blue-600 text-center">{formatDH(r.ordReports)}</TableCell>
+                              <TableCell className="text-xs font-bold text-rose-700 text-center">{formatDH(r.resteOrdReport)}</TableCell>
+                            </TableRow>
+                          )
+                        })}
+                        <TableRow className="bg-rose-50/40 font-bold-total">
+                          <TableCell className="text-xs font-bold text-gray-900" colSpan={6}>Total ({resteOrdLines.length} prestations)</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900 text-center">{formatDH(totReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-emerald-700 text-center">{formatDH(totEngReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-blue-700 text-center">{formatDH(totOrdReports)}</TableCell>
+                          <TableCell className="text-xs font-bold text-rose-700 text-center">{formatDH(totResteOrdReport)}</TableCell>
+                        </TableRow>
+                      </>
+                    )
+                  })()}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
       </>
     )
   }
