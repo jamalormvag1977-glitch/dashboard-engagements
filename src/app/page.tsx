@@ -6857,10 +6857,11 @@ export default function Dashboard() {
                 <TableBody>
                   {(() => {
                     const resteOrdLines = filteredData.map(r => {
+                      const reports = r.REPORTS || 0
                       const engReports = r['ENG REPORT'] || 0
                       const ordReports = r['ORD REPORTS'] || 0
                       const resteOrdReport = Math.max(0, engReports - ordReports)
-                      const tauxReste = engReports > 0 ? (resteOrdReport / engReports) * 100 : 0
+                      const tauxReste = reports > 0 ? (resteOrdReport / reports) * 100 : 0
                       return {
                         programme: r.Programme || '',
                         projet: r.Projet || 'Non classé',
@@ -6868,15 +6869,15 @@ export default function Dashboard() {
                         ecriture: r['N° ENGAGEMENT'] || '-',
                         nomenclature: r.NOMENCLATURE || '',
                         designation: r['DETAIL DESIGNATION'] || '',
-                        engReports,
+                        reports,
                         resteOrdReport,
                         tauxReste
                       }
                     }).filter(r => r.resteOrdReport > 0).sort((a, b) => b.resteOrdReport - a.resteOrdReport)
 
-                    const totEngReports = resteOrdLines.reduce((s, r) => s + r.engReports, 0)
+                    const totReports = resteOrdLines.reduce((s, r) => s + r.reports, 0)
                     const totResteOrdReport = resteOrdLines.reduce((s, r) => s + r.resteOrdReport, 0)
-                    const totTauxReste = totEngReports > 0 ? (totResteOrdReport / totEngReports) * 100 : 0
+                    const totTauxReste = totReports > 0 ? (totResteOrdReport / totReports) * 100 : 0
 
                     let currentProgramme = ''
                     return (
