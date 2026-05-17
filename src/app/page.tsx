@@ -1083,7 +1083,7 @@ export default function Dashboard() {
                 onClick={() => handleNavChange(item.key)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
                   activeNav === item.key
-                    ? 'bg-white/10 text-white font-medium'
+                    ? 'bg-blue-500 text-white font-semibold shadow-md shadow-blue-500/30'
                     : 'text-white/70 hover:bg-white/5 hover:text-white'
                 }`}
               >
