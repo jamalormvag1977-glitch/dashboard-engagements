@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { readFile, utils } from 'xlsx'
+import * as XLSX from 'xlsx'
 import { put } from '@vercel/blob'
 import fs from 'fs'
 import path from 'path'
@@ -118,6 +118,8 @@ function getDataFilePath(): string {
   return directPath
 }
 
+export const maxDuration = 60 // Allow up to 60 seconds for upload processing
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData()
@@ -129,14 +131,14 @@ export async function POST(request: Request) {
 
     // Read file as ArrayBuffer and parse with xlsx
     const buffer = Buffer.from(await file.arrayBuffer())
-    const workbook = readFile(buffer, { type: 'buffer' })
+    const workbook = XLSX.read(buffer, { type: 'buffer' })
 
     // Use first sheet
     const sheetName = workbook.SheetNames[0]
     const worksheet = workbook.Sheets[sheetName]
 
     // Convert to JSON with headers
-    const rawData: Record<string, unknown>[] = utils.sheet_to_json(worksheet, { defval: 0 })
+    const rawData: Record<string, unknown>[] = XLSX.utils.sheet_to_json(worksheet, { defval: 0 })
 
     if (rawData.length === 0) {
       return NextResponse.json({ error: 'Le fichier est vide ou le format est incorrect' }, { status: 400 })
