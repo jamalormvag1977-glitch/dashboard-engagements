@@ -4592,7 +4592,6 @@ export default function Dashboard() {
         </div>
 
         {/* ════════════════ PAGE 2 ════════════════ */}
-        <div className="print-page-break" />
         <div className="print-page-2">
           {/* ═══ 5. RÉPARTITION PAR ENTITÉ — CP / CE ═══ */}
           <div className="mb-1.5">

@@ -247,26 +247,17 @@ nav button {
     background: white !important;
   }
 
-  /* Page breaks */
-  .print-page-break {
-    page-break-before: always;
-  }
-
-  /* Force each page to fill exactly one printed page */
+  /* Page 1 ends here, force page break after */
   .print-page-1 {
     page-break-after: always;
-    break-inside: avoid;
   }
 
+  /* Page 2 starts on new page, allow content to flow naturally */
   .print-page-2 {
     page-break-before: always;
-    break-inside: avoid;
   }
 
-  /* Avoid breaking inside tables and KPI blocks */
-  .grid {
-    page-break-inside: avoid;
-  }
+  /* Allow grids to break across pages naturally */
 
   tr {
     page-break-inside: avoid;
