@@ -3327,7 +3327,7 @@ export default function Dashboard() {
                         </div>
 
                         {/* Row 5: Résumé financier */}
-                        <div className="grid grid-cols-4 gap-2 pt-2 border-t border-gray-100">
+                        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-gray-100">
                           <div className="text-center">
                             <p className="text-[10px] text-gray-400 font-medium">Total CP</p>
                             <p className="text-xs font-bold text-gray-800">{formatMillions(prog.cp)}</p>
@@ -3339,10 +3339,6 @@ export default function Dashboard() {
                           <div className="text-center">
                             <p className="text-[10px] text-gray-400 font-medium">Prévisions</p>
                             <p className="text-xs font-bold text-gray-800">{formatMillions(prog.previsions)}</p>
-                          </div>
-                          <div className="text-center">
-                            <p className="text-[10px] text-gray-400 font-medium">Disponible</p>
-                            <p className={`text-xs font-bold ${prog.disponible >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>{formatMillions(prog.disponible)}</p>
                           </div>
                         </div>
 
