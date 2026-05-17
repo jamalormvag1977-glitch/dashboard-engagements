@@ -4076,26 +4076,16 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-rose-50/60">
-                    <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>Projet</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>Entité</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>Nomenclature</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-700" rowSpan={2}>Désignation</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-700 text-center" rowSpan={2}>Total CP</TableHead>
-                    <TableHead className="text-xs font-bold text-center text-emerald-600" colSpan={4}>Engagements</TableHead>
-                    <TableHead className="text-xs font-bold text-center text-rose-600" colSpan={4}>Reste à engager</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-700 text-center" rowSpan={2}>Total CE</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-700 text-center" rowSpan={2}>Eng. CE</TableHead>
-                    <TableHead className="text-xs font-bold text-rose-700 text-center" rowSpan={2}>Reste à eng. CE</TableHead>
-                  </TableRow>
-                  <TableRow className="bg-rose-50/40">
-                    <TableHead className="text-[10px] font-bold text-emerald-500 text-center">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-bold text-emerald-500 text-center">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-bold text-emerald-500 text-center">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-bold text-emerald-500 text-center">Total</TableHead>
-                    <TableHead className="text-[10px] font-bold text-rose-500 text-center">Rep.</TableHead>
-                    <TableHead className="text-[10px] font-bold text-rose-500 text-center">Cons.</TableHead>
-                    <TableHead className="text-[10px] font-bold text-rose-500 text-center">Nouv.</TableHead>
-                    <TableHead className="text-[10px] font-bold text-rose-500 text-center">Total</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700">Projet</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700">Entité</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700">Écriture</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700">Nomenclature</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-700">Désignation</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-600 text-center">Reste Rep.</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-600 text-center">Reste Cons.</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-600 text-center">Reste Nouv.</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-600 text-center">Reste CP</TableHead>
+                    <TableHead className="text-xs font-bold text-rose-600 text-center">Reste CE</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4119,22 +4109,13 @@ export default function Dashboard() {
                       return {
                         projet: r.Projet || 'Non classé',
                         entite: r.ENTITE || '',
-                        nomenclature: r.Nomenclature || '',
-                        designation: r.Designation || '',
-                        cp, cpReports, cpConsolides, cpNouveaux,
-                        engReports, engConsolides, engNouveaux, engCPTotal,
-                        ce, engCE,
+                        ecriture: r['N° ENGAGEMENT'] || '-',
+                        nomenclature: r.NOMENCLATURE || '',
+                        designation: r['DETAIL DESIGNATION'] || '',
                         resteReport, resteConsolides, resteNouveaux, resteCP, resteCE
                       }
                     }).filter(r => r.resteCP > 0 || r.resteCE > 0).sort((a, b) => b.resteCP - a.resteCP)
 
-                    const totCP = resteLines.reduce((s, r) => s + r.cp, 0)
-                    const totEngReports = resteLines.reduce((s, r) => s + r.engReports, 0)
-                    const totEngConsolides = resteLines.reduce((s, r) => s + r.engConsolides, 0)
-                    const totEngNouveaux = resteLines.reduce((s, r) => s + r.engNouveaux, 0)
-                    const totEngCPTotal = resteLines.reduce((s, r) => s + r.engCPTotal, 0)
-                    const totCE = resteLines.reduce((s, r) => s + r.ce, 0)
-                    const totEngCE = resteLines.reduce((s, r) => s + r.engCE, 0)
                     const totResteReport = resteLines.reduce((s, r) => s + r.resteReport, 0)
                     const totResteConsolides = resteLines.reduce((s, r) => s + r.resteConsolides, 0)
                     const totResteNouveaux = resteLines.reduce((s, r) => s + r.resteNouveaux, 0)
@@ -4151,36 +4132,23 @@ export default function Dashboard() {
                             <TableRow key={`reste-${idx}`} className={`hover:bg-gray-50 ${showProjetHeader && idx > 0 ? 'border-t-2 border-rose-200' : ''}`}>
                               <TableCell className="text-xs font-medium text-gray-900 whitespace-nowrap">{r.projet}</TableCell>
                               <TableCell className="text-xs text-gray-600">{r.entite}</TableCell>
+                              <TableCell className="text-xs font-medium text-gray-900">{r.ecriture}</TableCell>
                               <TableCell className="text-xs text-blue-600 font-mono whitespace-nowrap">{r.nomenclature}</TableCell>
                               <TableCell className="text-xs text-gray-700" style={{minWidth:'250px',maxWidth:'400px',whiteSpace:'normal',lineHeight:'1.4'}}>{r.designation}</TableCell>
-                              <TableCell className="text-xs text-gray-700 text-center">{formatMillions(r.cp)}</TableCell>
-                              <TableCell className="text-xs text-emerald-600 text-center">{formatMillions(r.engReports)}</TableCell>
-                              <TableCell className="text-xs text-emerald-600 text-center">{formatMillions(r.engConsolides)}</TableCell>
-                              <TableCell className="text-xs text-emerald-600 text-center">{formatMillions(r.engNouveaux)}</TableCell>
-                              <TableCell className="text-xs font-bold text-emerald-700 text-center">{formatMillions(r.engCPTotal)}</TableCell>
                               <TableCell className="text-xs text-rose-600 text-center">{formatMillions(r.resteReport)}</TableCell>
                               <TableCell className="text-xs text-rose-600 text-center">{formatMillions(r.resteConsolides)}</TableCell>
                               <TableCell className="text-xs text-rose-600 text-center">{formatMillions(r.resteNouveaux)}</TableCell>
                               <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(r.resteCP)}</TableCell>
-                              <TableCell className="text-xs text-gray-700 text-center">{formatMillions(r.ce)}</TableCell>
-                              <TableCell className="text-xs text-teal-700 text-center">{formatMillions(r.engCE)}</TableCell>
                               <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(r.resteCE)}</TableCell>
                             </TableRow>
                           )
                         })}
                         <TableRow className="bg-rose-50/40 font-bold-total">
-                          <TableCell className="text-xs font-bold text-gray-900" colSpan={4}>Total ({resteLines.length} prestations)</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-center">{formatMillions(totCP)}</TableCell>
-                          <TableCell className="text-xs font-bold text-emerald-700 text-center">{formatMillions(totEngReports)}</TableCell>
-                          <TableCell className="text-xs font-bold text-emerald-700 text-center">{formatMillions(totEngConsolides)}</TableCell>
-                          <TableCell className="text-xs font-bold text-emerald-700 text-center">{formatMillions(totEngNouveaux)}</TableCell>
-                          <TableCell className="text-xs font-bold text-emerald-700 text-center">{formatMillions(totEngCPTotal)}</TableCell>
+                          <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({resteLines.length} prestations)</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(totResteReport)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(totResteConsolides)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(totResteNouveaux)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(totResteCP)}</TableCell>
-                          <TableCell className="text-xs font-bold text-gray-900 text-center">{formatMillions(totCE)}</TableCell>
-                          <TableCell className="text-xs font-bold text-teal-700 text-center">{formatMillions(totEngCE)}</TableCell>
                           <TableCell className="text-xs font-bold text-rose-700 text-center">{formatMillions(totResteCE)}</TableCell>
                         </TableRow>
                       </>
