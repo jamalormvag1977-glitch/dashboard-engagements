@@ -6981,9 +6981,15 @@ export default function Dashboard() {
                   <h2 className="text-base sm:text-lg font-bold text-blue-900 tracking-wide uppercase">
                     Tableau de bord de suivi de l&apos;exécution du budget d&apos;investissement au 17-05-2026
                   </h2>
-                  <p className="text-xs text-gray-500 hidden sm:block">
-                    Vue consolidée par entité, projet et programme
-                  </p>
+                  <div className="flex items-center gap-3">
+                    <p className="text-xs text-gray-500 hidden sm:block">
+                      Vue consolidée par entité, projet et programme
+                    </p>
+                    <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded px-2 py-0.5 hidden sm:inline-flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" /></svg>
+                      MAJ : {formatDate(lastUpdated)}
+                    </span>
+                  </div>
                 </div>
               </div>
 
