@@ -5325,14 +5325,217 @@ export default function Dashboard() {
   }
 
   const renderPrevisionsView = () => {
+    // Taux prévisions globaux
+    const tauxPrevJuin = kpis.totalCP > 0 ? (kpis.cumulPrevJuin / kpis.totalCP) * 100 : 0
+    const tauxPrevSeptembre = kpis.totalCP > 0 ? (kpis.cumulPrevSeptembre / kpis.totalCP) * 100 : 0
+    const tauxPrevOctobre = kpis.totalCP > 0 ? (kpis.cumulPrevOctobre / kpis.totalCP) * 100 : 0
+    const tauxPrevNovembre = kpis.totalCP > 0 ? (kpis.cumulPrevNovembre / kpis.totalCP) * 100 : 0
+    const tauxPrevDecembre = kpis.totalCP > 0 ? (kpis.cumulPrevDecembre / kpis.totalCP) * 100 : 0
+
     return (
       <>
-        {/* ═══════════ SECTION 1 : PRÉVISIONS PAR PROGRAMME ═══════════ */}
+        {/* ═══════════ 1. INDICATEURS CLÉS ═══════════ */}
+        <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
+          <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">1.</span>Indicateurs clés</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              {/* Camembert - Taux Ordonnancement */}
+              <div className="flex flex-col items-center">
+                <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Ordonnancement</p>
+                <div className="h-[120px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Ordonnancé', value: kpis.tauxOrdonnement },
+                          { name: 'Reste', value: Math.max(0, 100 - kpis.tauxOrdonnement) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={30} outerRadius={45} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={kpis.tauxOrdonnement >= 80 ? '#10b981' : kpis.tauxOrdonnement >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(kpis.tauxOrdonnement)}`}>{formatPercent(kpis.tauxOrdonnement)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{kpis.tauxOrdonnement >= 80 ? 'Bon' : kpis.tauxOrdonnement >= 50 ? 'Moyen' : 'Faible'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className={`w-1.5 h-1.5 rounded-full ${kpis.tauxOrdonnement >= 80 ? 'bg-emerald-500' : kpis.tauxOrdonnement >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="text-[9px] text-gray-400">{formatMillions(kpis.totalOrd)} M DH</span>
+                </div>
+              </div>
+
+              {/* Camembert - Taux Juin */}
+              <div className="flex flex-col items-center">
+                <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Juin</p>
+                <div className="h-[120px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Prévu', value: tauxPrevJuin },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxPrevJuin) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={30} outerRadius={45} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxPrevJuin >= 80 ? '#10b981' : tauxPrevJuin >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevJuin)}`}>{formatPercent(tauxPrevJuin)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxPrevJuin >= 80 ? 'Bon' : tauxPrevJuin >= 50 ? 'Moyen' : 'Faible'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className={`w-1.5 h-1.5 rounded-full ${tauxPrevJuin >= 80 ? 'bg-emerald-500' : tauxPrevJuin >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="text-[9px] text-gray-400">{formatMillions(kpis.cumulPrevJuin)} M DH</span>
+                </div>
+              </div>
+
+              {/* Camembert - Taux Septembre */}
+              <div className="flex flex-col items-center">
+                <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Septembre</p>
+                <div className="h-[120px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Prévu', value: tauxPrevSeptembre },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxPrevSeptembre) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={30} outerRadius={45} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxPrevSeptembre >= 80 ? '#10b981' : tauxPrevSeptembre >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevSeptembre)}`}>{formatPercent(tauxPrevSeptembre)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxPrevSeptembre >= 80 ? 'Bon' : tauxPrevSeptembre >= 50 ? 'Moyen' : 'Faible'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className={`w-1.5 h-1.5 rounded-full ${tauxPrevSeptembre >= 80 ? 'bg-emerald-500' : tauxPrevSeptembre >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="text-[9px] text-gray-400">{formatMillions(kpis.cumulPrevSeptembre)} M DH</span>
+                </div>
+              </div>
+
+              {/* Camembert - Taux Octobre */}
+              <div className="flex flex-col items-center">
+                <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Octobre</p>
+                <div className="h-[120px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Prévu', value: tauxPrevOctobre },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxPrevOctobre) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={30} outerRadius={45} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxPrevOctobre >= 80 ? '#10b981' : tauxPrevOctobre >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevOctobre)}`}>{formatPercent(tauxPrevOctobre)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxPrevOctobre >= 80 ? 'Bon' : tauxPrevOctobre >= 50 ? 'Moyen' : 'Faible'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className={`w-1.5 h-1.5 rounded-full ${tauxPrevOctobre >= 80 ? 'bg-emerald-500' : tauxPrevOctobre >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="text-[9px] text-gray-400">{formatMillions(kpis.cumulPrevOctobre)} M DH</span>
+                </div>
+              </div>
+
+              {/* Camembert - Taux Novembre */}
+              <div className="flex flex-col items-center">
+                <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Novembre</p>
+                <div className="h-[120px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Prévu', value: tauxPrevNovembre },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxPrevNovembre) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={30} outerRadius={45} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxPrevNovembre >= 80 ? '#10b981' : tauxPrevNovembre >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevNovembre)}`}>{formatPercent(tauxPrevNovembre)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxPrevNovembre >= 80 ? 'Bon' : tauxPrevNovembre >= 50 ? 'Moyen' : 'Faible'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className={`w-1.5 h-1.5 rounded-full ${tauxPrevNovembre >= 80 ? 'bg-emerald-500' : tauxPrevNovembre >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="text-[9px] text-gray-400">{formatMillions(kpis.cumulPrevNovembre)} M DH</span>
+                </div>
+              </div>
+
+              {/* Camembert - Taux Décembre */}
+              <div className="flex flex-col items-center">
+                <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Décembre</p>
+                <div className="h-[120px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Prévu', value: tauxPrevDecembre },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxPrevDecembre) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={30} outerRadius={45} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxPrevDecembre >= 80 ? '#10b981' : tauxPrevDecembre >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-base font-black tracking-tight ${tauxColor(tauxPrevDecembre)}`}>{formatPercent(tauxPrevDecembre)}</span>
+                    <span className="text-[8px] text-gray-400 font-medium">{tauxPrevDecembre >= 80 ? 'Bon' : tauxPrevDecembre >= 50 ? 'Moyen' : 'Faible'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className={`w-1.5 h-1.5 rounded-full ${tauxPrevDecembre >= 80 ? 'bg-emerald-500' : tauxPrevDecembre >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="text-[9px] text-gray-400">{formatMillions(kpis.cumulPrevDecembre)} M DH</span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* ═══════════ SECTION 2 : PRÉVISIONS PAR PROGRAMME ═══════════ */}
         <div className="space-y-3">
         {/* Prévisions par Programme */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">1.</span>Prévisions cumulées par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Prévisions cumulées par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5406,7 +5609,7 @@ export default function Dashboard() {
         {/* Prévisions par Projet */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Prévisions cumulées par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Prévisions cumulées par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5480,7 +5683,7 @@ export default function Dashboard() {
         {/* Prévisions par Entité */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Prévisions cumulées par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">4.</span>Prévisions cumulées par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -5554,7 +5757,7 @@ export default function Dashboard() {
         {/* Détail des prévisions par prestation */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">4.</span>Détail des prévisions par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">5.</span>Détail des prévisions par prestation <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
