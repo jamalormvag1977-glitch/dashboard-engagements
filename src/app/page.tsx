@@ -130,6 +130,12 @@ function formatKDH(value: number | null | undefined): string {
   return thousands.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 }
 
+// Format number in DH (dirhams)
+function formatDH(value: number | null | undefined): string {
+  if (value === null || value === undefined) return '-'
+  return value.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+}
+
 // Format number for table cells with French thousands separators
 function formatTableCell(value: number | null | undefined): string {
   if (value === null || value === undefined) return '—'
@@ -4075,7 +4081,7 @@ export default function Dashboard() {
         {/* ═══════════ Reste à engager ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">6.</span>Reste à engager <span className="text-gray-400 font-normal">(KDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">6.</span>Reste à engager <span className="text-gray-400 font-normal">(Dh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4126,15 +4132,15 @@ export default function Dashboard() {
                               <TableCell className="text-xs font-medium text-gray-900">{r.ecriture}</TableCell>
                               <TableCell className="text-xs text-blue-600 font-mono whitespace-nowrap">{r.nomenclature}</TableCell>
                               <TableCell className="text-xs text-gray-700" style={{minWidth:'250px',maxWidth:'400px',whiteSpace:'normal',lineHeight:'1.4'}}>{r.designation}</TableCell>
-                              <TableCell className="text-xs text-rose-600 text-center">{formatKDH(r.resteNouveaux)}</TableCell>
-                              <TableCell className="text-xs font-bold text-rose-700 text-center">{formatKDH(r.resteCE)}</TableCell>
+                              <TableCell className="text-xs text-rose-600 text-center">{formatDH(r.resteNouveaux)}</TableCell>
+                              <TableCell className="text-xs font-bold text-rose-700 text-center">{formatDH(r.resteCE)}</TableCell>
                             </TableRow>
                           )
                         })}
                         <TableRow className="bg-rose-50/40 font-bold-total">
                           <TableCell className="text-xs font-bold text-gray-900" colSpan={5}>Total ({resteLines.length} prestations)</TableCell>
-                          <TableCell className="text-xs font-bold text-rose-700 text-center">{formatKDH(totResteNouveaux)}</TableCell>
-                          <TableCell className="text-xs font-bold text-rose-700 text-center">{formatKDH(totResteCE)}</TableCell>
+                          <TableCell className="text-xs font-bold text-rose-700 text-center">{formatDH(totResteNouveaux)}</TableCell>
+                          <TableCell className="text-xs font-bold text-rose-700 text-center">{formatDH(totResteCE)}</TableCell>
                         </TableRow>
                       </>
                     )
