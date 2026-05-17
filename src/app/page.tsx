@@ -4202,12 +4202,172 @@ export default function Dashboard() {
     const totEntOrd = ordByEntity.reduce((s, e) => s + e.ord, 0)
     const totEntPaiements = ordByEntity.reduce((s, e) => s + e.paiements, 0)
 
+    // Taux Ordonnancement globaux
+    const tauxOrdReport = kpis.totalReports > 0 ? (kpis.totalOrdReports / kpis.totalReports) * 100 : 0
+    const tauxOrdConsolides = kpis.totalConsolides > 0 ? (kpis.totalOrdConsolides / kpis.totalConsolides) * 100 : 0
+    const tauxOrdNouveaux = kpis.totalNouveaux > 0 ? (kpis.totalOrdNouveaux / kpis.totalNouveaux) * 100 : 0
+    const tauxOrdTotal = kpis.totalCP > 0 ? (kpis.totalOrd / kpis.totalCP) * 100 : 0
+
     return (
       <>
-        {/* ═══════════ TABLEAU 1 : ORDONNANCEMENT PAR PROGRAMME ═══════════ */}
+        {/* ═══════════ 1. INDICATEURS CLÉS ═══════════ */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-5">1.</span>Indicateurs clés</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Camembert - Taux Ordonnancement Report */}
+            <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
+              <CardHeader className="pb-1 pt-3 px-4 bg-blue-50/50 border-b border-blue-200">
+                <CardTitle className="text-xs font-bold text-blue-900 uppercase tracking-wider">Taux Ordonnancement Report</CardTitle>
+              </CardHeader>
+              <CardContent className="p-2 flex flex-col items-center">
+                <div className="h-[160px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Ordonnancé', value: tauxOrdReport },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxOrdReport) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxOrdReport >= 80 ? '#10b981' : tauxOrdReport >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxOrdReport)}`}>{formatPercent(tauxOrdReport)}</span>
+                    <span className="text-[10px] text-gray-400 font-medium">
+                      {tauxOrdReport >= 80 ? 'Bon' : tauxOrdReport >= 50 ? 'Moyen' : 'Faible'}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className={`w-2 h-2 rounded-full ${tauxOrdReport >= 80 ? 'bg-emerald-500' : tauxOrdReport >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrdReports)} M DH</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Camembert - Taux Ordonnancement Consolidés */}
+            <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
+              <CardHeader className="pb-1 pt-3 px-4 bg-blue-50/50 border-b border-blue-200">
+                <CardTitle className="text-xs font-bold text-blue-900 uppercase tracking-wider">Taux Ordonnancement Consolidés</CardTitle>
+              </CardHeader>
+              <CardContent className="p-2 flex flex-col items-center">
+                <div className="h-[160px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Ordonnancé', value: tauxOrdConsolides },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxOrdConsolides) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxOrdConsolides >= 80 ? '#10b981' : tauxOrdConsolides >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxOrdConsolides)}`}>{formatPercent(tauxOrdConsolides)}</span>
+                    <span className="text-[10px] text-gray-400 font-medium">
+                      {tauxOrdConsolides >= 80 ? 'Bon' : tauxOrdConsolides >= 50 ? 'Moyen' : 'Faible'}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className={`w-2 h-2 rounded-full ${tauxOrdConsolides >= 80 ? 'bg-emerald-500' : tauxOrdConsolides >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrdConsolides)} M DH</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Camembert - Taux Ordonnancement Nouveaux */}
+            <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
+              <CardHeader className="pb-1 pt-3 px-4 bg-blue-50/50 border-b border-blue-200">
+                <CardTitle className="text-xs font-bold text-blue-900 uppercase tracking-wider">Taux Ordonnancement Nouveaux</CardTitle>
+              </CardHeader>
+              <CardContent className="p-2 flex flex-col items-center">
+                <div className="h-[160px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Ordonnancé', value: tauxOrdNouveaux },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxOrdNouveaux) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxOrdNouveaux >= 80 ? '#10b981' : tauxOrdNouveaux >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxOrdNouveaux)}`}>{formatPercent(tauxOrdNouveaux)}</span>
+                    <span className="text-[10px] text-gray-400 font-medium">
+                      {tauxOrdNouveaux >= 80 ? 'Bon' : tauxOrdNouveaux >= 50 ? 'Moyen' : 'Faible'}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className={`w-2 h-2 rounded-full ${tauxOrdNouveaux >= 80 ? 'bg-emerald-500' : tauxOrdNouveaux >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrdNouveaux)} M DH</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Camembert - Taux Ordonnancement Total */}
+            <Card className="border-2 border-blue-800 shadow-sm overflow-hidden">
+              <CardHeader className="pb-1 pt-3 px-4 bg-blue-50/50 border-b border-blue-200">
+                <CardTitle className="text-xs font-bold text-blue-900 uppercase tracking-wider">Taux Ordonnancement Total</CardTitle>
+              </CardHeader>
+              <CardContent className="p-2 flex flex-col items-center">
+                <div className="h-[160px] w-full relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Ordonnancé', value: tauxOrdTotal },
+                          { name: 'Reste', value: Math.max(0, 100 - tauxOrdTotal) },
+                        ]}
+                        cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value"
+                        startAngle={90} endAngle={-270}
+                        stroke="none"
+                      >
+                        <Cell fill={tauxOrdTotal >= 80 ? '#10b981' : tauxOrdTotal >= 50 ? '#f59e0b' : '#ef4444'} />
+                        <Cell fill="#f3f4f6" />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className={`text-2xl font-black tracking-tight ${tauxColor(tauxOrdTotal)}`}>{formatPercent(tauxOrdTotal)}</span>
+                    <span className="text-[10px] text-gray-400 font-medium">
+                      {tauxOrdTotal >= 80 ? 'Bon' : tauxOrdTotal >= 50 ? 'Moyen' : 'Faible'}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className={`w-2 h-2 rounded-full ${tauxOrdTotal >= 80 ? 'bg-emerald-500' : tauxOrdTotal >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
+                  <span className="text-[10px] text-gray-400">{formatMillions(kpis.totalOrd)} M DH</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* ═══════════ TABLEAU 2 : ORDONNANCEMENT PAR PROGRAMME ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">1.</span>Ordonnancement par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Ordonnancement par programme <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4263,7 +4423,7 @@ export default function Dashboard() {
         {/* ═══════════ TABLEAU 2 : ORDONNANCEMENT PAR PROJET ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">2.</span>Ordonnancement par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Ordonnancement par projet <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4319,7 +4479,7 @@ export default function Dashboard() {
         {/* ═══════════ TABLEAU 3 : ORDONNANCEMENT PAR ENTITÉ ═══════════ */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">3.</span>Ordonnancement par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">4.</span>Ordonnancement par entité <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -4375,7 +4535,7 @@ export default function Dashboard() {
         {/* Détail des ordonnancements */}
         <Card className="border-2 border-blue-800 shadow-sm">
           <CardHeader className="pb-3 bg-blue-50/50 border-b border-blue-200">
-            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">4.</span>Détail des ordonnancements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
+            <CardTitle className="text-sm font-bold text-blue-900 tracking-wide uppercase"><span className="text-blue-900 mr-2 inline-block w-6">5.</span>Détail des ordonnancements <span className="text-gray-400 font-normal">(MDh)</span></CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
