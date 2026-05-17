@@ -6858,9 +6858,8 @@ export default function Dashboard() {
                   {(() => {
                     const resteOrdLines = filteredData.map(r => {
                       const reports = r.REPORTS || 0
-                      const engReports = r['ENG REPORT'] || 0
                       const ordReports = r['ORD REPORTS'] || 0
-                      const resteOrdReport = Math.max(0, engReports - ordReports)
+                      const resteOrdReport = Math.max(0, reports - ordReports)
                       const tauxReste = reports > 0 ? (resteOrdReport / reports) * 100 : 0
                       return {
                         programme: r.Programme || '',
