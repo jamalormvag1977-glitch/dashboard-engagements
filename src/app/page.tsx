@@ -6101,31 +6101,6 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="p-4">
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-              {/* Camembert - Crédits de Reports */}
-              <div className="flex flex-col items-center">
-                <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Crédits de Reports</p>
-                <div className="h-[110px] w-full relative">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={[
-                          { name: 'Reports', value: Math.round(totalReports / 1e6 * 10) / 10 },
-                        ]}
-                        cx="50%" cy="50%" innerRadius={28} outerRadius={42} paddingAngle={3} dataKey="value"
-                        startAngle={90} endAngle={-270}
-                        stroke="none"
-                      >
-                        <Cell fill="#3b82f6" />
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className="text-base font-black text-gray-900 tracking-tight">{formatMillions(totalReports)}</span>
-                    <span className="text-[8px] text-gray-400 font-medium">M DH</span>
-                  </div>
-                </div>
-              </div>
-
               {/* Camembert - Taux Engagement Report */}
               <div className="flex flex-col items-center">
                 <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Eng. Report</p>
@@ -6287,11 +6262,9 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Deuxième ligne avec Décembre */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mt-3">
-              <div className="flex flex-col items-center lg:col-start-7">
+              {/* Camembert - Taux Prév. Décembre */}
+              <div className="flex flex-col items-center">
                 <p className="text-[9px] font-bold text-blue-900 uppercase tracking-wider mb-1 text-center">Taux Prév. Déc.</p>
                 <div className="h-[110px] w-full relative">
                   <ResponsiveContainer width="100%" height="100%">
