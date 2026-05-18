@@ -71,6 +71,8 @@ import {
   FileSpreadsheet,
   Zap,
   Printer,
+  CreditCard,
+  Calendar,
 } from 'lucide-react'
 
 interface DataRow {
