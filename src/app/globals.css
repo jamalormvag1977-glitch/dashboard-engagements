@@ -184,42 +184,25 @@ nav button {
 
 /* ═══════════ PRINT STYLES ═══════════ */
 @media print {
-  /* Hide the sidebar */
-  aside {
-    display: none !important;
-  }
-
-  /* Hide the dashboard header (filters, buttons) */
-  .print-hide-header {
-    display: none !important;
-  }
-
-  /* Hide buttons and interactive elements (except print-keep) */
-  .print\:hidden,
+  /* ── Hide non-report UI ── */
+  aside { display: none !important; }
+  .print-hide-header { display: none !important; }
   button:not(.print-keep),
   [data-sidebar],
   .fixed,
-  .sticky {
-    display: none !important;
-  }
+  .sticky { display: none !important; }
 
-  /* Reset layout for print */
+  /* ── Global resets ── */
   body {
     margin: 0 !important;
     padding: 0 !important;
     background: white !important;
-    font-size: 9px !important;
+    font-size: 7px !important;
     color: #000 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-
-  /* Make the flex container stack vertically */
-  .min-h-screen.flex {
-    display: block !important;
-  }
-
-  /* Make the main content area full-width */
+  .min-h-screen.flex { display: block !important; }
   main {
     margin: 0 !important;
     padding: 0 !important;
@@ -227,101 +210,170 @@ nav button {
     width: 100% !important;
     overflow: visible !important;
   }
+  .print-content-wrap { padding: 0 !important; }
+  .print-content-wrap > *:not(.print-report) { display: none !important; }
 
-  /* Remove padding from content wrapper */
-  .print-content-wrap {
-    padding: 0 !important;
-  }
-
-  /* Only show print-report, hide other views */
-  .print-content-wrap > *:not(.print-report) {
-    display: none !important;
-  }
-
-  /* Reset the content padding for print */
+  /* ── Report container ── */
   .print-report {
     margin: 0 !important;
-    padding: 4mm !important;
+    padding: 3mm 4mm !important;
     max-width: 100% !important;
     width: 100% !important;
     background: white !important;
     overflow: visible !important;
   }
 
-  /* Report header banner - make it print-friendly with solid dark bg */
+  /* ── Header banner ── */
   .print-report .bg-gradient-to-r {
     background: #0A1A3A !important;
+    padding: 3mm 4mm !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+  .print-report .bg-gradient-to-r h1 { font-size: 10px !important; }
+  .print-report .bg-gradient-to-r p { font-size: 7px !important; }
 
-  /* Page 1 ends here, force page break after */
-  .print-page-1 {
-    page-break-after: always;
+  /* ── Section spacing: ultra-compact ── */
+  .print-report { gap: 0 !important; }
+  .print-report > div { margin-bottom: 2mm !important; }
+  .print-report .space-y-5 > * + * { margin-top: 2mm !important; }
+
+  /* ── Section headers ── */
+  .print-report h2 { font-size: 8px !important; margin-bottom: 1mm !important; }
+  .print-report .flex.items-center.gap-2.mb-3 { margin-bottom: 1mm !important; }
+  .print-report .flex.items-center.gap-2.mb-3 span.w-7 { width: 16px !important; height: 16px !important; font-size: 7px !important; }
+
+  /* ── KPI cards: compact (8 in one row) ── */
+  .print-report .grid.grid-cols-4.gap-3 {
+    gap: 1.5mm !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3.mb-3 {
+    margin-bottom: 1.5mm !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3 > div {
+    padding: 2mm !important;
+    gap: 1.5mm !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3 > div .w-10.h-10 {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3 > div .w-10.h-10 svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3 > div p.text-2xl {
+    font-size: 10px !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3 > div p.text-\[10px\] {
+    font-size: 6px !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3 > div p.text-\[11px\] {
+    font-size: 6px !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3 > div .h-2 {
+    height: 3px !important;
   }
 
-  /* Page 2 starts on new page, allow content to flow naturally */
-  .print-page-2 {
+  /* ── Legend row: compact ── */
+  .print-report .flex.items-center.gap-4.px-1 {
+    gap: 2mm !important;
+    margin-bottom: 0 !important;
+  }
+  .print-report .flex.items-center.gap-4.px-1 span { font-size: 6px !important; }
+  .print-report .flex.items-center.gap-4.px-1 .w-3.h-3 {
+    width: 5px !important;
+    height: 5px !important;
+  }
+
+  /* ── Source de financement: compact pie + bars ── */
+  .print-report .grid.grid-cols-2.divide-x > div { padding: 2mm !important; }
+  .print-report .grid.grid-cols-2.divide-x > div .w-28.h-28 {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  .print-report .grid.grid-cols-2.divide-x > div .space-y-2 { gap: 0.5mm !important; }
+  .print-report .grid.grid-cols-2.divide-x > div .space-y-2 > * + * { margin-top: 0.5mm !important; }
+  .print-report .grid.grid-cols-2.divide-x > div .h-2 { height: 3px !important; }
+  .print-report .grid.grid-cols-2.divide-x > div .mb-3 { margin-bottom: 1mm !important; }
+  .print-report .grid.grid-cols-2.divide-x > div .mb-0\.5 { margin-bottom: 0 !important; }
+
+  /* ── Programme / Projet / Entité bar sections ── */
+  .print-report .grid.grid-cols-2.divide-x > div .space-y-2 > div .h-2 { height: 3px !important; }
+  .print-report .px-5.py-3 { padding: 1.5mm 3mm !important; }
+  .print-report .p-5 { padding: 2mm !important; }
+
+  /* ── Performance section: 3 cols compact ── */
+  .print-report .grid.grid-cols-3.gap-4 {
+    gap: 1.5mm !important;
+  }
+  .print-report .grid.grid-cols-3.gap-4 > div .p-3 { padding: 1.5mm !important; }
+  .print-report .grid.grid-cols-3.gap-4 > div .space-y-2 > * + * { margin-top: 1mm !important; }
+  .print-report .grid.grid-cols-3.gap-4 > div .px-3.py-2 { padding: 1mm 2mm !important; }
+  .print-report .grid.grid-cols-3.gap-4 > div .mb-1\.5 { margin-bottom: 0.5mm !important; }
+  .print-report .grid.grid-cols-3.gap-4 > div .h-2 { height: 3px !important; }
+  .print-report .grid.grid-cols-3.gap-4 > div .space-y-1 > * + * { margin-top: 0 !important; }
+
+  /* ── Prévisions cards: compact ── */
+  .print-report .grid.grid-cols-4.gap-3.mb-4 {
+    gap: 1.5mm !important;
+    margin-bottom: 1.5mm !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3.mb-4 > div {
+    padding: 2mm !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3.mb-4 > div .w-9.h-9 {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3.mb-4 > div .w-9.h-9 svg {
+    width: 9px !important;
+    height: 9px !important;
+  }
+  .print-report .grid.grid-cols-4.gap-3.mb-4 > div .mb-2 { margin-bottom: 0.5mm !important; }
+  .print-report .grid.grid-cols-4.gap-3.mb-4 > div .mt-1 { margin-top: 0 !important; }
+  .print-report .grid.grid-cols-4.gap-3.mb-4 > div .mt-2 { margin-top: 0.5mm !important; }
+  .print-report .grid.grid-cols-4.gap-3.mb-4 > div .h-2 { height: 3px !important; }
+  .print-report .grid.grid-cols-4.gap-3.mb-4 > div .text-2xl { font-size: 9px !important; }
+
+  /* ── Line chart: compact ── */
+  .print-report .bg-white.rounded-xl.p-5.shadow-sm:last-child {
+    padding: 2mm !important;
+  }
+  .print-report svg[viewBox="0 0 400 180"] {
+    max-height: 60px !important;
+  }
+
+  /* ── Page break between section 4 and 5 ── */
+  .print-page-break {
     page-break-before: always;
   }
 
-  tr {
-    page-break-inside: avoid;
-  }
+  /* ── Table styles ── */
+  tr { page-break-inside: avoid; }
+  table { border-collapse: collapse !important; width: 100% !important; }
+  th, td { border: 1px solid #999 !important; padding: 2px 4px !important; font-size: 7px !important; }
 
-  /* Ensure tables have proper borders */
-  table {
-    border-collapse: collapse !important;
-    width: 100% !important;
-  }
-
-  th, td {
-    border: 1px solid #999 !important;
-    padding: 4px 8px !important;
-    font-size: 10px !important;
-  }
-
-  /* Print-friendly colors for backgrounds */
-  .bg-blue-50, .bg-blue-50\/50, .bg-blue-50\/60, .bg-blue-50\/40,
-  .bg-emerald-50, .bg-violet-50, .bg-gray-50,
-  [class*="bg-blue-50"], [class*="bg-emerald-50"], [class*="bg-violet-50"],
-  [class*="bg-slate-50"], [class*="from-blue-"], [class*="from-emerald-"],
-  [class*="from-violet-"], [class*="from-amber-"], [class*="from-indigo-"],
-  [class*="from-teal-"], [class*="from-orange-"], [class*="from-slate-"] {
+  /* ── Print colors ── */
+  * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* KPI cards print-friendly */
+  /* ── Shadows ── */
+  .shadow-sm, .shadow-md, .shadow-lg, .shadow-2xl,
+  [class*="shadow-"] { box-shadow: none !important; }
+
+  /* ── Break avoidance ── */
   .kpi-card-premium,
   [class*="rounded-xl border"] {
     box-shadow: none !important;
     break-inside: avoid;
   }
 
-  /* Progress bars - keep colors */
-  .bg-indigo-600, .bg-emerald-600, .bg-blue-800,
-  .bg-emerald-500, .bg-orange-500, .bg-red-500, .bg-blue-600,
-  .bg-violet-500, .bg-blue-500 {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Hide shadows for cleaner print */
-  .shadow-sm, .shadow-md, .shadow-lg, .shadow-2xl,
-  [class*="shadow-"] {
-    box-shadow: none !important;
-  }
-
-  /* SVG charts - keep colors */
-  svg {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Page margins */
+  /* ── Page setup ── */
   @page {
-    margin: 5mm;
+    margin: 4mm;
     size: A4 landscape;
   }
 }

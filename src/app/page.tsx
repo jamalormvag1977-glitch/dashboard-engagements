@@ -5036,7 +5036,7 @@ export default function Dashboard() {
         </div>
 
         {/* ═══ 5. RÉPARTITION PAR ENTITÉ — CP / CE ═══ */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden print-page-break">
           <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
             <div className="flex items-center gap-2">
               <span className="w-7 h-7 rounded-md bg-[#1A3A6E] text-white text-xs font-black flex items-center justify-center">5</span>
