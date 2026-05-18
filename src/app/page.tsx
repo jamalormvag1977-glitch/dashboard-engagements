@@ -4693,7 +4693,7 @@ export default function Dashboard() {
     ]
 
     return (
-      <div className="space-y-5">
+      <div className="space-y-5 print-report">
         {/* ═══ HEADER BANNER ═══ */}
         <div className="bg-gradient-to-r from-[#0A1A3A] to-[#0F1F3F] rounded-xl p-5 text-white shadow-lg">
           <div className="flex items-center justify-between">
@@ -4704,7 +4704,7 @@ export default function Dashboard() {
             <div className="text-right flex items-center gap-4">
               <button
                 onClick={() => window.print()}
-                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg px-3 py-2 text-white transition-colors cursor-pointer"
+                className="print-keep flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg px-3 py-2 text-white transition-colors cursor-pointer"
                 title="Imprimer le rapport"
               >
                 <Printer className="w-4 h-4" />

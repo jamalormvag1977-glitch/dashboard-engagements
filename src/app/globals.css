@@ -194,7 +194,7 @@ nav button {
     display: none !important;
   }
 
-  /* Hide buttons and interactive elements */
+  /* Hide buttons and interactive elements (except print-keep) */
   .print\:hidden,
   button:not(.print-keep),
   [data-sidebar],
@@ -241,10 +241,18 @@ nav button {
   /* Reset the content padding for print */
   .print-report {
     margin: 0 !important;
-    padding: 2mm 4mm 0 4mm !important;
+    padding: 4mm !important;
     max-width: 100% !important;
     width: 100% !important;
     background: white !important;
+    overflow: visible !important;
+  }
+
+  /* Report header banner - make it print-friendly with solid dark bg */
+  .print-report .bg-gradient-to-r {
+    background: #0A1A3A !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   /* Page 1 ends here, force page break after */
@@ -256,8 +264,6 @@ nav button {
   .print-page-2 {
     page-break-before: always;
   }
-
-  /* Allow grids to break across pages naturally */
 
   tr {
     page-break-inside: avoid;
@@ -294,7 +300,9 @@ nav button {
   }
 
   /* Progress bars - keep colors */
-  .bg-indigo-600, .bg-emerald-600, .bg-blue-800 {
+  .bg-indigo-600, .bg-emerald-600, .bg-blue-800,
+  .bg-emerald-500, .bg-orange-500, .bg-red-500, .bg-blue-600,
+  .bg-violet-500, .bg-blue-500 {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
@@ -305,14 +313,15 @@ nav button {
     box-shadow: none !important;
   }
 
-  /* Page margins — force exactly 2 pages */
-  @page {
-    margin: 2mm 4mm;
-    size: A4 landscape;
+  /* SVG charts - keep colors */
+  svg {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  /* Limit the entire report to exactly 2 pages */
-  .print-report {
-    overflow: hidden !important;
+  /* Page margins */
+  @page {
+    margin: 5mm;
+    size: A4 landscape;
   }
 }
