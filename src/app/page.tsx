@@ -461,8 +461,9 @@ export default function Dashboard() {
     const tauxPaiement = totalCP > 0 ? (totalPaiements / totalCP) * 100 : 0
     const tauxOrdonnement = totalCP > 0 ? (totalOrd / totalCP) * 100 : 0
     const disponible = totalCP - totalEngCP
-    const totalTresorerie = filteredData.reduce((sum, r) => sum + (r['TRESORERIE'] || 0), 0)
-    const totalSubvention = filteredData.reduce((sum, r) => sum + (r['SUBVENTION DEMANDEE'] || 0), 0)
+    const totalTresorerie = data.reduce((sum, r) => sum + (r['TRESORERIE'] || 0), 0)
+    const totalSubvention = data.reduce((sum, r) => sum + (r['SUBVENTION DEMANDEE'] || 0), 0)
+    const totalCPGlobal = data.reduce((sum, r) => sum + (r['TOTAL CP'] || 0), 0)
 
     // Cumulative forecasts by month
     const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
@@ -481,7 +482,7 @@ export default function Dashboard() {
       totalReports, totalConsolides, totalNouveaux, totalOrd, totalOrdReports, totalOrdConsolides, totalOrdNouveaux,
       totalEngReports, totalEngConsolides, totalEngNouveaux, count: filteredData.length,
       tauxEngagement, tauxPaiement, tauxOrdonnement, disponible,
-      totalTresorerie, totalSubvention,
+      totalTresorerie, totalSubvention, totalCPGlobal,
       cumulPrevJuin: cumulPrev['JUIN'],
       cumulPrevSeptembre: cumulPrev['SEPTEMBRE'],
       cumulPrevOctobre: cumulPrev['OCTOBRE'],
@@ -1425,16 +1426,16 @@ export default function Dashboard() {
             <div className="mb-5">
               <p className="text-3xl font-extrabold tracking-tight text-gray-900">{formatMillions(kpis.totalTresorerie)} <span className="text-sm font-semibold text-gray-400">M DH</span></p>
             </div>
-            {kpis.totalCP > 0 && (
+            {kpis.totalCPGlobal > 0 && (
               <div className="bg-gray-50 rounded-xl p-3">
                 <div className="flex items-center justify-between text-xs mb-2">
                   <span className="text-gray-500 font-medium">Part du budget CP</span>
-                  <span className="font-bold text-sky-600">{Math.round((kpis.totalTresorerie / kpis.totalCP) * 100)}%</span>
+                  <span className="font-bold text-sky-600">{Math.round((kpis.totalTresorerie / kpis.totalCPGlobal) * 100)}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                   <div
                     className="h-2 rounded-full bg-sky-500 transition-all duration-700 ease-out"
-                    style={{ width: `${Math.min(100, (kpis.totalTresorerie / kpis.totalCP) * 100)}%` }}
+                    style={{ width: `${Math.min(100, (kpis.totalTresorerie / kpis.totalCPGlobal) * 100)}%` }}
                   />
                 </div>
                 <div className="flex justify-between mt-1.5 text-[10px] text-gray-300">
@@ -1466,16 +1467,16 @@ export default function Dashboard() {
             <div className="mb-5">
               <p className="text-3xl font-extrabold tracking-tight text-gray-900">{formatMillions(kpis.totalSubvention)} <span className="text-sm font-semibold text-gray-400">M DH</span></p>
             </div>
-            {kpis.totalCP > 0 && (
+            {kpis.totalCPGlobal > 0 && (
               <div className="bg-gray-50 rounded-xl p-3">
                 <div className="flex items-center justify-between text-xs mb-2">
                   <span className="text-gray-500 font-medium">Part du budget CP</span>
-                  <span className="font-bold text-amber-600">{Math.round((kpis.totalSubvention / kpis.totalCP) * 100)}%</span>
+                  <span className="font-bold text-amber-600">{Math.round((kpis.totalSubvention / kpis.totalCPGlobal) * 100)}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                   <div
                     className="h-2 rounded-full bg-amber-500 transition-all duration-700 ease-out"
-                    style={{ width: `${Math.min(100, (kpis.totalSubvention / kpis.totalCP) * 100)}%` }}
+                    style={{ width: `${Math.min(100, (kpis.totalSubvention / kpis.totalCPGlobal) * 100)}%` }}
                   />
                 </div>
                 <div className="flex justify-between mt-1.5 text-[10px] text-gray-300">
@@ -4764,7 +4765,7 @@ export default function Dashboard() {
               <div className="bg-amber-50 rounded p-1.5 text-center border border-amber-200">
                 <p className="text-[7px] font-bold text-amber-600 uppercase">Subv. dem.</p>
                 <p className="text-sm font-black text-gray-900">{formatMillions(kpis.totalSubvention)}</p>
-                <p className="text-[7px]"><span className="font-bold text-amber-600">{kpis.totalCP > 0 ? Math.round((kpis.totalSubvention / kpis.totalCP) * 100) : 0}%</span></p>
+                <p className="text-[7px]"><span className="font-bold text-amber-600">{kpis.totalCPGlobal > 0 ? Math.round((kpis.totalSubvention / kpis.totalCPGlobal) * 100) : 0}%</span></p>
               </div>
               <div className="bg-gray-50 rounded p-1.5 text-center border border-gray-200">
                 <p className="text-[7px] font-bold text-gray-500 uppercase">Trésorerie</p>
