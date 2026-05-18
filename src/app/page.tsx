@@ -5406,7 +5406,7 @@ export default function Dashboard() {
                 <Badge variant="secondary" className="text-xs">1.0.0</Badge>
               </div>
               <p className="text-xs text-gray-500">
-                Tableau de bord de suivi de l&apos;exécution du budget d&apos;investissement au 17-05-2026.
+                Tableau de bord de suivi de l&apos;exécution du budget d&apos;investissement.
                 Application dédiée au suivi et à l&apos;analyse des engagements, ordonnancements
                 et paiements relatifs au budget d&apos;investissement.
               </p>
@@ -6987,7 +6987,7 @@ export default function Dashboard() {
                 </Button>
                 <div>
                   <h2 className="text-base sm:text-lg font-bold text-blue-900 tracking-wide uppercase">
-                    Tableau de bord de suivi de l&apos;exécution du budget d&apos;investissement au 17-05-2026
+                    Tableau de bord de suivi de l&apos;exécution du budget d&apos;investissement
                   </h2>
                   <div className="flex items-center gap-3">
                     <p className="text-xs text-gray-500 hidden sm:block">
