@@ -352,120 +352,24 @@ export default function Dashboard() {
     if (!file) return
     setUploading(true)
     try {
-      // Parse Excel file on client side
-      const XLSX = await import('xlsx')
-      const arrayBuffer = await file.arrayBuffer()
-      const workbook = XLSX.read(arrayBuffer, { type: 'array' })
+      // Send file to server-side upload API for reliable Excel parsing
+      const formData = new FormData()
+      formData.append('file', file)
 
-      const sheetName = workbook.SheetNames[0]
-      const worksheet = workbook.Sheets[sheetName]
-
-      // Read all rows to find header row
-      const allRows: unknown[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '', blankrows: false })
-      if (allRows.length === 0) {
-        throw new Error('Le fichier est vide')
-      }
-
-      // Auto-detect header row
-      const knownHeaders = ['PROJET', 'Programme', 'ENTITE', 'NOMENCLATURE', 'REPORTS', 'TOTAL CP', 'DETAIL DESIGNATION']
-      let headerRowIndex = -1
-      for (let i = 0; i < Math.min(allRows.length, 10); i++) {
-        const rowStr = (allRows[i] || []).map(c => String(c || '').trim().toUpperCase())
-        const matchCount = knownHeaders.filter(h => rowStr.includes(h.toUpperCase())).length
-        if (matchCount >= 3) { headerRowIndex = i; break }
-      }
-      if (headerRowIndex === -1) {
-        throw new Error('En-têtes non trouvés dans le fichier Excel. Vérifiez le format.')
-      }
-
-      // Column mapping
-      const colMap: Record<string, string> = {
-        'PROJET': 'Programme', 'GROUPE': 'Projet', 'Programme': 'Programme', 'Projet': 'Projet',
-        'ENTITE': 'ENTITE', 'NOMENCLATURE': 'NOMENCLATURE', 'SOURCE FINANCEMENT': 'SOURCE FINANCEMENT',
-        'N° ENGAGEMENT': 'N° ENGAGEMENT', 'DETAIL DESIGNATION': 'DETAIL DESIGNATION',
-        'Détail désignation': 'DETAIL DESIGNATION', 'DESIGNATION': 'DETAIL DESIGNATION',
-        'REPORTS': 'REPORTS', 'Crédits de report': 'REPORTS',
-        'CONSOLIDES': 'CONSOLIDES', 'Consolidés': 'CONSOLIDES',
-        'NOUVEAUX': 'NOUVEAUX', 'Nouveaux': 'NOUVEAUX',
-        'CP': 'CP', 'TOTAL CP': 'TOTAL CP', 'Total CP': 'TOTAL CP',
-        'CE CONSOLIDES': 'CE CONSOLIDES', 'CE NOUVEAUX': 'CE NOUVEAUX', 'TOTAL CE': 'TOTAL CE',
-        'ENG REPORT': 'ENG REPORT', 'ENG CONSOLIDES': 'ENG CONSOLIDES', 'ENG NOUVEAUX': 'ENG NOUVEAUX',
-        'ENG CP TOTAL': 'ENG CP TOTAL', 'ENG CE ULT': 'ENG CE ULT',
-        'ORD REPORTS': 'ORD REPORTS', 'ORD CONSOLIDES': 'ORD CONSOLIDES', 'ORD NOUVEAUX': 'ORD NOUVEAUX', 'ORD TOTAL': 'ORD TOTAL',
-        'PAIEMENTS SUR REPORTS': 'PAIEMENTS SUR REPORTS', 'PAIEMENTS SUR CONSOLIDES': 'PAIEMENTS SUR CONSOLIDES',
-        'PAIEMENTS SUR NOUVEAUX': 'PAIEMENTS SUR NOUVEAUX', 'PAIEMENTS TOTAL': 'PAIEMENTS TOTAL',
-        'TOTAL PREV': 'TOTAL PREV', 'TRESORERIE': 'TRESORERIE', 'SUBVENTION DEMANDEE': 'SUBVENTION DEMANDEE',
-      }
-
-      const toNum = (v: unknown): number => {
-        if (typeof v === 'number') return v
-        if (typeof v === 'string') { if (v.trim() === '' || v.trim() === '-') return 0; const n = parseFloat(v.replace(/\s/g, '').replace(',', '.')); return isNaN(n) ? 0 : n }
-        return 0
-      }
-      const toStr = (v: unknown): string => { if (v === null || v === undefined) return ''; return String(v).trim() }
-
-      const numericFields = new Set([
-        'REPORTS', 'CONSOLIDES', 'NOUVEAUX', 'CP', 'TOTAL CP',
-        'CE CONSOLIDES', 'CE NOUVEAUX', 'TOTAL CE',
-        'ENG REPORT', 'ENG CONSOLIDES', 'ENG NOUVEAUX', 'ENG CP TOTAL', 'ENG CE ULT',
-        'ORD REPORTS', 'ORD CONSOLIDES', 'ORD NOUVEAUX', 'ORD TOTAL',
-        'PAIEMENTS SUR REPORTS', 'PAIEMENTS SUR CONSOLIDES', 'PAIEMENTS SUR NOUVEAUX', 'PAIEMENTS TOTAL',
-        'TOTAL PREV', 'TRESORERIE', 'SUBVENTION DEMANDEE',
-      ])
-
-      const headers = allRows[headerRowIndex].map((h: unknown) => String(h || '').trim())
-      const dataRows = allRows.slice(headerRowIndex + 1).filter((row: unknown[]) => row && row.length > 0 && row.some(c => c !== '' && c !== 0))
-
-      // Map column index to normalized field name
-      const fieldMap: Record<number, string> = {}
-      headers.forEach((h: string, i: number) => {
-        if (!h) return
-        const mapped = colMap[h] || h
-        fieldMap[i] = mapped
-      })
-
-      const normalizedData = dataRows.map((row: unknown[]) => {
-        const obj: Record<string, unknown> = {}
-        for (const [colIdx, fieldName] of Object.entries(fieldMap)) {
-          const rawValue = row[Number(colIdx)]
-          if (numericFields.has(fieldName) || fieldName.startsWith('Previsions ')) {
-            obj[fieldName] = toNum(rawValue)
-          } else {
-            obj[fieldName] = toStr(rawValue)
-          }
-        }
-        // Ensure Programme and Projet
-        if (!obj['Programme'] || obj['Programme'] === '') obj['Programme'] = obj['ENTITE'] || 'Non classé'
-        if (!obj['Projet'] || obj['Projet'] === '') obj['Projet'] = obj['ENTITE'] || 'Non classé'
-        // Ensure required numeric fields
-        for (const f of numericFields) { if (obj[f] === undefined || obj[f] === null) obj[f] = 0 }
-        // Ensure prevision fields
-        const prevMonths = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE']
-        const prevTypes = ['REPORTS','CONSOLIDES','NOUVEAUX']
-        for (const t of prevTypes) { for (const m of prevMonths) { const k = `Previsions ${t} ${m}`; if (obj[k] === undefined || obj[k] === null) obj[k] = 0 } }
-        return obj
-      }).filter((row: Record<string, unknown>) => row['ENTITE'] || row['Programme'] || row['NOMENCLATURE'] || row['TOTAL CP'])
-
-      // Build filters
-      const programmes = [...new Set(normalizedData.map((r: Record<string, unknown>) => r['Programme'] as string).filter(Boolean))].sort()
-      const projets = [...new Set(normalizedData.map((r: Record<string, unknown>) => r['Projet'] as string).filter(Boolean))].sort()
-      const entites = [...new Set(normalizedData.map((r: Record<string, unknown>) => r['ENTITE'] as string).filter(Boolean))].sort()
-      const nomenclatures = [...new Set(normalizedData.map((r: Record<string, unknown>) => String(r['NOMENCLATURE'] || '')).filter(Boolean))].sort()
-      const sources = [...new Set(normalizedData.map((r: Record<string, unknown>) => r['SOURCE FINANCEMENT'] as string).filter(Boolean))].sort()
-
-      // Send parsed data to server
-      const res = await fetch('/api/data', {
+      const res = await fetch('/api/upload', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: normalizedData, filters: { programmes, projets, entites, nomenclatures, sources } }),
+        body: formData,
       })
-      if (!res.ok) {
-        const err = await res.json()
-        throw new Error(err.error || 'Sauvegarde échouée')
-      }
+
       const result = await res.json()
+
+      if (!res.ok) {
+        throw new Error(result.error || 'Erreur lors de l\'import')
+      }
+
+      // Refresh data from server
       await fetchData(true)
-      alert(`Fichier importé avec succès ! ${normalizedData.length} lignes chargées.`)
+      alert(`Fichier importé avec succès ! ${result.count} lignes chargées.\nProgrammes: ${result.programmes || '?'} | Entités: ${result.entites || '?'}`)
     } catch (err) {
       console.error('Upload error:', err)
       alert(`Erreur lors de l'import : ${(err as Error).message}`)
