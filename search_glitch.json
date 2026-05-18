@@ -1,0 +1,65 @@
+[
+  {
+    "url": "https://vimeo.com/1170567064",
+    "name": "Engagements metrics Haptechs QR Code Performance Dashboard",
+    "snippet": "Engagements metrics",
+    "host_name": "vimeo.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/SeedCompany/cord-field/issues/1712",
+    "name": "Dashboard - Engagements using AI Assistance Card · Issue",
+    "snippet": "New issue New issue Open Feature #1728 Open Dashboard - Engagements using AI Assistance Card #1712 Feature #1728 Assignees",
+    "host_name": "github.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://help.velaro.com/kb/article/304/engagements-dashboard",
+    "name": "Engagements Dashboard | Velaro Help Center",
+    "snippet": "It is comprised of a header with key metrics, and widgets that provide views into activities and metrics. All dashboard controls will refresh in real-time unless there is a refresh button on the control. Widgets are auto-refreshed every minute. Each widget can be moved to the user's desired location on the dashboard screen.",
+    "host_name": "help.velaro.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.yess.ai/docs/ai-sdr/concepts/engagements",
+    "name": "Engagements | YESS AI SDR Docs",
+    "snippet": "Sometimes engagements fail to send. Common reasons: For temporary failures, you can retry: Access all engagements from Dashboard > Engagements: See engagements for a specific campaign: See all engagements with a specific lead: For new campaigns, review the first few messages to ensure quality.",
+    "host_name": "www.yess.ai",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://feedback.jedox.com/?sort=trending&status=-6296%22%29%2BORDER%2BBY%2B1--%2BjTuC&category=6709419755122762558",
+    "name": "Jedox Ideas",
+    "snippet": "Provide viewer analytics on the dashboard engagements focusing on three categories (Glanced, Quick Read and Deep Read) with additional data such as time spent on dashboards and click counters.",
+    "host_name": "feedback.jedox.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://help.rezolve.com/archive/merchants/ssp/dashboard/engagements",
+    "name": "Manage Your Engagements – Rezolve Online Help",
+    "snippet": "Your engagements are listed within the Dashboard. Actions The following actions are available: There are several main actions you can do here Download If your ...",
+    "host_name": "help.rezolve.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.gp.scale.com/reference/monitoringdashboard/get-dashboard-schema",
+    "name": "Get Dashboard Schema - Scale AI",
+    "snippet": "Path Parameters application_spec_id string required dashboard_id enum<string> required Available options: top_level_dashboard, engagements_dashboard, executions_dashboard,",
+    "host_name": "docs.gp.scale.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  }
+]
