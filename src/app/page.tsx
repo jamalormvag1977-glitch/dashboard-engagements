@@ -180,6 +180,7 @@ const NAV_ITEMS = [
   { key: 'previsions', label: "Prévisions d'ordonnancement", icon: TrendingUp },
   { key: 'assainissement', label: 'Assainissement des reports', icon: RotateCcw },
   { key: 'reports', label: 'Rapports', icon: Printer },
+  { key: 'settings', label: 'Paramètres', icon: Settings, adminOnly: true },
 ]
 
 const PIE_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4']
@@ -1086,7 +1087,7 @@ export default function Dashboard() {
       {/* Navigation */}
       <ScrollArea className="flex-1">
         <nav className="px-3 py-3 space-y-1">
-          {NAV_ITEMS.map(item => {
+          {NAV_ITEMS.filter(item => !item.adminOnly || isAdmin).map(item => {
             const Icon = item.icon
             return (
               <button
